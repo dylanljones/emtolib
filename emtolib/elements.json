@@ -1,0 +1,828 @@
+{
+    "H": {
+        "iz": 1,
+        "name": "Hydrogen",
+        "symbol": "H",
+        "econf": "1s1",
+        "econf_full": "1s1"
+    },
+    "He": {
+        "iz": 2,
+        "name": "Helium",
+        "symbol": "He",
+        "econf": "1s2",
+        "econf_full": "1s2"
+    },
+    "Li": {
+        "iz": 3,
+        "name": "Lithium",
+        "symbol": "Li",
+        "econf": "2s1",
+        "econf_full": "1s2_2s1"
+    },
+    "Be": {
+        "iz": 4,
+        "name": "Beryllium",
+        "symbol": "Be",
+        "econf": "2s2",
+        "econf_full": "1s2_2s2"
+    },
+    "B": {
+        "iz": 5,
+        "name": "Boron",
+        "symbol": "B",
+        "econf": "2s2_2p1",
+        "econf_full": "1s2_2s2_2p1"
+    },
+    "C": {
+        "iz": 6,
+        "name": "Carbon",
+        "symbol": "C",
+        "econf": "2s2_2p2",
+        "econf_full": "1s2_2s2_2p2"
+    },
+    "N": {
+        "iz": 7,
+        "name": "Nitrogen",
+        "symbol": "N",
+        "econf": "2s2_2p3",
+        "econf_full": "1s2_2s2_2p3"
+    },
+    "O": {
+        "iz": 8,
+        "name": "Oxygen",
+        "symbol": "O",
+        "econf": "2s2_2p4",
+        "econf_full": "1s2_2s2_2p4"
+    },
+    "F": {
+        "iz": 9,
+        "name": "Fluorine",
+        "symbol": "F",
+        "econf": "2s2_2p5",
+        "econf_full": "1s2_2s2_2p5"
+    },
+    "Ne": {
+        "iz": 10,
+        "name": "Neon",
+        "symbol": "Ne",
+        "econf": "2s2_2p6",
+        "econf_full": "1s2_2s2_2p6"
+    },
+    "Na": {
+        "iz": 11,
+        "name": "Sodium",
+        "symbol": "Na",
+        "econf": "3s1",
+        "econf_full": "1s2_2s2_2p6_3s1"
+    },
+    "Mg": {
+        "iz": 12,
+        "name": "Magnesium",
+        "symbol": "Mg",
+        "econf": "3s2",
+        "econf_full": "1s2_2s2_2p6_3s2"
+    },
+    "Al": {
+        "iz": 13,
+        "name": "Aluminum",
+        "symbol": "Al",
+        "econf": "3s2_3p1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p1"
+    },
+    "Si": {
+        "iz": 14,
+        "name": "Silicon",
+        "symbol": "Si",
+        "econf": "3s2_3p2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p2"
+    },
+    "P": {
+        "iz": 15,
+        "name": "Phosphorus",
+        "symbol": "P",
+        "econf": "3s2_3p3",
+        "econf_full": "1s2_2s2_2p6_3s2_3p3"
+    },
+    "S": {
+        "iz": 16,
+        "name": "Sulfur",
+        "symbol": "S",
+        "econf": "3s2_3p4",
+        "econf_full": "1s2_2s2_2p6_3s2_3p4"
+    },
+    "Cl": {
+        "iz": 17,
+        "name": "Chlorine",
+        "symbol": "Cl",
+        "econf": "3s2_3p5",
+        "econf_full": "1s2_2s2_2p6_3s2_3p5"
+    },
+    "Ar": {
+        "iz": 18,
+        "name": "Argon",
+        "symbol": "Ar",
+        "econf": "3s2_3p6",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6"
+    },
+    "K": {
+        "iz": 19,
+        "name": "Potassium",
+        "symbol": "K",
+        "econf": "4s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s1"
+    },
+    "Ca": {
+        "iz": 20,
+        "name": "Calcium",
+        "symbol": "Ca",
+        "econf": "4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2"
+    },
+    "Sc": {
+        "iz": 21,
+        "name": "Scandium",
+        "symbol": "Sc",
+        "econf": "3d_4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d1_4s2"
+    },
+    "Ti": {
+        "iz": 22,
+        "name": "Titanium",
+        "symbol": "Ti",
+        "econf": "3d2_4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d2_4s2"
+    },
+    "V": {
+        "iz": 23,
+        "name": "Vanadium",
+        "symbol": "V",
+        "econf": "3d3_4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d3_4s2"
+    },
+    "Cr": {
+        "iz": 24,
+        "name": "Chromium",
+        "symbol": "Cr",
+        "econf": "3d5_4s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d5_4s1"
+    },
+    "Mn": {
+        "iz": 25,
+        "name": "Manganese",
+        "symbol": "Mn",
+        "econf": "3d5_4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d5_4s2"
+    },
+    "Fe": {
+        "iz": 26,
+        "name": "Iron",
+        "symbol": "Fe",
+        "econf": "3d6_4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d6_4s2"
+    },
+    "Co": {
+        "iz": 27,
+        "name": "Cobalt",
+        "symbol": "Co",
+        "econf": "3d7_4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d7_4s2"
+    },
+    "Ni": {
+        "iz": 28,
+        "name": "Nickel",
+        "symbol": "Ni",
+        "econf": "3d8_4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d8_4s2"
+    },
+    "Cu": {
+        "iz": 29,
+        "name": "Copper",
+        "symbol": "Cu",
+        "econf": "3d10_4s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s1"
+    },
+    "Zn": {
+        "iz": 30,
+        "name": "Zinc",
+        "symbol": "Zn",
+        "econf": "3d10_4s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2"
+    },
+    "Ga": {
+        "iz": 31,
+        "name": "Gallium",
+        "symbol": "Ga",
+        "econf": "3d10_4s2_4p1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p1"
+    },
+    "Ge": {
+        "iz": 32,
+        "name": "Germanium",
+        "symbol": "Ge",
+        "econf": "3d10_4s2_4p2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p2"
+    },
+    "As": {
+        "iz": 33,
+        "name": "Arsenic",
+        "symbol": "As",
+        "econf": "3d10_4s2_4p3",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p3"
+    },
+    "Se": {
+        "iz": 34,
+        "name": "Selenium",
+        "symbol": "Se",
+        "econf": "3d10_4s2_4p4",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p4"
+    },
+    "Br": {
+        "iz": 35,
+        "name": "Bromine",
+        "symbol": "Br",
+        "econf": "3d10_4s2_4p5",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p5"
+    },
+    "Kr": {
+        "iz": 36,
+        "name": "Krypton",
+        "symbol": "Kr",
+        "econf": "3d10_4s2_4p6",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p6"
+    },
+    "Rb": {
+        "iz": 37,
+        "name": "Rubidium",
+        "symbol": "Rb",
+        "econf": "5s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s1"
+    },
+    "Sr": {
+        "iz": 38,
+        "name": "Strontium",
+        "symbol": "Sr",
+        "econf": "5s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2"
+    },
+    "Y": {
+        "iz": 39,
+        "name": "Yttrium",
+        "symbol": "Y",
+        "econf": "4d_5s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d1_5s2"
+    },
+    "Zr": {
+        "iz": 40,
+        "name": "Zirconium",
+        "symbol": "Zr",
+        "econf": "4d2_5s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d2_5s2"
+    },
+    "Nb": {
+        "iz": 41,
+        "name": "Niobium",
+        "symbol": "Nb",
+        "econf": "4d4_5s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d4_5s1"
+    },
+    "Mo": {
+        "iz": 42,
+        "name": "Molybdenum",
+        "symbol": "Mo",
+        "econf": "4d5_5s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d5_5s1"
+    },
+    "Tc": {
+        "iz": 43,
+        "name": "Technetium",
+        "symbol": "Tc",
+        "econf": "4d5_5s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d5_5s2"
+    },
+    "Ru": {
+        "iz": 44,
+        "name": "Ruthenium",
+        "symbol": "Ru",
+        "econf": "4d7_5s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d7_5s1"
+    },
+    "Rh": {
+        "iz": 45,
+        "name": "Rhodium",
+        "symbol": "Rh",
+        "econf": "4d8_5s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d8_5s1"
+    },
+    "Pd": {
+        "iz": 46,
+        "name": "Palladium",
+        "symbol": "Pd",
+        "econf": "4d10",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10"
+    },
+    "Ag": {
+        "iz": 47,
+        "name": "Silver",
+        "symbol": "Ag",
+        "econf": "4d10_5s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s1"
+    },
+    "Cd": {
+        "iz": 48,
+        "name": "Cadmium",
+        "symbol": "Cd",
+        "econf": "4d10_5s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2"
+    },
+    "In": {
+        "iz": 49,
+        "name": "Indium",
+        "symbol": "In",
+        "econf": "4d10_5s2_5p1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p1"
+    },
+    "Sn": {
+        "iz": 50,
+        "name": "Tin",
+        "symbol": "Sn",
+        "econf": "4d10_5s2_5p2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p2"
+    },
+    "Sb": {
+        "iz": 51,
+        "name": "Antimony",
+        "symbol": "Sb",
+        "econf": "4d10_5s2_5p3",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p3"
+    },
+    "Te": {
+        "iz": 52,
+        "name": "Tellurium",
+        "symbol": "Te",
+        "econf": "4d10_5s2_5p4",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p4"
+    },
+    "I": {
+        "iz": 53,
+        "name": "Iodine",
+        "symbol": "I",
+        "econf": "4d10_5s2_5p5",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p5"
+    },
+    "Xe": {
+        "iz": 54,
+        "name": "Xenon",
+        "symbol": "Xe",
+        "econf": "4d10_5s2_5p6",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p6"
+    },
+    "Cs": {
+        "iz": 55,
+        "name": "Cesium",
+        "symbol": "Cs",
+        "econf": "6s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s1"
+    },
+    "Ba": {
+        "iz": 56,
+        "name": "Barium",
+        "symbol": "Ba",
+        "econf": "6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2"
+    },
+    "La": {
+        "iz": 57,
+        "name": "Lanthanum",
+        "symbol": "La",
+        "econf": "5d_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_5d1_6s2"
+    },
+    "Ce": {
+        "iz": 58,
+        "name": "Cerium",
+        "symbol": "Ce",
+        "econf": "4f_5d_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f1_5d1_6s2"
+    },
+    "Pr": {
+        "iz": 59,
+        "name": "Praseodymium",
+        "symbol": "Pr",
+        "econf": "4f3_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f3_6s2"
+    },
+    "Nd": {
+        "iz": 60,
+        "name": "Neodymium",
+        "symbol": "Nd",
+        "econf": "4f4_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f4_6s2"
+    },
+    "Pm": {
+        "iz": 61,
+        "name": "Promethium",
+        "symbol": "Pm",
+        "econf": "4f5_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f5_6s2"
+    },
+    "Sm": {
+        "iz": 62,
+        "name": "Samarium",
+        "symbol": "Sm",
+        "econf": "4f6_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f6_6s2"
+    },
+    "Eu": {
+        "iz": 63,
+        "name": "Europium",
+        "symbol": "Eu",
+        "econf": "4f7_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f7_6s2"
+    },
+    "Gd": {
+        "iz": 64,
+        "name": "Gadolinium",
+        "symbol": "Gd",
+        "econf": "4f7_5d_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f7_5d1_6s2"
+    },
+    "Tb": {
+        "iz": 65,
+        "name": "Terbium",
+        "symbol": "Tb",
+        "econf": "4f9_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f9_6s2"
+    },
+    "Dy": {
+        "iz": 66,
+        "name": "Dysprosium",
+        "symbol": "Dy",
+        "econf": "4f10_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f10_6s2"
+    },
+    "Ho": {
+        "iz": 67,
+        "name": "Holmium",
+        "symbol": "Ho",
+        "econf": "4f11_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f11_6s2"
+    },
+    "Er": {
+        "iz": 68,
+        "name": "Erbium",
+        "symbol": "Er",
+        "econf": "4f12_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f12_6s2"
+    },
+    "Tm": {
+        "iz": 69,
+        "name": "Thulium",
+        "symbol": "Tm",
+        "econf": "4f13_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f13_6s2"
+    },
+    "Yb": {
+        "iz": 70,
+        "name": "Ytterbium",
+        "symbol": "Yb",
+        "econf": "4f14_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_6s2"
+    },
+    "Lu": {
+        "iz": 71,
+        "name": "Lutetium",
+        "symbol": "Lu",
+        "econf": "4f14_5d_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d1_6s2"
+    },
+    "Hf": {
+        "iz": 72,
+        "name": "Hafnium",
+        "symbol": "Hf",
+        "econf": "4f14_5d2_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d2_6s2"
+    },
+    "Ta": {
+        "iz": 73,
+        "name": "Tantalum",
+        "symbol": "Ta",
+        "econf": "4f14_5d3_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d3_6s2"
+    },
+    "W": {
+        "iz": 74,
+        "name": "Tungsten",
+        "symbol": "W",
+        "econf": "4f14_5d4_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d4_6s2"
+    },
+    "Re": {
+        "iz": 75,
+        "name": "Rhenium",
+        "symbol": "Re",
+        "econf": "4f14_5d5_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d5_6s2"
+    },
+    "Os": {
+        "iz": 76,
+        "name": "Osmium",
+        "symbol": "Os",
+        "econf": "4f14_5d6_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d6_6s2"
+    },
+    "Ir": {
+        "iz": 77,
+        "name": "Iridium",
+        "symbol": "Ir",
+        "econf": "4f14_5d7_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d7_6s2"
+    },
+    "Pt": {
+        "iz": 78,
+        "name": "Platinum",
+        "symbol": "Pt",
+        "econf": "4f14_5d9_6s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d9_6s1"
+    },
+    "Au": {
+        "iz": 79,
+        "name": "Gold",
+        "symbol": "Au",
+        "econf": "4f14_5d10_6s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s1"
+    },
+    "Hg": {
+        "iz": 80,
+        "name": "Mercury",
+        "symbol": "Hg",
+        "econf": "4f14_5d10_6s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2"
+    },
+    "Tl": {
+        "iz": 81,
+        "name": "Thallium",
+        "symbol": "Tl",
+        "econf": "4f14_5d10_6s2_6p1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p1"
+    },
+    "Pb": {
+        "iz": 82,
+        "name": "Lead",
+        "symbol": "Pb",
+        "econf": "4f14_5d10_6s2_6p2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p2"
+    },
+    "Bi": {
+        "iz": 83,
+        "name": "Bismuth",
+        "symbol": "Bi",
+        "econf": "4f14_5d10_6s2_6p3",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p3"
+    },
+    "Po": {
+        "iz": 84,
+        "name": "Polonium",
+        "symbol": "Po",
+        "econf": "4f14_5d10_6s2_6p4",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p4"
+    },
+    "At": {
+        "iz": 85,
+        "name": "Astatine",
+        "symbol": "At",
+        "econf": "4f14_5d10_6s2_6p5",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p5"
+    },
+    "Rn": {
+        "iz": 86,
+        "name": "Radon",
+        "symbol": "Rn",
+        "econf": "4f14_5d10_6s2_6p6",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p6"
+    },
+    "Fr": {
+        "iz": 87,
+        "name": "Francium",
+        "symbol": "Fr",
+        "econf": "7s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_7s1"
+    },
+    "Ra": {
+        "iz": 88,
+        "name": "Radium",
+        "symbol": "Ra",
+        "econf": "7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_7s2"
+    },
+    "Ac": {
+        "iz": 89,
+        "name": "Actinium",
+        "symbol": "Ac",
+        "econf": "6d_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_6d1_7s2"
+    },
+    "Th": {
+        "iz": 90,
+        "name": "Thorium",
+        "symbol": "Th",
+        "econf": "6d2_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_6d2_7s2"
+    },
+    "Pa": {
+        "iz": 91,
+        "name": "Protactinium",
+        "symbol": "Pa",
+        "econf": "5f2_6d_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f2_6d1_7s2"
+    },
+    "U": {
+        "iz": 92,
+        "name": "Uranium",
+        "symbol": "U",
+        "econf": "5f3_6d_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f3_6d1_7s2"
+    },
+    "Np": {
+        "iz": 93,
+        "name": "Neptunium",
+        "symbol": "Np",
+        "econf": "5f4_6d_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f4_6d1_7s2"
+    },
+    "Pu": {
+        "iz": 94,
+        "name": "Plutonium",
+        "symbol": "Pu",
+        "econf": "5f6_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f6_7s2"
+    },
+    "Am": {
+        "iz": 95,
+        "name": "Americium",
+        "symbol": "Am",
+        "econf": "5f7_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f7_7s2"
+    },
+    "Cm": {
+        "iz": 96,
+        "name": "Curium",
+        "symbol": "Cm",
+        "econf": "5f7_6d_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f7_6d1_7s2"
+    },
+    "Bk": {
+        "iz": 97,
+        "name": "Berkelium",
+        "symbol": "Bk",
+        "econf": "5f9_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f9_7s2"
+    },
+    "Cf": {
+        "iz": 98,
+        "name": "Californium",
+        "symbol": "Cf",
+        "econf": "5f10_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f10_7s2"
+    },
+    "Es": {
+        "iz": 99,
+        "name": "Einsteinium",
+        "symbol": "Es",
+        "econf": "5f11_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f11_7s2"
+    },
+    "Fm": {
+        "iz": 100,
+        "name": "Fermium",
+        "symbol": "Fm",
+        "econf": "5f12_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f12_7s2"
+    },
+    "Md": {
+        "iz": 101,
+        "name": "Mendelevium",
+        "symbol": "Md",
+        "econf": "5f13_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f13_7s2"
+    },
+    "No": {
+        "iz": 102,
+        "name": "Nobelium",
+        "symbol": "No",
+        "econf": "5f14_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_7s2"
+    },
+    "Lr": {
+        "iz": 103,
+        "name": "Lawrencium",
+        "symbol": "Lr",
+        "econf": "5f14_6d_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d1_7s2"
+    },
+    "Rf": {
+        "iz": 104,
+        "name": "Rutherfordium",
+        "symbol": "Rf",
+        "econf": "5f14_6d2_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d2_7s2"
+    },
+    "Db": {
+        "iz": 105,
+        "name": "Dubnium",
+        "symbol": "Db",
+        "econf": "5f14_6d3_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d3_7s2"
+    },
+    "Sg": {
+        "iz": 106,
+        "name": "Seaborgium",
+        "symbol": "Sg",
+        "econf": "5f14_6d4_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d4_7s2"
+    },
+    "Bh": {
+        "iz": 107,
+        "name": "Bohrium",
+        "symbol": "Bh",
+        "econf": "5f14_6d5_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d5_7s2"
+    },
+    "Hs": {
+        "iz": 108,
+        "name": "Hassium",
+        "symbol": "Hs",
+        "econf": "5f14_6d6_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d6_7s2"
+    },
+    "Mt": {
+        "iz": 109,
+        "name": "Meitnerium",
+        "symbol": "Mt",
+        "econf": "5f14_6d7_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d7_7s2"
+    },
+    "Ds": {
+        "iz": 110,
+        "name": "Darmstadtium",
+        "symbol": "Ds",
+        "econf": "5f14_6d9_7s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d9_7s1"
+    },
+    "Rg": {
+        "iz": 111,
+        "name": "Roentgenium",
+        "symbol": "Rg",
+        "econf": "5f14_6d10_7s1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s1"
+    },
+    "Cn": {
+        "iz": 112,
+        "name": "Copernicium",
+        "symbol": "Cn",
+        "econf": "5f14_6d10_7s2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2"
+    },
+    "Nh": {
+        "iz": 113,
+        "name": "Nihonium",
+        "symbol": "Nh",
+        "econf": "5f14_6d10_7s2_7p1",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p1"
+    },
+    "Fl": {
+        "iz": 114,
+        "name": "Flerovium",
+        "symbol": "Fl",
+        "econf": "5f14_6d10_7s2_7p2",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p2"
+    },
+    "Mc": {
+        "iz": 115,
+        "name": "Moscovium",
+        "symbol": "Mc",
+        "econf": "5f14_6d10_7s2_7p3",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p3"
+    },
+    "Lv": {
+        "iz": 116,
+        "name": "Livermorium",
+        "symbol": "Lv",
+        "econf": "5f14_6d10_7s2_7p4",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p4"
+    },
+    "Ts": {
+        "iz": 117,
+        "name": "Tennessine",
+        "symbol": "Ts",
+        "econf": "5f14_6d10_7s2_7p5",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p5"
+    },
+    "Og": {
+        "iz": 118,
+        "name": "Oganesson",
+        "symbol": "Og",
+        "econf": "5f14_6d10_7s2_7p6",
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p6"
+    }
+}
