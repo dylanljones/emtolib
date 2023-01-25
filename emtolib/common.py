@@ -41,3 +41,6 @@ class EmtoFile:
         file = file or self.path
         with open(file, "w") as fp:
             fp.write(self.dumps())
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}({self.path})>"
