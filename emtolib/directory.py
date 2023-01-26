@@ -18,7 +18,8 @@ def searchdir(root_dir, pattern, recursive=False):
     for root, dirs, files in os.walk(root_dir):
         for file in files:
             path = os.path.join(root, file)
-            match = regex.match(path)
+            relpath = os.path.relpath(path, root_dir)
+            match = regex.match(relpath)
             if match:
                 yield path
         if not recursive:
@@ -26,7 +27,6 @@ def searchdir(root_dir, pattern, recursive=False):
 
 
 class Directory:
-
     def __init__(self, path):
         self.root = path
 
@@ -41,6 +41,12 @@ class Directory:
 
     def listdir(self):
         return os.listdir(self.root)
+
+    def join(self, *relpath):
+        return os.path.join(self.root, *relpath)
+
+    def relpath(self, path):
+        return os.path.relpath(path, self.root)
 
     def searchdir(self, pattern, recursive=False):
         return list(searchdir(self.root, pattern, recursive))
@@ -65,7 +71,6 @@ class Directory:
 
 
 class EmtoDirectory(Directory):
-
     def __init__(self, path):
         super().__init__(path)
 
