@@ -26,6 +26,10 @@ class EmtoPrnFile(EmtoFile):
     def loads(self, data: str) -> None:
         self.data = data
 
+    @property
+    def converged(self):
+        return "Converged" in self.data
+
     def get_hopfield(self, unit="ev/aa^2"):
         # Prepare and check unit
         unit = unit.lower()
