@@ -11,8 +11,12 @@ from ..common import EmtoFile
 class EmtoPrnFile(EmtoFile):
 
     RE_ATOM = re.compile("^Atom:(?P<atom>.*)")
+
     RE_HOPFIELD = re.compile(r"^Hopfield\s+=\s+(?P<field1>.*),\s+(?P<field2>.*)")
     RE_FIELD = re.compile(r"(?P<value>.*)\((?P<unit>.*)\)")
+
+    RE_MAG = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)")
+    RE_MAG_ITER = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)$")
 
     def __init__(self, path):
         super().__init__(path)
@@ -22,7 +26,7 @@ class EmtoPrnFile(EmtoFile):
     def loads(self, data: str) -> None:
         self.data = data
 
-    def read_hopfield(self, unit="ev/aa^2"):
+    def get_hopfield(self, unit="ev/aa^2"):
         # Prepare and check unit
         unit = unit.lower()
         if unit.startswith("ev"):
@@ -58,3 +62,44 @@ class EmtoPrnFile(EmtoFile):
                 assert unit == unit2
                 fields[current_atom] = field2
         return fields
+
+    def read_hopfield(self, unit="ev/aa^2"):
+        """Backwards compatibility"""
+        return self.get_hopfield(unit)
+
+    def read_magnetic_moment(self):
+        pre = True
+        current_atom = ""
+        lines = self.data.splitlines(keepends=False)
+        mag_pre, mag_post, mag_iter = list(), list(), list()
+        for line in lines:
+            line = line.strip()
+            match = self.RE_ATOM.match(line)
+            if match:
+                current_atom = match["atom"]
+
+            match = self.RE_MAG.match(line)
+            if match:
+                m1, m2 = float(match.group(1)), float(match.group(2))
+                if pre:
+                    mag_pre.append((current_atom, m1, m2))
+                else:
+                    mag_post.append((current_atom, m1, m2))
+            match = self.RE_MAG_ITER.match(line)
+            if match:
+                pre = False
+                mag_iter.append((current_atom, float(match.group(1))))
+
+        return mag_pre, mag_post, mag_iter
+
+    def get_total_magnetic_moment(self):
+        mag_pre, mag_post, mag_iter = self.read_magnetic_moment()
+        mtot = abs(mag_post[0][-1])
+        for x in mag_post[1:]:
+            assert abs(x[-1]) == mtot
+        return mtot
+
+    def get_atomic_magnetic_moment(self, pre=False):
+        mag_pre, mag_post, mag_iter = self.read_magnetic_moment()
+        moments = mag_pre if pre else mag_post
+        return [(at, m) for at, m, _ in moments]
