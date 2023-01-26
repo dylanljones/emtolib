@@ -98,9 +98,9 @@ class EmtoPrnFile(EmtoFile):
 
     def get_total_magnetic_moment(self):
         mag_pre, mag_post, mag_iter = self.read_magnetic_moment()
-        mtot = abs(mag_post[0][-1])
+        mtot = mag_post[0][-1]
         for x in mag_post[1:]:
-            assert abs(x[-1]) == mtot
+            assert x[-1] == mtot
         return mtot
 
     def get_atomic_magnetic_moment(self, pre=False):
