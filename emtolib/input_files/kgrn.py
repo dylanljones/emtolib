@@ -301,11 +301,14 @@ class EmtoKgrnFile(EmtoFile):
         params.update(parse_params(" ".join(lines[:nlines])))
         lines = lines[nlines:]
         columns = lines.pop(0).split()[1:]
-        atom_lines = dict()
+        atom_lines = list()
+        # atom_lines = dict()
         while not lines[0].startswith("Atom:"):
             values = lines.pop(0).split()
             at = values.pop(0)
-            atom_lines[at] = dict(zip(columns, values))
+            # atom_lines[at] = dict(zip(columns, values))
+            atom_lines.append((at, dict(zip(columns, values))))
+
         # Atom section
         line = lines.pop(0)
         assert line.startswith("Atom: ")
@@ -316,11 +319,11 @@ class EmtoKgrnFile(EmtoFile):
         del atparams["NITER"]
         params.update(atparams)
         lines = lines[nlines:]
-        atom_blocks = dict()
-        for i in range(len(atom_lines)):
+
+        atom_blocks = list()
+        while lines:
             at = lines.pop(0)
             at_params = parse_params(lines.pop(0))
-            at_params.update(atom_lines[at])
             at_table = dict()
             for j in range(nblock - 2):
                 values = lines.pop(0).split()
@@ -328,7 +331,7 @@ class EmtoKgrnFile(EmtoFile):
                 values = np.array([int(x) for x in values])
                 assert len(values) == int(at_params["Norb"])
                 at_table[key] = values
-            atom_blocks[at] = (at_params, at_table)
+            atom_blocks.append((at, at_params, at_table))
 
         params = {k.upper(): v for k, v in params.items()}
         self.strt = params["STRT"]
@@ -403,8 +406,29 @@ class EmtoKgrnFile(EmtoFile):
         self.testy = float(params["TESTY"])
         self.testv = float(params["TESTV"])
 
-        atom_dict = dict()
-        for at, (at_params, at_table) in atom_blocks.items():
+        counts = dict()
+        atom_list = list()
+        for at, params in atom_lines:
+            if at not in counts:
+                counts[at] = 0
+            else:
+                counts[at] += 1
+            i = counts[at]
+
+            # Get the corresponding atom block
+            blocks = list()
+            for _at, at_params, at_table in atom_blocks:
+                _at = "".join([i for i in _at if not i.isdigit()])
+                if _at == at:
+                    blocks.append((at_params, at_table))
+
+            idx = 0 if len(blocks) == 1 else i
+            at_params, at_table = blocks[idx]
+            at_params.update(params)
+            atom_list.append((at, at_params, at_table))
+
+        atoms = list()
+        for at, at_params, at_table in atom_list:
             iq = int(at_params["IQ"])
             it = int(at_params["IT"])
             ita = int(at_params["ITA"])
@@ -415,7 +439,7 @@ class EmtoKgrnFile(EmtoFile):
             ws = float(at_params["WS(wst)"])
             qtr = float(at_params["QTR"])
             splt = float(at_params["SPLT"])
-            fix = at_params["Fix"]
+            fix = at_params.get("Fix")
 
             atom = Atom(at, iq, it, ita, nz, conc, sm, s, ws, qtr, splt, fix)
             atom.norb = int(at_params["Norb"])
@@ -425,8 +449,9 @@ class EmtoKgrnFile(EmtoFile):
             atom.kappa = at_table["Kappa"]
             atom.occup = at_table["Occup"]
             atom.valen = at_table["Valen"]
-            atom_dict[at] = atom
-        self.atoms = list(atom_dict.values())
+            atoms.append(atom)
+            # atom_dict[at] = atom
+        self.atoms = atoms
 
     def dumps(self) -> str:
         if self.jobname is None:
