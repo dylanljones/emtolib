@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 from .input_files import EmtoKgrnFile
+from .ouput_files import EmtoPrnFile, EmtoDosFile
 
 RE_COMP = re.compile(r"(\w+?)(\d+)")
 
@@ -73,6 +74,11 @@ class Directory:
 class EmtoDirectory(Directory):
     def __init__(self, path):
         super().__init__(path)
+        self.dat = None
+        try:
+            self.dat = self.get_input()
+        except FileNotFoundError:
+            pass
 
     def get_input_path(self):
         dat_paths = list(self.searchdir("*.dat"))
@@ -88,48 +94,25 @@ class EmtoDirectory(Directory):
             path = self.get_input_path()
         return EmtoKgrnFile(path)
 
+    def get_dos_path(self, name=""):
+        if not name:
+            name = self.dat.jobname
+        path = os.path.join(self.root, name + ".dos")
+        return path
 
-class EmtoDirectoryOld:
-    def __init__(self, path):
-        self.root = path
+    def get_dos(self, name=""):
+        path = self.get_dos_path(name)
+        return EmtoDosFile(path)
 
-    @property
-    def dat_path(self):
-        paths = list()
-        for name in os.listdir(self.root):
-            if name.endswith(".dat"):
-                paths.append(os.path.join(self.root, name))
-        assert len(paths) == 1
-        return paths[0]
+    def get_prn_path(self, name=""):
+        if not name:
+            name = self.dat.jobname
+        path = os.path.join(self.root, name + ".prn")
+        return path
 
-    @property
-    def prn_path(self):
-        paths = list()
-        for name in os.listdir(self.root):
-            if name.endswith(".prn"):
-                paths.append(os.path.join(self.root, name))
-        if len(paths) > 1:
-            paths.sort(key=lambda x: len(x))
-        # assert len(paths) == 1
-        return paths[0]
-
-    @property
-    def dos_paths(self):
-        paths = list()
-        for name in os.listdir(self.root):
-            if name.endswith(".dos"):
-                paths.append(os.path.join(self.root, name))
-        paths.sort(key=lambda x: len(x))
-        return paths
-
-    # def dat_file(self):
-    #     return EmtoDatFile(self.dat_path)
-
-    # def prn_file(self):
-    #     return EmtoPrnFile(self.prn_path)
-
-    def __repr__(self):
-        return f"<{self.__class__.__name__}({self.root})>"
+    def get_prn(self, name=""):
+        path = self.get_prn_path(name)
+        return EmtoPrnFile(path)
 
 
 def parse_dirname(dirname, atoms):
