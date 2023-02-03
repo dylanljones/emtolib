@@ -30,6 +30,23 @@ class EmtoPrnFile(EmtoFile):
     def converged(self):
         return "Converged" in self.data
 
+    def search_line(self, text, ignore_case=False):
+        lines = list()
+        for line in self.data.splitlines(keepends=False):
+            if ignore_case:
+                if text.lower() in line.lower():
+                    lines.append(line)
+            else:
+                if text in line:
+                    lines.append(line)
+        return lines
+
+    def search(self, pattern):
+        return re.search(pattern, self.data)
+
+    def findall(self, pattern):
+        return re.findall(pattern, self.data)
+
     def get_hopfield(self, unit="ev/aa^2"):
         # Prepare and check unit
         unit = unit.lower()
@@ -71,7 +88,7 @@ class EmtoPrnFile(EmtoFile):
         """Backwards compatibility"""
         return self.get_hopfield(unit)
 
-    def read_magnetic_moment(self):
+    def get_magnetic_moment(self):
         pre = True
         current_atom = ""
         lines = self.data.splitlines(keepends=False)
@@ -97,13 +114,13 @@ class EmtoPrnFile(EmtoFile):
         return mag_pre, mag_post, mag_iter
 
     def get_total_magnetic_moment(self):
-        mag_pre, mag_post, mag_iter = self.read_magnetic_moment()
+        mag_pre, mag_post, mag_iter = self.get_magnetic_moment()
         mtot = mag_post[0][-1]
         for x in mag_post[1:]:
             assert x[-1] == mtot
         return mtot
 
     def get_atomic_magnetic_moment(self, pre=False):
-        mag_pre, mag_post, mag_iter = self.read_magnetic_moment()
+        mag_pre, mag_post, mag_iter = self.get_magnetic_moment()
         moments = mag_pre if pre else mag_post
         return [(at, m) for at, m, _ in moments]
