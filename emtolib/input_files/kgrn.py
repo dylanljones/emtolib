@@ -107,8 +107,8 @@ class Atom:
     def __repr__(self):
         cls = self.__class__.__name__
         s = (
-            f"<{cls}({self.symbol} Iz={self.iz} Norb={self.norb} Ion={self.ion} "
-            f"Config={self.config})>"
+            f"<{cls}({self.symbol} It={self.it} Ita={self.ita} Iz={self.iz} "
+            f"Norb={self.norb} Ion={self.ion} Config={self.config})>"
         )
         return s
 
@@ -256,10 +256,19 @@ class EmtoKgrnFile(EmtoFile):
     def get_atom(self, key) -> Atom:
         if isinstance(key, int):
             return self.atoms[key]
-
+        # Check if index in key
+        if not key.isalpha():
+            # split idx from jey
+            idx = re.findall(r"\d+", key)[0]
+            key = key.replace(idx, "").strip()
+            idx = int(idx.strip())
+        else:
+            idx = 0
+        res = list()
         for at in self.atoms:
             if at.symbol == key:
-                return at
+                res.append(at)
+        return res[idx]
 
     def add_atom(self, atom: Atom):
         self.atoms.append(atom)
