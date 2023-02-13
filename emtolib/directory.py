@@ -86,7 +86,7 @@ class EmtoDirectory(Directory):
             if os.path.split(p)[1].startswith("dmft"):
                 dat_paths.remove(p)
         if len(dat_paths) != 1:
-            raise ValueError("Could not identify input '*.dat' file")
+            raise FileNotFoundError("Could not identify input '*.dat' file")
         return dat_paths[0]
 
     def get_input(self, path=""):
