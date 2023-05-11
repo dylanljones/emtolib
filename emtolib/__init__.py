@@ -7,4 +7,4 @@
 from .common import EmtoFile, elements
 from . import input_files
 from . import ouput_files
-from .directory import Directory, EmtoDirectory
+from .directory import EmtoDirectory

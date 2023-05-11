@@ -87,9 +87,9 @@ def lat_to_ibz(lat):
 
 
 class EmtoBmdlFile(EmtoFile):
-    def __init__(self):
+    def __init__(self, path):
         now = datetime.now()
-        super().__init__()
+        super().__init__(path)
         self.jobname = None
         self.lat = None  # The lattice type (name)
 

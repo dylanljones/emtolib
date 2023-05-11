@@ -3,7 +3,7 @@
 # This code is part of emto.
 #
 # Copyright (c) 2023, Dylan Jones
-import os.path
+
 import re
 from datetime import datetime
 import numpy as np
@@ -250,7 +250,7 @@ class EmtoKgrnFile(EmtoFile):
 
         self.atoms = list()
 
-        if os.path.exists(self.path):
+        if self.path.exists():
             self.load()
 
     def get_atom(self, key) -> Atom:

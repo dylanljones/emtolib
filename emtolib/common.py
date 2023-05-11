@@ -4,13 +4,13 @@
 #
 # Copyright (c) 2023, Dylan Jones
 
-import os
 import re
 import json
+from pathlib import Path
 
 RE_KEYVAL = re.compile(r"([a-zA-Z()0-9]+).*?=.*?([a-zA-Z0-9_\-.]+)")
 
-with open(os.path.join(os.path.dirname(__file__), "elements.json"), "r") as _fp:
+with open(Path(__file__).parent / "elements.json", "r") as _fp:
     elements = json.load(_fp)
 
 
@@ -23,8 +23,10 @@ def parse_filepath(line: str) -> str:
 
 
 class EmtoFile:
+    """Base class for EMTO input and output files."""
+
     def __init__(self, path):
-        self.path = path
+        self.path = Path(path)
 
     def loads(self, data: str) -> None:
         pass
