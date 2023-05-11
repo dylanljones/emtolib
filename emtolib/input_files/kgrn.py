@@ -322,25 +322,27 @@ class EmtoKgrnFile(EmtoFile):
         line = lines.pop(0)
         assert line.startswith("Atom: ")
         nlines, nblock = (int(x) for x in re.findall(r"\d", line))
-
         atparams = parse_params(" ".join(lines[:nlines]))
         atparams["ATNITER"] = atparams["NITER"]
         del atparams["NITER"]
         params.update(atparams)
         lines = lines[nlines:]
-
         atom_blocks = list()
         while lines:
-            at = lines.pop(0)
-            at_params = parse_params(lines.pop(0))
-            at_table = dict()
-            for j in range(nblock - 2):
-                values = lines.pop(0).split()
-                key = values.pop(0)
-                values = np.array([int(x) for x in values])
-                assert len(values) == int(at_params["Norb"])
-                at_table[key] = values
-            atom_blocks.append((at, at_params, at_table))
+            try:
+                at = lines.pop(0)
+                at_params = parse_params(lines.pop(0))
+                at_table = dict()
+                for j in range(nblock - 2):
+                    values = lines.pop(0).split()
+                    key = values.pop(0)
+                    values = np.array([int(x) for x in values])
+                    assert len(values) == int(at_params["Norb"])
+                    at_table[key] = values
+                atom_blocks.append((at, at_params, at_table))
+            except IndexError as e:
+                print(f"WARNING: {e}")
+                break
 
         params = {k.upper(): v for k, v in params.items()}
         self.strt = params["STRT"]
