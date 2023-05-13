@@ -9,11 +9,12 @@ import shutil
 from pathlib import Path
 from .input_files import EmtoKgrnFile
 from .ouput_files import EmtoPrnFile, EmtoDosFile
+from typing import Union
 
 RE_COMP = re.compile(r"(\w+?)(\d+)")
 
 
-def find_input_file(folder: Path | str) -> Path:
+def find_input_file(folder: Union[Path, str]) -> Path:
     folder = Path(folder)
     # get *.dat files
     for file in folder.glob("*.dat"):

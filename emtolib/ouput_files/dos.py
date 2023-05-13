@@ -79,7 +79,7 @@ def _search_sections(fp: TextIO):
     return dict(zip(keys, sections))
 
 
-def _parse_columns(lines: list[str]) -> str:
+def _parse_columns(lines: list) -> str:
     """Parses the column line at the top of a section.
 
     Removes column line if it exists, so lines start at actual data
@@ -99,7 +99,7 @@ def _parse_columns(lines: list[str]) -> str:
     return columns
 
 
-def _parse_data(lines: list[str]) -> tuple[list, list]:
+def _parse_data(lines: list) -> tuple:
     dos_data, tnos_data = list(), list()
     contains_tnos = False
     i = 0
