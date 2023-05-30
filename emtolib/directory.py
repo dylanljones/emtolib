@@ -8,6 +8,7 @@ import re
 import shutil
 from pathlib import Path
 from .input_files import EmtoKgrnFile
+from .input_files.kgrn_dmft import EmtoKgrnFile as EmtoKgrnFileDMFT
 from .ouput_files import EmtoPrnFile, EmtoDosFile
 from typing import Union
 
@@ -29,11 +30,11 @@ def find_input_file(folder: Union[Path, str]) -> Path:
 class EmtoDirectory:
     """Class to handle EMTO simulation directories."""
 
-    def __init__(self, path):
+    def __init__(self, path, dmft=False):
         self.root = Path(path)
         self.dat = None
         try:
-            self.dat = self.get_input()
+            self.dat = self.get_input(dmft=dmft)
         except FileNotFoundError:
             pass
 
@@ -51,10 +52,14 @@ class EmtoDirectory:
     def get_input_path(self):
         return find_input_file(self.root)
 
-    def get_input(self, path=""):
+    def get_input(self, path="", dmft=False):
         if not path:
             path = self.get_input_path()
-        return EmtoKgrnFile(path)
+        if dmft:
+            file = EmtoKgrnFileDMFT(path)
+        else:
+            file = EmtoKgrnFile(path)
+        return file
 
     def get_dos_path(self, name=""):
         if not name:
