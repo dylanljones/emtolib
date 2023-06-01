@@ -4,679 +4,925 @@
         "name": "Hydrogen",
         "symbol": "H",
         "econf": "1s1",
-        "econf_full": "1s1"
+        "econf_full": "1s1",
+        "mass": 1.008,
+        "debye_0K": 122.0
     },
     "He": {
         "iz": 2,
         "name": "Helium",
         "symbol": "He",
         "econf": "1s2",
-        "econf_full": "1s2"
+        "econf_full": "1s2",
+        "mass": 4.003
     },
     "Li": {
         "iz": 3,
         "name": "Lithium",
         "symbol": "Li",
         "econf": "2s1",
-        "econf_full": "1s2_2s1"
+        "econf_full": "1s2_2s1",
+        "mass": 6.941,
+        "debye_0K": 344.0,
+        "debye_room": 448.0
     },
     "Be": {
         "iz": 4,
         "name": "Beryllium",
         "symbol": "Be",
         "econf": "2s2",
-        "econf_full": "1s2_2s2"
+        "econf_full": "1s2_2s2",
+        "mass": 9.012,
+        "debye_0K": 1481.0,
+        "debye_room": 1031.0
     },
     "B": {
         "iz": 5,
         "name": "Boron",
         "symbol": "B",
         "econf": "2s2_2p1",
-        "econf_full": "1s2_2s2_2p1"
+        "econf_full": "1s2_2s2_2p1",
+        "mass": 10.811,
+        "debye_0K": 1480.0,
+        "debye_room": 1362.0
     },
     "C": {
         "iz": 6,
         "name": "Carbon",
         "symbol": "C",
         "econf": "2s2_2p2",
-        "econf_full": "1s2_2s2_2p2"
+        "econf_full": "1s2_2s2_2p2",
+        "mass": 12.011,
+        "debye_0K": 2230.0,
+        "debye_room": 1550.0
     },
     "N": {
         "iz": 7,
         "name": "Nitrogen",
         "symbol": "N",
         "econf": "2s2_2p3",
-        "econf_full": "1s2_2s2_2p3"
+        "econf_full": "1s2_2s2_2p3",
+        "mass": 14.007
     },
     "O": {
         "iz": 8,
         "name": "Oxygen",
         "symbol": "O",
         "econf": "2s2_2p4",
-        "econf_full": "1s2_2s2_2p4"
+        "econf_full": "1s2_2s2_2p4",
+        "mass": 15.999
     },
     "F": {
         "iz": 9,
         "name": "Fluorine",
         "symbol": "F",
         "econf": "2s2_2p5",
-        "econf_full": "1s2_2s2_2p5"
+        "econf_full": "1s2_2s2_2p5",
+        "mass": 18.998
     },
     "Ne": {
         "iz": 10,
         "name": "Neon",
         "symbol": "Ne",
         "econf": "2s2_2p6",
-        "econf_full": "1s2_2s2_2p6"
+        "econf_full": "1s2_2s2_2p6",
+        "mass": 20.18,
+        "debye_0K": 74.6
     },
     "Na": {
         "iz": 11,
         "name": "Sodium",
         "symbol": "Na",
         "econf": "3s1",
-        "econf_full": "1s2_2s2_2p6_3s1"
+        "econf_full": "1s2_2s2_2p6_3s1",
+        "mass": 22.99,
+        "debye_0K": 156.5,
+        "debye_room": 155.0
     },
     "Mg": {
         "iz": 12,
         "name": "Magnesium",
         "symbol": "Mg",
         "econf": "3s2",
-        "econf_full": "1s2_2s2_2p6_3s2"
+        "econf_full": "1s2_2s2_2p6_3s2",
+        "mass": 24.305,
+        "debye_0K": 403.0,
+        "debye_room": 330.0
     },
     "Al": {
         "iz": 13,
         "name": "Aluminum",
         "symbol": "Al",
         "econf": "3s2_3p1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p1",
+        "mass": 26.982,
+        "debye_0K": 433.0,
+        "debye_room": 390.0
     },
     "Si": {
         "iz": 14,
         "name": "Silicon",
         "symbol": "Si",
         "econf": "3s2_3p2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p2",
+        "mass": 28.086,
+        "debye_0K": 645.0,
+        "debye_room": 692.0
     },
     "P": {
         "iz": 15,
         "name": "Phosphorus",
         "symbol": "P",
         "econf": "3s2_3p3",
-        "econf_full": "1s2_2s2_2p6_3s2_3p3"
+        "econf_full": "1s2_2s2_2p6_3s2_3p3",
+        "mass": 30.974
     },
     "S": {
         "iz": 16,
         "name": "Sulfur",
         "symbol": "S",
         "econf": "3s2_3p4",
-        "econf_full": "1s2_2s2_2p6_3s2_3p4"
+        "econf_full": "1s2_2s2_2p6_3s2_3p4",
+        "mass": 32.066,
+        "debye_0K": 527.0
     },
     "Cl": {
         "iz": 17,
         "name": "Chlorine",
         "symbol": "Cl",
         "econf": "3s2_3p5",
-        "econf_full": "1s2_2s2_2p6_3s2_3p5"
+        "econf_full": "1s2_2s2_2p6_3s2_3p5",
+        "mass": 35.453
     },
     "Ar": {
         "iz": 18,
         "name": "Argon",
         "symbol": "Ar",
         "econf": "3s2_3p6",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6",
+        "mass": 39.948,
+        "debye_0K": 92.0
     },
     "K": {
         "iz": 19,
         "name": "Potassium",
         "symbol": "K",
         "econf": "4s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s1",
+        "mass": 39.098,
+        "debye_0K": 91.1,
+        "debye_room": 100.0
     },
     "Ca": {
         "iz": 20,
         "name": "Calcium",
         "symbol": "Ca",
         "econf": "4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2",
+        "mass": 40.078,
+        "debye_0K": 229.0,
+        "debye_room": 230.0
     },
     "Sc": {
         "iz": 21,
         "name": "Scandium",
         "symbol": "Sc",
         "econf": "3d_4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d1_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d1_4s2",
+        "mass": 44.956,
+        "debye_0K": 346.0,
+        "debye_room": 476.0
     },
     "Ti": {
         "iz": 22,
         "name": "Titanium",
         "symbol": "Ti",
         "econf": "3d2_4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d2_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d2_4s2",
+        "mass": 47.867,
+        "debye_0K": 420.0,
+        "debye_room": 380.0
     },
     "V": {
         "iz": 23,
         "name": "Vanadium",
         "symbol": "V",
         "econf": "3d3_4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d3_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d3_4s2",
+        "mass": 50.942,
+        "debye_0K": 399.0,
+        "debye_room": 390.0
     },
     "Cr": {
         "iz": 24,
         "name": "Chromium",
         "symbol": "Cr",
         "econf": "3d5_4s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d5_4s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d5_4s1",
+        "mass": 51.996,
+        "debye_0K": 606.0,
+        "debye_room": 424.0
     },
     "Mn": {
         "iz": 25,
         "name": "Manganese",
         "symbol": "Mn",
         "econf": "3d5_4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d5_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d5_4s2",
+        "mass": 54.938,
+        "debye_0K": 409.0,
+        "debye_room": 363.0
     },
     "Fe": {
         "iz": 26,
         "name": "Iron",
         "symbol": "Fe",
         "econf": "3d6_4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d6_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d6_4s2",
+        "mass": 55.845,
+        "debye_0K": 477.0,
+        "debye_room": 373.0
     },
     "Co": {
         "iz": 27,
         "name": "Cobalt",
         "symbol": "Co",
         "econf": "3d7_4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d7_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d7_4s2",
+        "mass": 58.933,
+        "debye_0K": 460.0,
+        "debye_room": 386.0
     },
     "Ni": {
         "iz": 28,
         "name": "Nickel",
         "symbol": "Ni",
         "econf": "3d8_4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d8_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d8_4s2",
+        "mass": 58.693,
+        "debye_0K": 477.0,
+        "debye_room": 345.0
     },
     "Cu": {
         "iz": 29,
         "name": "Copper",
         "symbol": "Cu",
         "econf": "3d10_4s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s1",
+        "mass": 63.546,
+        "debye_0K": 347.0,
+        "debye_room": 310.0
     },
     "Zn": {
         "iz": 30,
         "name": "Zinc",
         "symbol": "Zn",
         "econf": "3d10_4s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2",
+        "mass": 65.38,
+        "debye_0K": 329.0,
+        "debye_room": 237.0
     },
     "Ga": {
         "iz": 31,
         "name": "Gallium",
         "symbol": "Ga",
         "econf": "3d10_4s2_4p1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p1",
+        "mass": 69.723,
+        "debye_0K": 325.0,
+        "debye_room": 240.0
     },
     "Ge": {
         "iz": 32,
         "name": "Germanium",
         "symbol": "Ge",
         "econf": "3d10_4s2_4p2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p2",
+        "mass": 72.631,
+        "debye_0K": 373.0,
+        "debye_room": 403.0
     },
     "As": {
         "iz": 33,
         "name": "Arsenic",
         "symbol": "As",
         "econf": "3d10_4s2_4p3",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p3"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p3",
+        "mass": 74.922,
+        "debye_0K": 282.0,
+        "debye_room": 275.0
     },
     "Se": {
         "iz": 34,
         "name": "Selenium",
         "symbol": "Se",
         "econf": "3d10_4s2_4p4",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p4"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p4",
+        "mass": 78.971,
+        "debye_0K": 152.5
     },
     "Br": {
         "iz": 35,
         "name": "Bromine",
         "symbol": "Br",
         "econf": "3d10_4s2_4p5",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p5"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p5",
+        "mass": 79.904
     },
     "Kr": {
         "iz": 36,
         "name": "Krypton",
         "symbol": "Kr",
         "econf": "3d10_4s2_4p6",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p6"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_3d10_4s2_4p6",
+        "debye_0K": 71.9
     },
     "Rb": {
         "iz": 37,
         "name": "Rubidium",
         "symbol": "Rb",
         "econf": "5s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s1",
+        "mass": 84.468,
+        "debye_0K": 56.5,
+        "debye_room": 59.0
     },
     "Sr": {
         "iz": 38,
         "name": "Strontium",
         "symbol": "Sr",
         "econf": "5s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2",
+        "mass": 87.62,
+        "debye_0K": 147.0,
+        "debye_room": 148.0
     },
     "Y": {
         "iz": 39,
         "name": "Yttrium",
         "symbol": "Y",
         "econf": "4d_5s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d1_5s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d1_5s2",
+        "mass": 88.906,
+        "debye_0K": 248.0,
+        "debye_room": 214.0
     },
     "Zr": {
         "iz": 40,
         "name": "Zirconium",
         "symbol": "Zr",
         "econf": "4d2_5s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d2_5s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d2_5s2",
+        "mass": 91.224,
+        "debye_0K": 290.0,
+        "debye_room": 250.0
     },
     "Nb": {
         "iz": 41,
         "name": "Niobium",
         "symbol": "Nb",
         "econf": "4d4_5s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d4_5s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d4_5s1",
+        "mass": 92.90637,
+        "debye_0K": 276.0,
+        "debye_room": 260.0
     },
     "Mo": {
         "iz": 42,
         "name": "Molybdenum",
         "symbol": "Mo",
         "econf": "4d5_5s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d5_5s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d5_5s1",
+        "mass": 95.95,
+        "debye_0K": 423.0,
+        "debye_room": 377.0
     },
     "Tc": {
         "iz": 43,
         "name": "Technetium",
         "symbol": "Tc",
         "econf": "4d5_5s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d5_5s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d5_5s2",
+        "mass": 98.907,
+        "debye_0K": 454.0,
+        "debye_room": 422.0
     },
     "Ru": {
         "iz": 44,
         "name": "Ruthenium",
         "symbol": "Ru",
         "econf": "4d7_5s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d7_5s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d7_5s1",
+        "mass": 101.07,
+        "debye_0K": 555.0,
+        "debye_room": 415.0
     },
     "Rh": {
         "iz": 45,
         "name": "Rhodium",
         "symbol": "Rh",
         "econf": "4d8_5s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d8_5s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d8_5s1",
+        "mass": 102.906,
+        "debye_0K": 512.0,
+        "debye_room": 350.0
     },
     "Pd": {
         "iz": 46,
         "name": "Palladium",
         "symbol": "Pd",
         "econf": "4d10",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10",
+        "mass": 106.42,
+        "debye_0K": 271.0,
+        "debye_room": 275.0
     },
     "Ag": {
         "iz": 47,
         "name": "Silver",
         "symbol": "Ag",
         "econf": "4d10_5s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s1",
+        "mass": 107.868,
+        "debye_0K": 227.3,
+        "debye_room": 221.0
     },
     "Cd": {
         "iz": 48,
         "name": "Cadmium",
         "symbol": "Cd",
         "econf": "4d10_5s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2",
+        "mass": 112.414,
+        "debye_0K": 210.0,
+        "debye_room": 221.0
     },
     "In": {
         "iz": 49,
         "name": "Indium",
         "symbol": "In",
         "econf": "4d10_5s2_5p1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p1",
+        "mass": 114.818,
+        "debye_0K": 112.0,
+        "debye_room": 129.0
     },
     "Sn": {
         "iz": 50,
         "name": "Tin",
         "symbol": "Sn",
         "econf": "4d10_5s2_5p2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p2",
+        "mass": 118.711,
+        "debye_0K": 199.0,
+        "debye_room": 254.0
     },
     "Sb": {
         "iz": 51,
         "name": "Antimony",
         "symbol": "Sb",
         "econf": "4d10_5s2_5p3",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p3"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p3",
+        "mass": 121.76,
+        "debye_0K": 220.0,
+        "debye_room": 200.0
     },
     "Te": {
         "iz": 52,
         "name": "Tellurium",
         "symbol": "Te",
         "econf": "4d10_5s2_5p4",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p4"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p4",
+        "mass": 126.7,
+        "debye_0K": 152.0
     },
     "I": {
         "iz": 53,
         "name": "Iodine",
         "symbol": "I",
         "econf": "4d10_5s2_5p5",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p5"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p5",
+        "mass": 126.904,
+        "debye_0K": 109.0
     },
     "Xe": {
         "iz": 54,
         "name": "Xenon",
         "symbol": "Xe",
         "econf": "4d10_5s2_5p6",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p6"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_4d10_5s2_5p6",
+        "mass": 131.294,
+        "debye_0K": 64.0
     },
     "Cs": {
         "iz": 55,
         "name": "Cesium",
         "symbol": "Cs",
         "econf": "6s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s1",
+        "mass": 132.905,
+        "debye_0K": 40.5,
+        "debye_room": 43.0
     },
     "Ba": {
         "iz": 56,
         "name": "Barium",
         "symbol": "Ba",
         "econf": "6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2",
+        "mass": 137.328,
+        "debye_0K": 111.0,
+        "debye_room": 116.0
     },
     "La": {
         "iz": 57,
         "name": "Lanthanum",
         "symbol": "La",
         "econf": "5d_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_5d1_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_5d1_6s2",
+        "mass": 138.905,
+        "debye_0K": 135.0
     },
     "Ce": {
         "iz": 58,
         "name": "Cerium",
         "symbol": "Ce",
         "econf": "4f_5d_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f1_5d1_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f1_5d1_6s2",
+        "mass": 140.116,
+        "debye_0K": 179.0,
+        "debye_room": 138.0
     },
     "Pr": {
         "iz": 59,
         "name": "Praseodymium",
         "symbol": "Pr",
         "econf": "4f3_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f3_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f3_6s2",
+        "mass": 140.908,
+        "debye_0K": 152.0,
+        "debye_room": 138.0
     },
     "Nd": {
         "iz": 60,
         "name": "Neodymium",
         "symbol": "Nd",
         "econf": "4f4_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f4_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f4_6s2",
+        "mass": 144.243,
+        "debye_0K": 163.0,
+        "debye_room": 148.0
     },
     "Pm": {
         "iz": 61,
         "name": "Promethium",
         "symbol": "Pm",
         "econf": "4f5_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f5_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f5_6s2",
+        "mass": 144.913
     },
     "Sm": {
         "iz": 62,
         "name": "Samarium",
         "symbol": "Sm",
         "econf": "4f6_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f6_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f6_6s2",
+        "mass": 150.36,
+        "debye_0K": 169.0,
+        "debye_room": 184.0
     },
     "Eu": {
         "iz": 63,
         "name": "Europium",
         "symbol": "Eu",
         "econf": "4f7_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f7_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f7_6s2",
+        "debye_0K": 118.0
     },
     "Gd": {
         "iz": 64,
         "name": "Gadolinium",
         "symbol": "Gd",
         "econf": "4f7_5d_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f7_5d1_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f7_5d1_6s2",
+        "mass": 157.25,
+        "debye_0K": 182.0,
+        "debye_room": 155.0
     },
     "Tb": {
         "iz": 65,
         "name": "Terbium",
         "symbol": "Tb",
         "econf": "4f9_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f9_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f9_6s2",
+        "mass": 158.925,
+        "debye_0K": 176.0,
+        "debye_room": 158.0
     },
     "Dy": {
         "iz": 66,
         "name": "Dysprosium",
         "symbol": "Dy",
         "econf": "4f10_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f10_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f10_6s2",
+        "mass": 162.5,
+        "debye_0K": 183.0,
+        "debye_room": 158.0
     },
     "Ho": {
         "iz": 67,
         "name": "Holmium",
         "symbol": "Ho",
         "econf": "4f11_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f11_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f11_6s2",
+        "mass": 164.93,
+        "debye_0K": 190.0,
+        "debye_room": 161.0
     },
     "Er": {
         "iz": 68,
         "name": "Erbium",
         "symbol": "Er",
         "econf": "4f12_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f12_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f12_6s2",
+        "mass": 167.259,
+        "debye_0K": 188.0,
+        "debye_room": 163.0
     },
     "Tm": {
         "iz": 69,
         "name": "Thulium",
         "symbol": "Tm",
         "econf": "4f13_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f13_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f13_6s2",
+        "mass": 168.934,
+        "debye_0K": 200.0,
+        "debye_room": 167.0
     },
     "Yb": {
         "iz": 70,
         "name": "Ytterbium",
         "symbol": "Yb",
         "econf": "4f14_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_6s2",
+        "mass": 173.055,
+        "debye_0K": 118.0
     },
     "Lu": {
         "iz": 71,
         "name": "Lutetium",
         "symbol": "Lu",
         "econf": "4f14_5d_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d1_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d1_6s2",
+        "mass": 174.967,
+        "debye_0K": 183.0,
+        "debye_room": 116.0
     },
     "Hf": {
         "iz": 72,
         "name": "Hafnium",
         "symbol": "Hf",
         "econf": "4f14_5d2_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d2_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d2_6s2",
+        "mass": 178.49,
+        "debye_0K": 252.0,
+        "debye_room": 213.0
     },
     "Ta": {
         "iz": 73,
         "name": "Tantalum",
         "symbol": "Ta",
         "econf": "4f14_5d3_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d3_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d3_6s2",
+        "mass": 180.948,
+        "debye_0K": 246.0,
+        "debye_room": 225.0
     },
     "W": {
         "iz": 74,
         "name": "Tungsten",
         "symbol": "W",
         "econf": "4f14_5d4_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d4_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d4_6s2",
+        "mass": 183.84,
+        "debye_0K": 383.0,
+        "debye_room": 312.0
     },
     "Re": {
         "iz": 75,
         "name": "Rhenium",
         "symbol": "Re",
         "econf": "4f14_5d5_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d5_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d5_6s2",
+        "mass": 186.207,
+        "debye_0K": 416.0,
+        "debye_room": 275.0
     },
     "Os": {
         "iz": 76,
         "name": "Osmium",
         "symbol": "Os",
         "econf": "4f14_5d6_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d6_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d6_6s2",
+        "mass": 190.23,
+        "debye_0K": 467.0,
+        "debye_room": 400.0
     },
     "Ir": {
         "iz": 77,
         "name": "Iridium",
         "symbol": "Ir",
         "econf": "4f14_5d7_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d7_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d7_6s2",
+        "mass": 192.217,
+        "debye_0K": 420.0,
+        "debye_room": 228.0
     },
     "Pt": {
         "iz": 78,
         "name": "Platinum",
         "symbol": "Pt",
         "econf": "4f14_5d9_6s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d9_6s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d9_6s1",
+        "mass": 195.085,
+        "debye_0K": 237.0,
+        "debye_room": 225.0
     },
     "Au": {
         "iz": 79,
         "name": "Gold",
         "symbol": "Au",
         "econf": "4f14_5d10_6s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s1",
+        "mass": 196.967,
+        "debye_0K": 162.3,
+        "debye_room": 178.0
     },
     "Hg": {
         "iz": 80,
         "name": "Mercury",
         "symbol": "Hg",
         "econf": "4f14_5d10_6s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2",
+        "mass": 200.592,
+        "debye_0K": 72.0,
+        "debye_room": 92.0
     },
     "Tl": {
         "iz": 81,
         "name": "Thallium",
         "symbol": "Tl",
         "econf": "4f14_5d10_6s2_6p1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p1",
+        "mass": 204.383,
+        "debye_0K": 78.5,
+        "debye_room": 96.0
     },
     "Pb": {
         "iz": 82,
         "name": "Lead",
         "symbol": "Pb",
         "econf": "4f14_5d10_6s2_6p2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p2",
+        "mass": 207.2,
+        "debye_0K": 105.0,
+        "debye_room": 87.0
     },
     "Bi": {
         "iz": 83,
         "name": "Bismuth",
         "symbol": "Bi",
         "econf": "4f14_5d10_6s2_6p3",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p3"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p3",
+        "mass": 208.98,
+        "debye_0K": 120.0,
+        "debye_room": 116.0
     },
     "Po": {
         "iz": 84,
         "name": "Polonium",
         "symbol": "Po",
         "econf": "4f14_5d10_6s2_6p4",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p4"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p4",
+        "mass": 208.982
     },
     "At": {
         "iz": 85,
         "name": "Astatine",
         "symbol": "At",
         "econf": "4f14_5d10_6s2_6p5",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p5"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p5",
+        "mass": 209.987
     },
     "Rn": {
         "iz": 86,
         "name": "Radon",
         "symbol": "Rn",
         "econf": "4f14_5d10_6s2_6p6",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p6"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_4f14_5d10_6s2_6p6",
+        "mass": 222.081
     },
     "Fr": {
         "iz": 87,
         "name": "Francium",
         "symbol": "Fr",
         "econf": "7s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_7s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_7s1",
+        "mass": 223.02,
+        "debye_0K": 39.0
     },
     "Ra": {
         "iz": 88,
         "name": "Radium",
         "symbol": "Ra",
         "econf": "7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_7s2",
+        "mass": 226.025,
+        "debye_0K": 89.0
     },
     "Ac": {
         "iz": 89,
         "name": "Actinium",
         "symbol": "Ac",
         "econf": "6d_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_6d1_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_6d1_7s2",
+        "mass": 227.028
     },
     "Th": {
         "iz": 90,
         "name": "Thorium",
         "symbol": "Th",
         "econf": "6d2_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_6d2_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_6d2_7s2",
+        "mass": 232.038,
+        "debye_0K": 160.0,
+        "debye_room": 100.0
     },
     "Pa": {
         "iz": 91,
         "name": "Protactinium",
         "symbol": "Pa",
         "econf": "5f2_6d_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f2_6d1_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f2_6d1_7s2",
+        "mass": 231.036,
+        "debye_0K": 185.0,
+        "debye_room": 262.0
     },
     "U": {
         "iz": 92,
         "name": "Uranium",
         "symbol": "U",
         "econf": "5f3_6d_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f3_6d1_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f3_6d1_7s2",
+        "mass": 238.029,
+        "debye_0K": 248.0,
+        "debye_room": 300.0
     },
     "Np": {
         "iz": 93,
         "name": "Neptunium",
         "symbol": "Np",
         "econf": "5f4_6d_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f4_6d1_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f4_6d1_7s2",
+        "mass": 237,
+        "debye_0K": 259.0,
+        "debye_room": 163.0
     },
     "Pu": {
         "iz": 94,
         "name": "Plutonium",
         "symbol": "Pu",
         "econf": "5f6_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f6_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f6_7s2",
+        "mass": 244,
+        "debye_0K": 176.0
     },
     "Am": {
         "iz": 95,
         "name": "Americium",
         "symbol": "Am",
         "econf": "5f7_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f7_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f7_7s2",
+        "mass": 243,
+        "debye_0K": 121.0
     },
     "Cm": {
         "iz": 96,
         "name": "Curium",
         "symbol": "Cm",
         "econf": "5f7_6d_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f7_6d1_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f7_6d1_7s2",
+        "mass": 247,
+        "debye_0K": 123.0
     },
     "Bk": {
         "iz": 97,
         "name": "Berkelium",
         "symbol": "Bk",
         "econf": "5f9_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f9_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f9_7s2",
+        "mass": 247
     },
     "Cf": {
         "iz": 98,
@@ -690,139 +936,159 @@
         "name": "Einsteinium",
         "symbol": "Es",
         "econf": "5f11_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f11_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f11_7s2",
+        "mass": 252
     },
     "Fm": {
         "iz": 100,
         "name": "Fermium",
         "symbol": "Fm",
         "econf": "5f12_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f12_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f12_7s2",
+        "mass": 257
     },
     "Md": {
         "iz": 101,
         "name": "Mendelevium",
         "symbol": "Md",
         "econf": "5f13_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f13_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f13_7s2",
+        "mass": 258
     },
     "No": {
         "iz": 102,
         "name": "Nobelium",
         "symbol": "No",
         "econf": "5f14_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_7s2",
+        "mass": 259
     },
     "Lr": {
         "iz": 103,
         "name": "Lawrencium",
         "symbol": "Lr",
         "econf": "5f14_6d_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d1_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d1_7s2",
+        "mass": 262
     },
     "Rf": {
         "iz": 104,
         "name": "Rutherfordium",
         "symbol": "Rf",
         "econf": "5f14_6d2_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d2_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d2_7s2",
+        "mass": 261
     },
     "Db": {
         "iz": 105,
         "name": "Dubnium",
         "symbol": "Db",
         "econf": "5f14_6d3_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d3_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d3_7s2",
+        "mass": 262
     },
     "Sg": {
         "iz": 106,
         "name": "Seaborgium",
         "symbol": "Sg",
         "econf": "5f14_6d4_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d4_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d4_7s2",
+        "mass": 266
     },
     "Bh": {
         "iz": 107,
         "name": "Bohrium",
         "symbol": "Bh",
         "econf": "5f14_6d5_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d5_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d5_7s2",
+        "mass": 264
     },
     "Hs": {
         "iz": 108,
         "name": "Hassium",
         "symbol": "Hs",
         "econf": "5f14_6d6_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d6_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d6_7s2",
+        "mass": 269
     },
     "Mt": {
         "iz": 109,
         "name": "Meitnerium",
         "symbol": "Mt",
         "econf": "5f14_6d7_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d7_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d7_7s2",
+        "mass": 268
     },
     "Ds": {
         "iz": 110,
         "name": "Darmstadtium",
         "symbol": "Ds",
         "econf": "5f14_6d9_7s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d9_7s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d9_7s1",
+        "mass": 271
     },
     "Rg": {
         "iz": 111,
         "name": "Roentgenium",
         "symbol": "Rg",
         "econf": "5f14_6d10_7s1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s1",
+        "mass": 272
     },
     "Cn": {
         "iz": 112,
         "name": "Copernicium",
         "symbol": "Cn",
         "econf": "5f14_6d10_7s2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2",
+        "mass": 285
     },
     "Nh": {
         "iz": 113,
         "name": "Nihonium",
         "symbol": "Nh",
         "econf": "5f14_6d10_7s2_7p1",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p1"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p1",
+        "mass": 284
     },
     "Fl": {
         "iz": 114,
         "name": "Flerovium",
         "symbol": "Fl",
         "econf": "5f14_6d10_7s2_7p2",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p2"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p2",
+        "mass": 289
     },
     "Mc": {
         "iz": 115,
         "name": "Moscovium",
         "symbol": "Mc",
         "econf": "5f14_6d10_7s2_7p3",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p3"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p3",
+        "mass": 288
     },
     "Lv": {
         "iz": 116,
         "name": "Livermorium",
         "symbol": "Lv",
         "econf": "5f14_6d10_7s2_7p4",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p4"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p4",
+        "mass": 292
     },
     "Ts": {
         "iz": 117,
         "name": "Tennessine",
         "symbol": "Ts",
         "econf": "5f14_6d10_7s2_7p5",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p5"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p5",
+        "mass": 294
     },
     "Og": {
         "iz": 118,
         "name": "Oganesson",
         "symbol": "Og",
         "econf": "5f14_6d10_7s2_7p6",
-        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p6"
+        "econf_full": "1s2_2s2_2p6_3s2_3p6_4s2_3d10_4p6_5s2_4d10_5p6_6s2_4f14_5d10_6p6_5f14_6d10_7s2_7p6",
+        "mass": 294
     }
 }

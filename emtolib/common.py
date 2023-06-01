@@ -10,6 +10,9 @@ from pathlib import Path
 
 RE_KEYVAL = re.compile(r"([a-zA-Z()0-9]+).*?=.*?([a-zA-Z0-9_\-.]+)")
 
+# Atomic masses in 1u ~ 1.660 10-27 kg
+# Debye temperatures (in K)
+# https://www.knowledgedoor.com/2/elements_handbook/debye_temperature.html
 with open(Path(__file__).parent / "elements.json", "r") as _fp:
     elements = json.load(_fp)
 
