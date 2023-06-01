@@ -108,7 +108,12 @@ def _parse_data(lines: list) -> tuple:
             if line.startswith("TNOS"):
                 contains_tnos = True
                 break
-            values = [float(x) for x in line.split()]
+            values = list()
+            for value in line.split():
+                try:
+                    values.append(float(value))
+                except ValueError:
+                    values.append(np.nan)
             dos_data.append(values)
     if contains_tnos:
         for line in lines[i + 1 :]:

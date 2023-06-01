@@ -35,7 +35,7 @@ class EmtoDirectory:
         try:
             self.dat = self.get_input()
         except FileNotFoundError:
-            raise FileNotFoundError(f"No input file found in {self.root}!")
+            self.dat = None
 
     def move(self, dst):
         dst = Path(dst)
