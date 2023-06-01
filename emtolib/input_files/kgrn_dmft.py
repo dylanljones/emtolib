@@ -53,6 +53,7 @@ ATLINE_OUT = (
     "{name:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
     "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f}{splt:5.2f}  {fix}"
 )
+ORBITALS = ["s", "p", "d", "f", "g", "h", "i", "j", "k", "l"]
 
 
 class Atom:
@@ -130,6 +131,26 @@ class Atom:
     def set_num_valen(self, n):
         self.valen[:] = 0
         self.valen[-n:] = 1
+
+    def get_u(self, item):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        return self.u[item]
+
+    def get_j(self, item):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        return self.j[item]
+
+    def set_u(self, item, u):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        self.u[item] = u
+
+    def set_j(self, item, j):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        self.j[item] = j
 
     def dumps_line(self):
         p = {
