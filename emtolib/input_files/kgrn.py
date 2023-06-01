@@ -53,6 +53,7 @@ ATLINE_OUT = (
     "{name:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
     "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f}{splt:5.2f}  {fix}"
 )
+ORBITALS = ["s", "p", "d", "f", "g", "h"]
 
 
 class Atom:
@@ -95,6 +96,9 @@ class Atom:
         self.splt = splt  # Initial magnetic moment
         self.fix = fix  # Fixed to the value of SPLT (Y) or it is not fixed (N) AFM=m
 
+        self.u = list()
+        self.j = list()
+
         self.n = np.zeros(self.norb, dtype=np.int64)
         self.kappa = np.zeros(self.norb, dtype=np.int64)
         self.occup = np.zeros(self.norb, dtype=np.int64)
@@ -128,6 +132,26 @@ class Atom:
         self.valen[:] = 0
         self.valen[-n:] = 1
 
+    def get_u(self, item):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        return self.u[item]
+
+    def get_j(self, item):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        return self.j[item]
+
+    def set_u(self, item, u):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        self.u[item] = u
+
+    def set_j(self, item, j):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        self.j[item] = j
+
     def dumps_line(self):
         p = {
             "name": self.symbol,
@@ -143,7 +167,11 @@ class Atom:
             "splt": self.splt,
             "fix": self.fix,
         }
-        return ATLINE_OUT.format(**p)
+        line = ATLINE_OUT.format(**p)
+        if self.u and self.j:
+            line += " " + " ".join(f"{x:4.2f}" for x in self.u)
+            line += " " + " ".join(f"{x:4.2f}" for x in self.j)
+        return line
 
     def dumps_block(self):
         lines = list()
@@ -309,14 +337,16 @@ class EmtoKgrnFile(EmtoFile):
         nlines = int(re.findall(r"\d", line)[0]) - 1
         params.update(parse_params(" ".join(lines[:nlines])))
         lines = lines[nlines:]
-        columns = lines.pop(0).split()[1:]
+        columns = lines.pop(0).split()[1:12]
+        ncols = len(columns)
         atom_lines = list()
-        # atom_lines = dict()
         while not lines[0].startswith("Atom:"):
             values = lines.pop(0).split()
             at = values.pop(0)
+            kwargs = dict(zip(columns, values[:ncols]))
+            uj = values[ncols:]
             # atom_lines[at] = dict(zip(columns, values))
-            atom_lines.append((at, dict(zip(columns, values))))
+            atom_lines.append((at, kwargs, uj))
 
         # Atom section
         line = lines.pop(0)
@@ -419,7 +449,7 @@ class EmtoKgrnFile(EmtoFile):
 
         counts = dict()
         atom_list = list()
-        for at, params in atom_lines:
+        for at, params, uj in atom_lines:
             if at not in counts:
                 counts[at] = 0
             else:
@@ -436,10 +466,13 @@ class EmtoKgrnFile(EmtoFile):
             idx = 0 if len(blocks) == 1 else i
             at_params, at_table = blocks[idx]
             at_params.update(params)
-            atom_list.append((at, at_params, at_table))
+            atom_list.append((at, at_params, at_table, uj))
 
         atoms = list()
-        for at, at_params, at_table in atom_list:
+        for at, at_params, at_table, uj in atom_list:
+            uj = [float(x) for x in uj]
+            n = len(uj) // 2
+            u, j = uj[:n], uj[n:]
             iq = int(at_params["IQ"])
             it = int(at_params["IT"])
             ita = int(at_params["ITA"])
@@ -460,6 +493,8 @@ class EmtoKgrnFile(EmtoFile):
             atom.kappa = at_table["Kappa"]
             atom.occup = at_table["Occup"]
             atom.valen = at_table["Valen"]
+            atom.u = u
+            atom.j = j
             atoms.append(atom)
             # atom_dict[at] = atom
         self.atoms = atoms
