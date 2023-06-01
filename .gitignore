@@ -2,6 +2,7 @@
 # -- Project gitignore -----------------------------------------------------------------
 
 data/
+app/
 main*.py
 dev*.py
 # setuptools_scm version file
