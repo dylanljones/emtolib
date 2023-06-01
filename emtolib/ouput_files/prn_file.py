@@ -18,6 +18,8 @@ class EmtoPrnFile(EmtoFile):
     RE_MAG = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)")
     RE_MAG_ITER = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)$")
 
+    RE_DOS_EF = re.compile(r"DOS\(EF\)\s=\s+(?P<value>.*)")
+
     def __init__(self, path):
         super().__init__(path)
         self.data = ""
@@ -127,3 +129,9 @@ class EmtoPrnFile(EmtoFile):
         mag_pre, mag_post, mag_iter = self.get_magnetic_moment()
         moments = mag_pre if pre else mag_post
         return [(at, m) for at, m, _ in moments]
+
+    def get_dos_ef(self):
+        match = self.RE_DOS_EF.search(self.data)
+        if match:
+            return float(match.group("value"))
+        return None
