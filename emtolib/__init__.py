@@ -8,3 +8,4 @@ from .common import EmtoFile, elements
 from . import input_files
 from . import ouput_files
 from .directory import EmtoDirectory
+from .slurm import SlurmScript
