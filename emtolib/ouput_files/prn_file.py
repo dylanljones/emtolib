@@ -41,6 +41,9 @@ class EmtoPrnFile(EmtoFile):
                     lines.append(line)
         return lines
 
+    def grep(self, text, ignore_case=False):
+        return "\n".join(self.search_line(text, ignore_case))
+
     def search(self, pattern):
         return re.search(pattern, self.data)
 
