@@ -33,8 +33,11 @@ class SlurmScript(EmtoFile):
         self.mail_user = mail_user
         self.time = time
         self.mem = mem
-
         self.commands = list()
+
+        if self.path.exists():
+            self.load()
+
         if commands:
             if isinstance(commands, str):
                 commands = commands.splitlines(keepends=False)

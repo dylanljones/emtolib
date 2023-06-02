@@ -49,10 +49,11 @@ class EmtoFile:
     def dumps(self) -> str:
         pass
 
-    def load(self, file: str = "") -> None:
+    def load(self, file: str = ""):
         file = file or self.path
         with open(file, "r") as fp:
             self.loads(fp.read())
+        return self
 
     def dump(self, file: str = "") -> None:
         file = file or self.path
