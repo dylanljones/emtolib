@@ -7,9 +7,10 @@
 import re
 import shutil
 from pathlib import Path
+from typing import Union
 from .input_files import EmtoKgrnFile
 from .ouput_files import EmtoPrnFile, EmtoDosFile
-from typing import Union
+from .slurm import SlurmScript
 
 RE_COMP = re.compile(r"(\w+?)(\d+)")
 
@@ -74,6 +75,10 @@ class EmtoDirectory:
     def get_prn(self, name=""):
         path = self.get_prn_path(name)
         return EmtoPrnFile(path)
+
+    def get_slurm(self, name="run_emto"):
+        path = self.root / name
+        return SlurmScript(path)
 
     def __repr__(self):
         return f"<{self.__class__.__name__}({self.root})>"
