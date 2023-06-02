@@ -4,9 +4,21 @@
 #
 # Copyright (c) 2023, Dylan Jones
 
+import logging
 import re
 import json
 from pathlib import Path
+
+logger = logging.getLogger("emtolib")
+sh = logging.StreamHandler()
+sh.setLevel(logging.DEBUG)
+logger.addHandler(sh)
+fmt = logging.Formatter(
+    "[%(asctime)s] %(levelname)-8s - %(name)-25s - %(message)s",
+    datefmt="%H:%M:%S"
+)
+sh.setFormatter(fmt)
+logger.setLevel(logging.INFO)
 
 RE_KEYVAL = re.compile(r"([a-zA-Z()0-9]+).*?=.*?([a-zA-Z0-9_\-.]+)")
 

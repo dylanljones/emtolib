@@ -6,8 +6,11 @@
 
 import re
 from datetime import datetime
+import logging
 import numpy as np
 from ..common import EmtoFile, parse_params, elements
+
+logger = logging.getLogger(__name__)
 
 RE_BAND_SECTION = re.compile(r"Band: (.*?) lines")
 
@@ -371,7 +374,7 @@ class EmtoKgrnFile(EmtoFile):
                     at_table[key] = values
                 atom_blocks.append((at, at_params, at_table))
             except IndexError as e:
-                print(f"WARNING: {e}")
+                logger.debug(f"Error parsing atom block: {e}")
                 break
 
         params = {k.upper(): v for k, v in params.items()}
