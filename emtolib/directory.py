@@ -82,3 +82,14 @@ class EmtoDirectory:
 
     def __repr__(self):
         return f"<{self.__class__.__name__}({self.root})>"
+
+
+def walk_emtodirs(root):
+    root = Path(root)
+    for folder in root.glob("*"):
+        if not folder.is_dir():
+            continue
+        folder = EmtoDirectory(folder)
+        if folder.dat is None:
+            continue
+        yield folder

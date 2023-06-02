@@ -7,6 +7,6 @@
 from .common import logger, EmtoFile, elements
 from . import input_files
 from . import ouput_files
-from .directory import EmtoDirectory
+from .directory import EmtoDirectory, walk_emtodirs
 from .slurm import SlurmScript
 
