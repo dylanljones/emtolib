@@ -6,6 +6,7 @@
 
 from pathlib import Path
 from configparser import ConfigParser
+from .input_files import EmtoKgrnFile
 
 
 def read_config(file="emto.ini"):
@@ -16,21 +17,39 @@ def read_config(file="emto.ini"):
     root = Path(parser["emto"]["root"])
     config["emto"] = dict(
         root=root,
-        executable=root / parser["emto"]["executable"],
-        executable2=root / parser["emto"]["executable2"],
-        executable_dmft=root / parser["emto"]["executable_dmft"],
-        kstr=root / parser["emto"]["kstr"],
-        bmdl=root / parser["emto"]["bmdl"],
+        executable=str(root / parser["emto"]["executable"]).replace("\\", "/"),
+        executable2=str(root / parser["emto"]["executable2"]).replace("\\", "/"),
+        executable_dmft=str(root / parser["emto"]["executable_dmft"]).replace(
+            "\\", "/"
+        ),
+        kstr=str(root / parser["emto"]["kstr"]).replace("\\", "/"),
+        bmdl=str(root / parser["emto"]["bmdl"]).replace("\\", "/"),
     )
     config["slurm"] = dict(parser["slurm"])
 
     return config
 
 
-def update_slurm_settings(slurm, config):
+def update_slurm_settings(slurm, config, executable, jobname):
     slurm.ntasks = config["slurm"]["ntasks"]
     slurm.nodes = config["slurm"]["nodes"]
     slurm.mail_user = config["slurm"]["mail_user"]
     slurm.mail_type = config["slurm"]["mail_type"]
     slurm.mem = config["slurm"]["mem"]
     slurm.time = config["slurm"]["time"]
+
+    executable = executable.replace("\\", "/")
+    i, _ = slurm.find_command("time")
+    slurm.commands[i] = f"time {executable} < {jobname}.dat"
+
+
+def update_emto_paths(dat: EmtoKgrnFile, config, kstr, bmdl, kstr2=""):
+    kstr_path = config["emto"]["kstr"] + "/" + kstr
+    if not kstr2:
+        kstr2 = kstr
+    kstr2_path = config["emto"]["kstr"] + "/" + kstr2
+    bmdl_path = config["emto"]["bmdl"] + "/" + bmdl
+
+    dat.for001 = kstr_path
+    dat.for001_2 = kstr2_path
+    dat.for004 = bmdl_path
