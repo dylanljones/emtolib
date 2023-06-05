@@ -4,9 +4,7 @@
 data/
 app/
 figs/
-main*.py
 dev*.py
-dispatch*.py
 
 # setuptools_scm version file
 #  Use this if the project uses pyproject.toml with setuptools_scm instead of setup.py
