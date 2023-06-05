@@ -32,7 +32,7 @@ def phonon_coupling(eta, mass, theta_d):
     x /= (2 * np.pi * const.c)**2                   # SI Unit: 1/m²
     theta = kelvin_to_ev * theta_d                  # SI Unit: eV
     theta = theta * const.eV / (const.h * const.c)  # SI Unit: 1/m
-    lamb = 2 * x / (theta**2)                       # Dimension-less
+    lamb = x / (theta**2)                           # Dimension-less
     return lamb
 
 
