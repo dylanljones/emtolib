@@ -4,12 +4,14 @@
 #
 # Copyright (c) 2023, Dylan Jones
 
+import time
+import shutil
 from pathlib import Path
 import numpy as np
 import xarray as xr
+from typing import Union
 from .directory import EmtoDirectory, walk_emtodirs
 from .common import elements
-from typing import Union
 
 
 def save_dataset(ds: xr.Dataset, location: Union[Path, str] = ".", *, name: str, **kw):
@@ -60,7 +62,29 @@ def construct_dataset(folder: EmtoDirectory):
     return ds
 
 
-def update_datasets(root: Union[Path, str], xarr_dir: str = "xarr", force=False):
+def rmdir(path, maxtry=10):
+
+    e = None
+    if path.exists():
+        try:
+            shutil.rmtree(path)
+        except PermissionError:
+            pass
+        i = 1
+        while path.exists():
+            time.sleep(0.1)
+            try:
+                shutil.rmtree(path)
+            except PermissionError:
+                pass
+            if i >= maxtry:
+                raise e
+            i += 1
+
+
+def update_datasets(
+    root: Union[Path, str], xarr_dir: str = "xarr", force=False, exclude=()
+):
     root = Path(root)
     xarr_root = root / xarr_dir
     if xarr_root.exists():
@@ -69,6 +93,7 @@ def update_datasets(root: Union[Path, str], xarr_dir: str = "xarr", force=False)
         if (xarr_root.exists() and root_mtime <= xarr_mtime) and not force:
             # print("Datasets are up-to date.")
             return xarr_root
+        rmdir(xarr_root)
     else:
         xarr_root.mkdir(parents=True)
 
@@ -77,6 +102,8 @@ def update_datasets(root: Union[Path, str], xarr_dir: str = "xarr", force=False)
     print("=" * 50)
 
     for folder in walk_emtodirs(root):
+        if exclude and folder.root.name in exclude:
+            continue
         print(folder)
         try:
             ds = construct_dataset(folder)
