@@ -30,7 +30,7 @@ DIR011={dir011}
 Self-consistent KKR calculation for {jobnam}
 Band: 10 lines
 NITER.={niter:3d} NLIN.={nlin:3d} NPRN.=  {nprn} NCPA.={ncpa:3d} NT...= {nt:2d} MNTA.= {mnta:2d}
-MODE..= {mode:2} FRC..=  {frc} DOS..=  {dos} OPS..=  {ops} AFM..=  {afm} CRT..=  M
+MODE..= {mode:2} FRC..=  {frc} DOS..=  {dos} OPS..=  {ops} AFM..=  {afm} CRT..=  {crt}
 Lmaxh.= {lmaxh:2d} Lmaxt= {lmaxt:2d} NFI..={nfi:3d} FIXG.= {fixg:2d} SHF..=  {shf:1d} SOFC.=  {sofc}
 KMSH...= {kmsh} IBZ..= {ibz:2d} NKX..= {nkx:2d} NKY..= {nky:2d} NKZ..= {nkz:2d} FBZ..=  {fbz}
 KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d}
@@ -191,13 +191,105 @@ class Atom:
 class EmtoKgrnFile(EmtoFile):
 
     extension = ".dat"
+    __slots__ = [
+        "atoms",
+        "date",
+        "jobnam",
+        "strt",
+        "msgl",
+        "expan",
+        "fcd",
+        "func",
+        "for001",
+        "for001_2",
+        "dir002",
+        "dir003",
+        "for004",
+        "dir006",
+        "dir009",
+        "dir010",
+        "dir011",
+        "jobnam",
+        "niter",
+        "nlin",
+        "nprn",
+        "ncpa",
+        "nt",
+        "mnta",
+        "mode",
+        "frc",
+        "dos",
+        "ops",
+        "afm",
+        "crt",
+        "lmaxh",
+        "lmaxt",
+        "nfi",
+        "fixg",
+        "shf",
+        "sofc",
+        "kmsh",
+        "ibz",
+        "nkx",
+        "nky",
+        "nkz",
+        "fbz",
+        "kmsh2",
+        "ibz2",
+        "nkx2",
+        "nky2",
+        "nkz2",
+        "zmsh",
+        "nz1",
+        "nz2",
+        "nz3",
+        "nres",
+        "nzd",
+        "depth",
+        "imagz",
+        "eps",
+        "elim",
+        "amix",
+        "efmix",
+        "vmtz",
+        "mmom",
+        "tole",
+        "tolef",
+        "tolcpa",
+        "tfermi",
+        "sws",
+        "nsws",
+        "dsws",
+        "alpcpa",
+        "efgs",
+        "hx",
+        "nx",
+        "nz0",
+        "stmp",
+        "atoms",
+        "iex",
+        "np",
+        "nes",
+        "dirac_niter",
+        "iwat",
+        "nprna",
+        "vmix",
+        "rwat",
+        "rmax",
+        "dx",
+        "dr1",
+        "test",
+        "teste",
+        "testy",
+        "testv",
+    ]
 
     def __init__(self, path=""):
         super().__init__(path)
 
-        self.jobname = "kgrn"
+        self.jobnam = "kgrn"
         self.date = ""
-        self.strt = "N"  # A: start from scracth, B: Resume, N: Reuse kmesh
+        self.strt = "A"  # A: start from scratch, B: Resume, N: Reuse kmesh
         self.msgl = 1  # Level of printing
         self.expan = "S"  # Expansion mode: single (S), double (D) or modified (M)
         self.fcd = "Y"  # Y if full charge density is calculated, N if not
@@ -312,13 +404,42 @@ class EmtoKgrnFile(EmtoFile):
     def get_concentrations(self):
         return [atom.conc for atom in self.atoms]
 
+    def get_concentration(self, key):
+        try:
+            return self.get_atom(key).conc
+        except IndexError:
+            return 0.0
+
+    def to_dict(self):
+        return {k: getattr(self, k) for k in self.__slots__ if k not in ("atoms",)}
+
+    def __getitem__(self, key):
+        if not hasattr(self, key):
+            raise KeyError(f"Unknown attribute {key}")
+        return self.__getattribute__(key)
+
+    def __setitem__(self, key, value):
+        if not hasattr(self, key):
+            raise KeyError(f"Unknown attribute {key}")
+        self.__setattr__(key, value)
+
+    def update(self, data: dict):
+        for key, value in data.items():
+            self.__setitem__(key, value)
+
+    def param_diff(self, other):
+        d1 = self.to_dict()
+        d2 = other.to_dict()
+        diffset = set(d1.items()) ^ set(d2.items())
+        return {key: (d1[key], d2[key]) for key in dict(diffset).keys()}
+
     def loads(self, data: str) -> None:
         params = dict()
         lines = data.splitlines(keepends=False)
         prog, date = lines.pop(0).split(" ", maxsplit=1)
         assert prog == "KGRN"
         self.date = date.strip()
-        self.jobname = lines.pop(0).split("=")[1].strip()
+        self.jobnam = lines.pop(0).split("=")[1].strip()
         params.update(parse_params(lines.pop(0)))
         self.for001 = lines.pop(0).split("=")[1].strip()
         self.for001_2 = lines.pop(0).split("=")[1].strip()
@@ -503,12 +624,13 @@ class EmtoKgrnFile(EmtoFile):
         self.atoms = atoms
 
     def dumps(self) -> str:
-        if self.jobname is None:
-            raise ValueError("KGRN: 'jobname' has to be given!")
+        if self.jobnam is None:
+            raise ValueError("KGRN: 'jobnam' has to be given!")
         now = datetime.now()
+
         params = {
             "date": now.strftime("%d %b %y"),
-            "jobnam": self.jobname,
+            "jobnam": self.jobnam,
             "strt": self.strt,
             "msgl": self.msgl,
             "expan": self.expan,
