@@ -108,7 +108,7 @@ class Atom:
         self.iz = iz
         self.norb = norb
         self.ion = ion
-        self.config = config or elements[symbol]["econf"]
+        self.config = config
 
         self.iq = iq  # Atomic site
         self.it = it  # Sublattice
@@ -207,8 +207,9 @@ class EmtoKgrnFile(EmtoFile):
 
     extension = ".dat"
 
-    def __init__(self, path=None, **kwargs):
+    def __init__(self, path=None, update_date=True, **kwargs):
         super().__init__(path)
+        self._update_date = update_date
 
         self.jobnam = "kgrn"
         self.date = datetime.now()
@@ -554,7 +555,7 @@ class EmtoKgrnFile(EmtoFile):
             # atom_dict[at] = atom
         self.atoms = atoms
 
-    def dumps(self, update_date=True) -> str:
+    def dumps(self) -> str:
         if self.jobnam is None:
             raise ValueError("KGRN: 'jobnam' has to be given!")
 
@@ -562,7 +563,7 @@ class EmtoKgrnFile(EmtoFile):
         atomstr = "\n".join(format_atom_line(at.to_dict()) for at in self.atoms)
         atomconf = "\n".join(format_atom_block(at.to_dict()) for at in self.atoms)
 
-        if update_date:
+        if self._update_date:
             params["date"] = datetime.now()
         params["atoms"] = atomstr
         params["atomconf"] = atomconf
