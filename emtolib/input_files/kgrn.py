@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 
 RE_BAND_SECTION = re.compile(r"Band: (.*?) lines")
 
-KGRN_OUT = """\
+TEMPLATE = """\
 KGRN                                               {date:%d %b %y}
 JOBNAM={jobnam}
-STRT..=  {strt} MSGL.=  {msgl} EXPAN.= {expan} FCD..=  {fcd} FUNC..= {func}
+STRT..=  {strt} MSGL.=  {msgl:d} EXPAN.= {expan} FCD..=  {fcd} FUNC..= {func}
 FOR001={for001}
 FOR001={for001_2}
 DIR002={dir002}
@@ -29,7 +29,7 @@ DIR010={dir010}
 DIR011={dir011}
 Self-consistent KKR calculation for {jobnam}
 Band: 10 lines
-NITER.={niter:3d} NLIN.={nlin:3d} NPRN.=  {nprn} NCPA.={ncpa:3d} NT...= {nt:2d} MNTA.= {mnta:2d}
+NITER.={niter:3d} NLIN.={nlin:3d} NPRN.=  {nprn:d} NCPA.={ncpa:3d} NT...= {nt:2d} MNTA.= {mnta:2d}
 MODE..= {mode:2} FRC..=  {frc} DOS..=  {dos} OPS..=  {ops} AFM..=  {afm} CRT..=  {crt}
 Lmaxh.= {lmaxh:2d} Lmaxt= {lmaxt:2d} NFI..={nfi:3d} FIXG.= {fixg:2d} SHF..=  {shf:1d} SOFC.=  {sofc}
 KMSH...= {kmsh} IBZ..= {ibz:2d} NKX..= {nkx:2d} NKY..= {nky:2d} NKZ..= {nkz:2d} FBZ..=  {fbz}
@@ -51,38 +51,61 @@ TESTE....=  {teste:8.2E} TESTY...=  {testy:8.2E} TESTV...=  {testv:8.2E}
 {atomconf}
 """  # noqa
 
-ATCONF_OUT = "Iz= {iz:3d} Norb={norb:3d} Ion=  {ion} Config= {config}"
-ATLINE_OUT = (
-    "{name:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
+ATCONF_TEMPLATE = "Iz= {iz:3d} Norb={norb:3d} Ion=  {ion:d} Config= {config}"
+ATLINE_TEMPLATE = (
+    "{symbol:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
     "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f}{splt:5.2f}   {fix}"
 )
+
 ORBITALS = ["s", "p", "d", "f", "g", "h"]
+
+
+def format_atom_line(params):
+    line = ATLINE_TEMPLATE.format(**params)
+    uj = params["u"] + params["j"]
+    if uj:
+        line += " " + " ".join(f"{x:4.2f}" for x in uj)
+    return line
+
+
+def format_atom_block(params):
+    lines = list()
+    lines.append(params["symbol"])
+    lines.append(ATCONF_TEMPLATE.format(**params))
+    lines.append("n     " + " ".join(f"{x:2d}" for x in params["n"]))
+    lines.append("Kappa " + " ".join(f"{x:2d}" for x in params["kappa"]))
+    lines.append("Occup " + " ".join(f"{x:2d}" for x in params["occup"]))
+    lines.append("Valen " + " ".join(f"{x:2d}" for x in params["valen"]))
+    return "\n".join(lines)
 
 
 class Atom:
     def __init__(
         self,
-        symbol,
+        symbol="",
         iq=1,
         it=1,
         ita=1,
         nz=None,
         conc=1.0,
-        sm=1.0,
-        s=1.0,
-        ws=1.0,
+        sms=1.0,
+        sws=1.0,
+        wswst=1.0,
         qtr=0.0,
         splt=0.0,
         fix="N",
+        iz=None,
         norb=0,
         ion=0,
         config=None,
     ):
-
-        config = config or elements[symbol]["econf"]
-        nz = nz or elements[symbol]["iz"]
+        element = elements.get(symbol, {})
+        config = config or element.get("econf", "")
+        nz = nz or element.get("iz", 0)
+        iz = iz or nz
 
         self.symbol = symbol
+        self.iz = iz
         self.norb = norb
         self.ion = ion
         self.config = config or elements[symbol]["econf"]
@@ -92,9 +115,9 @@ class Atom:
         self.ita = ita  # Types of atoms occupying a given atomic site (in CPA)
         self.nz = nz  # Atomic number (same as IZ?)
         self.conc = conc  # Concentration of a type of atom in a given atomic site
-        self.sms = sm  # Size of the local muffin-tin zero in units of S
-        self.sws = s  # Size of the potential spheres in units of WS
-        self.wswst = ws  # Size of the atomic spheres in ASA in units of W.-S. spheres
+        self.sms = sms  # Size of the local muffin-tin zero in units of S
+        self.sws = sws  # Size of the potential spheres in units of WS
+        self.wswst = wswst  # Size of atomic spheres in ASA in units of W.-S. spheres
         self.qtr = qtr  # Initial charge transfer
         self.splt = splt  # Initial magnetic moment
         self.fix = fix  # Fixed to the value of SPLT (Y) or it is not fixed (N) AFM=m
@@ -106,10 +129,6 @@ class Atom:
         self.kappa = np.zeros(self.norb, dtype=np.int64)
         self.occup = np.zeros(self.norb, dtype=np.int64)
         self.valen = np.zeros(self.norb, dtype=np.int64)
-
-    @property
-    def iz(self):
-        return self.nz
 
     def __repr__(self):
         cls = self.__class__.__name__
@@ -155,44 +174,40 @@ class Atom:
             item = ORBITALS.index(item)
         self.j[item] = j
 
-    def dumps_line(self):
-        p = {
-            "name": self.symbol,
-            "iq": self.iq,
-            "it": self.it,
-            "ita": self.ita,
-            "nz": self.iz,
-            "conc": self.conc,
-            "sms": self.sms,
-            "sws": self.sws,
-            "wswst": self.wswst,
-            "qtr": self.qtr,
-            "splt": self.splt,
-            "fix": self.fix,
-        }
-        line = ATLINE_OUT.format(**p)
-        if self.u and self.j:
-            line += " " + " ".join(f"{x:4.2f}" for x in self.u)
-            line += " " + " ".join(f"{x:4.2f}" for x in self.j)
-        return line
+    def update(self, *args, **kwargs):
+        data = dict(*args, **kwargs)
+        if "n" in data:
+            self.n = np.array(data.pop("n"), dtype=np.int64)
+        if "kappa" in data:
+            self.kappa = np.array(data.pop("kappa"), dtype=np.int64)
+        if "occup" in data:
+            self.occup = np.array(data.pop("occup"), dtype=np.int64)
+        if "valen" in data:
+            self.valen = np.array(data.pop("valen"), dtype=np.int64)
+        for k, v in data.items():
+            self.__setattr__(k, v)
 
-    def dumps_block(self):
-        lines = list()
-        lines.append(self.symbol)
-        p = {"iz": self.iz, "norb": self.norb, "ion": self.ion, "config": self.config}
-        lines.append(ATCONF_OUT.format(**p))
-        lines.append("n     " + " ".join(f"{x:2d}" for x in self.n))
-        lines.append("Kappa " + " ".join(f"{x:2d}" for x in self.kappa))
-        lines.append("Occup " + " ".join(f"{x:2d}" for x in self.occup))
-        lines.append("Valen " + " ".join(f"{x:2d}" for x in self.valen))
-        return "\n".join(lines)
+    def to_dict(self):
+        data = self.__dict__.copy()
+        return data
+
+    @classmethod
+    def from_dict(cls, data):
+        self = cls()
+        self.update(data)
+        assert len(self.n) == self.norb
+        assert len(self.kappa) == self.norb
+        assert len(self.occup) == self.norb
+        assert len(self.valen) == self.norb
+        assert len(self.u) == len(self.j)
+        return self
 
 
 class EmtoKgrnFile(EmtoFile):
 
     extension = ".dat"
 
-    def __init__(self, path=""):
+    def __init__(self, path=None, **kwargs):
         super().__init__(path)
 
         self.jobnam = "kgrn"
@@ -539,102 +554,17 @@ class EmtoKgrnFile(EmtoFile):
             # atom_dict[at] = atom
         self.atoms = atoms
 
-    def dumps(self) -> str:
+    def dumps(self, update_date=True) -> str:
         if self.jobnam is None:
             raise ValueError("KGRN: 'jobnam' has to be given!")
-        now = datetime.now()
 
-        params = {
-            "date": now,
-            "jobnam": self.jobnam,
-            "strt": self.strt,
-            "msgl": self.msgl,
-            "expan": self.expan,
-            "fcd": self.fcd,
-            "func": self.func,
-            "for001": self.for001,
-            "for001_2": self.for001_2,
-            "for004": self.for004,
-            "dir002": self.dir002,
-            "dir003": self.dir003,
-            "dir006": self.dir006,
-            "dir009": self.dir009,
-            "dir010": self.dir010,
-            "dir011": self.dir011,
-            "niter": self.niter,
-            "nlin": self.nlin,
-            "nprn": self.nprn,
-            "ncpa": self.ncpa,
-            "nt": self.nt,
-            "mnta": self.mnta,
-            "mode": self.mode,
-            "frc": self.frc,
-            "dos": self.dos,
-            "ops": self.ops,
-            "afm": self.afm,
-            "crt": self.crt,
-            "lmaxh": self.lmaxh,
-            "lmaxt": self.lmaxt,
-            "nfi": self.nfi,
-            "fixg": self.fixg,
-            "shf": self.shf,
-            "sofc": self.sofc,
-            "kmsh": self.kmsh,
-            "ibz": self.ibz,
-            "nkx": self.nkx,
-            "nky": self.nky,
-            "nkz": self.nkz,
-            "fbz": self.fbz,
-            "kmsh2": self.kmsh2,
-            "ibz2": self.ibz2,
-            "nkx2": self.nkx2,
-            "nky2": self.nky2,
-            "nkz2": self.nkz2,
-            "zmsh": self.zmsh,
-            "nz1": self.nz1,
-            "nz2": self.nz2,
-            "nz3": self.nz3,
-            "nres": self.nres,
-            "nzd": self.nzd,
-            "depth": self.depth,
-            "imagz": self.imagz,
-            "eps": self.eps,
-            "elim": self.elim,
-            "amix": self.amix,
-            "efmix": self.efmix,
-            "vmtz": self.vmtz,
-            "mmom": self.mmom,
-            "tole": self.tole,
-            "tolef": self.tolef,
-            "tolcpa": self.tolcpa,
-            "tfermi": self.tfermi,
-            "sws": self.sws,
-            "nsws": self.nsws,
-            "dsws": self.dsws,
-            "alpcpa": self.alpcpa,
-            "efgs": self.efgs,
-            "hx": self.hx,
-            "nx": self.nx,
-            "nz0": self.nz0,
-            "stmp": self.stmp,
-            "iex": self.iex,
-            "np": self.np,
-            "nes": self.nes,
-            "dirac_niter": self.dirac_niter,
-            "iwat": self.iwat,
-            "nprna": self.nprna,
-            "vmix": self.vmix,
-            "rwat": self.rwat,
-            "rmax": self.rmax,
-            "dx": self.dx,
-            "dr1": self.dr1,
-            "test": self.test,
-            "teste": self.teste,
-            "testy": self.testy,
-            "testv": self.testv,
-            #
-            "atoms": "\n".join(at.dumps_line() for at in self.atoms),
-            "atomconf": "\n".join(at.dumps_block() for at in self.atoms),
-        }
-        s = KGRN_OUT.format(**params)
+        params = self.to_dict()
+        atomstr = "\n".join(format_atom_line(at.to_dict()) for at in self.atoms)
+        atomconf = "\n".join(format_atom_block(at.to_dict()) for at in self.atoms)
+
+        if update_date:
+            params["date"] = datetime.now()
+        params["atoms"] = atomstr
+        params["atomconf"] = atomconf
+        s = TEMPLATE.format(**params)
         return s.replace(".0e", ".d")
