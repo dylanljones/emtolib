@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 RE_BAND_SECTION = re.compile(r"Band: (.*?) lines")
 
 KGRN_OUT = """\
-KGRN                                               {date}
+KGRN                                               {date:%d %b %y}
 JOBNAM={jobnam}
 STRT..=  {strt} MSGL.=  {msgl} EXPAN.= {expan} FCD..=  {fcd} FUNC..= {func}
 FOR001={for001}
@@ -54,7 +54,7 @@ TESTE....=  {teste:8.2E} TESTY...=  {testy:8.2E} TESTV...=  {testv:8.2E}
 ATCONF_OUT = "Iz= {iz:3d} Norb={norb:3d} Ion=  {ion} Config= {config}"
 ATLINE_OUT = (
     "{name:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
-    "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f}{splt:5.2f}  {fix}"
+    "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f}{splt:5.2f}   {fix}"
 )
 ORBITALS = ["s", "p", "d", "f", "g", "h"]
 
@@ -92,9 +92,9 @@ class Atom:
         self.ita = ita  # Types of atoms occupying a given atomic site (in CPA)
         self.nz = nz  # Atomic number (same as IZ?)
         self.conc = conc  # Concentration of a type of atom in a given atomic site
-        self.sm = sm  # Size of the local muffin-tin zero in units of S
-        self.s = s  # Size of the potential spheres in units of WS
-        self.ws = ws  # Size of the atomic spheres in ASA in units of W.-S. spheres
+        self.sms = sm  # Size of the local muffin-tin zero in units of S
+        self.sws = s  # Size of the potential spheres in units of WS
+        self.wswst = ws  # Size of the atomic spheres in ASA in units of W.-S. spheres
         self.qtr = qtr  # Initial charge transfer
         self.splt = splt  # Initial magnetic moment
         self.fix = fix  # Fixed to the value of SPLT (Y) or it is not fixed (N) AFM=m
@@ -163,9 +163,9 @@ class Atom:
             "ita": self.ita,
             "nz": self.iz,
             "conc": self.conc,
-            "sms": self.sm,
-            "sws": self.s,
-            "wswst": self.ws,
+            "sms": self.sms,
+            "sws": self.sws,
+            "wswst": self.wswst,
             "qtr": self.qtr,
             "splt": self.splt,
             "fix": self.fix,
@@ -191,104 +191,12 @@ class Atom:
 class EmtoKgrnFile(EmtoFile):
 
     extension = ".dat"
-    __slots__ = [
-        "atoms",
-        "date",
-        "jobnam",
-        "strt",
-        "msgl",
-        "expan",
-        "fcd",
-        "func",
-        "for001",
-        "for001_2",
-        "dir002",
-        "dir003",
-        "for004",
-        "dir006",
-        "dir009",
-        "dir010",
-        "dir011",
-        "jobnam",
-        "niter",
-        "nlin",
-        "nprn",
-        "ncpa",
-        "nt",
-        "mnta",
-        "mode",
-        "frc",
-        "dos",
-        "ops",
-        "afm",
-        "crt",
-        "lmaxh",
-        "lmaxt",
-        "nfi",
-        "fixg",
-        "shf",
-        "sofc",
-        "kmsh",
-        "ibz",
-        "nkx",
-        "nky",
-        "nkz",
-        "fbz",
-        "kmsh2",
-        "ibz2",
-        "nkx2",
-        "nky2",
-        "nkz2",
-        "zmsh",
-        "nz1",
-        "nz2",
-        "nz3",
-        "nres",
-        "nzd",
-        "depth",
-        "imagz",
-        "eps",
-        "elim",
-        "amix",
-        "efmix",
-        "vmtz",
-        "mmom",
-        "tole",
-        "tolef",
-        "tolcpa",
-        "tfermi",
-        "sws",
-        "nsws",
-        "dsws",
-        "alpcpa",
-        "efgs",
-        "hx",
-        "nx",
-        "nz0",
-        "stmp",
-        "atoms",
-        "iex",
-        "np",
-        "nes",
-        "dirac_niter",
-        "iwat",
-        "nprna",
-        "vmix",
-        "rwat",
-        "rmax",
-        "dx",
-        "dr1",
-        "test",
-        "teste",
-        "testy",
-        "testv",
-    ]
 
     def __init__(self, path=""):
         super().__init__(path)
 
         self.jobnam = "kgrn"
-        self.date = ""
+        self.date = datetime.now()
         self.strt = "A"  # A: start from scratch, B: Resume, N: Reuse kmesh
         self.msgl = 1  # Level of printing
         self.expan = "S"  # Expansion mode: single (S), double (D) or modified (M)
@@ -410,35 +318,43 @@ class EmtoKgrnFile(EmtoFile):
         except IndexError:
             return 0.0
 
-    def to_dict(self):
-        return {k: getattr(self, k) for k in self.__slots__ if k not in ("atoms",)}
-
-    def __getitem__(self, key):
-        if not hasattr(self, key):
-            raise KeyError(f"Unknown attribute {key}")
-        return self.__getattribute__(key)
-
-    def __setitem__(self, key, value):
-        if not hasattr(self, key):
-            raise KeyError(f"Unknown attribute {key}")
-        self.__setattr__(key, value)
-
-    def update(self, data: dict):
-        for key, value in data.items():
-            self.__setitem__(key, value)
-
     def param_diff(self, other):
         d1 = self.to_dict()
         d2 = other.to_dict()
         diffset = set(d1.items()) ^ set(d2.items())
         return {key: (d1[key], d2[key]) for key in dict(diffset).keys()}
 
+    # ----------------------------------------------------------------------------------
+
+    def to_dict(self):
+        data = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
+        data.pop("atoms", None)
+        data.pop("path", None)
+        return data
+
+    def __getitem__(self, key):
+        if not hasattr(self, key):
+            raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
+        return self.__getattribute__(key)
+
+    def __setitem__(self, key, value):
+        if not hasattr(self, key):
+            raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
+        self.__setattr__(key, value)
+
+    def update(self, *args, **kwargs):
+        data = dict(*args, **kwargs)
+        for k, v in data.items():
+            if not hasattr(self, k):
+                raise KeyError(f"{k} is not a valid field of {self.__class__.__name__}")
+            self.__setattr__(k, v)
+
     def loads(self, data: str) -> None:
         params = dict()
         lines = data.splitlines(keepends=False)
         prog, date = lines.pop(0).split(" ", maxsplit=1)
         assert prog == "KGRN"
-        self.date = date.strip()
+        self.date = datetime.strptime(date.strip(), "%d %b %y")
         self.jobnam = lines.pop(0).split("=")[1].strip()
         params.update(parse_params(lines.pop(0)))
         self.for001 = lines.pop(0).split("=")[1].strip()
@@ -629,7 +545,7 @@ class EmtoKgrnFile(EmtoFile):
         now = datetime.now()
 
         params = {
-            "date": now.strftime("%d %b %y"),
+            "date": now,
             "jobnam": self.jobnam,
             "strt": self.strt,
             "msgl": self.msgl,
