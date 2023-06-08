@@ -51,6 +51,7 @@ TESTE....=  {teste:8.2E} TESTY...=  {testy:8.2E} TESTV...=  {testv:8.2E}
 {atomconf}
 """  # noqa
 
+ATOM_COLUMNS = "iq it ita nz conc sms sws wswst qtr splt fix".split()
 ATCONF_TEMPLATE = "Iz= {iz:3d} Norb={norb:3d} Ion=  {ion:d} Config= {config}"
 ATLINE_TEMPLATE = (
     "{symbol:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
@@ -77,6 +78,73 @@ def format_atom_block(params):
     lines.append("Occup " + " ".join(f"{x:2d}" for x in params["occup"]))
     lines.append("Valen " + " ".join(f"{x:2d}" for x in params["valen"]))
     return "\n".join(lines)
+
+
+def parse_atom_line(line):
+    columns = ATOM_COLUMNS
+    ncols = len(columns)
+    parts = line.split()
+    at = parts.pop(0)
+    values = parts[:ncols]
+    for i in range(4):
+        values[i] = int(values[i])
+    for i in range(4, ncols - 1):
+        values[i] = float(values[i])
+    params = dict(zip(columns, values))
+    uj = [float(x) for x in parts[ncols:]]
+    nuj = len(uj)
+    params["u"] = uj[: nuj // 2]
+    params["j"] = uj[nuj // 2 :]
+    return at, params
+
+
+def parse_atom_block(lines):
+    assert len(lines) == 6
+    at = lines.pop(0).strip()
+    at_params = {k.lower(): v for k, v in parse_params(lines.pop(0).strip()).items()}
+    at_params["iz"] = int(at_params["iz"])
+    at_params["norb"] = int(at_params["norb"])
+    at_params["ion"] = int(at_params["ion"])
+    for line in lines:
+        parts = line.strip().split()
+        key = parts.pop(0)
+        values = [int(x) for x in parts]
+        at_params[key.lower()] = values
+    return at, at_params
+
+
+def parse_atoms(atomstr, atomconfstr):
+    atom_params = [parse_atom_line(line) for line in atomstr.splitlines()]
+
+    lines = atomconfstr.splitlines()
+    n_blocks = len(lines) // 6
+    atom_blocks = [
+        parse_atom_block(lines[i * 6 : (i + 1) * 6]) for i in range(n_blocks)
+    ]
+
+    counts = dict()
+    atoms = list()
+    for at, params in atom_params:
+        if at not in counts:
+            counts[at] = 0
+        else:
+            counts[at] += 1
+        i = counts[at]
+
+        # Get the corresponding atom block
+        blocks = list()
+        for _at, at_params in atom_blocks:
+            _at = "".join([i for i in _at if not i.isdigit()])
+            if _at == at:
+                blocks.append(at_params)
+
+        idx = 0 if len(blocks) == 1 else i
+        at_params = blocks[idx]
+        at_params.update(params)
+        at_params["symbol"] = at
+        atoms.append(at_params)
+
+    return atoms
 
 
 class Atom:
@@ -386,23 +454,22 @@ class EmtoKgrnFile(EmtoFile):
         # Band section
         nlines = int(RE_BAND_SECTION.match(lines.pop(0)).group(1))
         params.update(parse_params(" ".join(lines[:nlines]).replace(" (K)", "")))
-        lines = lines[nlines:]
         # Setup section
+        lines = lines[nlines:]
         line = lines.pop(0)
         assert line.startswith("Setup: ")
         nlines = int(re.findall(r"\d", line)[0]) - 1
         params.update(parse_params(" ".join(lines[:nlines])))
+
+        # Atom lines
         lines = lines[nlines:]
-        columns = lines.pop(0).split()[1:12]
-        ncols = len(columns)
-        atom_lines = list()
+        columns = lines.pop(0).split()[1:12]  # header line
+        columns = [c.strip().lower().replace("(", "").replace(")", "") for c in columns]
+        assert columns == ATOM_COLUMNS
+        atomstr_lines = list()
         while not lines[0].startswith("Atom:"):
-            values = lines.pop(0).split()
-            at = values.pop(0)
-            kwargs = dict(zip(columns, values[:ncols]))
-            uj = values[ncols:]
-            # atom_lines[at] = dict(zip(columns, values))
-            atom_lines.append((at, kwargs, uj))
+            atomstr_lines.append(lines.pop(0))
+        atomstr = "\n".join(atomstr_lines)
 
         # Atom section
         line = lines.pop(0)
@@ -412,23 +479,9 @@ class EmtoKgrnFile(EmtoFile):
         atparams["ATNITER"] = atparams["NITER"]
         del atparams["NITER"]
         params.update(atparams)
-        lines = lines[nlines:]
-        atom_blocks = list()
-        while lines:
-            try:
-                at = lines.pop(0)
-                at_params = parse_params(lines.pop(0))
-                at_table = dict()
-                for j in range(nblock - 2):
-                    values = lines.pop(0).split()
-                    key = values.pop(0)
-                    values = np.array([int(x) for x in values])
-                    assert len(values) == int(at_params["Norb"])
-                    at_table[key] = values
-                atom_blocks.append((at, at_params, at_table))
-            except IndexError as e:
-                logger.debug(f"Error parsing atom block: {e}")
-                break
+
+        # Atom blocks
+        atomconfstr = "\n".join(lines[nlines:])
 
         params = {k.upper(): v for k, v in params.items()}
         self.strt = params["STRT"]
@@ -503,57 +556,7 @@ class EmtoKgrnFile(EmtoFile):
         self.testy = float(params["TESTY"])
         self.testv = float(params["TESTV"])
 
-        counts = dict()
-        atom_list = list()
-        for at, params, uj in atom_lines:
-            if at not in counts:
-                counts[at] = 0
-            else:
-                counts[at] += 1
-            i = counts[at]
-
-            # Get the corresponding atom block
-            blocks = list()
-            for _at, at_params, at_table in atom_blocks:
-                _at = "".join([i for i in _at if not i.isdigit()])
-                if _at == at:
-                    blocks.append((at_params, at_table))
-
-            idx = 0 if len(blocks) == 1 else i
-            at_params, at_table = blocks[idx]
-            at_params.update(params)
-            atom_list.append((at, at_params, at_table, uj))
-
-        atoms = list()
-        for at, at_params, at_table, uj in atom_list:
-            uj = [float(x) for x in uj]
-            n = len(uj) // 2
-            u, j = uj[:n], uj[n:]
-            iq = int(at_params["IQ"])
-            it = int(at_params["IT"])
-            ita = int(at_params["ITA"])
-            nz = int(at_params["NZ"])
-            conc = float(at_params["CONC"])
-            sm = float(at_params["Sm(s)"])
-            s = float(at_params["S(ws)"])
-            ws = float(at_params["WS(wst)"])
-            qtr = float(at_params["QTR"])
-            splt = float(at_params["SPLT"])
-            fix = at_params.get("Fix")
-
-            atom = Atom(at, iq, it, ita, nz, conc, sm, s, ws, qtr, splt, fix)
-            atom.norb = int(at_params["Norb"])
-            atom.ion = int(at_params["Ion"])
-            atom.config = at_params["Config"]
-            atom.n = at_table["n"]
-            atom.kappa = at_table["Kappa"]
-            atom.occup = at_table["Occup"]
-            atom.valen = at_table["Valen"]
-            atom.u = u
-            atom.j = j
-            atoms.append(atom)
-            # atom_dict[at] = atom
-        self.atoms = atoms
+        self.atoms = [Atom.from_dict(at) for at in parse_atoms(atomstr, atomconfstr)]
 
     def dumps(self) -> str:
         if self.jobnam is None:
