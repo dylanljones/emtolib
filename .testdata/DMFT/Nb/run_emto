@@ -1,0 +1,28 @@
+#!/bin/bash
+#SBATCH --job-name=NbV-100-DMFT
+#SBATCH --partition=epyc
+#SBATCH --ntasks=1
+#SBATCH --nodes=1
+#SBATCH --mail-type=FAIL,END,INVALID_DEPEND,TIME_LIMIT
+#SBATCH --mail-user=dylan.jones@student.uni-augsburg.de
+#SBATCH --time=7-0
+#SBATCH --mem=2gb
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+export OMP_PROC_BIND=false
+export OMP_STACKSIZE=256M
+ulimit -Ss unlimited
+
+
+echo - Host machine:\ \ \ $HOSTNAME
+echo - I/O directory:\ \ $PWD
+echo - SCF directory:\ \ $SCFDIR
+echo - Calculation started:\ \ `date`
+echo - PATH:\ \ $PATH
+echo - E_RAND:\ \ $E_RAND
+
+time ~/EMTO/EMTO_DMFT/kgrn/kgrn_cpa < nb.dat
+
+
+echo
+echo - Calculation finished: `date`

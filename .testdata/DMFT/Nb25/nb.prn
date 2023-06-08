@@ -1,0 +1,2265 @@
+ TASK:     Self-consistent KKR calculation for nb            11:10 / 02-Jun-23
+
+ FHNDLR:   Program: KGRN, Version: LV 24 Oct 2013
+
+           JOB:    nb
+           FOR001: ~/EMTO/EMTO5.8/kstr/smx/bcc.tfh
+           FOR002: pot/nb.pot
+           FOR003: pot/snb.atm
+           FOR004: ~/EMTO/EMTO5.8/bmdl/mdl/bcc.mdl
+           FOR006: nb.prn
+           FOR009: pot/nb.zms
+           FOR010: chd/nb.chd
+           FOR011: /tmp/nb.tmp
+
+           MSGL = 1 STRT =A FUNC = SCA EXPAN = S FCD = Y
+
+ TRNSFM:   Single Taylor expansion for the slope matrix
+
+           Slope matrices, bcc (spdf), (kappa*w)^2= 0.0              30-May-23
+
+           ITRANS =  3 (kappa0*w)^2 =   0.000 NDER =  6
+
+ DMFT:     LMTO structure constants: lbccspd.tfh
+           No. of Matsubaras:          256
+           Temperature [K]:    400.000000000000
+           Solver: uppsalasolver
+           Double counting:            1
+           Mixing:   5.000000000000000E-002
+           Nomi (Pade):           80
+
+
+ INPUT:    Non-overlapping values are used for f and g
+
+           Higher tails included in the charge density Lmaxt =  4
+
+           Full charge density is calculated for       Lmaxh =  8
+
+           Density of states (DOS) is calculatated
+
+           TOLE   =0.1000E-06 TOLEF =0.1000E-06 TOLCPA=0.1000E-05
+           DEPTH  = 1.0000000 IMAGZ = 0.0100000 EPS   = 0.2000000
+           AMIX   = 0.1000000 EFMIX = 1.0000000 ALPCPA= 0.6020000
+
+           NQ     =  1 NT    =  1 NL    =  4 NS    =  2 MNTA  =  2
+           KMSH   =  G IBZ   =  3 NKX   =  0 NKY   = 57 NKZ   =  0
+           ZMSH   =  C NZ1   = 32 NZ2   =  8 NZ3   =  8 NRES  =  4
+           NITER  =200 NLIN  = 31 NCPA  =  7 AFM   =  F CRT   =  M
+
+ INPUT: LDA+DFMT for site IT =  1 ITA =  1
+
+              U(s,p,d,...)[eV]        J(s,p,d,...)[eV]
+
+              0.000   0.000   0.000   0.000   0.000   0.000   0.000   0.000
+
+ INPUT: LDA+DFMT for site IT =  1 ITA =  2
+
+              U(s,p,d,...)[eV]        J(s,p,d,...)[eV]
+
+              0.000   0.000   2.000   0.000   0.000   0.000   0.600   0.000
+
+ MGAUN:    Generate real Gaunt numbers
+
+ MGAUNT:   NGAUNT =   708
+
+ SET3DI:   Angular integration mesh generated with NTH =  31 NFI =  31
+
+ ROTM3D:   Set up the 3D rotation matrices for IBZ =  3
+
+           Rotation matrices generated, NPRPRT = 48
+
+ SETSYM:   Set up the site-group symmetry elements for IQ =  1
+
+           E     sigb  C31+  C31-  sigf  sige  C4z+  C4z-
+           C2z   sigx  C2d   C4y-  S64-  S62+  sigy  C4x+
+           C2c   S62-  S63+  siga  C33+  C34-  S4x+  S4y-
+           I     C2b   S61-  S61+  C2f   C2e   S4z-  S4z+
+           sigz  C2x   sigd  S4y+  C34+  C32-  C2y   S4x-
+           sigc  C32+  C33-  C2a   S63-  S64+  C4x-  C4y+
+
+
+ MADMTR:   Madelung potential for bcc bulk                           17-Jan-23
+
+           NLMAD  =  49
+
+ SCAWS:    IQ IT ITA  WS     S      Sm     Si     Sc     hard spheres (s,p,...)
+
+            1  1  1 2.8775 2.8775 2.8775 2.5306 3.2670 2.0142 2.0142 2.0142 2.0142
+            1  1  2 2.8775 2.8775 2.8775 2.5306 3.2670 2.0142 2.0142 2.0142 2.0142
+
+           Exchange-correlation: P-W
+
+ ATOMI:    Atomic calculation for Nb   WSATM =  2.877500
+
+           NITER =100 IEX   =  4 IWAT  =  0 IZ    = 41 ION   =  0
+
+           Precision on energy, wavefunction, and potential:
+
+           TESTE =  1.00E-12 TESTY =  1.00E-12 TESTV =  1.00E-12
+           VMIX  =  0.300000
+
+           Precision on energy and number of iterations in DIRACA:
+
+           TEST  =  1.00E-12 NES   = 15
+
+           Radial mesh given by (R(1)=DR1/IZ) :
+
+           JWSA  = 369   JRIA  = 371   JWOA  =   0   NP    = 433
+           DR1   =  0.002000 DX    =  0.030000 RMAX  = 20.000000
+           R(1)  =  0.4617472E-04         R(NP) =  0.1962731E+02
+
+           Exchange-correlation: Perdew-Wang-CA
+
+           Valence orbital Nodes
+
+                 5s          4
+                 5p          3
+                 4d          1
+                 4f          0
+
+ ATOMC:    Nb     4d3_5s2                Perdew-Wang-CA
+
+
+           Orbital   Occup.   Valence   deltaQ   Final energy (Rydberg)
+
+            1s1/2      2         0       0.00     -1.3800440E+03
+            2s1/2      2         0       0.00     -1.9326667E+02
+            2p3/2      2         0       0.00     -1.7751258E+02
+            2p1/2      4         0      -0.00     -1.7048549E+02
+            3s1/2      2         0       0.00     -3.2414782E+01
+            3p3/2      2         0       0.00     -2.6480392E+01
+            3p1/2      4         0       0.00     -2.5340617E+01
+            3d5/2      4         0       0.00     -1.4820043E+01
+            3d3/2      6         0       0.00     -1.4607631E+01
+            4s1/2      2         0       0.00     -4.5327705E+00
+            4p3/2      2         0       0.01     -2.8793558E+00
+            4p1/2      4         0       0.01     -2.7201432E+00
+            4d5/2      3         1       0.18     -4.1753678E-01
+            5s1/2      2         1       0.71     -4.2716378E-01
+
+ TOTALE:   (Rydberg)
+
+           EONE =     -2.106938 VINT =    -28.349082 EKIN =     26.242144
+           ENUC =   -220.652309 ECOR =    180.357088
+           EVAL =    197.286980 EXCT =   -229.202777 EXCC =   -224.675853
+           ETOT =    -10.115055
+
+           Valence energies in the frozen core approximation (Rydbergs)
+
+           Kinetic energy        26.242144
+           El-ion energy       -220.652309
+           El-el energy         188.822034
+           Exc energy            -4.526924
+
+           Total energy         -10.115055
+
+ Atomic charge densities, and potential stored on FOR003
+
+ ATOMI:    Atomic calculation for V    WSATM =  2.877500
+
+           NITER =100 IEX   =  4 IWAT  =  0 IZ    = 23 ION   =  0
+
+           Precision on energy, wavefunction, and potential:
+
+           TESTE =  1.00E-12 TESTY =  1.00E-12 TESTV =  1.00E-12
+           VMIX  =  0.300000
+
+           Precision on energy and number of iterations in DIRACA:
+
+           TEST  =  1.00E-12 NES   = 15
+
+           Radial mesh given by (R(1)=DR1/IZ) :
+
+           JWSA  = 349   JRIA  = 351   JWOA  =   0   NP    = 413
+           DR1   =  0.002000 DX    =  0.030000 RMAX  = 20.000000
+           R(1)  =  0.8413582E-04         R(NP) =  0.1962731E+02
+
+           Exchange-correlation: Perdew-Wang-CA
+
+           Valence orbital Nodes
+
+                 4s          3
+                 4p          2
+                 3d          0
+                 4f          0
+
+ ATOMC:    V      3d3_4s2                Perdew-Wang-CA
+
+
+           Orbital   Occup.   Valence   deltaQ   Final energy (Rydberg)
+
+            1s1/2      2         0       0.00     -3.9330923E+02
+            2s1/2      2         0       0.00     -4.4243302E+01
+            2p3/2      2         0       0.00     -3.7369730E+01
+            2p1/2      4         0       0.00     -3.6849332E+01
+            3s1/2      2         0       0.00     -5.2065351E+00
+            3p3/2      2         0       0.00     -3.3459474E+00
+            3p1/2      4         0       0.00     -3.2841254E+00
+            3d5/2      3         1       0.07     -4.6957058E-01
+            4s1/2      2         1       0.65     -4.4013905E-01
+
+ TOTALE:   (Rydberg)
+
+           EONE =     -2.288990 VINT =    -32.785818 EKIN =     30.496828
+           ENUC =   -166.449049 ECOR =    118.332701
+           EVAL =    139.848584 EXCT =    -86.223751 EXCC =    -80.533966
+           ETOT =    -12.551363
+
+           Valence energies in the frozen core approximation (Rydbergs)
+
+           Kinetic energy        30.496828
+           El-ion energy       -166.449049
+           El-el energy         129.090642
+           Exc energy            -5.689785
+
+           Total energy         -12.551363
+
+ Atomic charge densities, and potential stored on FOR003
+
+           Self-consistent bulk program: ATOM
+
+
+ OLDIN:    NT     =  1 NS   =  2
+
+           EFGS   = -0.300000
+
+ SETRMS:   dimension for potential spheres     : 373
+
+           dimension for circumscribed spheres : 374
+
+           IT ITA    Si      w       Sc      S
+
+            1  1     363     369     374     369
+                   2.5306  2.8775  3.2670  2.8775
+            1  2     343     349     354     349
+                   2.5306  2.8775  3.2670  2.8775
+
+ SETNGB:   Madelung correction for each site and sort
+
+             0.384132  0.384132
+
+ NXTSWS:   IQ IT ITA MMT Type  NZ ION  ELN   QTR   SPLIT  FIX  CONC
+
+            1  1  1   1   Nb   41  0   5.0  0.000  0.000   N  0.250
+            1  1  2   1   V    23  0   5.0  0.000  0.000   N  0.750
+
+           SWS =    2.8775 Alat =  5.8442 Bohr   3.0926 AA
+           VOL =   99.8009 ELT  =  5.0000
+
+ OVRLPS:   Set up the overlapping spheres for IQ =  1
+
+           Number of different overlapping spheres NOV =  1
+
+            jt  wov   ovt jrov   tov(Bohr)   tov(a)      okac     omega
+
+             1    8    1  360   5.061184    0.866025    0.153521  13.71 %
+
+           Number of different overlapping spheres NOV =  1
+
+            jt  wov   ovt jrov   tov(Bohr)   tov(a)      okac     omega
+
+             1    8    1  340   5.061184    0.866025    0.153521  13.71 %
+
+ OVRLPS:   VOL =   99.800934 VOLS =   99.800934 VOLI =    0.000000
+
+ RENORM:   IT         CWS             ZWS
+             1  1   0.36000000E+02 0.39017644E+02
+             1  2   0.18000000E+02 0.21488213E+02
+
+ OPTPOT:   Fbar =  0.000000 g = -0.687249 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.687249 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.687249     -0.687249
+
+ EBTOP:      Bot       Top
+
+            -0.483435  9.949422
+
+ KMESH:    Brillouin zone: bcc. NPT = 8555
+
+ KMESH:    NKVEC =  8555 NKX =  0 NKY = 57 NKZ =  0
+           DKX =  0.035714 DKY =  0.035714 DKZ =  0.035714
+
+ SETIBZ:   dimension of the point group:
+           IMSYMM:   1 IBZR:  48 IBZROT:  48
+
+ ZMESH:    Semi-circular contour
+
+
+           ELT  =  5.000000 EB   = -1.800000 EFX= -0.300000
+           DEPTH=  1.000000 DELTA=  0.079621 EPS=  0.200000
+
+           LZ     Re(z)     Im(z)    Weight
+
+            1  -1.299388 -0.024738  0.003113 -0.062850
+            2  -1.284351 -0.124112  0.033622 -0.131212
+            3  -1.219331 -0.272326  0.100905 -0.155375
+            4  -1.081191 -0.413439  0.171794 -0.116842
+            5  -0.889708 -0.491887  0.202148 -0.036867
+            6  -0.694375 -0.488716  0.181335  0.039191
+            7  -0.536315 -0.424818  0.132733  0.082387
+            8  -0.428923 -0.335115  0.083534  0.092498
+            9  -0.364890 -0.246331  0.046989  0.083000
+           10  -0.330300 -0.171413  0.024235  0.066407
+           11  -0.313050 -0.113490  0.011595  0.049750
+           12  -0.305069 -0.071018  0.005123  0.035705
+           13  -0.301689 -0.041065  0.002034  0.024677
+           14  -0.300434 -0.020820  0.000674  0.016174
+           15  -0.300066 -0.008116  0.000154  0.009475
+           16  -0.300002 -0.001503  0.000012  0.003880
+
+           LX     Re(z)     Im(z)
+
+            1  -1.200002 -0.001503
+            2  -0.900002 -0.001503
+            3  -0.600002 -0.001503
+            4  -0.300002 -0.001503
+            5  -0.000002 -0.001503
+            6   0.299998 -0.001503
+            7   0.599998 -0.001503
+
+ WARNING:  Taylor expansion might not be converged:
+
+ LZ exp   E     S00     S00_Dots(1,2,...)
+
+  1  1  -1.30 -1.2896 -1.5857  0.3796 -0.1083  0.0316 -0.0094  0.0026
+  2  1  -1.28 -1.2635 -1.5468  0.3612 -0.1005  0.0286 -0.0083  0.0022
+  3  1  -1.22 -1.1481 -1.3783  0.2868 -0.0711  0.0180 -0.0046  0.0011
+  4  1  -1.08 -0.8876 -1.0205  0.1572 -0.0289  0.0054 -0.0010  0.0002
+ 11  1  -0.31  1.1413  0.9693  0.1419  0.0247  0.0044  0.0008  0.0001
+ 12  1  -0.31  1.1702  0.9900  0.1480  0.0264  0.0048  0.0009  0.0002
+ 13  1  -0.30  1.1825  0.9988  0.1506  0.0271  0.0050  0.0009  0.0002
+ 14  1  -0.30  1.1871  1.0020  0.1516  0.0273  0.0050  0.0009  0.0002
+ 15  1  -0.30  1.1884  1.0030  0.1519  0.0274  0.0051  0.0009  0.0002
+ 16  1  -0.30  1.1887  1.0031  0.1519  0.0274  0.0051  0.0009  0.0002
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -9.027768202746098E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ Ocuppation DMFT   3.62791463631669
+ Ocuppation LDA   3.62791463631669
+ Occupation difference DMFT-LDA:  0.000000000000000E+000
+
+
+ IT, ITA, Sigma error            1           2   1.00000000000000
+
+
+ Valence one-electron energy:  -0.154013622182667      -0.176453664643968
+
+
+ Atom:Nb              S =    2.877500        SWS =    2.877500
+ Exch:P-W                              Date : 02-Jun-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -0.800000   -0.800000   -0.800000   -0.800000   -0.800000   -0.800000   -0.800000   -0.800000
+ D-nu       =    0.928047    2.213230    1.539480    2.894413    0.928047    2.213230    1.539480    2.894413
+ Dnud       =    9.758841   -6.064553    6.669862   12.332451    9.758841   -6.064553    6.669862   12.332451
+ Omega-     =    0.974245    4.709884    1.407671    4.025601    0.974245    4.709884    1.407671    4.025601
+ S*Phisq-   =    0.414748   -2.276650   -0.164522    0.337415    0.414748   -2.276650   -0.164522    0.337415
+ Phi-/Phi+  =    0.907053    1.738088    0.482930    0.571405    0.907053    1.738088    0.482930    0.571405
+
+ Mu         =    0.582391    0.106097    1.468165    0.715872    0.582391    0.106097    1.468165    0.715872
+ Tau        =    0.718739    0.801285    1.198424    1.051809    0.718739    0.801285    1.198424    1.051809
+ A          =    4.636456   -5.343681    2.198579    8.736407    4.636456   -5.343681    2.198579    8.736407
+ C          =    0.174245    3.909884    0.607671    3.225601    0.174245    3.909884    0.607671    3.225601
+ B          =   -0.283003    0.858195   -0.107894    1.438185   -0.283003    0.858195   -0.107894    1.438185
+ V          =   -0.283003   -0.019692   -1.095706   -0.907894   -0.283003   -0.019692   -1.095706   -0.907894
+ D(Ef)      =    0.027626    1.350945    0.483653    2.370883    0.027626    1.350945    0.483653    2.370883
+
+ Bot, Top   =   -0.483435    9.949422
+ V-Madelung =   -0.000000
+ V(S) Up,Dwn=   -0.732374                                       -0.732374
+ V(W) Up,Dwn=   -0.732374                                       -0.732374
+
+ Atom:V               S =    2.877500        SWS =    2.877500
+ Exch:P-W                              Date : 02-Jun-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -0.800000   -0.800000   -0.800000   -0.800000   -0.800000   -0.800000   -0.800000   -0.800000
+ D-nu       =    0.633576    1.462755    1.750555    3.013407    0.633576    1.462755    1.750555    3.013407
+ Dnud       =    7.947621   11.832224    6.113034   13.189884    7.947621   11.832224    6.113034   13.189884
+ Omega-     =    0.724991    1.753821    1.399595    4.385723    0.724991    1.753821    1.399595    4.385723
+ S*Phisq-   =   -0.362780    0.379689    0.141036    0.370200   -0.362780    0.379689    0.141036    0.370200
+ Phi-/Phi+  =    0.888238    0.783115    0.451335    0.592784    0.888238    0.783115    0.451335    0.592784
+
+ Mu         =    0.665819    0.636167    1.712659    0.652473    0.665819    0.636167    1.712659    0.652473
+ Tau        =    0.787964    0.975355    1.221061    1.031734    0.787964    0.975355    1.221061    1.031734
+ A          =    3.171008    6.205763    1.884857    9.949422    3.171008    6.205763    1.884857    9.949422
+ C          =   -0.075009    0.953821    0.599595    3.585723   -0.075009    0.953821    0.599595    3.585723
+ B          =   -0.483435    0.066085   -0.031153    1.655851   -0.483435    0.066085   -0.031153    1.655851
+ V          =   -0.483435   -0.500713   -0.962830   -0.785857   -0.483435   -0.500713   -0.962830   -0.785857
+ D(Ef)      =   -0.429843    0.658280    0.692535    2.516069   -0.429843    0.658280    0.692535    2.516069
+
+ Bot, Top   =   -0.483435    9.949422
+ V-Madelung =   -0.000000
+ V(S) Up,Dwn=   -0.667552                                       -0.667552
+ V(W) Up,Dwn=   -0.667552                                       -0.667552
+
+ EF         =   -0.090278
+
+ VMTZ Up,Dwn=   -0.687249                                       -0.687249
+
+ Atom:Nb
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.206759    0.390853    1.193884    0.037922    0.206759    0.390853    1.193884    0.037922
+ Nos(Ef)    =    3.658835
+ Dos(Ef)    =    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000
+ Dos(Ef)    =    0.000000
+ Magn. mom. =    0.000000    0.000000
+ Stoner-I   =    0.000000    0.000000    0.000000    0.000000
+
+ Atom:V
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.243626    0.443911    1.998640    0.037350    0.243626    0.443911    1.998640    0.037350
+ Nos(Ef)    =    5.447055
+ Dos(Ef)    =    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000
+ Dos(Ef)    =    0.000000
+ Magn. mom. =    0.000000    0.000000
+ Stoner-I   =    0.000000    0.000000    0.000000    0.000000
+
+ PRNPRM:   EONE =     -0.154014 VINT =    -29.474285 EKIN =     29.320272
+           ECOR =    216.708677 ENUC =   -263.745438 EMADL=     -0.000000
+           EVAL =     11.541288 EXCT =   -230.629323 EXCC =   -224.700031
+           ETOT =    -12.104492 OKAE =     -0.000006 E[n] =    -12.104498
+            T*S =      0.000000 E-TS =    -12.104492
+
+ PRNPRM:   EONE =     -0.176454 VINT =    -33.311443 EKIN =     33.134989
+           ECOR =    132.381765 ENUC =   -185.207714 EMADL=     -0.000000
+           EVAL =     13.487091 EXCT =    -87.168888 EXCC =    -80.538396
+           ETOT =    -12.834362 OKAE =      0.000002 E[n] =    -12.834359
+            T*S =      0.000000 E-TS =    -12.834362
+
+           Valence energies in the frozen core approximation (Rydbergs)
+           calculated from output charge density:
+
+           Kinetic energy        29.320272
+           Madelung energy       -0.000000
+           El-ion energy       -263.745438
+           El-el energy         228.249966
+           Exc energy            -5.929292
+                              ------------
+           Total                -12.104492
+           Total+OKAE           -12.104498
+           Total+Ewald          -12.074822 4pi SS n(S)=  3.376165
+
+           Kinetic energy        33.134989
+           Madelung energy       -0.000000
+           El-ion energy       -185.207714
+           El-el energy         145.868856
+           Exc energy            -6.630493
+                              ------------
+           Total                -12.834362
+           Total+OKAE           -12.834359
+           Total+Ewald          -12.818194 4pi SS n(S)=  2.492195
+
+           Total energy         -12.651894
+
+           Total energy+OKA     -12.651894
+
+           Total+Ewald          -12.632351
+                              ============
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9203 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000
+ Tot  4.9203
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.003367
+            25 -0.002845
+            43 -0.000505
+            47  0.001336
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.734832 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.734832 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.696766     -0.696766
+
+ KGRN:  Iteration no.   1 Etot =      -12.651894 erren = 1.00000000
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.073127 erref = 0.09027768
+
+ KGRN:  QSCA = -0.015043
+
+ KGRN:  QCPA = -0.736311  0.245437
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -9.980650937274377E-003
+
+ MATSCPAPTH: CPA equation for IS =  1 not converged
+         number of iterations performed  3- 7
+
+ MATSCPAPTH: CPA equation for IS =  2 not converged
+         number of iterations performed  3- 7
+
+ MATSCPAPTH: CPA equation for IS =  1 not converged
+         number of iterations performed  3- 7
+
+ MATSCPAPTH: CPA equation for IS =  2 not converged
+         number of iterations performed  3- 7
+
+ Ocuppation DMFT   4.78339866322679
+ Ocuppation LDA   4.78356566139692
+ Occupation difference DMFT-LDA: -1.669981701271084E-004
+
+
+ IT, ITA, Sigma error            1           2  0.993865042052147
+
+
+ Valence one-electron energy:  -0.858430477877469      -0.280274532894994
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9347 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ Tot  4.9347
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.003649
+            25  0.003084
+            43 -0.000098
+            47  0.000259
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.742406 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.742406 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.715022     -0.715022
+
+ KGRN:  Iteration no.   2 Etot =      -12.545456 erren = 0.10643812
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.004143 erref = 0.08029703
+
+ KGRN:  QSCA =  0.019673
+
+ KGRN:  QCPA = -0.287451  0.095817
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF:  2.250611937887043E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.37401886241464
+ Ocuppation LDA   5.37524792393162
+ Occupation difference DMFT-LDA: -1.229061516976770E-003
+
+
+ IT, ITA, Sigma error            1           2  0.958345627255958
+
+
+ Valence one-electron energy:  -0.433959006989526      -0.317589017583566
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9538 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000
+ Tot  4.9538
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.004757
+            25  0.004020
+            43 -0.000268
+            47  0.000708
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754157 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754157 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.746330     -0.746330
+
+ KGRN:  Iteration no.   3 Etot =      -12.525391 erren = 0.02006546
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.030470 erref = 0.03248677
+
+ KGRN:  QSCA = -0.067270
+
+ KGRN:  QCPA = -0.328032  0.109344
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -3.019451906178140E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ Ocuppation DMFT   5.89421924023079
+ Ocuppation LDA   5.89779895811762
+ Occupation difference DMFT-LDA: -3.579717886823985E-003
+
+
+ IT, ITA, Sigma error            1           2  0.917945616819618
+
+
+ Valence one-electron energy:  -0.778431595436250      -0.816801023882184
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9766 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000
+ Tot  4.9766
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001875
+            25  0.001585
+            43 -0.000336
+            47  0.000888
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756265 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756265 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.756265     -0.756265
+
+ KGRN:  Iteration no.   4 Etot =      -12.642294 erren = 0.11690315
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.038443 erref = 0.05270064
+
+ KGRN:  QSCA = -0.011961
+
+ KGRN:  QCPA = -0.357265  0.119088
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -3.795482806347115E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.89448000011477
+ Ocuppation LDA   5.89783135419384
+ Occupation difference DMFT-LDA: -3.351354079068614E-003
+
+
+ IT, ITA, Sigma error            1           2  0.874344028700839
+
+
+ Valence one-electron energy:  -0.791429914669263      -0.842146061476112
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001886
+            25  0.001594
+            43 -0.000324
+            47  0.000857
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756830 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756830 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.756830     -0.756830
+
+ KGRN:  Iteration no.   5 Etot =      -12.641242 erren = 0.00105145
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.039092 erref = 0.00776031
+
+ KGRN:  QSCA = -0.006373
+
+ KGRN:  QCPA = -0.359037  0.119679
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -3.902246115883547E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90038823081058
+ Ocuppation LDA   5.90342456130681
+ Occupation difference DMFT-LDA: -3.036330496232864E-003
+
+
+ IT, ITA, Sigma error            1           2  0.831232459271544
+
+
+ Valence one-electron energy:  -0.796554632397229      -0.848479567007645
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9761 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000 0.0000
+ Tot  4.9761
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001859
+            25  0.001571
+            43 -0.000323
+            47  0.000855
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756649 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756649 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.756649     -0.756649
+
+ KGRN:  Iteration no.   6 Etot =      -12.642721 erren = 0.00147847
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.038709 erref = 0.00106763
+
+ KGRN:  QSCA = -0.004197
+
+ KGRN:  QCPA = -0.358848  0.119616
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -3.857900300776517E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90017305523146
+ Ocuppation LDA   5.90282697876646
+ Occupation difference DMFT-LDA: -2.653923535000047E-003
+
+
+ IT, ITA, Sigma error            1           2  0.789727064443433
+
+
+ Valence one-electron energy:  -0.793508317086517      -0.845875971243206
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9761 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000
+ Tot  4.9761
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001867
+            25  0.001578
+            43 -0.000323
+            47  0.000855
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756517 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756517 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.756517     -0.756517
+
+ KGRN:  Iteration no.   7 Etot =      -12.642518 erren = 0.00020234
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.038372 erref = 0.00044346
+
+ KGRN:  QSCA = -0.003825
+
+ KGRN:  QCPA = -0.358935  0.119645
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -3.826784166906123E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90080722355350
+ Ocuppation LDA   5.90309565063087
+ Occupation difference DMFT-LDA: -2.288427077377975E-003
+
+
+ IT, ITA, Sigma error            1           2  0.750235758555216
+
+
+ Valence one-electron energy:  -0.792744683297646      -0.844517259876531
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9760 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000-0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000
+ Tot  4.9760
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001868
+            25  0.001579
+            43 -0.000323
+            47  0.000855
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756387 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756387 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.756387     -0.756387
+
+ KGRN:  Iteration no.   8 Etot =      -12.642605 erren = 0.00008675
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.038085 erref = 0.00031116
+
+ KGRN:  QSCA = -0.003319
+
+ KGRN:  QCPA = -0.359040  0.119680
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -3.799349771230465E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90127879953521
+ Ocuppation LDA   5.90322277373326
+ Occupation difference DMFT-LDA: -1.943974198049148E-003
+
+
+ IT, ITA, Sigma error            1           2  0.712738167714131
+
+
+ Valence one-electron energy:  -0.791966467395779      -0.843233832915726
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9760 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000
+ Tot  4.9760
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001869
+            25  0.001580
+            43 -0.000323
+            47  0.000856
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756257 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756257 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.756257     -0.756257
+
+ KGRN:  Iteration no.   9 Etot =      -12.642650 erren = 0.00004525
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.037804 erref = 0.00027434
+
+ KGRN:  QSCA = -0.002807
+
+ KGRN:  QCPA = -0.359094  0.119698
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -3.771454246038855E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90160706825063
+ Ocuppation LDA   5.90322645297263
+ Occupation difference DMFT-LDA: -1.619384721995409E-003
+
+
+ IT, ITA, Sigma error            1           2  0.677133010646285
+
+
+ Valence one-electron energy:  -0.791017084443190      -0.841880341437640
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9760 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000 0.0000-0.0000
+ Tot  4.9760
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001871
+            25  0.001581
+            43 -0.000323
+            47  0.000856
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756137 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756137 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.756137     -0.756137
+
+ KGRN:  Iteration no.  10 Etot =      -12.642658 erren = 0.00000758
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.037542 erref = 0.00027896
+
+ KGRN:  QSCA = -0.002357
+
+ KGRN:  QCPA = -0.359160  0.119720
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  4 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  4 to  7
+ MATSUB EF: -3.745789996504216E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90195453972170
+ Ocuppation LDA   5.90326945242903
+ Occupation difference DMFT-LDA: -1.314912707324645E-003
+
+
+ IT, ITA, Sigma error            1           2  0.643320368169222
+
+
+ Valence one-electron energy:  -0.790199101042425      -0.840654850399652
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9760 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000
+ Tot  4.9760
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001873
+            25  0.001583
+            43 -0.000324
+            47  0.000856
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756023 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.756023 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.756023     -0.756023
+
+ KGRN:  Iteration no.  11 Etot =      -12.642677 erren = 0.00001935
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.037294 erref = 0.00025664
+
+ KGRN:  QSCA = -0.001923
+
+ KGRN:  QCPA = -0.359219  0.119740
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  7 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  7 to  7
+ MATSUB EF: -3.723860171222127E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90170164754526
+ Ocuppation LDA   5.90271270030761
+ Occupation difference DMFT-LDA: -1.011052762345699E-003
+
+
+ IT, ITA, Sigma error            1           2  0.611213393490455
+
+
+ Valence one-electron energy:  -0.789677416822117      -0.839481724017111
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000 0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001876
+            25  0.001585
+            43 -0.000324
+            47  0.000856
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755900 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755900 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755900     -0.755900
+
+ KGRN:  Iteration no.  12 Etot =      -12.642756 erren = 0.00007820
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.037042 erref = 0.00021930
+
+ KGRN:  QSCA = -0.001405
+
+ KGRN:  QCPA = -0.359372  0.119791
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+ MATSUB EF: -3.683551323011382E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90190618268903
+ Ocuppation LDA   5.90260694186295
+ Occupation difference DMFT-LDA: -7.007591739167651E-004
+
+
+ IT, ITA, Sigma error            1           2  0.580649251563324
+
+
+ Valence one-electron energy:  -0.789025474955863      -0.837639018207087
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000-0.0000-0.0000 0.0000-0.0000-0.0000-0.0000 0.0000 0.0000 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001874
+            25  0.001584
+            43 -0.000324
+            47  0.000857
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755841 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755841 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755841     -0.755841
+
+ KGRN:  Iteration no.  13 Etot =      -12.642865 erren = 0.00010904
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.036889 erref = 0.00040309
+
+ KGRN:  QSCA = -0.001295
+
+ KGRN:  QCPA = -0.359560  0.119853
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+ MATSUB EF: -3.684144035158338E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90330062794208
+ Ocuppation LDA   5.90381968727355
+ Occupation difference DMFT-LDA: -5.190593314683412E-004
+
+
+ IT, ITA, Sigma error            1           2  0.551725509055269
+
+
+ Valence one-electron energy:  -0.789067858552481      -0.837973383591747
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001873
+            25  0.001583
+            43 -0.000324
+            47  0.000857
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755750 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755750 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755750     -0.755750
+
+ KGRN:  Iteration no.  14 Etot =      -12.642963 erren = 0.00009846
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.036696 erref = 0.00000593
+
+ KGRN:  QSCA = -0.000738
+
+ KGRN:  QCPA = -0.359612  0.119871
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+ MATSUB EF: -3.665963409548116E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90327770807407
+ Ocuppation LDA   5.90355454293057
+ Occupation difference DMFT-LDA: -2.768348564963219E-004
+
+
+ IT, ITA, Sigma error            1           2  0.524237046260857
+
+
+ Valence one-electron energy:  -0.788324458545946      -0.837006557147177
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000-0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001874
+            25  0.001584
+            43 -0.000324
+            47  0.000857
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755645 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755645 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755645     -0.755645
+
+ KGRN:  Iteration no.  15 Etot =      -12.642967 erren = 0.00000427
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.036522 erref = 0.00018181
+
+ KGRN:  QSCA = -0.000336
+
+ KGRN:  QCPA = -0.359643  0.119881
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+ MATSUB EF: -3.645658768736215E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90284685381190
+ Ocuppation LDA   5.90287395324357
+ Occupation difference DMFT-LDA: -2.709943166756545E-005
+
+
+ IT, ITA, Sigma error            1           2  0.498121457001117
+
+
+ Valence one-electron energy:  -0.787522324168920      -0.835885532086096
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000-0.0000-0.0000 0.0000-0.0000-0.0000-0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000 0.0000 0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001876
+            25  0.001585
+            43 -0.000324
+            47  0.000857
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755559 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755559 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755559     -0.755559
+
+ KGRN:  Iteration no.  16 Etot =      -12.642969 erren = 0.00000162
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.036354 erref = 0.00020305
+
+ KGRN:  QSCA = -0.000038
+
+ KGRN:  QCPA = -0.359685  0.119895
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+ MATSUB EF: -3.628476656653224E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90283969909893
+ Ocuppation LDA   5.90265151872456
+ Occupation difference DMFT-LDA:  1.881803743728483E-004
+
+
+ IT, ITA, Sigma error            1           2  0.473316259401197
+
+
+ Valence one-electron energy:  -0.786907689135292      -0.835015380941974
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001877
+            25  0.001586
+            43 -0.000324
+            47  0.000858
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755477 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755477 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755477     -0.755477
+
+ KGRN:  Iteration no.  17 Etot =      -12.642975 erren = 0.00000560
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.036190 erref = 0.00017182
+
+ KGRN:  QSCA =  0.000271
+
+ KGRN:  QCPA = -0.359724  0.119908
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+ MATSUB EF: -3.611755421945457E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90288351958950
+ Ocuppation LDA   5.90249641898503
+ Occupation difference DMFT-LDA:  3.871006044677827E-004
+
+
+ IT, ITA, Sigma error            1           2  0.449753297761338
+
+
+ Valence one-electron energy:  -0.786307852488189      -0.834175270344006
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001878
+            25  0.001588
+            43 -0.000324
+            47  0.000858
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755400 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755400 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755400     -0.755400
+
+ KGRN:  Iteration no.  18 Etot =      -12.642978 erren = 0.00000391
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.036030 erref = 0.00016721
+
+ KGRN:  QSCA =  0.000557
+
+ KGRN:  QCPA = -0.359759  0.119920
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.595694994247658E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90299928036564
+ Ocuppation LDA   5.90242965044414
+ Occupation difference DMFT-LDA:  5.696299215003364E-004
+
+
+ IT, ITA, Sigma error            1           2  0.427368834024916
+
+
+ Valence one-electron energy:  -0.785744006537894      -0.833384478785341
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9759 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000 0.0000-0.0000 0.0000
+ Tot  4.9759
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001880
+            25  0.001589
+            43 -0.000324
+            47  0.000858
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755328 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755328 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755328     -0.755328
+
+ KGRN:  Iteration no.  19 Etot =      -12.642981 erren = 0.00000262
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.035875 erref = 0.00016060
+
+ KGRN:  QSCA =  0.000825
+
+ KGRN:  QCPA = -0.359789  0.119930
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.580238109744641E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90316532204135
+ Ocuppation LDA   5.90242790668634
+ Occupation difference DMFT-LDA:  7.374153550152585E-004
+
+
+ IT, ITA, Sigma error            1           2  0.406102615798988
+
+
+ Valence one-electron energy:  -0.785208987653802      -0.832634827838986
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001881
+            25  0.001590
+            43 -0.000324
+            47  0.000858
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755260 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755260 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755260     -0.755260
+
+ KGRN:  Iteration no.  20 Etot =      -12.642982 erren = 0.00000111
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.035726 erref = 0.00015457
+
+ KGRN:  QSCA =  0.001075
+
+ KGRN:  QCPA = -0.359815  0.119938
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.565532777696342E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90336920021362
+ Ocuppation LDA   5.90247748479866
+ Occupation difference DMFT-LDA:  8.917154149585826E-004
+
+
+ IT, ITA, Sigma error            1           2  0.385898726253329
+
+
+ Valence one-electron energy:  -0.784707849642635      -0.831932133583427
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000 0.0000 0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001882
+            25  0.001590
+            43 -0.000324
+            47  0.000858
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755197 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755197 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755197     -0.755197
+
+ KGRN:  Iteration no.  21 Etot =      -12.642983 erren = 0.00000090
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.035583 erref = 0.00014705
+
+ KGRN:  QSCA =  0.001308
+
+ KGRN:  QCPA = -0.359840  0.119947
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.551626922980564E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90358375138625
+ Ocuppation LDA   5.90254915235537
+ Occupation difference DMFT-LDA:  1.034599030876215E-003
+
+
+ IT, ITA, Sigma error            1           2  0.366704365601132
+
+
+ Valence one-electron energy:  -0.784237891081415      -0.831272731291978
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000 0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001883
+            25  0.001591
+            43 -0.000324
+            47  0.000858
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755138 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755138 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755138     -0.755138
+
+ KGRN:  Iteration no.  22 Etot =      -12.642984 erren = 0.00000088
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.035449 erref = 0.00013906
+
+ KGRN:  QSCA =  0.001527
+
+ KGRN:  QCPA = -0.359863  0.119954
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.538509070068291E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90379517720979
+ Ocuppation LDA   5.90262771637979
+ Occupation difference DMFT-LDA:  1.167460830008515E-003
+
+
+ IT, ITA, Sigma error            1           2  0.348469201077173
+
+
+ Valence one-electron energy:  -0.783796361901106      -0.830652950080216
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000 0.0000 0.0000 0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001884
+            25  0.001592
+            43 -0.000324
+            47  0.000858
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755082 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755082 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755082     -0.755082
+
+ KGRN:  Iteration no.  23 Etot =      -12.642985 erren = 0.00000086
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.035321 erref = 0.00013118
+
+ KGRN:  QSCA =  0.001734
+
+ KGRN:  QCPA = -0.359884  0.119961
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.526139702437813E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90399719774971
+ Ocuppation LDA   5.90270591883730
+ Occupation difference DMFT-LDA:  1.291278912407101E-003
+
+
+ IT, ITA, Sigma error            1           2  0.331145178108875
+
+
+ Valence one-electron energy:  -0.783380778672938      -0.830069407134347
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000-0.0000 0.0000 0.0000-0.0000 0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001885
+            25  0.001593
+            43 -0.000325
+            47  0.000859
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755029 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.755029 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.755029     -0.755029
+
+ KGRN:  Iteration no.  24 Etot =      -12.642986 erren = 0.00000083
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.035201 erref = 0.00012369
+
+ KGRN:  QSCA =  0.001928
+
+ KGRN:  QCPA = -0.359905  0.119968
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.514476736799031E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90418783603528
+ Ocuppation LDA   5.90278107621105
+ Occupation difference DMFT-LDA:  1.406759824233106E-003
+
+
+ IT, ITA, Sigma error            1           2  0.314686521684662
+
+
+ Valence one-electron energy:  -0.782989290803965      -0.829519530227963
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000 0.0000-0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001886
+            25  0.001594
+            43 -0.000325
+            47  0.000859
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754979 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754979 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.754979     -0.754979
+
+ KGRN:  Iteration no.  25 Etot =      -12.642986 erren = 0.00000080
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.035088 erref = 0.00011663
+
+ KGRN:  QSCA =  0.002111
+
+ KGRN:  QCPA = -0.359924  0.119975
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.503479905032716E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90436686367991
+ Ocuppation LDA   5.90285238928331
+ Occupation difference DMFT-LDA:  1.514474396596910E-003
+
+
+ IT, ITA, Sigma error            1           2  0.299049715463489
+
+
+ Valence one-electron energy:  -0.782620384889804      -0.829001206617009
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000-0.0000-0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001886
+            25  0.001594
+            43 -0.000325
+            47  0.000859
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754933 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754933 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.754933     -0.754933
+
+ KGRN:  Iteration no.  26 Etot =      -12.642987 erren = 0.00000077
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.034981 erref = 0.00010997
+
+ KGRN:  QSCA =  0.002283
+
+ KGRN:  QCPA = -0.359942  0.119981
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.493111277978850E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90453467111162
+ Ocuppation LDA   5.90291974740570
+ Occupation difference DMFT-LDA:  1.614923705925086E-003
+
+
+ IT, ITA, Sigma error            1           2  0.284193431190991
+
+
+ Valence one-electron energy:  -0.782272727030485      -0.828512572006268
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001887
+            25  0.001595
+            43 -0.000325
+            47  0.000859
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754888 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754888 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.754888     -0.754888
+
+ KGRN:  Iteration no.  27 Etot =      -12.642988 erren = 0.00000074
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.034881 erref = 0.00010369
+
+ KGRN:  QSCA =  0.002445
+
+ KGRN:  QCPA = -0.359959  0.119986
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+ MATSUB EF: -3.483335169061272E-002
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  1 converged in  3- 6 iterations
+
+ MATSCPAPTH: CPA equation for IS =  2 converged in  3- 6 iterations
+
+ Ocuppation DMFT   5.90469183761158
+ Ocuppation LDA   5.90298327130454
+ Occupation difference DMFT-LDA:  1.708566307041082E-003
+
+
+ IT, ITA, Sigma error            1           2  0.270078433985120
+
+
+ Valence one-electron energy:  -0.781945093489575      -0.828051916464934
+
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  4.9758 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000-0.0000 0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000-0.0000
+ Tot  4.9758
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21  0.001888
+            25  0.001595
+            43 -0.000325
+            47  0.000859
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754847 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.754847 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.754847     -0.754847
+
+ KGRN:  Iteration no.  28 Etot =      -12.642989 erren = 0.00000072
+
+        Magn. mom. =  0.000
+
+        Dyson loops    32 EF   =       -0.034786 erref = 0.00009776
+
+ KGRN:  QSCA =  0.002598
+
+ KGRN:  QCPA = -0.359975  0.119992
+
+ Potential parameters, charge densities, and potential stored on:    02-Jun-23
+
+ PATHOP: CPA equation for IS =  1 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  3- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations

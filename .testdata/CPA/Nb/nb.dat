@@ -1,0 +1,39 @@
+KGRN                                               03 Jun 23
+JOBNAM=nb
+STRT..=  N MSGL.=  1 EXPAN.= S FCD..=  Y FUNC..= SCA
+FOR001=~/EMTO/EMTO5.8/kstr/smx/bcc.tfh
+FOR001=~/EMTO/EMTO5.8/kstr/smx/bcc.tfh
+DIR002=pot/
+DIR003=pot/
+FOR004=~/EMTO/EMTO5.8/bmdl/mdl/bcc.mdl
+DIR006=
+DIR009=pot/
+DIR010=chd/
+DIR011=/tmp/
+Self-consistent KKR calculation for nb
+Band: 10 lines
+NITER.=999 NLIN.= 31 NPRN.=  0 NCPA.=  7 NT...=  1 MNTA.=  1
+MODE..= 3D FRC..=  N DOS..=  D OPS..=  N AFM..=  P CRT..=  M
+Lmaxh.=  8 Lmaxt=  4 NFI..= 31 FIXG.=  2 SHF..=  0 SOFC.=  N
+KMSH...= G IBZ..=  3 NKX..=  0 NKY..= 57 NKZ..=  0 FBZ..=  N
+KMSH2..= G IBZ2.=  1 NKX2.=  4 NKY2.=  0 NKZ2.= 51
+ZMSH...= C NZ1..= 32 NZ2..=  8 NZ3..=  8 NRES.=  4 NZD.=5000
+DEPTH..=  1.000 IMAGZ.=0.00100 EPS...=0.20000 ELIM..= -1.000
+AMIX...=  0.010 EFMIX.=  1.000 VMTZ..=  0.000 MMOM..=  0.000
+TOLE...= 1.d-07 TOLEF.= 1.d-07 TOLCPA= 1.d-06 TFERMI=  500.0 (K)
+SWS......= 3.0710000 NSWS.=  1 DSWS..=   0.05 ALPCPA= 0.6020
+Setup: 2 + NQ*NS lines
+EFGS...=  0.100 HX....=  0.300 NX...=  7 NZ0..= 16 STMP..= N
+Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT Fix
+Nb      1  1  1  41  1.000  1.000  1.000  1.000  0.0 0.00   N
+Atom:  4 lines + NT*NTA*6 lines
+IEX...=  4 NP..= 251 NES..= 15 NITER=100 IWAT.=  0 NPRNA=  0
+VMIX.....=  0.300000 RWAT....=  3.500000 RMAX....= 20.000000
+DX.......=  0.030000 DR1.....=  0.002000 TEST....=  1.00E-12
+TESTE....=  1.00E-12 TESTY...=  1.00E-12 TESTV...=  1.00E-12
+Nb
+Iz=  41 Norb= 14 Ion=  0 Config= 4d3_5s2
+n      1  2  2  2  3  3  3  3  3  4  4  4  4  5
+Kappa -1 -1  1 -2 -1  1 -2  2 -3 -1  1 -2  2 -1
+Occup  2  2  2  4  2  2  4  4  6  2  2  4  3  2
+Valen  0  0  0  0  0  0  0  0  0  0  0  0  1  1

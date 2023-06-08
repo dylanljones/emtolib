@@ -1,0 +1,8 @@
+#LMTO structure constants, number Matsubaras, Temp (Kelvin), Solver, DC, Mixing Sigma, Nomis
+lbccspd.tfh
+256
+400.d0
+uppsalasolver
+1
+0.05d0
+80
