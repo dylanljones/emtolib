@@ -365,7 +365,7 @@ class EmtoKgrnFile(EmtoFile):
 
         self.atoms = list()
 
-        if self.path.exists():
+        if self.path.is_file():
             self.load()
 
     def get_atom(self, key) -> Atom:

@@ -14,8 +14,7 @@ sh = logging.StreamHandler()
 sh.setLevel(logging.DEBUG)
 logger.addHandler(sh)
 fmt = logging.Formatter(
-    "[%(asctime)s] %(levelname)-8s - %(name)-25s - %(message)s",
-    datefmt="%H:%M:%S"
+    "[%(asctime)s] %(levelname)-8s - %(name)-25s - %(message)s", datefmt="%H:%M:%S"
 )
 sh.setFormatter(fmt)
 logger.setLevel(logging.INFO)
@@ -40,7 +39,9 @@ def parse_filepath(line: str) -> str:
 class EmtoFile:
     """Base class for EMTO input and output files."""
 
-    def __init__(self, path):
+    def __init__(self, path=None):
+        if path is None:
+            path = ""
         self.path = Path(path)
 
     def loads(self, data: str) -> None:
