@@ -60,7 +60,7 @@ class EmtoDirectory:
 
     def get_dos_path(self, name=""):
         if not name:
-            name = self.dat.jobname
+            name = self.dat.jobnam
         return self.root / f"{name}.dos"
 
     def get_dos(self, name=""):
@@ -69,7 +69,7 @@ class EmtoDirectory:
 
     def get_prn_path(self, name=""):
         if not name:
-            name = self.dat.jobname
+            name = self.dat.jobnam
         return self.root / f"{name}.prn"
 
     def get_prn(self, name=""):
