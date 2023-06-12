@@ -147,6 +147,10 @@ def parse_atoms(atomstr, atomconfstr):
     return atoms
 
 
+class KGRNError(Exception):
+    pass
+
+
 class Atom:
     def __init__(
         self,
@@ -402,11 +406,38 @@ class EmtoKgrnFile(EmtoFile):
         except IndexError:
             return 0.0
 
-    def param_diff(self, other):
+    def param_diff(self, other, exclude=None):
         d1 = self.to_dict()
         d2 = other.to_dict()
         diffset = set(d1.items()) ^ set(d2.items())
-        return {key: (d1[key], d2[key]) for key in dict(diffset).keys()}
+        diff = dict()
+        for key in dict(diffset).keys():
+            if exclude is None or key not in exclude:
+                diff[key] = (d1[key], d2[key])
+        return diff
+
+    def update(self, *args, **kwargs):
+        data = dict(*args, **kwargs)
+        for k, v in data.items():
+            if not hasattr(self, k):
+                raise KeyError(f"{k} is not a valid field of {self.__class__.__name__}")
+            self.__setattr__(k, v)
+
+    def check(self):
+        """Check if the input is consistent."""
+        if self.jobnam is None:
+            raise KGRNError("'jobnam' has to be given!")
+        if self.strt not in ("A", "B", "N"):
+            raise KGRNError("'strt' has to be 'A', 'B' or 'N'!")
+        if self.expan not in ("S", "D", "M"):
+            raise KGRNError("'expan' has to be 'S', 'D' or 'M'!")
+        if self.fcd not in ("Y", "N"):
+            raise KGRNError("'fcd' has to be 'Y' or 'N'!")
+        if self.func not in ("SCA", "ASA"):
+            raise KGRNError("'func' has to be 'SCA' or 'ASA'!")
+
+        if self.mnta != len(self.atoms):
+            raise KGRNError("'mnta' and number of atoms are not consistent!")
 
     # ----------------------------------------------------------------------------------
 
@@ -425,13 +456,6 @@ class EmtoKgrnFile(EmtoFile):
         if not hasattr(self, key):
             raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
         self.__setattr__(key, value)
-
-    def update(self, *args, **kwargs):
-        data = dict(*args, **kwargs)
-        for k, v in data.items():
-            if not hasattr(self, k):
-                raise KeyError(f"{k} is not a valid field of {self.__class__.__name__}")
-            self.__setattr__(k, v)
 
     def loads(self, data: str) -> None:
         params = dict()
@@ -559,8 +583,7 @@ class EmtoKgrnFile(EmtoFile):
         self.atoms = [Atom.from_dict(at) for at in parse_atoms(atomstr, atomconfstr)]
 
     def dumps(self) -> str:
-        if self.jobnam is None:
-            raise ValueError("KGRN: 'jobnam' has to be given!")
+        self.check()
 
         params = self.to_dict()
         atomstr = "\n".join(format_atom_line(at.to_dict()) for at in self.atoms)
