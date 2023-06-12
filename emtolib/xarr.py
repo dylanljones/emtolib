@@ -29,6 +29,8 @@ def construct_dataset(folder: EmtoDirectory):
     # Input/Output file
     prn = folder.get_prn()
     hopfield = prn.get_hopfield()
+    dos_ef = prn.get_dos_ef()
+
     atoms = [atom.symbol for atom in dat.atoms]
     hopfields = np.array([hopfield[atom] for atom in atoms])
     concs = np.array([atom.conc for atom in dat.atoms])
@@ -55,6 +57,7 @@ def construct_dataset(folder: EmtoDirectory):
         atoms=atoms,
         mass=mass_avg,
         debye_temp=debye_avg,
+        dos_ef=dos_ef,
     )
 
     # Create dataset
