@@ -1,4 +1,18 @@
 {
+    "Va": {
+        "iz": 0,
+        "name": "",
+        "symbol": "Va",
+        "econf": "1s0",
+        "econf_full": "1s0"
+    },
+    "Em": {
+        "iz": 1,
+        "name": "",
+        "symbol": "Em",
+        "econf": "1s0",
+        "econf_full": "1s0"
+    },
     "H": {
         "iz": 1,
         "name": "Hydrogen",
@@ -71,6 +85,13 @@
         "econf": "2s2_2p4",
         "econf_full": "1s2_2s2_2p4",
         "mass": 15.999
+    },
+    "O-2": {
+        "iz": 8,
+        "name": "Oxygen-2",
+        "symbol": "O-2",
+        "econf": "2p6",
+        "econf_full": "1s2_2s2_2p6"
     },
     "F": {
         "iz": 9,
