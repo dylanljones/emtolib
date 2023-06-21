@@ -9,6 +9,7 @@ from datetime import datetime
 import logging
 import numpy as np
 from ..common import EmtoFile, parse_params, elements
+from ..ftmplt import Template
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +60,10 @@ ATLINE_TEMPLATE = (
 )
 
 ORBITALS = ["s", "p", "d", "f", "g", "h"]
+
+
+class KGRNError(Exception):
+    pass
 
 
 def format_atom_line(params):
@@ -147,8 +152,22 @@ def parse_atoms(atomstr, atomconfstr):
     return atoms
 
 
-class KGRNError(Exception):
-    pass
+def parse_kgrn(template, text):
+    data = template.parse(text.replace(".d", ".e"))
+    params = dict(data.copy())
+    atomstr = params.pop("atoms")
+    confstr = params.pop("atomconf")
+    atoms = parse_atoms(atomstr, confstr)
+    return params, atoms
+
+
+def format_kgrn(template, params, atoms):
+    atomstr = "\n".join(format_atom_line(atom) for atom in atoms)
+    atomconf = "\n".join(format_atom_block(atom) for atom in atoms)
+    data = dict(params.copy())
+    data["atoms"] = atomstr
+    data["atomconf"] = atomconf
+    return template.format(data).replace(".0e", ".d")
 
 
 class Atom:
@@ -276,8 +295,10 @@ class Atom:
 
 
 class EmtoKgrnFile(EmtoFile):
+    """KGRN input file."""
 
     extension = ".dat"
+    template = Template(TEMPLATE, ignore_case=True)
 
     def __init__(self, path=None, update_date=True, **kwargs):
         super().__init__(path)
@@ -372,6 +393,9 @@ class EmtoKgrnFile(EmtoFile):
         if self.path.is_file():
             self.load()
 
+        if kwargs:
+            self.update(kwargs)
+
     def get_atom(self, key) -> Atom:
         if isinstance(key, int):
             return self.atoms[key]
@@ -457,141 +481,27 @@ class EmtoKgrnFile(EmtoFile):
             raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
         self.__setattr__(key, value)
 
-    def loads(self, data: str) -> None:
-        params = dict()
-        lines = data.splitlines(keepends=False)
-        prog, date = lines.pop(0).split(" ", maxsplit=1)
-        assert prog == "KGRN"
-        self.date = datetime.strptime(date.strip(), "%d %b %y")
-        self.jobnam = lines.pop(0).split("=")[1].strip()
-        params.update(parse_params(lines.pop(0)))
-        self.for001 = lines.pop(0).split("=")[1].strip()
-        self.for001_2 = lines.pop(0).split("=")[1].strip()
-        self.dir002 = lines.pop(0).split("=")[1].strip()
-        self.dir003 = lines.pop(0).split("=")[1].strip()
-        self.for004 = lines.pop(0).split("=")[1].strip()
-        self.dir006 = lines.pop(0).split("=")[1].strip()
-        self.dir009 = lines.pop(0).split("=")[1].strip()
-        self.dir010 = lines.pop(0).split("=")[1].strip()
-        self.dir011 = lines.pop(0).split("=")[1].strip()
-        assert lines.pop(0).startswith("Self-consistent KKR calculation for")
-        # Band section
-        nlines = int(RE_BAND_SECTION.match(lines.pop(0)).group(1))
-        params.update(parse_params(" ".join(lines[:nlines]).replace(" (K)", "")))
-        # Setup section
-        lines = lines[nlines:]
-        line = lines.pop(0)
-        assert line.startswith("Setup: ")
-        nlines = int(re.findall(r"\d", line)[0]) - 1
-        params.update(parse_params(" ".join(lines[:nlines])))
+    def loads(self, text):
+        data = self.template.parse(text.replace(".d", ".e"))
+        params = dict(data.copy())
+        atomstr = params.pop("atoms")
+        confstr = params.pop("atomconf")
+        atoms = parse_atoms(atomstr, confstr)
 
-        # Atom lines
-        lines = lines[nlines:]
-        columns = lines.pop(0).split()[1:12]  # header line
-        columns = [c.strip().lower().replace("(", "").replace(")", "") for c in columns]
-        assert columns == ATOM_COLUMNS
-        atomstr_lines = list()
-        while not lines[0].startswith("Atom:"):
-            atomstr_lines.append(lines.pop(0))
-        atomstr = "\n".join(atomstr_lines)
-
-        # Atom section
-        line = lines.pop(0)
-        assert line.startswith("Atom: ")
-        nlines, nblock = (int(x) for x in re.findall(r"\d", line))
-        atparams = parse_params(" ".join(lines[:nlines]))
-        atparams["ATNITER"] = atparams["NITER"]
-        del atparams["NITER"]
-        params.update(atparams)
-
-        # Atom blocks
-        atomconfstr = "\n".join(lines[nlines:])
-
-        params = {k.upper(): v for k, v in params.items()}
-        self.strt = params["STRT"]
-        self.msgl = int(params["MSGL"])
-        self.expan = params["EXPAN"]
-        self.fcd = params["FCD"]
-        self.func = params["FUNC"]
-        self.niter = int(params["NITER"])
-        self.nlin = int(params["NLIN"])
-        self.nprn = int(params["NPRN"])
-        self.ncpa = int(params["NCPA"])
-        self.nt = int(params["NT"])
-        self.mnta = int(params["MNTA"])
-        self.mode = params["MODE"]
-        self.frc = params["FRC"]
-        self.dos = params["DOS"]
-        self.ops = params["OPS"]
-        self.afm = params["AFM"]
-        self.crt = params["CRT"]
-        self.lmaxh = int(params["LMAXH"])
-        self.lmaxt = int(params["LMAXT"])
-        self.nfi = int(params["NFI"])
-        self.fixg = int(params["FIXG"])
-        self.shf = int(params["SHF"])
-        self.sofc = params["SOFC"]
-        self.kmsh = params["KMSH"]
-        self.ibz = int(params["IBZ"])
-        self.nkx, self.nky, self.nkz = (int(params[k]) for k in ["NKX", "NKY", "NKZ"])
-        self.fbz = params["FBZ"]
-        self.kmsh2 = params.get("KMSH2", "G")
-        self.nkx2 = int(params.get("NKX2", "0"))
-        self.nky2 = int(params.get("NKY2", "0"))
-        self.nkz2 = int(params.get("NKZ2", "0"))
-        self.zmsh = params["ZMSH"]
-        self.nz1, self.nz2, self.nz3 = (int(params[k]) for k in ["NZ1", "NZ2", "NZ3"])
-        self.nres = int(params["NRES"])
-        self.nzd = int(params["NZD"])
-        self.depth = float(params["DEPTH"])
-        self.imagz = float(params["IMAGZ"])
-        self.eps = float(params["EPS"])
-        self.elim = float(params["ELIM"])
-        self.amix = float(params["AMIX"])
-        self.efmix = float(params["EFMIX"])
-        self.vmtz = float(params["VMTZ"])
-        self.mmom = float(params["MMOM"])
-        self.tole = float(params["TOLE"].replace("d", "e"))
-        self.tolef = float(params["TOLEF"].replace("d", "e"))
-        self.tolcpa = float(params["TOLCPA"].replace("d", "e"))
-        self.tfermi = float(params["TFERMI"])
-        self.sws = float(params["SWS"])
-        self.nsws = int(params["NSWS"])
-        self.dsws = float(params["DSWS"])
-        self.alpcpa = float(params["ALPCPA"])
-        self.efgs = float(params["EFGS"])
-        self.hx = float(params["HX"])
-        self.nx = int(params["NX"])
-        self.nz0 = int(params["NZ0"])
-        self.stmp = params["STMP"]
-        self.iex = int(params["IEX"])
-        self.np = int(params["NP"])
-        self.nes = int(params["NES"])
-        self.dirac_niter = int(params["ATNITER"])
-        self.iwat = int(params["IWAT"])
-        self.nprna = int(params["NPRNA"])
-        self.vmix = float(params["VMIX"])
-        self.rwat = float(params["RWAT"])
-        self.rmax = float(params["RMAX"])
-        self.dx = float(params["DX"])
-        self.dr1 = float(params["DR1"])
-        self.test = float(params["TEST"])
-        self.teste = float(params["TESTE"])
-        self.testy = float(params["TESTY"])
-        self.testv = float(params["TESTV"])
-
-        self.atoms = [Atom.from_dict(at) for at in parse_atoms(atomstr, atomconfstr)]
-
-    def dumps(self) -> str:
+        self.update(params)
+        self.atoms = [Atom.from_dict(at) for at in atoms]
         self.check()
 
+    def dumps(self):
+        self.check()
         params = self.to_dict()
-        atomstr = "\n".join(format_atom_line(at.to_dict()) for at in self.atoms)
-        atomconf = "\n".join(format_atom_block(at.to_dict()) for at in self.atoms)
-
         if self._update_date:
             params["date"] = datetime.now()
-        params["atoms"] = atomstr
-        params["atomconf"] = atomconf
-        s = TEMPLATE.format(**params)
-        return s.replace(".0e", ".d")
+        atoms = [at.to_dict() for at in self.atoms]
+
+        atomstr = "\n".join(format_atom_line(atom) for atom in atoms)
+        atomconf = "\n".join(format_atom_block(atom) for atom in atoms)
+        data = dict(params.copy())
+        data["atoms"] = atomstr
+        data["atomconf"] = atomconf
+        return self.template.format(data).replace(".0e", ".d")
