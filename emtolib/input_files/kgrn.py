@@ -459,6 +459,8 @@ class EmtoKgrnFile(EmtoFile):
         for k, v in data.items():
             if not hasattr(self, k):
                 raise KeyError(f"{k} is not a valid field of {self.__class__.__name__}")
+            if isinstance(v, str):
+                v = v.strip()
             self.__setattr__(k, v)
 
     def check(self):
