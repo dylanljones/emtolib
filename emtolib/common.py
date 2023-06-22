@@ -4,10 +4,11 @@
 #
 # Copyright (c) 2023, Dylan Jones
 
-import logging
 import re
 import json
+import logging
 from pathlib import Path
+from typing import Union
 
 logger = logging.getLogger("emtolib")
 sh = logging.StreamHandler()
@@ -39,7 +40,7 @@ def parse_filepath(line: str) -> str:
 class EmtoFile:
     """Base class for EMTO input and output files."""
 
-    def __init__(self, path=None):
+    def __init__(self, path: Union[str, Path] = None):
         if path is None:
             path = ""
         self.path = Path(path)
@@ -50,13 +51,13 @@ class EmtoFile:
     def dumps(self) -> str:
         pass
 
-    def load(self, file: str = ""):
+    def load(self, file: Union[str, Path] = ""):
         file = file or self.path
         with open(file, "r") as fp:
             self.loads(fp.read())
         return self
 
-    def dump(self, file: str = "") -> None:
+    def dump(self, file: Union[str, Path] = "") -> None:
         file = file or self.path
         with open(file, "w") as fp:
             fp.write(self.dumps())

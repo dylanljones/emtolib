@@ -5,4 +5,4 @@
 # Copyright (c) 2023, Dylan Jones
 
 from .bmdl import EmtoBmdlFile
-from .kgrn import EmtoKgrnFile, Atom
+from .kgrn import EmtoKgrnFile, Atom, KGRNError

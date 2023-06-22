@@ -4,9 +4,8 @@
 #
 # Copyright (c) 2022, Dylan Jones
 
-from .common import logger, EmtoFile, elements
+from .common import logger, elements
 from . import input_files
-from . import ouput_files
+from . import output_files
 from .directory import EmtoDirectory, walk_emtodirs
 from .slurm import SlurmScript
-

@@ -511,6 +511,7 @@ class EmtoKgrnFile(EmtoFile):
         self.update(params)
         self.atoms = [Atom.from_dict(at) for at in atoms]
         self.check()
+        return self
 
     def dumps(self):
         self.check()
