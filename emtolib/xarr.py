@@ -105,12 +105,12 @@ def update_datasets(
     print("=" * 50)
 
     for folder in walk_emtodirs(root):
-        if exclude and folder.root.name in exclude:
+        if exclude and folder.path.name in exclude:
             continue
         print(folder)
         try:
             ds = construct_dataset(folder)
-            save_dataset(ds, xarr_root, name=folder.root.name)
+            save_dataset(ds, xarr_root, name=folder.path.name)
         except Exception as e:
             print("Error", e)
 

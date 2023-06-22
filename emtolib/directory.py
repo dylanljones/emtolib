@@ -31,7 +31,7 @@ class EmtoDirectory:
     """Class to handle EMTO simulation directories."""
 
     def __init__(self, path):
-        self.root = Path(path)
+        self.path = Path(path)
         self.dat = None
         try:
             self.dat = self.get_input()
@@ -40,17 +40,17 @@ class EmtoDirectory:
 
     def move(self, dst):
         dst = Path(dst)
-        shutil.move(self.root, dst)
-        self.root = dst
+        shutil.move(self.path, dst)
+        self.path = dst
 
     def copy(self, dst):
         dst = Path(dst)
-        shutil.copytree(self.root, dst)
+        shutil.copytree(self.path, dst)
         folder = self.__class__(dst)
         return folder
 
     def get_input_path(self):
-        return find_input_file(self.root)
+        return find_input_file(self.path)
 
     def get_input(self, path=""):
         if not path:
@@ -61,7 +61,7 @@ class EmtoDirectory:
     def get_dos_path(self, name=""):
         if not name:
             name = self.dat.jobnam
-        return self.root / f"{name}.dos"
+        return self.path / f"{name}.dos"
 
     def get_dos(self, name=""):
         path = self.get_dos_path(name)
@@ -70,18 +70,18 @@ class EmtoDirectory:
     def get_prn_path(self, name=""):
         if not name:
             name = self.dat.jobnam
-        return self.root / f"{name}.prn"
+        return self.path / f"{name}.prn"
 
     def get_prn(self, name=""):
         path = self.get_prn_path(name)
         return EmtoPrnFile(path)
 
     def get_slurm(self, name="run_emto"):
-        path = self.root / name
+        path = self.path / name
         return SlurmScript(path)
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}({self.root})>"
+        return f"<{self.__class__.__name__}({self.path})>"
 
 
 def walk_emtodirs(root):
