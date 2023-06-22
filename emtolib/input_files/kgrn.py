@@ -30,12 +30,12 @@ DIR010={dir010}
 DIR011={dir011}
 {comment}
 Band: 10 lines
-NITER.={niter:3d} NLIN.={nlin:3d} NPRN.=  {nprn:d} NCPA.={ncpa:3d} NT...= {nt:2d} MNTA.= {mnta:2d}
+NITER.={niter:3d} NLIN.={nlin:3d} NPRN.=  {nprn:d} NCPA.={ncpa:3d} NT...={nt:3d} MNTA.={mnta:3d}
 MODE..= {mode:2} FRC..=  {frc} DOS..=  {dos} OPS..=  {ops} AFM..=  {afm} CRT..=  {crt}
-Lmaxh.= {lmaxh:2d} Lmaxt= {lmaxt:2d} NFI..={nfi:3d} FIXG.= {fixg:2d} SHF..=  {shf:1d} SOFC.=  {sofc}
-KMSH...= {kmsh} IBZ..= {ibz:2d} NKX..= {nkx:2d} NKY..= {nky:2d} NKZ..= {nkz:2d} FBZ..=  {fbz}
+Lmaxh.={lmaxh:3d} Lmaxt={lmaxt:3d} NFI..={nfi:3d} FIXG.={fixg:3d} SHF..=  {shf:1d} SOFC.=  {sofc}
+KMSH...= {kmsh} IBZ..={ibz:3d} NKX..={nkx:3d} NKY..={nky:3d} NKZ..={nkz:3d} FBZ..=  {fbz}
 KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d}
-ZMSH...= {zmsh} NZ1..= {nz1:2d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
+ZMSH...= {zmsh} NZ1..={nz1:3d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
 DEPTH..= {depth:6.3f} IMAGZ.={imagz:7.5f} EPS...={eps:7.5f} ELIM..= {elim:6.3f}
 AMIX...= {amix:6.3f} EFMIX.= {efmix:6.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
 TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI= {tfermi:6.1f} (K)
