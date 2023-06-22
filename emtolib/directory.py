@@ -32,7 +32,7 @@ class EmtoDirectory:
 
     def __init__(self, path):
         self.path = Path(path)
-        self.dat = None
+        self.dat: Union[EmtoKgrnFile, None] = None
         try:
             self.dat = self.get_input()
         except FileNotFoundError:
@@ -72,6 +72,14 @@ class EmtoDirectory:
             name = self.dat.jobnam
         return self.path / f"{name}.prn"
 
+    def get_slurm_out_paths(self):
+        paths = list()
+        for path in self.path.iterdir():
+            if path.is_file():
+                if path.name.startswith("slurm") and path.suffix == ".out":
+                    paths.append(path)
+        return paths
+
     def get_prn(self, name=""):
         path = self.get_prn_path(name)
         return EmtoPrnFile(path)
@@ -79,6 +87,29 @@ class EmtoDirectory:
     def get_slurm(self, name="run_emto"):
         path = self.path / name
         return SlurmScript(path)
+
+    def mkdirs(self):
+        for name in self.dat.aux_dirs():
+            path = self.path / name
+            path.mkdir(parents=True, exist_ok=True)
+
+    def clear(self, slurm=True, prn=True, dos=True, aux=True):
+        dat = self.dat
+        if slurm:
+            for path in self.get_slurm_out_paths():
+                path.unlink()
+        if prn:
+            path = self.get_prn_path()
+            path.unlink()
+        if dos:
+            path = self.get_dos_path()
+            path.unlink()
+        if aux:
+            for name in dat.aux_dirs():
+                path = self.path / name
+                if path.exists():
+                    shutil.rmtree(path)
+            self.mkdirs()
 
     def __repr__(self):
         return f"<{self.__class__.__name__}({self.path})>"
