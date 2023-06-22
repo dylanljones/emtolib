@@ -55,7 +55,7 @@ ATOM_COLUMNS = tuple("iq it ita nz conc sms sws wswst qtr splt fix".split())
 ATCONF_TEMPLATE = "Iz= {iz:3d} Norb={norb:3d} Ion=  {ion:d} Config= {config}"
 ATLINE_TEMPLATE = (
     "{symbol:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
-    "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f}{splt:5.2f}   {fix}"
+    "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f} {splt:4.1f}   {fix}"
 )
 
 ORBITALS = ["s", "p", "d", "f", "g", "h"]
@@ -70,7 +70,7 @@ def format_atom_line(params):
     uj = params["u"] + params["j"]
     if uj:
         line += " " + " ".join(f"{x:4.2f}" for x in uj)
-    return line
+    return line.strip()
 
 
 def format_atom_block(params):
@@ -150,13 +150,13 @@ def parse_atoms(atomstr, atomconfstr):
 
         # Get the corresponding atom block
         blocks = list()
-        for _at, at_params in atom_blocks:
+        for _at, _params in atom_blocks:
             _at = "".join([i for i in _at if not i.isdigit()])
             if _at == at:
-                blocks.append(at_params)
+                blocks.append(_params)
 
         idx = 0 if len(blocks) == 1 else i
-        at_params = blocks[idx]
+        at_params = blocks[idx].copy()
         at_params.update(params)
         at_params["symbol"] = at
         atoms.append(at_params)
@@ -475,12 +475,6 @@ class EmtoKgrnFile(EmtoFile):
             raise KGRNError("'fcd' has to be 'Y' or 'N'!")
         if self.func not in ("SCA", "ASA"):
             raise KGRNError("'func' has to be 'SCA' or 'ASA'!")
-
-        atoms = self.get_atom_symbols(include_empty=False)
-        if self.mnta != len(atoms):
-            raise KGRNError(
-                f"mnta={self.mnta} and atom types {atoms} is not consistent!"
-            )
 
     # ----------------------------------------------------------------------------------
 

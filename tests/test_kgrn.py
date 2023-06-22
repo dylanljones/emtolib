@@ -4,10 +4,10 @@
 #
 # Copyright (c) 2023, Dylan Jones
 
-import datetime
 from pathlib import Path
 from emtolib.input_files.kgrn import EmtoKgrnFile
 from numpy.testing import assert_array_equal
+from pytest import mark
 
 TEST_ROOT = Path(__file__).parent.parent / ".testdata"
 
@@ -52,18 +52,20 @@ V_AT_PARAMS = {
 }
 
 
-def test_parse_format_cpa_pure():
-    path = TEST_ROOT / "CPA" / "Nb" / "nb.dat"
-    text = path.read_text()
-    dat = EmtoKgrnFile(path)
-    text2 = dat.dumps()
-    text = "\n".join(text.splitlines()[1:])
-    text2 = "\n".join(text2.splitlines()[1:])
-    assert text.strip() == text2.strip()
+def test_empty_file():
+    _ = EmtoKgrnFile()
+    _ = EmtoKgrnFile("test.dat")
 
 
-def test_parse_format_cpa():
-    path = TEST_ROOT / "CPA" / "Nb25" / "nb.dat"
+@mark.parametrize(
+    "path",
+    [
+        TEST_ROOT / "CPA" / "Nb" / "nb.dat",
+        TEST_ROOT / "CPA" / "Nb25" / "nb.dat",
+        TEST_ROOT / "CPA" / "Fe040_DLM" / "fe0484.dat",
+    ],
+)
+def test_parse_format_cpa(path):
     text = path.read_text()
     dat = EmtoKgrnFile(path)
     text2 = dat.dumps()
@@ -95,7 +97,8 @@ def test_parse_format_dmft():
 def test_parse_1():
     params = {
         "jobnam": "nb",
-        "date": datetime.datetime(2023, 6, 3, 0, 0),
+        "header": "03 Jun 23",
+        "comment": "Self-consistent KKR calculation for nb",
         "strt": "N",
         "msgl": 1,
         "expan": "S",
@@ -205,7 +208,8 @@ def test_parse_1():
 def test_parse_2():
     expected = {
         "jobnam": "nb",
-        "date": datetime.datetime(2023, 6, 3, 0, 0),
+        "header": "03 Jun 23",
+        "comment": "Self-consistent KKR calculation for nb",
         "strt": "N",
         "msgl": 1,
         "expan": "S",
