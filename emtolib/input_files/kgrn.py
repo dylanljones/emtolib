@@ -518,15 +518,21 @@ class EmtoKgrnFile(EmtoFile):
     def dumps(self):
         self.check()
         params = self.to_dict()
-        atoms = [at.to_dict() for at in self.atoms]
 
+        # Pre-format header and comment fields to allow for nested formatting
+        params["header"] = self.header.format(**params)
+        params["comment"] = self.comment.format(**params)
+
+        # format atom info
         atomstr = "Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT"
         if self.atoms[0].fix:
             atomstr += " Fix"
         atomstr += "\n"
+        atoms = [at.to_dict() for at in self.atoms]
         atomstr += "\n".join(format_atom_line(atom) for atom in atoms)
         atomconf = "\n".join(format_atom_block(atom) for atom in atoms)
         data = dict(params.copy())
         data["atoms"] = atomstr
         data["atomconf"] = atomconf
+
         return self.template.format(data).replace(".0e", ".d")
