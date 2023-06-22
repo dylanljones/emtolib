@@ -152,24 +152,6 @@ def parse_atoms(atomstr, atomconfstr):
     return atoms
 
 
-def parse_kgrn(template, text):
-    data = template.parse(text.replace(".d", ".e"))
-    params = dict(data.copy())
-    atomstr = params.pop("atoms")
-    confstr = params.pop("atomconf")
-    atoms = parse_atoms(atomstr, confstr)
-    return params, atoms
-
-
-def format_kgrn(template, params, atoms):
-    atomstr = "\n".join(format_atom_line(atom) for atom in atoms)
-    atomconf = "\n".join(format_atom_block(atom) for atom in atoms)
-    data = dict(params.copy())
-    data["atoms"] = atomstr
-    data["atomconf"] = atomconf
-    return template.format(data).replace(".0e", ".d")
-
-
 class Atom:
     def __init__(
         self,
@@ -286,11 +268,17 @@ class Atom:
     def from_dict(cls, data):
         self = cls()
         self.update(data)
-        assert len(self.n) == self.norb
-        assert len(self.kappa) == self.norb
-        assert len(self.occup) == self.norb
-        assert len(self.valen) == self.norb
-        assert len(self.u) == len(self.j)
+        if self.norb:
+            assert len(self.n) == self.norb
+            assert len(self.kappa) == self.norb
+            assert len(self.occup) == self.norb
+            assert len(self.valen) == self.norb
+            assert len(self.u) == len(self.j)
+        else:
+            assert len(self.n) == 1
+            assert len(self.kappa) == 1
+            assert len(self.occup) == 1
+            assert len(self.valen) == 1
         return self
 
 
@@ -486,7 +474,12 @@ class EmtoKgrnFile(EmtoFile):
         params = dict(data.copy())
         atomstr = params.pop("atoms")
         confstr = params.pop("atomconf")
-        atoms = parse_atoms(atomstr, confstr)
+        try:
+            atoms = parse_atoms(atomstr, confstr)
+        except Exception as e:
+            raise KGRNError(
+                f"Failed to parse atoms: {self.path}\n{atomstr}\n{confstr}"
+            ) from e
 
         self.update(params)
         self.atoms = [Atom.from_dict(at) for at in atoms]
