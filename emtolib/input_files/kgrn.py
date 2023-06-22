@@ -300,9 +300,8 @@ class EmtoKgrnFile(EmtoFile):
     extension = ".dat"
     template = Template(TEMPLATE, ignore_case=True)
 
-    def __init__(self, path=None, update_date=True, **kwargs):
+    def __init__(self, path=None, **kwargs):
         super().__init__(path)
-        self._update_date = update_date
 
         self.jobnam = "kgrn"
         self.header = ""  # first line after KGRN (usually date in the format %d %b %y)
