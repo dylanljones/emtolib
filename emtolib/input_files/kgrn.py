@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 RE_BAND_SECTION = re.compile(r"Band: (.*?) lines")
 
 TEMPLATE = """\
-KGRN                                               {date:%d %b %y}
+KGRN {header:>55}
 JOBNAM={jobnam}
 STRT..=  {strt} MSGL.=  {msgl:d} EXPAN.= {expan} FCD..=  {fcd} FUNC..= {func}
 FOR001={for001}
@@ -28,7 +28,7 @@ DIR006={dir006}
 DIR009={dir009}
 DIR010={dir010}
 DIR011={dir011}
-Self-consistent KKR calculation for {jobnam}
+{comment}
 Band: 10 lines
 NITER.={niter:3d} NLIN.={nlin:3d} NPRN.=  {nprn:d} NCPA.={ncpa:3d} NT...= {nt:2d} MNTA.= {mnta:2d}
 MODE..= {mode:2} FRC..=  {frc} DOS..=  {dos} OPS..=  {ops} AFM..=  {afm} CRT..=  {crt}
@@ -42,7 +42,6 @@ TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI= {tfermi:
 SWS......={sws:10.7f} NSWS.={nsws:3d} DSWS..=   {dsws:4.2f} ALPCPA= {alpcpa:6.4f}
 Setup: 2 + NQ*NS lines
 EFGS...= {efgs:6.3f} HX....= {hx:6.3f} NX...= {nx:2d} NZ0..= {nz0:2d} STMP..= {stmp}
-Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT Fix
 {atoms}
 Atom:  4 lines + NT*NTA*6 lines
 IEX...= {iex:2d} NP..={np:4d} NES..={nes:3d} NITER={dirac_niter:3d} IWAT.={iwat:3d} NPRNA={nprna:3d}
@@ -52,7 +51,7 @@ TESTE....=  {teste:8.2E} TESTY...=  {testy:8.2E} TESTV...=  {testv:8.2E}
 {atomconf}
 """  # noqa
 
-ATOM_COLUMNS = "iq it ita nz conc sms sws wswst qtr splt fix".split()
+ATOM_COLUMNS = tuple("iq it ita nz conc sms sws wswst qtr splt fix".split())
 ATCONF_TEMPLATE = "Iz= {iz:3d} Norb={norb:3d} Ion=  {ion:d} Config= {config}"
 ATLINE_TEMPLATE = (
     "{symbol:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
@@ -85,17 +84,25 @@ def format_atom_block(params):
     return "\n".join(lines)
 
 
-def parse_atom_line(line):
-    columns = ATOM_COLUMNS
+def parse_atom_line(line, columns=ATOM_COLUMNS):
     ncols = len(columns)
     parts = line.split()
     at = parts.pop(0)
     values = parts[:ncols]
-    for i in range(4):
-        values[i] = int(values[i])
-    for i in range(4, ncols - 1):
-        values[i] = float(values[i])
     params = dict(zip(columns, values))
+    params["iq"] = int(params["iq"])
+    params["it"] = int(params["it"])
+    params["ita"] = int(params["ita"])
+    params["nz"] = int(params["nz"])
+    params["conc"] = float(params["conc"])
+    params["sms"] = float(params["sms"])
+    params["sws"] = float(params["sws"])
+    params["wswst"] = float(params["wswst"])
+    params["qtr"] = float(params["qtr"])
+    params["splt"] = float(params["splt"])
+    if "fix" not in params:
+        params["fix"] = ""
+
     uj = [float(x) for x in parts[ncols:]]
     nuj = len(uj)
     params["u"] = uj[: nuj // 2]
@@ -119,7 +126,12 @@ def parse_atom_block(lines):
 
 
 def parse_atoms(atomstr, atomconfstr):
-    atom_params = [parse_atom_line(line) for line in atomstr.splitlines()]
+    atom_lines = atomstr.splitlines()
+    header = atom_lines.pop(0).lower()
+    columns = header.replace("(", "").replace(")", "").split()[1:]
+    if tuple(columns) != ATOM_COLUMNS[: len(columns)]:
+        raise KGRNError(f"Invalid atom header: {header}")
+    atom_params = [parse_atom_line(line, columns) for line in atom_lines]
 
     lines = atomconfstr.splitlines()
     n_blocks = len(lines) // 6
@@ -293,12 +305,15 @@ class EmtoKgrnFile(EmtoFile):
         self._update_date = update_date
 
         self.jobnam = "kgrn"
-        self.date = datetime.now()
+        self.header = ""  # first line after KGRN (usually date in the format %d %b %y)
         self.strt = "A"  # A: start from scratch, B: Resume, N: Reuse kmesh
         self.msgl = 1  # Level of printing
         self.expan = "S"  # Expansion mode: single (S), double (D) or modified (M)
         self.fcd = "Y"  # Y if full charge density is calculated, N if not
         self.func = "SCA"  # SCA (spherical cell approx), ASA (atomic sphere approx)
+
+        # Line after path variables, eg 'Self-consistent KKR calculation for {jobnam}'
+        self.comment = ""
 
         self.niter = 50
         self.nlin = 30
@@ -384,6 +399,17 @@ class EmtoKgrnFile(EmtoFile):
         if kwargs:
             self.update(kwargs)
 
+    def set_header(self, header="", date_frmt="%d %b %y"):
+        self.header = (header + " " + datetime.now().strftime(date_frmt)).strip()
+
+    def get_atom_symbols(self, include_empty=True):
+        atoms = set(
+            at.symbol
+            for at in self.atoms
+            if include_empty or at.symbol not in ("E", "Va")
+        )
+        return atoms
+
     def get_atom(self, key) -> Atom:
         if isinstance(key, int):
             return self.atoms[key]
@@ -448,8 +474,11 @@ class EmtoKgrnFile(EmtoFile):
         if self.func not in ("SCA", "ASA"):
             raise KGRNError("'func' has to be 'SCA' or 'ASA'!")
 
-        if self.mnta != len(self.atoms):
-            raise KGRNError("'mnta' and number of atoms are not consistent!")
+        atoms = self.get_atom_symbols(include_empty=False)
+        if self.mnta != len(atoms):
+            raise KGRNError(
+                f"mnta={self.mnta} and atom types {atoms} is not consistent!"
+            )
 
     # ----------------------------------------------------------------------------------
 
@@ -477,9 +506,7 @@ class EmtoKgrnFile(EmtoFile):
         try:
             atoms = parse_atoms(atomstr, confstr)
         except Exception as e:
-            raise KGRNError(
-                f"Failed to parse atoms: {self.path}\n{atomstr}\n{confstr}"
-            ) from e
+            raise KGRNError(f"Failed to parse atoms: {self.path}\n{atomstr}") from e
 
         self.update(params)
         self.atoms = [Atom.from_dict(at) for at in atoms]
@@ -488,11 +515,13 @@ class EmtoKgrnFile(EmtoFile):
     def dumps(self):
         self.check()
         params = self.to_dict()
-        if self._update_date:
-            params["date"] = datetime.now()
         atoms = [at.to_dict() for at in self.atoms]
 
-        atomstr = "\n".join(format_atom_line(atom) for atom in atoms)
+        atomstr = "Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT"
+        if self.atoms[0].fix:
+            atomstr += " Fix"
+        atomstr += "\n"
+        atomstr += "\n".join(format_atom_line(atom) for atom in atoms)
         atomconf = "\n".join(format_atom_block(atom) for atom in atoms)
         data = dict(params.copy())
         data["atoms"] = atomstr
