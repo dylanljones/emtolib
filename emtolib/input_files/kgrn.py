@@ -8,6 +8,7 @@ import re
 from datetime import datetime
 import logging
 import numpy as np
+from typing import Union
 from ..common import EmtoFile, parse_params, elements
 from ..ftmplt import Template
 
@@ -171,7 +172,7 @@ class Atom:
         iq=1,
         it=1,
         ita=1,
-        nz=None,
+        iz=0,
         conc=1.0,
         sms=1.0,
         sws=1.0,
@@ -179,15 +180,25 @@ class Atom:
         qtr=0.0,
         splt=0.0,
         fix="N",
-        iz=None,
+        nz=None,
         norb=0,
         ion=0,
-        config=None,
+        config="",
+        n=None,
+        kappa=None,
+        occup=None,
+        valen=None,
     ):
         element = elements.get(symbol, {})
-        config = config or element.get("econf", "")
-        nz = nz or element.get("iz", 0)
-        iz = iz or nz
+        iz = iz or element.get("iz", 0)
+        nz = nz if nz is not None else iz
+        ion = ion or element.get("ion", 0)
+        norb = norb or element.get("norb", 0)
+        config = config or element.get("config", "")
+        n = n or [int(x) for x in element.get("n", "").split() if x.strip()]
+        kappa = kappa or [int(x) for x in element.get("kappa", "").split() if x.strip()]
+        occup = occup or [int(x) for x in element.get("occup", "").split() if x.strip()]
+        valen = valen or [int(x) for x in element.get("valen", "").split() if x.strip()]
 
         self.symbol = symbol
         self.iz = iz
@@ -210,10 +221,10 @@ class Atom:
         self.u = list()
         self.j = list()
 
-        self.n = np.zeros(self.norb, dtype=np.int64)
-        self.kappa = np.zeros(self.norb, dtype=np.int64)
-        self.occup = np.zeros(self.norb, dtype=np.int64)
-        self.valen = np.zeros(self.norb, dtype=np.int64)
+        self.n = np.array(n) if n else np.zeros(self.norb, dtype=np.int64)
+        self.kappa = np.array(kappa) if n else np.zeros(self.norb, dtype=np.int64)
+        self.occup = np.array(occup) if n else np.zeros(self.norb, dtype=np.int64)
+        self.valen = np.array(valen) if n else np.zeros(self.norb, dtype=np.int64)
 
     def __repr__(self):
         cls = self.__class__.__name__
@@ -312,14 +323,14 @@ class EmtoKgrnFile(EmtoFile):
         self.func = "SCA"  # SCA (spherical cell approx), ASA (atomic sphere approx)
 
         # Line after path variables, eg 'Self-consistent KKR calculation for {jobnam}'
-        self.comment = ""
+        self.comment = "Self-consistent KKR calculation for {jobnam}"
 
         self.niter = 50
         self.nlin = 30
         self.nprn = 0
         self.ncpa = 7
         self.nt = 1  # Total number of sublattices: see atoms!
-        self.mnta = 2  # Number of atomic species in an atomic site: see atoms!
+        self.mnta = 0  # Number of atomic species in an atomic site: see atoms!
         self.mode = "3D"  # 2D or 3D
         self.frc = "N"  # Whether (Y) or not (N) forces should be calculated.
         self.dos = "D"  # DOS (D), Fermi surface (F) or neither (N)
@@ -398,6 +409,10 @@ class EmtoKgrnFile(EmtoFile):
         if kwargs:
             self.update(kwargs)
 
+    def aux_dirs(self):
+        d = self.dir002, self.dir003, self.dir006, self.dir009, self.dir010, self.dir011
+        return [path for path in d if path]
+
     def set_header(self, header="", date_frmt="%d %b %y"):
         self.header = (header + " " + datetime.now().strftime(date_frmt)).strip()
 
@@ -426,8 +441,11 @@ class EmtoKgrnFile(EmtoFile):
                 res.append(at)
         return res[idx]
 
-    def add_atom(self, atom: Atom):
+    def add_atom(self, atom: Union[str, Atom]):
+        if isinstance(atom, str):
+            atom = Atom(atom)
         self.atoms.append(atom)
+        return atom
 
     def set_concentrations(self, cc):
         assert len(cc) == len(self.atoms)
@@ -481,6 +499,8 @@ class EmtoKgrnFile(EmtoFile):
         data = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
         data.pop("atoms", None)
         data.pop("path", None)
+        if data["for001_2"] is None:
+            data["for001_2"] = data["for001"]
         return data
 
     def __getitem__(self, key):
@@ -518,7 +538,7 @@ class EmtoKgrnFile(EmtoFile):
 
         # format atom info
         atomstr = "Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT"
-        if self.atoms[0].fix:
+        if not self.atoms or self.atoms[0].fix:
             atomstr += " Fix"
         atomstr += "\n"
         atoms = [at.to_dict() for at in self.atoms]
