@@ -97,13 +97,13 @@ class EmtoDirectory:
         dat = self.dat
         if slurm:
             for path in self.get_slurm_out_paths():
-                path.unlink()
+                path.unlink(missing_ok=True)
         if prn:
             path = self.get_prn_path()
-            path.unlink()
+            path.unlink(missing_ok=True)
         if dos:
             path = self.get_dos_path()
-            path.unlink()
+            path.unlink(missing_ok=True)
         if aux:
             for name in dat.aux_dirs():
                 path = self.path / name
