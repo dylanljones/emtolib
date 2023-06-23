@@ -5,7 +5,79 @@
 # Copyright (c) 2022, Dylan Jones
 
 import re
+import numpy as np
 from ..common import EmtoFile
+
+
+def extract_hopfields(prn, unit="ev/aa^2"):
+    """Extracts the Hopfield parameters in the given unit from the given PRN file.
+
+    Parameters
+    ----------
+    prn : emtolib.input_files.EmtoPrnFile
+        The PRN file to extract the Hopfield parameters from.
+    unit : str, optional
+        The unit of the Hopfield parameters. Can be 'Ry/Bohr^2' or 'eV/AA^2'.
+
+    Returns
+    -------
+    hopfields : list[tuple[str, list[float]]]
+        A list of tuples. Each tuple contains the atom symbol and a list of the
+        Hopfield parameters for that atom and for each spin
+    """
+    re_atom = re.compile("^Atom:(?P<atom>.*)")
+    re_hopfield = re.compile(r"^Hopfield\s+=\s+(?P<field1>.*),\s+(?P<field2>.*)")
+
+    # Prepare and check unit
+    unit = unit.lower()
+    if unit.startswith("ev"):
+        unit = "ev/aa^2"
+    elif unit.startswith("ry"):
+        unit = "ry/bohr^2"
+    if unit not in ("ry/bohr^2", "ev/aa^2"):
+        raise ValueError(f"Unit must be 'Ry/Bohr^2' or 'eV/AA^2', not '{unit}'")
+
+    text = prn.data
+    hopfields = list()
+    current_atom = ""
+    ihf = 0 if unit == "ry/bohr^2" else 1
+
+    hopfield = list()
+
+    # Hopfields are stored in blocks:
+    # Atom:<Symbol>
+    # ...
+    # Hopfield = 0.013988 (Ry / Bohr ^ 2), 0.679618 (eV / AA ^ 2)
+    # ...
+    for line in text.splitlines(keepends=False):
+        line = line.strip()
+
+        # Check for new Atom line
+        match = re_atom.match(line)
+        if match:
+            if hopfield:
+                # New block: We already have seen hopfields, this means a new block
+                # begins here. Store the hopfields of the previous block.
+                hopfields.append((current_atom, hopfield))
+                hopfield = list()
+            # Update current atom
+            current_atom = match["atom"]
+
+        # Check line for Hopfield
+        match = re_hopfield.match(line)
+        if match:
+            # Extract the hopfield values
+            etas = [match["field1"], match["field2"]]
+            # Choose the correct unit and convert to float
+            eta = float(etas[ihf].split("(")[0])
+            # Add to list of hopfield values of *current* block
+            hopfield.append(eta)
+
+    if hopfield:
+        # Store the last block
+        hopfields.append((current_atom, hopfield))
+
+    return hopfields
 
 
 class EmtoPrnFile(EmtoFile):
@@ -51,6 +123,33 @@ class EmtoPrnFile(EmtoFile):
 
     def findall(self, pattern):
         return re.findall(pattern, self.data)
+
+    def extract_hopfields(self, unit="ev/aa^2"):
+        return extract_hopfields(self, unit)
+
+    def get_sublat_hopfields(self, dat, unit="ev/aa^2"):
+        # Extract raw Hopfield parameters
+        raw = self.extract_hopfields(unit)
+        assert len(raw) == len(dat.atoms)
+        assert tuple(x[0] for x in raw) == tuple(x.symbol for x in dat.atoms)
+
+        # Construct sublattice indices
+        sublattices = {i: list() for i in range(dat.nt)}
+        for i, atom in enumerate(dat.atoms):
+            sublattices[atom.it - 1].append(i)
+
+        # Average over sublattices
+        hopfields = list()
+        for it in range(dat.nt):
+            # Get the Hopfield parameters for each atom in the sublattice
+            etas = np.array([raw[i][1] for i in sublattices[it]])
+            # Get the concentrations of each atom in the sublattice
+            concs = [dat.atoms[i].conc for i in sublattices[it]]
+            # Average over the sublattice
+            eta = np.average(etas, weights=concs, axis=0)
+            hopfields.append(eta)
+
+        return np.array(hopfields)
 
     def get_hopfield(self, unit="ev/aa^2"):
         # Prepare and check unit
