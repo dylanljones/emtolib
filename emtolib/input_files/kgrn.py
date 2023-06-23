@@ -229,8 +229,16 @@ class Atom:
     def __repr__(self):
         cls = self.__class__.__name__
         s = (
-            f"<{cls}({self.symbol} It={self.it} Ita={self.ita} Iz={self.iz} "
-            f"Norb={self.norb} Ion={self.ion} Config={self.config})>"
+            f"<{cls}({self.symbol} IQ={self.iq} It={self.it} Ita={self.ita}"
+            f" Iz={self.iz} Norb={self.norb} Ion={self.ion} Config={self.config})>"
+        )
+        return s
+
+    def __str__(self):
+        cls = self.__class__.__name__
+        s = (
+            f"{cls}({self.symbol:<2} IQ={self.iq:<2} It={self.it:<2} Ita={self.ita:<2}"
+            f" Iz={self.iz:<2} Norb={self.norb:<2} Ion={self.ion} Config={self.config})"
         )
         return s
 
@@ -496,13 +504,20 @@ class EmtoKgrnFile(EmtoFile):
         if self.jobnam is None:
             raise KGRNError("'jobnam' has to be given!")
         if self.strt not in ("A", "B", "N"):
-            raise KGRNError("'strt' has to be 'A', 'B' or 'N'!")
+            raise KGRNError(f"'strt' has to be 'A', 'B' or 'N', not '{self.strt}'!")
         if self.expan not in ("S", "D", "M"):
-            raise KGRNError("'expan' has to be 'S', 'D' or 'M'!")
+            raise KGRNError(f"'expan' has to be 'S', 'D' or 'M', not '{self.expan}'!")
         if self.fcd not in ("Y", "N"):
-            raise KGRNError("'fcd' has to be 'Y' or 'N'!")
+            raise KGRNError(f"'fcd' has to be 'Y' or 'N', not '{self.fcd}'!")
         if self.func not in ("SCA", "ASA"):
-            raise KGRNError("'func' has to be 'SCA' or 'ASA'!")
+            raise KGRNError(f"'func' has to be 'SCA' or 'ASA', not {self.func}!")
+        # Check if atoms are consistent with parameters
+        nt = max(atom.it for atom in self.atoms)
+        if self.nt != nt:
+            raise KGRNError(f"maximal iq={nt} does not match nt={self.nt}!")
+        mnta = max(atom.ita for atom in self.atoms)
+        if self.mnta != mnta:
+            raise KGRNError(f"maximal ita={mnta} does not match mnta={self.mnta}!")
 
     # ----------------------------------------------------------------------------------
 
