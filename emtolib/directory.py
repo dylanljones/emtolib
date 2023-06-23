@@ -6,6 +6,7 @@
 
 import re
 import shutil
+import warnings
 from pathlib import Path
 from typing import Union
 from .input_files import EmtoKgrnFile
@@ -32,11 +33,108 @@ class EmtoDirectory:
 
     def __init__(self, path):
         self.path = Path(path)
-        self.dat: Union[EmtoKgrnFile, None] = None
-        try:
-            self.dat = self.get_input()
-        except FileNotFoundError:
-            self.dat = None
+        self._dat: Union[EmtoKgrnFile, None] = None
+        self._prn: Union[EmtoPrnFile, None] = None
+        self._dos: Union[EmtoDosFile, None] = None
+        self._slurm: Union[SlurmScript, None] = None
+
+    @property
+    def dat(self):
+        if self._dat is None:
+            try:
+                return self.get_dat()
+            except FileNotFoundError:
+                return None
+        return self._dat
+
+    @property
+    def prn(self):
+        if self._prn is None:
+            try:
+                return self.get_prn()
+            except FileNotFoundError:
+                return None
+        return self._dat
+
+    @property
+    def dos(self):
+        if self._dos is None:
+            try:
+                return self.get_dos()
+            except FileNotFoundError:
+                return None
+        return self._dos
+
+    @property
+    def slurm(self):
+        if self._slurm is None:
+            try:
+                return self.get_slurm()
+            except FileNotFoundError:
+                return None
+        return self._slurm
+
+    def get_dat_path(self):
+        return find_input_file(self.path)
+
+    def get_dat(self, path=""):
+        if not path:
+            path = self.get_dat_path()
+        dat = EmtoKgrnFile(path)
+        self._dat = dat
+        return dat
+
+    def get_input_path(self):
+        warnings.warn(
+            "get_input_path() is deprecated, use get_dat_path() instead",
+            DeprecationWarning,
+        )
+        return self.get_dat_path()
+
+    def get_input(self, path=""):
+        warnings.warn(
+            "get_input() is deprecated, use get_dat() instead", DeprecationWarning
+        )
+        return self.get_dat(path)
+
+    def get_dos_path(self, name=""):
+        if not name:
+            name = self.dat.jobnam
+        return self.path / f"{name}.dos"
+
+    def get_dos(self, name=""):
+        path = self.get_dos_path(name)
+        dos = EmtoDosFile(path)
+        self._dos = dos
+        return dos
+
+    def get_prn_path(self, name=""):
+        if not name:
+            name = self.dat.jobnam
+        return self.path / f"{name}.prn"
+
+    def get_prn(self, name=""):
+        path = self.get_prn_path(name)
+        prn = EmtoPrnFile(path)
+        self._prn = prn
+        return prn
+
+    def get_slurm_path(self, name="run_emto"):
+        return self.path / name
+
+    def get_slurm(self, name="run_emto"):
+        path = self.get_slurm_path(name)
+        slurm = SlurmScript(path)
+        self._slurm = slurm
+        return slurm
+
+    def get_slurm_out_paths(self):
+        paths = list()
+        for path in self.path.iterdir():
+            if path.is_file():
+                if path.name.startswith("slurm") and path.suffix == ".out":
+                    paths.append(path)
+        return paths
 
     def move(self, dst):
         dst = Path(dst)
@@ -48,45 +146,6 @@ class EmtoDirectory:
         shutil.copytree(self.path, dst)
         folder = self.__class__(dst)
         return folder
-
-    def get_input_path(self):
-        return find_input_file(self.path)
-
-    def get_input(self, path=""):
-        if not path:
-            path = self.get_input_path()
-        file = EmtoKgrnFile(path)
-        return file
-
-    def get_dos_path(self, name=""):
-        if not name:
-            name = self.dat.jobnam
-        return self.path / f"{name}.dos"
-
-    def get_dos(self, name=""):
-        path = self.get_dos_path(name)
-        return EmtoDosFile(path)
-
-    def get_prn_path(self, name=""):
-        if not name:
-            name = self.dat.jobnam
-        return self.path / f"{name}.prn"
-
-    def get_slurm_out_paths(self):
-        paths = list()
-        for path in self.path.iterdir():
-            if path.is_file():
-                if path.name.startswith("slurm") and path.suffix == ".out":
-                    paths.append(path)
-        return paths
-
-    def get_prn(self, name=""):
-        path = self.get_prn_path(name)
-        return EmtoPrnFile(path)
-
-    def get_slurm(self, name="run_emto"):
-        path = self.path / name
-        return SlurmScript(path)
 
     def mkdirs(self):
         for name in self.dat.aux_dirs():
