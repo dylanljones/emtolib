@@ -325,10 +325,10 @@ class EmtoKgrnFile(EmtoFile):
         # Line after path variables, eg 'Self-consistent KKR calculation for {jobnam}'
         self.comment = "Self-consistent KKR calculation for {jobnam}"
 
-        self.niter = 50
-        self.nlin = 30
-        self.nprn = 0
-        self.ncpa = 7
+        self.niter = 50  # Max number of iterations in the main self-consistent DFT loop
+        self.nlin = 30  # Max number of iterations in the Dyson equation.
+        self.nprn = 0  # Determines what/how much will be printed in the output file
+        self.ncpa = 7  # Maximum number of iterations in CPA loop.
         self.nt = 1  # Total number of sublattices: see atoms!
         self.mnta = 0  # Number of atomic species in an atomic site: see atoms!
         self.mode = "3D"  # 2D or 3D
@@ -377,17 +377,26 @@ class EmtoKgrnFile(EmtoFile):
         self.nz0 = 16  # Initial number of z-mesh points.
         self.stmp = "N"  # Y: tmp disk storage (DIR011), A: RAM, N: No tmp storage
 
-        self.iex = 4
-        self.np = 251
+        self.iex = 4  # Determines which exchange-correlation functional to use (4=LDA)
+        self.np = 251  # number of radial grid points in the Poisson equation solver.
+        # Number of times the atomic orbital energies are adjusted in the Dirac solver
         self.nes = 15
-        self.dirac_niter = 100
+        self.dirac_niter = 100  # The maximum number of iterations in the Dirac solver
+        # If IWAT = 1, the potential DV(I) is corrected either with a term ION/RWAT or
+        # ION/DR(I), where ION is the number of electrons of a given atomic species.
+        # DR(I) is the point I of the radial mesh. If IWAT = 0,
+        # this correction is not performed.
         self.iwat = 0
-        self.nprna = 0
-        self.vmix = 0.3
-        self.rwat = 3.5
+        self.nprna = 0  # Determines how much information will be printed in the file
+        self.vmix = 0.3  # Mixing parameter of the potential.
+        self.rwat = 3.5  # The radius of the Watson sphere.
+        # Controls the distribution of points in the atomic radial mesh
         self.rmax = 20.0
+        # A step size controlling the number of points in the atomic radial mesh.
+        # Small values of DX lead to high number of points and vice versa.
         self.dx = 0.03
         self.dr1 = 0.002
+        # Convergence criteria in the Poisson equation and the orbital Dirac equations
         self.test = self.teste = self.testy = self.testv = 1e-12
 
         # Input/Output directories
@@ -462,6 +471,8 @@ class EmtoKgrnFile(EmtoFile):
             return 0.0
 
     def param_diff(self, other, exclude=None):
+        if exclude is not None and isinstance(exclude, str):
+            exclude = (exclude,)
         d1 = self.to_dict()
         d2 = other.to_dict()
         diffset = set(d1.items()) ^ set(d2.items())
