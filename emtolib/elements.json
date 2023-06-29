@@ -73,7 +73,9 @@
         "valen": "0  1",
         "mass": 6.941,
         "debye_0K": 344.0,
-        "debye_room": 448.0
+        "debye_room": 448.0,
+        "latt": "fcc*",
+        "sws": 3.237
     },
     "Be": {
         "symbol": "Be",
@@ -90,7 +92,9 @@
         "valen": "0  1",
         "mass": 9.012,
         "debye_0K": 1481.0,
-        "debye_room": 1031.0
+        "debye_room": 1031.0,
+        "latt": "hcp",
+        "sws": 2.350
     },
     "B": {
         "symbol": "B",
@@ -216,7 +220,9 @@
         "valen": "0  0  0  0  1",
         "mass": 22.99,
         "debye_0K": 156.5,
-        "debye_room": 155.0
+        "debye_room": 155.0,
+        "latt": "bcc",
+        "sws": 3.928
     },
     "Mg": {
         "symbol": "Mg",
@@ -233,7 +239,9 @@
         "valen": "0  0  0  0  1",
         "mass": 24.305,
         "debye_0K": 403.0,
-        "debye_room": 330.0
+        "debye_room": 330.0,
+        "latt": "hcp",
+        "sws": 3.346
     },
     "Al": {
         "symbol": "Al",
@@ -250,7 +258,9 @@
         "valen": "0  0  0  0  1  1",
         "mass": 26.982,
         "debye_0K": 433.0,
-        "debye_room": 390.0
+        "debye_room": 390.0,
+        "latt": "fcc",
+        "sws": 2.991
     },
     "Si": {
         "symbol": "Si",
@@ -346,7 +356,9 @@
         "valen": "0  0  0  0  0  0  0  1",
         "mass": 39.098,
         "debye_0K": 91.1,
-        "debye_room": 100.0
+        "debye_room": 100.0,
+        "latt": "bcc",
+        "sws": 4.871
     },
     "Ca": {
         "symbol": "Ca",
@@ -363,7 +375,9 @@
         "valen": "0  0  0  0  0  0  0  1",
         "mass": 40.078,
         "debye_0K": 229.0,
-        "debye_room": 230.0
+        "debye_room": 230.0,
+        "latt": "fcc",
+        "sws": 4.109
     },
     "Sc": {
         "symbol": "Sc",
@@ -380,7 +394,9 @@
         "valen": "0  0  0  0  0  0  0  1  1",
         "mass": 44.956,
         "debye_0K": 346.0,
-        "debye_room": 476.0
+        "debye_room": 476.0,
+        "latt": "hcp",
+        "sws": 3.424
     },
     "Ti": {
         "symbol": "Ti",
@@ -397,7 +413,9 @@
         "valen": "0  0  0  0  0  0  0  1  1",
         "mass": 47.867,
         "debye_0K": 420.0,
-        "debye_room": 380.0
+        "debye_room": 380.0,
+        "latt": "hcp",
+        "sws": 3.053
     },
     "V": {
         "symbol": "V",
@@ -414,7 +432,9 @@
         "valen": "0  0  0  0  0  0  0  1  1",
         "mass": 50.942,
         "debye_0K": 399.0,
-        "debye_room": 390.0
+        "debye_room": 390.0,
+        "latt": "bcc",
+        "sws": 2.813
     },
     "Cr": {
         "symbol": "Cr",
@@ -431,7 +451,9 @@
         "valen": "0  0  0  0  0  0  0  1  1",
         "mass": 51.996,
         "debye_0K": 606.0,
-        "debye_room": 424.0
+        "debye_room": 424.0,
+        "latt": "Sc",
+        "sws": 2.684
     },
     "Mn": {
         "symbol": "Mn",
@@ -465,7 +487,9 @@
         "valen": "0  0  0  0  0  0  0  1  1  1",
         "mass": 55.845,
         "debye_0K": 477.0,
-        "debye_room": 373.0
+        "debye_room": 373.0,
+        "latt": "bcc",
+        "sws": 2.667
     },
     "Co": {
         "symbol": "Co",
@@ -482,7 +506,9 @@
         "valen": "0  0  0  0  0  0  0  1  1  1",
         "mass": 58.933,
         "debye_0K": 460.0,
-        "debye_room": 386.0
+        "debye_room": 386.0,
+        "latt": "hcp",
+        "sws": 2.613
     },
     "Ni": {
         "symbol": "Ni",
@@ -499,7 +525,9 @@
         "valen": "0  0  0  0  0  0  0  1  1  1",
         "mass": 58.693,
         "debye_0K": 477.0,
-        "debye_room": 345.0
+        "debye_room": 345.0,
+        "latt": "fcc",
+        "sws": 2.602
     },
     "Cu": {
         "symbol": "Cu",
@@ -516,7 +544,9 @@
         "valen": "0  0  0  0  0  0  0  1  1  1",
         "mass": 63.546,
         "debye_0K": 347.0,
-        "debye_room": 310.0
+        "debye_room": 310.0,
+        "latt": "fcc",
+        "sws": 2.669
     },
     "Zn": {
         "symbol": "Zn",
@@ -647,7 +677,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1",
         "mass": 84.468,
         "debye_0K": 56.5,
-        "debye_room": 59.0
+        "debye_room": 59.0,
+        "latt": "bcc",
+        "sws": 5.200
     },
     "Sr": {
         "symbol": "Sr",
@@ -664,7 +696,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1",
         "mass": 87.62,
         "debye_0K": 147.0,
-        "debye_room": 148.0
+        "debye_room": 148.0,
+        "latt": "fcc",
+        "sws": 4.470
     },
     "Y": {
         "symbol": "Y",
@@ -681,7 +715,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1",
         "mass": 88.906,
         "debye_0K": 248.0,
-        "debye_room": 214.0
+        "debye_room": 214.0,
+        "latt": "hcp",
+        "sws": 3.760
     },
     "Zr": {
         "symbol": "Zr",
@@ -698,7 +734,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1",
         "mass": 91.224,
         "debye_0K": 290.0,
-        "debye_room": 250.0
+        "debye_room": 250.0,
+        "latt": "hcp",
+        "sws": 3.347
     },
     "Nb": {
         "symbol": "Nb",
@@ -715,7 +753,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1",
         "mass": 92.90637,
         "debye_0K": 276.0,
-        "debye_room": 260.0
+        "debye_room": 260.0,
+        "latt": "bcc",
+        "sws": 3.071
     },
     "Mo": {
         "symbol": "Mo",
@@ -732,7 +772,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1",
         "mass": 95.95,
         "debye_0K": 423.0,
-        "debye_room": 377.0
+        "debye_room": 377.0,
+        "latt": "bcc",
+        "sws": 2.928
     },
     "Tc": {
         "symbol": "Tc",
@@ -749,7 +791,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 98.907,
         "debye_0K": 454.0,
-        "debye_room": 422.0
+        "debye_room": 422.0,
+        "latt": "hcp",
+        "sws": 2.847
     },
     "Ru": {
         "symbol": "Ru",
@@ -766,7 +810,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 101.07,
         "debye_0K": 555.0,
-        "debye_room": 415.0
+        "debye_room": 415.0,
+        "latt": "hcp",
+        "sws": 2.796
     },
     "Rh": {
         "symbol": "Rh",
@@ -783,7 +829,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 102.906,
         "debye_0K": 512.0,
-        "debye_room": 350.0
+        "debye_room": 350.0,
+        "latt": "fcc",
+        "sws": 2.803
     },
     "Pd": {
         "symbol": "Pd",
@@ -800,7 +848,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 106.42,
         "debye_0K": 271.0,
-        "debye_room": 275.0
+        "debye_room": 275.0,
+        "latt": "fcc",
+        "sws": 2.840
     },
     "Ag": {
         "symbol": "Ag",
@@ -817,7 +867,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 107.868,
         "debye_0K": 227.3,
-        "debye_room": 221.0
+        "debye_room": 221.0,
+        "latt": "fer",
+        "sws": 3.018
     },
     "Cd": {
         "symbol": "Cd",
@@ -950,7 +1002,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1",
         "mass": 132.905,
         "debye_0K": 40.5,
-        "debye_room": 43.0
+        "debye_room": 43.0,
+        "latt": "bcc",
+        "sws": 5.622
     },
     "Ba": {
         "symbol": "Ba",
@@ -967,7 +1021,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1",
         "mass": 137.328,
         "debye_0K": 111.0,
-        "debye_room": 116.0
+        "debye_room": 116.0,
+        "latt": "bcc",
+        "sws": 4.659
     },
     "La": {
         "symbol": "La",
@@ -983,7 +1039,9 @@
         "occup": "2  2  2  4  2  2  4  4  6  2  2  4  4  6  2  2  4  1  2",
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1",
         "mass": 138.905,
-        "debye_0K": 135.0
+        "debye_0K": 135.0,
+        "latt": "hcp*",
+        "sws": 3.925
     },
     "Ce": {
         "symbol": "Ce",
@@ -1163,7 +1221,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  1  1",
         "mass": 178.49,
         "debye_0K": 252.0,
-        "debye_room": 213.0
+        "debye_room": 213.0,
+        "latt": "hcp",
+        "sws": 3.301
     },
     "Ta": {
         "symbol": "Ta",
@@ -1180,7 +1240,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1",
         "mass": 180.948,
         "debye_0K": 246.0,
-        "debye_room": 225.0
+        "debye_room": 225.0,
+        "latt": "bcc",
+        "sws": 3.073
     },
     "W": {
         "symbol": "W",
@@ -1197,7 +1259,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1",
         "mass": 183.84,
         "debye_0K": 383.0,
-        "debye_room": 312.0
+        "debye_room": 312.0,
+        "latt": "bcc",
+        "sws": 2.937
     },
     "Re": {
         "symbol": "Re",
@@ -1214,7 +1278,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 186.207,
         "debye_0K": 416.0,
-        "debye_room": 275.0
+        "debye_room": 275.0,
+        "latt": "hcp",
+        "sws": 2.872
     },
     "Os": {
         "symbol": "Os",
@@ -1231,7 +1297,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 190.23,
         "debye_0K": 467.0,
-        "debye_room": 400.0
+        "debye_room": 400.0,
+        "latt": "hcp",
+        "sws": 2.824
     },
     "Ir": {
         "symbol": "Ir",
@@ -1248,7 +1316,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 192.217,
         "debye_0K": 420.0,
-        "debye_room": 228.0
+        "debye_room": 228.0,
+        "latt": "fcc",
+        "sws": 2.872
     },
     "Pt": {
         "symbol": "Pt",
@@ -1265,7 +1335,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 195.085,
         "debye_0K": 237.0,
-        "debye_room": 225.0
+        "debye_room": 225.0,
+        "latt": "fcc",
+        "sws": 2.835
     },
     "Au": {
         "symbol": "Au",
@@ -1282,7 +1354,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1",
         "mass": 196.967,
         "debye_0K": 162.3,
-        "debye_room": 178.0
+        "debye_room": 178.0,
+        "latt": "fcc",
+        "sws": 3.012
     },
     "Hg": {
         "symbol": "Hg",
@@ -1333,7 +1407,9 @@
         "valen": "0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  1",
         "mass": 207.2,
         "debye_0K": 105.0,
-        "debye_room": 87.0
+        "debye_room": 87.0,
+        "latt": "fcc",
+        "sws": 3.656
     },
     "Bi": {
         "symbol": "Bi",
