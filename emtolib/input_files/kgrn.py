@@ -525,8 +525,8 @@ class EmtoKgrnFile(EmtoFile):
         data = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
         data.pop("atoms", None)
         data.pop("path", None)
-        if data["for001_2"] is None:
-            data["for001_2"] = data["for001"]
+        # if data["for001_2"] is None:
+        #     data["for001_2"] = data["for001"]
         return data
 
     def __getitem__(self, key):
