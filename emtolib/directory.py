@@ -119,10 +119,11 @@ class EmtoDirectory:
         self._prn = prn
         return prn
 
-    def get_slurm_path(self, name="run_emto"):
+    def get_slurm_path(self, name=""):
+        name = name or "run_emto"
         return self.path / name
 
-    def get_slurm(self, name="run_emto"):
+    def get_slurm(self, name=""):
         path = self.get_slurm_path(name)
         slurm = SlurmScript(path)
         self._slurm = slurm
@@ -138,12 +139,21 @@ class EmtoDirectory:
 
     def move(self, dst):
         dst = Path(dst)
+        if dst.exists():
+            raise FileExistsError(f"Destination {dst} already exists!")
         shutil.move(self.path, dst)
         self.path = dst
 
-    def copy(self, dst):
+    def rename(self, name: str):
+        self.move(self.path.parent / name)
+
+    def copy(self, dst, exist_ok=False):
         dst = Path(dst)
-        shutil.copytree(self.path, dst)
+        if dst.exists():
+            if not exist_ok:
+                raise FileExistsError(f"Destination {dst} already exists!")
+        else:
+            shutil.copytree(self.path, dst)
         folder = self.__class__(dst)
         return folder
 

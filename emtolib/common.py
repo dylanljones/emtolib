@@ -4,11 +4,13 @@
 #
 # Copyright (c) 2023, Dylan Jones
 
+import shutil
 import re
 import json
 import logging
 from pathlib import Path
 from typing import Union
+import numpy as np
 
 logger = logging.getLogger("emtolib")
 sh = logging.StreamHandler()
@@ -51,10 +53,16 @@ class EmtoFile:
     def dumps(self) -> str:
         pass
 
-    def load(self, file: Union[str, Path] = ""):
+    def load(self, file: Union[str, Path] = "", missing_ok: bool = False):
         file = file or self.path
-        with open(file, "r") as fp:
-            self.loads(fp.read())
+        try:
+            with open(file, "r") as fp:
+                data = fp.read()
+        except FileNotFoundError:
+            if missing_ok:
+                return None
+            raise
+        self.loads(data)
         return self
 
     def dump(self, file: Union[str, Path] = "") -> None:
@@ -65,5 +73,46 @@ class EmtoFile:
         with open(file, "wb") as fp:
             fp.write(data)
 
+    def move(self, dst: Union[str, Path], exist_ok: bool = False) -> None:
+        dst = Path(dst)
+        if dst.exists() and not exist_ok:
+            raise FileExistsError(f"Destination {dst} already exists!")
+        shutil.move(self.path, dst)
+        self.path = dst
+
+    def rename(self, name: str, exist_ok: bool = False) -> None:
+        self.move(self.path.parent / name, exist_ok)
+
+    def copy(self, dst: Union[str, Path], exist_ok: bool = False):
+        dst = Path(dst)
+        if dst.exists():
+            if not exist_ok:
+                raise FileExistsError(f"Destination {dst} already exists!")
+        else:
+            shutil.copytree(self.path, dst)
+        return self.__class__(dst)
+
     def __repr__(self):
         return f"<{self.__class__.__name__}({self.path})>"
+
+
+def dict_diff(d1, d2, exclude=None):
+    # copy to avoid changing the original dict
+    d1, d2 = d1.copy(), d2.copy()
+    # Ensure exclude is a tuple
+    if exclude is not None and isinstance(exclude, str):
+        exclude = (exclude,)
+    # Convert lists and arrays inside the dicts to tuples
+    for k, v in d1.items():
+        if isinstance(v, list) or isinstance(v, np.ndarray):
+            d1[k] = tuple(v)
+    for k, v in d2.items():
+        if isinstance(v, list) or isinstance(v, np.ndarray):
+            d2[k] = tuple(v)
+    # Find the difference between the two dicts
+    diffset = set(d1.items()) ^ set(d2.items())
+    diff = dict()
+    for key in dict(diffset).keys():
+        if exclude is None or key not in exclude:
+            diff[key] = (d1[key], d2[key])
+    return diff
