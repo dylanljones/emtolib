@@ -59,8 +59,11 @@ class EmtoFile:
 
     def dump(self, file: Union[str, Path] = "") -> None:
         file = file or self.path
-        with open(file, "w") as fp:
-            fp.write(self.dumps())
+        # Encode contents to UTF-8 and replace DOS with UNIX line endings
+        # This is probably not necessary, but it's done anyway for good measure
+        data = self.dumps().encode("utf-8").replace(b"\r\n", b"\n")
+        with open(file, "wb") as fp:
+            fp.write(data)
 
     def __repr__(self):
         return f"<{self.__class__.__name__}({self.path})>"
