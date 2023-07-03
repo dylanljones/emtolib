@@ -11,6 +11,7 @@ import logging
 from pathlib import Path
 from typing import Union
 import numpy as np
+from collections import abc
 
 logger = logging.getLogger("emtolib")
 sh = logging.StreamHandler()
@@ -24,11 +25,59 @@ logger.setLevel(logging.INFO)
 
 RE_KEYVAL = re.compile(r"([a-zA-Z()0-9]+).*?=.*?([a-zA-Z0-9_\-.]+)")
 
+
+class Mapping(abc.Mapping):
+    def __init__(self, data):
+        self._data = data
+
+    def __len__(self):
+        return len(self._data)
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def __getitem__(self, item):
+        return self._data[item]
+
+    def __getattr__(self, item):
+        return self.__getitem__(item)
+
+    def __repr__(self):
+        return repr(self._data)
+
+    def __str__(self):
+        return str(self._data)
+
+
+class ElementView(Mapping):
+    def __repr__(self):
+        return f"<ElementView {self.symbol} ({self.name})>"
+
+    def __str__(self):
+        data = self._data.copy()
+        name = data.pop("name")
+        symbol = data.pop("symbol")
+        lines = list()
+        lines.append(f"{symbol} ({name})")
+        for key, value in data.items():
+            lines.append(f"   {key + ':':<15} {value}")
+        return "\n".join(lines) + "\n"
+
+
+class Elements(Mapping):
+    def __getitem__(self, item):
+        data = self._data[item]
+        return ElementView(data)
+
+    def __repr__(self):
+        return f"<Elements ({len(self)})>"
+
+
 # Atomic masses in 1u ~ 1.660 10-27 kg
 # Debye temperatures (in K)
 # https://www.knowledgedoor.com/2/elements_handbook/debye_temperature.html
 with open(Path(__file__).parent / "elements.json", "r") as _fp:
-    elements = json.load(_fp)
+    elements = Elements(json.load(_fp))
 
 
 def parse_params(data: str) -> dict:

@@ -9,7 +9,7 @@ import shutil
 from pathlib import Path
 import numpy as np
 import xarray as xr
-from typing import Union
+from typing import Union, Callable
 from .directory import EmtoDirectory, walk_emtodirs
 from .common import elements
 
@@ -86,12 +86,12 @@ def rmdir(path, maxtry=10):
 
 
 def update_datasets(
-    root: Union[Path, str], xarr_dir: str = "xarr", force=False, exclude=()
+    src: Union[Path, str], location: Union[Path, str] = None, force=False, exclude=()
 ):
-    root = Path(root)
-    xarr_root = root / xarr_dir
+    emto_root = Path(src)
+    xarr_root = emto_root / "xarr" if location is None else Path(location)
     if xarr_root.exists():
-        root_mtime = root.stat().st_mtime
+        root_mtime = emto_root.stat().st_mtime
         xarr_mtime = xarr_root.stat().st_mtime
         if (xarr_root.exists() and root_mtime <= xarr_mtime) and not force:
             # print("Datasets are up-to date.")
@@ -104,7 +104,7 @@ def update_datasets(
     print("Updating datasets", xarr_root)
     print("=" * 50)
 
-    for folder in walk_emtodirs(root):
+    for folder in walk_emtodirs(emto_root):
         if exclude and folder.path.name in exclude:
             continue
         print(folder)
@@ -122,3 +122,13 @@ def load_dataset(dir_name: Union[Path, str], **kw):
     if not dir_name.suffix:
         dir_name = dir_name.with_suffix(".zarr")
     return xr.open_zarr(dir_name, **kw)
+
+
+def load_datasets(location: Union[Path, str], keyfunc: Callable):
+    xarr_root = Path(location)
+    datasets = dict()
+    for folder in xarr_root.iterdir():
+        ds = load_dataset(folder)
+        key = keyfunc(ds)
+        datasets[key] = ds
+    return datasets
