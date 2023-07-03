@@ -6,26 +6,26 @@
 
 from pathlib import Path
 from configparser import ConfigParser
-from .input_files import EmtoKgrnFile
+from .files import EmtoKgrnFile
 
 
 def read_config(file="emto.ini"):
     parser = ConfigParser()
     parser.read(file)
     config = dict()
-
-    root = Path(parser["emto"]["root"])
+    emto = parser["emto"]
+    root = Path(emto["root"])
     config["emto"] = dict(
         root=root,
-        executable=str(root / parser["emto"]["executable"]).replace("\\", "/"),
-        executable2=str(root / parser["emto"]["executable2"]).replace("\\", "/"),
-        executable_dmft=str(root / parser["emto"]["executable_dmft"]).replace(
-            "\\", "/"
-        ),
-        kstr=str(root / parser["emto"]["kstr"]).replace("\\", "/"),
-        bmdl=str(root / parser["emto"]["bmdl"]).replace("\\", "/"),
+        executable=str(root / emto["executable"]).replace("\\", "/"),
+        executable1=str(root / emto["executable1"]).replace("\\", "/"),
+        executable2=str(root / emto["executable2"]).replace("\\", "/"),
+        executable_dmft=str(root / emto["executable_dmft"]).replace("\\", "/"),
+        kstr=str(root / emto["kstr"]).replace("\\", "/"),
+        bmdl=str(root / emto["bmdl"]).replace("\\", "/"),
     )
     config["slurm"] = dict(parser["slurm"])
+    config.update(**parser["general"])
 
     return config
 
