@@ -5,9 +5,9 @@
 # Copyright (c) 2023, Dylan Jones
 
 from pathlib import Path
-from emtolib.input_files.kgrn import EmtoKgrnFile
-from numpy.testing import assert_array_equal
 from pytest import mark
+from numpy.testing import assert_array_equal
+from emtolib.files import EmtoKgrnFile
 
 TEST_ROOT = Path(__file__).parent.parent / ".testdata"
 
