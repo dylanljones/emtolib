@@ -9,7 +9,7 @@ from datetime import datetime
 import logging
 import numpy as np
 from typing import Union
-from ..common import EmtoFile, parse_params, elements
+from ..common import EmtoFile, parse_params, elements, dict_diff
 from ..ftmplt import Template
 
 logger = logging.getLogger(__name__)
@@ -312,6 +312,12 @@ class Atom:
             assert len(self.valen) == 1
         return self
 
+    def diff(self, other, exclude=None):
+        return dict_diff(self.to_dict(), other.to_dict(), exclude)
+
+    def __eq__(self, other):
+        return self.to_dict() == other.to_dict()
+
 
 class EmtoKgrnFile(EmtoFile):
     """KGRN input file."""
@@ -420,9 +426,7 @@ class EmtoKgrnFile(EmtoFile):
 
         self.atoms = list()
 
-        if self.path.is_file():
-            self.load()
-
+        self.load(missing_ok=True)
         if kwargs:
             self.update(kwargs)
 
@@ -479,16 +483,7 @@ class EmtoKgrnFile(EmtoFile):
             return 0.0
 
     def param_diff(self, other, exclude=None):
-        if exclude is not None and isinstance(exclude, str):
-            exclude = (exclude,)
-        d1 = self.to_dict()
-        d2 = other.to_dict()
-        diffset = set(d1.items()) ^ set(d2.items())
-        diff = dict()
-        for key in dict(diffset).keys():
-            if exclude is None or key not in exclude:
-                diff[key] = (d1[key], d2[key])
-        return diff
+        return dict_diff(self.to_dict(), other.to_dict(), exclude=exclude)
 
     def update(self, *args, **kwargs):
         data = dict(*args, **kwargs)

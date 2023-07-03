@@ -95,7 +95,7 @@ class EmtoPrnFile(EmtoFile):
     def __init__(self, path):
         super().__init__(path)
         self.data = ""
-        self.load()
+        self.load(missing_ok=True)
 
     def loads(self, data: str) -> None:
         self.data = data

@@ -1,0 +1,88 @@
+KGRN                                               22 Jan 08
+JOBNAM=co3sn2s2
+STRT..=  A MSGL.=  1 EXPAN.= M FCD..=  N FUNC..= SCA
+FOR001=../../../EMTO5.8/kstr/smx/co3sn2s2_2.tfh
+FOR001=../../../EMTO5.8/kstr/smx/co3sn2s2_3.tfh
+DIR002=pot/
+DIR003=pot/
+FOR004=../../../EMTO5.8/bmdl/mdl/co3sn2s2_2.mdl
+DIR006=
+DIR009=pot/
+DIR010=chd/
+DIR011=/tmp/
+Self-consistent KKR calculation for sc Li
+Band: 10 lines
+NITER.=100 NLIN.= 31 NPRN.=  1 NCPA.=  7 NT...=  4 MNTA.=  2
+MODE..= 3D FRC..=  N DOS..=  D OPS..=  N AFM..=  F CRT..=  M
+Lmaxh.=  8 Lmaxt=  4 NFI..= 31 FIXG.=  2 SHF..=  0 SOFC.=  N
+KMSH...= G IBZ..=  7 NKX..=  0 NKY..= 15 NKZ..= 19 FBZ..=  N
+KMSH2..= G IBZ2.=  1 NKX2.=  4 NKY2.=  0 NKZ2.= 51
+ZMSH...= C NZ1..= 32 NZ2..=  8 NZ3..=  8 NRES.=  4 NZD.=5000
+DEPTH..=  3.000 IMAGZ.=0.00100 EPS...=0.20000 ELIM..= -1.000
+AMIX...=  0.100 EFMIX.=  1.000 VMTZ..=  0.000 MMOM..=  0.000
+TOLE...= 1.d-06 TOLEF.= 1.d-06 TOLCPA= 1.d-06 TFERMI=  500.0 (K)
+SWS......= 2.9317900 NSWS.=  1 DSWS..=   0.05 ALPCPA= 0.9020
+Setup: 2 + NQ*NS lines
+EFGS...=  0.140 HX....=  0.300 NX...=  5 NZ0..= 16 STMP..= N
+Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT
+Co      1  1  1  27  1.000  1.000  1.000  1.000  0.0  0.5
+Co      2  1  1  27  1.000  1.000  1.000  1.000  0.0  0.5
+Co      3  1  1  27  1.000  1.000  1.000  1.000  0.0  0.5
+Sn      4  2  1  50  1.000  1.000  1.000  1.000  0.0  0.0
+Sn      5  3  1  50  0.500  1.000  1.000  1.000  0.0  0.0
+In      5  3  2  49  0.500  1.000  1.000  1.000  0.1  0.0
+S       6  4  1  16  1.000  1.000  1.000  1.000  0.0  0.0
+S       7  4  1  16  1.000  1.000  1.000  1.000  0.0  0.0
+Atom:  4 lines + NT*NTA*6 lines
+IEX...=  7 NP..= 251 NES..= 15 NITER=100 IWAT.=  0 NPRNA=  0
+VMIX.....=  0.300000 RWAT....=  3.500000 RMAX....= 20.000000
+DX.......=  0.030000 DR1.....=  0.002000 TEST....=  1.00E-12
+TESTE....=  1.00E-12 TESTY...=  1.00E-12 TESTV...=  1.00E-12
+Co
+Iz=  27 Norb= 10 Ion=  0 Config= 3d7_4s2
+n      1  2  2  2  3  3  3  3  3  4
+Kappa -1 -1  1 -2 -1  1 -2  2 -3 -1
+Occup  2  2  2  4  2  2  4  4  3  2
+Valen  0  0  0  0  0  0  0  1  1  1
+Co
+Iz=  27 Norb= 10 Ion=  0 Config= 3d7_4s2
+n      1  2  2  2  3  3  3  3  3  4
+Kappa -1 -1  1 -2 -1  1 -2  2 -3 -1
+Occup  2  2  2  4  2  2  4  4  3  2
+Valen  0  0  0  0  0  0  0  1  1  1
+Co
+Iz=  27 Norb= 10 Ion=  0 Config= 3d7_4s2
+n      1  2  2  2  3  3  3  3  3  4
+Kappa -1 -1  1 -2 -1  1 -2  2 -3 -1
+Occup  2  2  2  4  2  2  4  4  3  2
+Valen  0  0  0  0  0  0  0  1  1  1
+Sn
+Iz=  50 Norb= 16 Ion=  0 Config= 4d10_5s2_5p2
+n      1  2  2  2  3  3  3  3  3  4  4  4  4  4  5  5
+Kappa -1 -1  1 -2 -1  1 -2  2 -3 -1  1 -2  2 -3 -1  1
+Occup  2  2  2  4  2  2  4  4  6  2  2  4  4  6  2  2
+Valen  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  1
+Sn
+Iz=  50 Norb= 16 Ion=  0 Config= 4d10_5s2_5p2
+n      1  2  2  2  3  3  3  3  3  4  4  4  4  4  5  5
+Kappa -1 -1  1 -2 -1  1 -2  2 -3 -1  1 -2  2 -3 -1  1
+Occup  2  2  2  4  2  2  4  4  6  2  2  4  4  6  2  2
+Valen  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  1
+In
+Iz=  49 Norb= 16 Ion=  0 Config= 4d10_5s2_5p1
+n      1  2  2  2  3  3  3  3  3  4  4  4  4  4  5  5
+Kappa -1 -1  1 -2 -1  1 -2  2 -3 -1  1 -2  2 -3 -1  1
+Occup  2  2  2  4  2  2  4  4  6  2  2  4  4  6  2  1
+Valen  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  1
+S
+Iz=  16 Norb=  7 Ion=  0 Config= 3s2_3p4
+n      1  2  2  2  3  3  3
+Kappa -1 -1  1 -2 -1  1 -2
+Occup  2  2  2  4  2  2  2
+Valen  0  0  0  0  1  1  1
+S
+Iz=  16 Norb=  7 Ion=  0 Config= 3s2_3p4
+n      1  2  2  2  3  3  3
+Kappa -1 -1  1 -2 -1  1 -2
+Occup  2  2  2  4  2  2  2
+Valen  0  0  0  0  1  1  1

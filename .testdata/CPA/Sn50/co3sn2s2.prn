@@ -1,0 +1,3827 @@
+ TASK:     Self-consistent KKR calculation for sc Li         13:46 / 07-Feb-23
+
+ FHNDLR:   Program: KGRN, Version: LV 24 Oct 2013
+
+           JOB:    co3sn2s2
+           FOR001: ../../../EMTO5.8/kstr/smx/co3sn2s2_2.tfh
+           FOR002: pot/co3sn2s2.pot
+           FOR003: pot/co3sn2s2.atm
+           FOR004: ../../../EMTO5.8/bmdl/mdl/co3sn2s2_2.mdl
+           FOR006: co3sn2s2.prn
+           FOR009: pot/co3sn2s2.zms
+           FOR010: chd/co3sn2s2.chd
+           FOR011: /tmp/co3sn2s2.tmp
+
+           MSGL = 1 STRT =A FUNC = SCA EXPAN = M FCD = N
+
+ TRNSFM:   Modified TwoC expansion for the slope matrix
+
+           Co3 Sn2 S2, Vaqueiro, P. and Sobany, G.G., Solid State Sci23-Jan-23 5
+
+           ITRANS =  3 (kappa0*w)^2 =   0.000 NDER =  6
+
+           Co3 Sn2 S2, Vaqueiro, P. and Sobany, G.G., Solid State Sci23-Jan-23 5
+
+           ITRANS =  3 (kappa0*w)^2 = -30.000 NDER =  6
+
+           Modified TwoC expansion with NDER = 13
+
+ INPUT:    Non-overlapping values are used for f and g
+
+           Higher tails included in the charge density Lmaxt =  4
+
+           Density of states (DOS) is calculatated
+
+           TOLE   =0.1000E-05 TOLEF =0.1000E-05 TOLCPA=0.1000E-05
+           DEPTH  = 3.0000000 IMAGZ = 0.0010000 EPS   = 0.2000000
+           AMIX   = 0.1000000 EFMIX = 1.0000000 ALPCPA= 0.9020000
+
+           NQ     =  7 NT    =  4 NL    =  4 NS    =  2 MNTA  =  2
+           KMSH   =  G IBZ   =  7 NKX   =  0 NKY   = 15 NKZ   = 19
+           ZMSH   =  C NZ1   = 32 NZ2   =  8 NZ3   =  8 NRES  =  4
+           NITER  =100 NLIN  = 31 NCPA  =  7 AFM   =  F CRT   =  M
+
+ MGAUN:    Generate real Gaunt numbers
+
+ MGAUNT:   NGAUNT =   708
+
+ ROTM3D:   Set up the 3D rotation matrices for IBZ =  7
+
+           Rotation matrices generated, NPRPRT = 12
+
+ SETSYM:   Set up the site-group symmetry elements for IQ =  1
+
+           E     I
+             1 --->   2      2 C3+
+             1 --->   3      3 C3-
+             1 --->   2      8 s6-
+             1 --->   3      9 s6+
+
+ SETSYM:   Set up the site-group symmetry elements for IQ =  2
+
+           E     I
+             2 --->   3      2 C3+
+             2 --->   1      3 C3-
+             2 --->   3      8 s6-
+             2 --->   1      9 s6+
+
+ SETSYM:   Set up the site-group symmetry elements for IQ =  3
+
+           E     I
+             3 --->   1      2 C3+
+             3 --->   2      3 C3-
+             3 --->   1      8 s6-
+             3 --->   2      9 s6+
+
+ SETSYM:   Set up the site-group symmetry elements for IQ =  4
+
+           E     C3+   C3-   I     s6-   s6+
+
+ SETSYM:   Set up the site-group symmetry elements for IQ =  5
+
+           E     C3+   C3-   I     s6-   s6+
+
+ SETSYM:   Set up the site-group symmetry elements for IQ =  6
+
+           E     C3+   C3-
+             6 --->   7      7 I
+             6 --->   7      8 s6-
+             6 --->   7      9 s6+
+
+ SETSYM:   Set up the site-group symmetry elements for IQ =  7
+
+           E     C3+   C3-
+             7 --->   6      7 I
+             7 --->   6      8 s6-
+             7 --->   6      9 s6+
+
+           The irreducible Brillouin zone will be increased
+           by applying the following missing symmetry elements:
+
+           C2h1  C2h2  C2h3  sig1  sig2  sig3
+
+ MADMTR:   Madelung potential for hcp bulk                           23-Jan-23
+
+           NLMAD  =  49
+
+ SCAWS:    IQ IT ITA  WS     S      Sm     Si     Sc     hard spheres (s,p,...)
+
+            1  1  1 2.7876 2.7876 2.7876 2.0582 3.7479 1.9513 1.9513 1.9513 1.9513
+            2  1  1 2.7876 2.7876 2.7876 2.0582 3.7479 1.9513 1.9513 1.9513 1.9513
+            3  1  1 2.7876 2.7876 2.7876 2.0582 3.7479 1.9513 1.9513 1.9513 1.9513
+            4  2  1 3.0443 3.0443 3.0443 2.5366 3.7479 2.1310 2.1310 2.1310 2.1310
+            5  3  1 3.0735 3.0735 3.0735 2.5372 3.7479 2.1514 2.1514 2.1514 2.1514
+            5  3  2 3.0735 3.0735 3.0735 2.5372 3.7479 2.1514 2.1514 2.1514 2.1514
+            6  4  1 3.0032 3.0032 3.0032 2.0582 3.7479 2.0121 2.0121 2.0121 2.0121
+            7  4  1 3.0032 3.0032 3.0032 2.0582 3.7479 2.0121 2.0121 2.0121 2.0121
+
+           Exchange-correlation: PBE
+
+ ATOMI:    Atomic calculation for Co   WSATM =  2.787554
+
+           NITER =100 IEX   =  7 IWAT  =  0 IZ    = 27 ION   =  0
+
+           Precision on energy, wavefunction, and potential:
+
+           TESTE =  1.00E-12 TESTY =  1.00E-12 TESTV =  1.00E-12
+           VMIX  =  0.300000
+
+           Precision on energy and number of iterations in DIRACA:
+
+           TEST  =  1.00E-12 NES   = 15
+
+           Radial mesh given by (R(1)=DR1/IZ) :
+
+           JWSA  = 353   JRIA  = 355   JWOA  =   0   NP    = 419
+           DR1   =  0.002000 DX    =  0.030000 RMAX  = 20.000000
+           R(1)  =  0.7228922E-04         R(NP) =  0.2018954E+02
+
+           Exchange-correlation: Perdew-B-E GGA
+
+           Valence orbital Nodes
+
+                 4s          3
+                 4p          2
+                 3d          0
+                 4f          0
+
+ ATOMC:    Co     3d7_4s2                Perdew-B-E GGA
+
+
+           Orbital   Occup.   Valence   deltaQ   Final energy (Rydberg)
+
+            1s1/2      2         0       0.00     -5.5804237E+02
+            2s1/2      2         0       0.00     -6.6139649E+01
+            2p3/2      2         0       0.00     -5.7384917E+01
+            2p1/2      4         0      -0.00     -5.6295452E+01
+            3s1/2      2         0       0.00     -7.6115266E+00
+            3p3/2      2         0       0.00     -5.0009724E+00
+            3p1/2      4         0       0.00     -4.8647405E+00
+            3d5/2      4         1       0.02     -6.9547256E-01
+            3d3/2      3         1       0.02     -6.8132220E-01
+            4s1/2      2         1       0.54     -5.0589528E-01
+
+ TOTALE:   (Rydberg)
+
+           EONE =     -5.837647 VINT =   -122.299564 EKIN =    116.461916
+           ENUC =   -531.502144 ECOR =    317.102330
+           EVAL =    427.177763 EXCT =   -118.628369 EXCC =   -102.160090
+           ETOT =    -59.368461
+
+           Valence energies in the frozen core approximation (Rydbergs)
+
+           Kinetic energy       116.461916
+           El-ion energy       -531.502144
+           El-el energy         372.140046
+           Exc energy           -16.468279
+
+           Total energy         -59.368461
+
+ Atomic charge densities, and potential stored on FOR003
+
+ ATOMI:    Atomic calculation for Sn1  WSATM =  3.044253
+
+           NITER =100 IEX   =  7 IWAT  =  0 IZ    = 50 ION   =  0
+
+           Precision on energy, wavefunction, and potential:
+
+           TESTE =  1.00E-12 TESTY =  1.00E-12 TESTV =  1.00E-12
+           VMIX  =  0.300000
+
+           Precision on energy and number of iterations in DIRACA:
+
+           TEST  =  1.00E-12 NES   = 15
+
+           Radial mesh given by (R(1)=DR1/IZ) :
+
+           JWSA  = 377   JRIA  = 379   JWOA  =   0   NP    = 439
+           DR1   =  0.002000 DX    =  0.030000 RMAX  = 20.000000
+           R(1)  =  0.3842722E-04         R(NP) =  0.1955548E+02
+
+           Exchange-correlation: Perdew-B-E GGA
+
+           Valence orbital Nodes
+
+                 5s          4
+                 5p          3
+                 4d          1
+                 4f          0
+
+ ATOMC:    Sn1    4d10_5s2_5p2           Perdew-B-E GGA
+
+
+           Orbital   Occup.   Valence   deltaQ   Final energy (Rydberg)
+
+            1s1/2      2         0       0.00     -2.1311692E+03
+            2s1/2      2         0       0.00     -3.2168808E+02
+            2p3/2      2         0       0.00     -3.0047771E+02
+            2p1/2      4         0       0.00     -2.8352648E+02
+            3s1/2      2         0       0.00     -6.2132898E+01
+            3p3/2      2         0       0.00     -5.3519314E+01
+            3p1/2      4         0      -0.00     -5.0423915E+01
+            3d5/2      4         0       0.00     -3.5206478E+01
+            3d3/2      6         0       0.00     -3.4567575E+01
+            4s1/2      2         0       0.00     -9.8996287E+00
+            4p3/2      2         0       0.00     -7.0367258E+00
+            4p1/2      4         0       0.00     -6.4804314E+00
+            4d5/2      4         1       0.00     -2.0060942E+00
+            4d3/2      6         1       0.00     -1.9294845E+00
+            5s1/2      2         1       0.22     -8.3084721E-01
+            5p3/2      2         1       0.53     -3.7138416E-01
+
+ TOTALE:   (Rydberg)
+
+           EONE =    -22.005747 VINT =   -278.553939 EKIN =    256.548192
+           ENUC =  -1400.675492 ECOR =    911.864044
+           EVAL =   1151.781148 EXCT =   -330.374582 EXCC =   -303.538167
+           ETOT =   -139.141119
+
+           Valence energies in the frozen core approximation (Rydbergs)
+
+           Kinetic energy       256.548192
+           El-ion energy      -1400.675492
+           El-el energy        1031.822596
+           Exc energy           -26.836414
+
+           Total energy        -139.141119
+
+ Atomic charge densities, and potential stored on FOR003
+
+ ATOMI:    Atomic calculation for Sn2  WSATM =  3.073462
+
+           NITER =100 IEX   =  7 IWAT  =  0 IZ    = 50 ION   =  0
+
+           Precision on energy, wavefunction, and potential:
+
+           TESTE =  1.00E-12 TESTY =  1.00E-12 TESTV =  1.00E-12
+           VMIX  =  0.300000
+
+           Precision on energy and number of iterations in DIRACA:
+
+           TEST  =  1.00E-12 NES   = 15
+
+           Radial mesh given by (R(1)=DR1/IZ) :
+
+           JWSA  = 377   JRIA  = 379   JWOA  =   0   NP    = 439
+           DR1   =  0.002000 DX    =  0.030000 RMAX  = 20.000000
+           R(1)  =  0.3879592E-04         R(NP) =  0.1974311E+02
+
+           Exchange-correlation: Perdew-B-E GGA
+
+           Valence orbital Nodes
+
+                 5s          4
+                 5p          3
+                 4d          1
+                 4f          0
+
+ ATOMC:    Sn2    4d10_5s2_5p2           Perdew-B-E GGA
+
+
+           Orbital   Occup.   Valence   deltaQ   Final energy (Rydberg)
+
+            1s1/2      2         0       0.00     -2.1311692E+03
+            2s1/2      2         0       0.00     -3.2168808E+02
+            2p3/2      2         0       0.00     -3.0047771E+02
+            2p1/2      4         0      -0.00     -2.8352647E+02
+            3s1/2      2         0       0.00     -6.2132895E+01
+            3p3/2      2         0       0.00     -5.3519311E+01
+            3p1/2      4         0      -0.00     -5.0423912E+01
+            3d5/2      4         0       0.00     -3.5206474E+01
+            3d3/2      6         0       0.00     -3.4567572E+01
+            4s1/2      2         0       0.00     -9.8996256E+00
+            4p3/2      2         0       0.00     -7.0367229E+00
+            4p1/2      4         0       0.00     -6.4804285E+00
+            4d5/2      4         1       0.00     -2.0060917E+00
+            4d3/2      6         1       0.00     -1.9294820E+00
+            5s1/2      2         1       0.21     -8.3083908E-01
+            5p3/2      2         1       0.53     -3.7137430E-01
+
+ TOTALE:   (Rydberg)
+
+           EONE =    -22.005685 VINT =   -278.553859 EKIN =    256.548174
+           ENUC =  -1400.675700 ECOR =    911.864142
+           EVAL =   1151.781329 EXCT =   -330.374585 EXCC =   -303.538166
+           ETOT =   -139.141210
+
+           Valence energies in the frozen core approximation (Rydbergs)
+
+           Kinetic energy       256.548174
+           El-ion energy      -1400.675700
+           El-el energy        1031.822736
+           Exc energy           -26.836419
+
+           Total energy        -139.141210
+
+ Atomic charge densities, and potential stored on FOR003
+
+ ATOMI:    Atomic calculation for In   WSATM =  3.073462
+
+           NITER =100 IEX   =  7 IWAT  =  0 IZ    = 49 ION   =  0
+
+           Precision on energy, wavefunction, and potential:
+
+           TESTE =  1.00E-12 TESTY =  1.00E-12 TESTV =  1.00E-12
+           VMIX  =  0.300000
+
+           Precision on energy and number of iterations in DIRACA:
+
+           TEST  =  1.00E-12 NES   = 15
+
+           Radial mesh given by (R(1)=DR1/IZ) :
+
+           JWSA  = 377   JRIA  = 379   JWOA  =   0   NP    = 439
+           DR1   =  0.002000 DX    =  0.030000 RMAX  = 20.000000
+           R(1)  =  0.3879592E-04         R(NP) =  0.1974311E+02
+
+           Exchange-correlation: Perdew-B-E GGA
+
+           Valence orbital Nodes
+
+                 5s          4
+                 5p          3
+                 4d          1
+                 4f          0
+
+ ATOMC:    In     4d10_5s2_5p1           Perdew-B-E GGA
+
+
+           Orbital   Occup.   Valence   deltaQ   Final energy (Rydberg)
+
+            1s1/2      2         0       0.00     -2.0386877E+03
+            2s1/2      2         0       0.00     -3.0522367E+02
+            2p3/2      2         0       0.00     -2.8463353E+02
+            2p1/2      4         0       0.00     -2.6913461E+02
+            3s1/2      2         0       0.00     -5.7979755E+01
+            3p3/2      2         0       0.00     -4.9672714E+01
+            3p1/2      4         0       0.00     -4.6873156E+01
+            3d5/2      4         0       0.00     -3.2186289E+01
+            3d3/2      6         0       0.00     -3.1612747E+01
+            4s1/2      2         0       0.00     -8.8591607E+00
+            4p3/2      2         0       0.00     -6.1471696E+00
+            4p1/2      4         0       0.00     -5.6585151E+00
+            4d5/2      4         1       0.01     -1.4749661E+00
+            4d3/2      6         1       0.01     -1.4116845E+00
+            5s1/2      2         1       0.30     -6.7057521E-01
+            5p3/2      1         1       0.67     -3.0169255E-01
+
+ TOTALE:   (Rydberg)
+
+           EONE =    -16.012814 VINT =   -236.775133 EKIN =    220.762318
+           ENUC =  -1241.212912 ECOR =    826.460415
+           EVAL =   1031.189553 EXCT =   -319.765434 EXCC =   -295.520078
+           ETOT =   -115.870965
+
+           Valence energies in the frozen core approximation (Rydbergs)
+
+           Kinetic energy       220.762318
+           El-ion energy      -1241.212912
+           El-el energy         928.824984
+           Exc energy           -24.245356
+
+           Total energy        -115.870965
+
+ Atomic charge densities, and potential stored on FOR003
+
+ ATOMI:    Atomic calculation for S    WSATM =  3.003192
+
+           NITER =100 IEX   =  7 IWAT  =  0 IZ    = 16 ION   =  0
+
+           Precision on energy, wavefunction, and potential:
+
+           TESTE =  1.00E-12 TESTY =  1.00E-12 TESTV =  1.00E-12
+           VMIX  =  0.300000
+
+           Precision on energy and number of iterations in DIRACA:
+
+           TEST  =  1.00E-12 NES   = 15
+
+           Radial mesh given by (R(1)=DR1/IZ) :
+
+           JWSA  = 339   JRIA  = 341   JWOA  =   0   NP    = 403
+           DR1   =  0.002000 DX    =  0.030000 RMAX  = 20.000000
+           R(1)  =  0.1185324E-03         R(NP) =  0.2048465E+02
+
+           Exchange-correlation: Perdew-B-E GGA
+
+           Valence orbital Nodes
+
+                 3s          2
+                 3p          1
+                 4d          0
+                 4f          0
+
+ ATOMC:    S      3s2_3p4                Perdew-B-E GGA
+
+
+           Orbital   Occup.   Valence   deltaQ   Final energy (Rydberg)
+
+            1s1/2      2         0       0.00     -1.7695629E+02
+            2s1/2      2         0       0.00     -1.5687065E+01
+            2p3/2      2         0       0.00     -1.1692663E+01
+            2p1/2      4         0       0.00     -1.1599803E+01
+            3s1/2      2         1       0.05     -1.3585424E+00
+            3p3/2      2         1       0.18     -6.1938212E-01
+            3p1/2      2         1       0.18     -6.1352678E-01
+
+ TOTALE:   (Rydberg)
+
+           EONE =     -5.182903 VINT =    -30.728968 EKIN =     25.546066
+           ENUC =   -134.093705 ECOR =     76.982993
+           EVAL =    109.746661 EXCT =    -50.812314 EXCC =    -45.663209
+           ETOT =    -20.331918
+
+           Valence energies in the frozen core approximation (Rydbergs)
+
+           Kinetic energy        25.546066
+           El-ion energy       -134.093705
+           El-el energy          93.364827
+           Exc energy            -5.149105
+
+           Total energy         -20.331918
+
+ Atomic charge densities, and potential stored on FOR003
+
+           Self-consistent bulk program: ATOM
+
+
+ OLDIN:    NT     =  4 NS   =  2
+
+           EFGS   =  0.140000
+
+ SETRMS:   dimension for potential spheres     : 381
+
+           dimension for circumscribed spheres : 384
+
+           IT ITA    Si      w       Sc      S
+
+            1  1     341     353     363     353
+                   2.0582  2.7876  3.7479  2.7876
+            1  1     341     353     363     353
+                   2.0582  2.7876  3.7479  2.7876
+            1  1     341     353     363     353
+                   2.0582  2.7876  3.7479  2.7876
+            2  1     369     377     384     377
+                   2.5366  3.0443  3.7479  3.0443
+            3  1     369     377     384     377
+                   2.5372  3.0735  3.7479  3.0735
+            3  2     369     377     384     377
+                   2.5372  3.0735  3.7479  3.0735
+            4  1     325     339     347     339
+                   2.0582  3.0032  3.7479  3.0032
+            4  1     325     339     347     339
+                   2.0582  3.0032  3.7479  3.0032
+
+ SETNGB:   Madelung correction for each site and sort
+
+             0.396526  0.396526  0.396526  0.363090  0.359640  0.359640  0.368055  0.368055
+
+ NXTSWS:   IQ IT ITA MMT Type  NZ ION  ELN   QTR   SPLIT  FIX  CONC
+
+            1  1  1   3   Co   27  0   9.0  0.000  0.500   N  1.000
+            2  1  1   3   Co   27  0   9.0  0.000  0.500   N  1.000
+            3  1  1   3   Co   27  0   9.0  0.000  0.500   N  1.000
+            4  2  1   1   Sn   50  0  14.0  0.000  0.000   N  1.000
+            5  3  1   1   Sn   50  0  14.0  0.000  0.000   N  0.500
+            5  3  2   1   In   49  0  13.0  0.100  0.000   N  0.500
+            6  4  1   2   S    16  0   6.0  0.000  0.000   N  1.000
+            7  4  1   2   S    16  0   6.0  0.000  0.000   N  1.000
+
+           SWS =    2.9318 Alat =  5.8581 Bohr   3.1000 AA
+           VOL =  738.8992 ELT  = 66.5000
+
+ OVRLPS:   Set up the overlapping spheres for IQ =  1
+
+           Number of different overlapping spheres NOV =  4
+
+            jt  wov   ovt jrov   tov(Bohr)   tov(a)      okac     omega
+
+             4    2    1  323   4.116409    0.702688    4.234748  40.67 %
+             2    2    2  343   5.073256    0.866025    0.219868  14.95 %
+             1    4    3  347   5.073256    0.866025    0.042124   9.89 %
+             3    2    4  342   5.074423    0.866225    0.254287  15.50 %
+
+ OVRLPS:   Set up the overlapping spheres for IQ =  2
+
+ OVRLPS:   Set up the overlapping spheres for IQ =  3
+
+ OVRLPS:   Set up the overlapping spheres for IQ =  4
+
+           Number of different overlapping spheres NOV =  2
+
+            jt  wov   ovt jrov   tov(Bohr)   tov(a)      okac     omega
+
+             1    6    1  368   5.073256    0.866025    0.219868  14.95 %
+             4    2    2  369   5.395130    0.920971    0.127870  12.09 %
+
+ OVRLPS:   Set up the overlapping spheres for IQ =  5
+
+           Number of different overlapping spheres NOV =  2
+
+            jt  wov   ovt jrov   tov(Bohr)   tov(a)      okac     omega
+
+             1    6    1  368   5.074423    0.866225    0.254287  15.50 %
+             4    6    2  377   5.990263    1.022562    0.000044   1.44 %
+
+           Number of different overlapping spheres NOV =  2
+
+            jt  wov   ovt jrov   tov(Bohr)   tov(a)      okac     omega
+
+             1    6    1  368   5.074423    0.866225    0.254287  15.50 %
+             4    6    2  377   5.990263    1.022562    0.000044   1.44 %
+
+ OVRLPS:   Set up the overlapping spheres for IQ =  6
+
+           Number of different overlapping spheres NOV =  3
+
+            jt  wov   ovt jrov   tov(Bohr)   tov(a)      okac     omega
+
+             1    3    1  312   4.116410    0.702688    4.234745  40.67 %
+             2    1    2  331   5.395131    0.920971    0.127869  12.09 %
+             3    3    3  339   5.990263    1.022562    0.000044   1.44 %
+
+ OVRLPS:   Set up the overlapping spheres for IQ =  7
+
+ OVRLPS:   VOL =  738.899235 VOLS =  738.899235 VOLI =    0.000000
+
+ RENORM:   IT         CWS             ZWS
+             1  1   0.18000000E+02 0.25752646E+02
+             2  1   0.36000000E+02 0.48470401E+02
+             3  1   0.36000000E+02 0.48504969E+02
+             3  2   0.36000000E+02 0.47665023E+02
+             4  1   0.10000000E+02 0.15188268E+02
+
+ OPTPOT:   Fbar =  0.000000 g = -0.629984 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.636741 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.629984     -0.636741
+
+ EBTOP:      Bot       Top
+
+            -1.379627 12.191210
+
+ KMESH:    Brillouin zone:trig. NPT = 1216
+
+ KMESH:    NKVEC =  1216 NKX =  0 NKY = 15 NKZ = 19
+           DKX =  0.054986 DKY =  0.047619 DKZ =  0.111111
+
+ SETIBZ:   dimension of the point group:
+           IMSYMM:   2 IBZR:   6 IBZROT:  12
+
+ SETKMS:   IBZ increased, NKVEC = 2147
+
+ ZMESH:    Semi-circular contour
+
+
+           ELT  = 66.500000 EB   = -4.360000 EFX=  0.140000
+           DEPTH=  3.000000 DELTA=  0.079621 EPS=  0.200000
+
+           LZ     Re(z)     Im(z)    Weight
+
+            1  -2.858163 -0.074214  0.009340 -0.188550
+            2  -2.813054 -0.372337  0.100867 -0.393635
+            3  -2.617992 -0.816979  0.302716 -0.466125
+            4  -2.203573 -1.240317  0.515382 -0.350525
+            5  -1.629125 -1.475660  0.606444 -0.110601
+            6  -1.043125 -1.466148  0.544005  0.117574
+            7  -0.568945 -1.274454  0.398198  0.247162
+            8  -0.246770 -1.005346  0.250602  0.277494
+            9  -0.054669 -0.738994  0.140967  0.248999
+           10   0.049099 -0.514238  0.072704  0.199222
+           11   0.100849 -0.340469  0.034784  0.149249
+           12   0.124792 -0.213055  0.015370  0.107116
+           13   0.134933 -0.123194  0.006101  0.074031
+           14   0.138699 -0.062461  0.002022  0.048522
+           15   0.139802 -0.024347  0.000461  0.028425
+           16   0.139993 -0.004510  0.000035  0.011641
+
+           LX     Re(z)     Im(z)
+
+            1  -0.460007 -0.004510
+            2  -0.160007 -0.004510
+            3   0.139993 -0.004510
+            4   0.439993 -0.004510
+            5   0.739993 -0.004510
+
+ WARNING:  Taylor expansion might not be converged:
+
+ LZ exp   E     S00     S00_Dots(1,2,...)
+
+  1  1  -2.86 -4.2789 -2.1834  1.0978 -1.1156  1.5202 -2.4298  4.2226 -6.6878  8.0301 -6.6757  3.6792 -1.2804  0.2548 -0.0221
+  2  1  -2.81 -4.2536 -2.1391  1.0537 -1.0491  1.4006 -2.1933  3.7343 -5.7944  6.8163 -5.5518  2.9977 -1.0221  0.1993 -0.0169
+  3  1  -2.62 -4.1419 -1.9477  0.8735 -0.7919  0.9626 -1.3725  2.1277 -3.0061  3.2198 -2.3878  1.1739 -0.3644  0.0647 -0.0050
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 7 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  5- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  5- 7 iterations
+
+ Atom:Co              S =    2.787554        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000
+ D-nu       =    1.292049    1.913159    2.500276    3.506016    1.265104    1.892036    2.479800    3.493072
+ Dnud       =    8.075220   10.027728    7.646483   14.429953    8.024768    9.974493    7.516753   14.394959
+ Omega-     =    1.114399    2.154498    2.285323    5.519037    1.093918    2.131750    2.233083    5.494694
+ S*Phisq-   =   -0.363406    0.371450    0.200837    0.435822   -0.361731    0.369697    0.195176    0.434597
+ Phi-/Phi+  =    0.889810    0.750576    0.530361    0.620184    0.889194    0.749467    0.524568    0.619461
+
+ Mu         =    0.708257    0.692920    1.281561    0.590574    0.711538    0.696206    1.318734    0.592239
+ Tau        =    0.841156    0.975917    1.261686    1.022181    0.843883    0.977650    1.270074    1.022674
+ A          =    3.052391    5.262198    3.063532   12.191210    2.998454    5.198683    2.925700   12.129084
+ C          =   -0.245601    0.794498    0.925323    4.159037   -0.266082    0.771750    0.873083    4.134694
+ B          =   -0.654010   -0.096571    0.086423    1.932509   -0.672890   -0.115901    0.053866    1.913253
+ V          =   -0.654010   -0.690161   -0.968077   -0.760074   -0.672890   -0.708088   -0.987266   -0.776313
+ D(Ef)      =   -2.738417   -0.610843    4.316848    2.128578   -2.842818   -0.656037    3.731525    2.111118
+
+ Bot, Top   =   -1.379627   12.191210
+ V-Madelung =   -0.004062
+ V(S) Up,Dwn=   -0.652081                                       -0.664694
+ V(W) Up,Dwn=   -0.652081                                       -0.664694
+
+ Atom:Sn              S =    3.044253        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000
+ D-nu       =    1.129752    1.886280    0.196516    3.561024    1.129752    1.886280    0.196516    3.561024
+ Dnud       =    6.902981    9.279765    3.034875   14.018892    6.902981    9.279765    3.034875   14.018892
+ Omega-     =    0.718687    1.665998    0.044424    4.541379    0.718687    1.665998    0.044424    4.541379
+ S*Phisq-   =    0.246512   -0.280989   -0.006536    0.348596    0.246512   -0.280989   -0.006536    0.348596
+ Phi-/Phi+  =    0.873465    0.734037    0.171482    0.611519    0.873465    0.734037    0.171482    0.611519
+
+ Mu         =    0.875447    0.768031   33.016654    0.619080    0.875447    0.768031   33.016654    0.619080
+ Tau        =    1.001873    1.034558    3.398132    1.041786    1.001873    1.034558    3.398132    1.041786
+ A          =    1.306868    3.475490   -1.276130    9.462689    1.306868    3.475490   -1.276130    9.462689
+ C          =   -0.641313    0.305998   -1.315576    3.181379   -0.641313    0.305998   -1.315576    3.181379
+ B          =   -0.923536   -0.377099   -1.354569    1.389137   -0.923536   -0.377099   -1.354569    1.389137
+ V          =   -0.923536   -0.842401   -1.506160   -0.808965   -0.923536   -0.842401   -1.506160   -0.808965
+ D(Ef)      =  -17.588209   -1.923268    0.958408    1.835067  -17.588209   -1.923268    0.958408    1.835067
+
+ Bot, Top   =   -1.379627   12.191210
+ V-Madelung =   -0.007594
+ V(S) Up,Dwn=   -0.659899                                       -0.659899
+ V(W) Up,Dwn=   -0.659899                                       -0.659899
+
+ Atom:Sn              S =    3.073462        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000
+ D-nu       =    1.174212    1.922781   -0.231104    3.589636    1.174212    1.922781   -0.231104    3.589636
+ Dnud       =    6.903552    9.298509    3.024744   14.098392    6.903552    9.298509    3.024744   14.098392
+ Omega-     =    0.719491    1.654119    0.030298    4.499264    0.719491    1.654119    0.030298    4.499264
+ S*Phisq-   =    0.239887   -0.275268   -0.005913    0.344217    0.239887   -0.275268   -0.005913    0.344217
+ Phi-/Phi+  =    0.873475    0.734478    0.170089    0.613225    0.873475    0.734478    0.170089    0.613225
+
+ Mu         =    0.882609    0.769162   35.805076    0.615095    0.882609    0.769162   35.805076    0.615095
+ Tau        =    1.010090    1.037327    3.625486    1.040867    1.010090    1.037327    3.625486    1.040867
+ A          =    1.255447    3.404243   -1.294076    9.369032    1.255447    3.404243   -1.294076    9.369032
+ C          =   -0.640509    0.294119   -1.329702    3.139264   -0.640509    0.294119   -1.329702    3.139264
+ B          =   -0.915144   -0.374832   -1.365037    1.371753   -0.915144   -0.374832   -1.365037    1.371753
+ V          =   -0.915144   -0.830224   -1.503532   -0.789988   -0.915144   -0.830224   -1.503532   -0.789988
+ D(Ef)      =  -22.046167   -1.995739    0.930934    1.836657  -22.046167   -1.995739    0.930934    1.836657
+
+ Bot, Top   =   -1.379627   12.191210
+ V-Madelung =   -0.001182
+ V(S) Up,Dwn=   -0.643836                                       -0.643836
+ V(W) Up,Dwn=   -0.643836                                       -0.643836
+
+ Atom:In              S =    3.073462        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000
+ D-nu       =    1.378824    2.042740    2.443351    3.631861    1.378824    2.042740    2.443351    3.631861
+ Dnud       =    7.606019    9.864086    4.764991   14.319108    7.606019    9.864086    4.764991   14.319108
+ Omega-     =    0.883965    1.817578    0.801126    4.600125    0.883965    1.817578    0.801126    4.600125
+ S*Phisq-   =    0.268883   -0.296391   -0.044004    0.351642    0.268883   -0.296391   -0.044004    0.351642
+ Phi-/Phi+  =    0.883802    0.747136    0.356084    0.617885    0.883802    0.747136    0.356084    0.617885
+
+ Mu         =    0.787429    0.714348    4.811560    0.602107    0.787429    0.714348    4.811560    0.602107
+ Tau        =    0.922599    0.996894    2.135303    1.034432    0.922599    0.996894    2.135303    1.034432
+ A          =    1.837975    3.973982   -0.217186    9.681892    1.837975    3.973982   -0.217186    9.681892
+ C          =   -0.476035    0.457578   -0.558874    3.240125   -0.476035    0.457578   -0.558874    3.240125
+ B          =   -0.780269   -0.255393   -0.773998    1.440637   -0.780269   -0.255393   -0.773998    1.440637
+ V          =   -0.780269   -0.732529   -1.176756   -0.743614   -0.780269   -0.732529   -1.176756   -0.743614
+ D(Ef)      =   -7.319415   -1.362840    1.328686    1.911314   -7.319415   -1.362840    1.328686    1.911314
+
+ Bot, Top   =   -1.379627   12.191210
+ V-Madelung =   -0.062714
+ V(S) Up,Dwn=   -0.619867                                       -0.619867
+ V(W) Up,Dwn=   -0.619867                                       -0.619867
+
+ Atom:S               S =    3.003192        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000   -1.360000
+ D-nu       =   -0.127226    1.692885    2.713683    3.640251   -0.127226    1.692885    2.713683    3.640251
+ Dnud       =    3.637909    6.524371   10.543438   14.589806    3.637909    6.524371   10.543438   14.589806
+ Omega-     =    0.105609    1.094069    2.758393    4.894412    0.105609    1.094069    2.758393    4.894412
+ S*Phisq-   =    0.098233   -0.167918    0.279100    0.377324    0.098233   -0.167918    0.279100    0.377324
+ Phi-/Phi+  =    0.784386    0.648068    0.630818    0.623450    0.784386    0.648068    0.630818    0.623450
+
+ Mu         =    2.257389    1.320586    0.794520    0.587692    2.257389    1.320586    0.794520    0.587692
+ Tau        =    2.083324    1.386589    1.106574    1.027932    2.083324    1.386589    1.106574    1.027932
+ A          =   -0.798795    1.165464    5.178360   10.548792   -0.798795    1.165464    5.178360   10.548792
+ C          =   -1.254391   -0.265931    1.398393    3.534412   -1.254391   -0.265931    1.398393    3.534412
+ B          =   -1.379627   -0.704715    0.322851    1.611321   -1.379627   -0.704715    0.322851    1.611321
+ V          =   -1.379627   -1.043248   -0.813812   -0.702127   -1.379627   -1.043248   -0.813812   -0.702127
+ D(Ef)      =    1.835166   18.529286    0.135457    2.033682    1.835166   18.529286    0.135457    2.033682
+
+ Bot, Top   =   -1.379627   12.191210
+ V-Madelung =   -0.005468
+ V(S) Up,Dwn=   -0.564257                                       -0.564257
+ V(W) Up,Dwn=   -0.564257                                       -0.564257
+
+ EF         =    0.082959
+
+ VMTZ Up,Dwn=   -0.629984                                       -0.636741
+
+ Atom:Co
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.277547    0.346437    3.594251    0.014173    0.288770    0.375896    3.883852    0.015621
+ Nos(Ef)    =    8.796547
+ Dos(Ef)    =    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000
+ Dos(Ef)    =    0.000000
+ Magn. mom. =    0.331731    1.335246
+ Stoner-I   =    0.061741    0.068574    0.157477    0.073380
+
+ Atom:Sn
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.738762    0.777241    5.079026    0.028588    0.737591    0.864342    5.082746    0.033920
+ Nos(Ef)    =   13.342215
+ Dos(Ef)    =    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000
+ Dos(Ef)    =    0.000000
+ Magn. mom. =    0.094983    1.335246
+ Stoner-I   =   -0.000000    0.000000    0.000000    0.000000
+
+ Atom:Sn
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.757970    0.486551    5.135555    0.030629    0.765271    0.610750    5.132512    0.035134
+ Nos(Ef)    =   12.954371
+ Dos(Ef)    =    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000
+ Dos(Ef)    =    0.000000
+ Magn. mom. =    0.132963    1.335246
+ Stoner-I   =    0.000000    0.000000   -0.000000    0.000000
+
+ Atom:In
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.668556    0.432316    4.989051    0.030379    0.678147    0.548191    4.985096    0.034864
+ Nos(Ef)    =   12.366600
+ Dos(Ef)    =    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000
+ Dos(Ef)    =    0.000000
+ Magn. mom. =    0.125996    1.335246
+ Stoner-I   =   -0.000000   -0.000000    0.000000    0.000000
+
+ Atom:S
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.937400    2.327046    0.211502    0.022068    0.942453    2.349703    0.240289    0.023367
+ Nos(Ef)    =    7.053829
+ Dos(Ef)    =    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000    0.000000
+ Dos(Ef)    =    0.000000
+ Magn. mom. =    0.057796    1.335246
+ Stoner-I   =    0.000000    0.000000   -0.000000    0.000000
+
+ PRNPRM:   EONE =     -1.631019 VINT =   -119.859326 EKIN =    118.228306
+           ECOR =    328.914380 ENUC =   -549.787462 EMADL=      0.000000
+           EVAL =     59.846630 EXCT =   -119.366043 EXCC =   -102.160618
+           ETOT =    -60.003570 OKAE =     -0.000334 E[n] =    -60.003904
+            T*S =      0.000000 E-TS =    -60.003570
+
+ PRNPRM:   EONE =    -14.201434 VINT =   -273.644674 EKIN =    259.443240
+           ECOR =    938.434958 ENUC =  -1438.275514 EMADL=      0.000000
+           EVAL =    128.338967 EXCT =   -331.336082 EXCC =   -303.538230
+           ETOT =   -139.856201 OKAE =      0.000009 E[n] =   -139.856192
+            T*S =      0.000000 E-TS =   -139.856201
+
+ PRNPRM:   EONE =    -14.313617 VINT =   -273.407734 EKIN =    259.094117
+           ECOR =    937.543888 ENUC =  -1437.003136 EMADL=     -0.001568
+           EVAL =    128.077190 EXCT =   -331.301347 EXCC =   -303.538218
+           ETOT =   -140.052638 OKAE =      0.000009 E[n] =   -140.052629
+            T*S =      0.000000 E-TS =   -140.052638
+
+ PRNPRM:   EONE =     -9.262384 VINT =   -232.408899 EKIN =    223.146515
+           ECOR =    853.351991 ENUC =  -1278.483863 EMADL=     -0.001568
+           EVAL =    110.449991 EXCT =   -320.685071 EXCC =   -295.520200
+           ETOT =   -116.701804 OKAE =     -0.000011 E[n] =   -116.701815
+            T*S =      0.000000 E-TS =   -116.701804
+
+ PRNPRM:   EONE =     -4.165863 VINT =    -31.076718 EKIN =     26.910855
+           ECOR =     80.662668 ENUC =   -140.078948 EMADL=      0.000000
+           EVAL =     17.905409 EXCT =    -51.212378 EXCC =    -45.663209
+           ETOT =    -20.149185 OKAE =     -0.000343 E[n] =    -20.149528
+            T*S =      0.000000 E-TS =    -20.149185
+
+           Valence energies in the frozen core approximation (Rydbergs)
+           calculated from output charge density:
+
+           Kinetic energy       118.228306
+           Madelung energy        0.000000
+           El-ion energy       -549.787462
+           El-el energy         388.761010
+           Exc energy           -17.205425
+                              ------------
+           Total                -60.003570
+           Total+OKAE           -60.003904
+           Total+Ewald          -59.686064 4pi SS n(S)=  2.272744
+
+           Kinetic energy       259.443240
+           Madelung energy        0.000000
+           El-ion energy      -1438.275514
+           El-el energy        1066.773925
+           Exc energy           -27.797853
+                              ------------
+           Total               -139.856201
+           Total+OKAE          -139.856192
+           Total+Ewald         -139.925002 4pi SS n(S)=  2.704626
+
+           Kinetic energy       259.094117
+           Madelung energy       -0.001568
+           El-ion energy      -1437.003136
+           El-el energy        1065.621078
+           Exc energy           -27.763129
+                              ------------
+           Total               -140.052638
+           Total+OKAE          -140.052629
+           Total+Ewald         -140.140278 4pi SS n(S)=  2.628731
+
+           Kinetic energy       223.146515
+           Madelung energy       -0.001568
+           El-ion energy      -1278.483863
+           El-el energy         963.801982
+           Exc energy           -25.164871
+                              ------------
+           Total               -116.701804
+           Total+OKAE          -116.701815
+           Total+Ewald         -116.773603 4pi SS n(S)=  2.379311
+
+           Kinetic energy        26.910855
+           Madelung energy        0.000000
+           El-ion energy       -140.078948
+           El-el energy          98.568077
+           Exc energy            -5.549169
+                              ------------
+           Total                -20.149185
+           Total+OKAE           -20.149528
+           Total+Ewald          -20.087475 4pi SS n(S)=  1.741568
+
+           Total energy         -69.791786
+
+           Total energy+OKA     -69.792026
+
+           Total+Ewald          -69.659298
+                              ============
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.5745 0.3317 0.0000 0.0000 0.0000-0.0000-0.0000 0.0083-0.0958 0.0471 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000 0.0000
+   2  9.5745 0.3317-0.0000-0.0000-0.0000-0.0408-0.0830 0.0083 0.0479-0.0236 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000
+   3  9.5745 0.3317 0.0000 0.0000 0.0000 0.0408 0.0830 0.0083 0.0479-0.0236-0.0000-0.0000-0.0000 0.0000-0.0000-0.0000 0.0000
+   4 13.2364 0.0950 0.0000 0.0000 0.0000 0.0000-0.0000-0.0437 0.0000-0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000
+   5 13.3584 0.1295-0.0000-0.0000 0.0000 0.0000-0.0000 0.0601 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000
+   6 62.4375 0.0578-0.0000-0.1725 0.0000-0.0000-0.0000 0.0331 0.0000-0.0000-0.0000-0.0000-0.0000 0.0117-0.0000-0.0000 0.0161
+   7 62.4375 0.0578 0.0000 0.1725-0.0000-0.0000-0.0000 0.0331 0.0000-0.0000 0.0000 0.0000 0.0000-0.0117-0.0000 0.0000-0.0161
+ Tot180.1933
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.007492
+            22 -0.004066
+            23  0.019224
+            24 -0.008984
+            25  0.006395
+            43 -0.000285
+            44  0.000324
+            45  0.000178
+            46 -0.000546
+            47  0.000499
+            48 -0.000193
+            49  0.000073
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.005539
+            19 -0.016649
+            20 -0.003521
+            21 -0.007492
+            22  0.002033
+            23 -0.009612
+            24 -0.008984
+            25 -0.003198
+            38  0.000167
+            39  0.000432
+            41 -0.000155
+            42  0.000281
+            43 -0.000285
+            44 -0.000162
+            45 -0.000089
+            46 -0.000546
+            47 -0.000249
+            48  0.000097
+            49  0.000073
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.005539
+            19  0.016649
+            20  0.003521
+            21 -0.007492
+            22  0.002033
+            23 -0.009612
+            24 -0.008984
+            25 -0.003198
+            38 -0.000167
+            39 -0.000432
+            41  0.000155
+            42 -0.000281
+            43 -0.000285
+            44 -0.000162
+            45 -0.000089
+            46 -0.000546
+            47 -0.000249
+            48  0.000097
+            49  0.000073
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010603
+            24 -0.002768
+            43  0.000428
+            46  0.000155
+            49 -0.000055
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.002177
+            24  0.004302
+            43 -0.000073
+            46 -0.000341
+            49  0.000392
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21 -0.004236
+            24 -0.004997
+            31  0.000830
+            34 -0.000551
+            43 -0.000067
+            46  0.000048
+            49 -0.000153
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21 -0.004236
+            24 -0.004997
+            31 -0.000830
+            34  0.000551
+            43 -0.000067
+            46  0.000048
+            49 -0.000153
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E=  0.139993 -0.004510 N=334 PREL= 0.14024E-11 0.48558E-14 QREL=-0.43847E-09 0.17177E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E=  0.139993 -0.004510 N=334 PREL= 0.14024E-11 0.48558E-14 QREL=-0.43847E-09 0.17177E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E=  0.139993 -0.004510 N=336 PREL=-0.52590E-11-0.36170E-13 QREL=-0.13525E-08-0.74639E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E=  0.139993 -0.004510 N=337 PREL= 0.57647E-11 0.43061E-13 QREL= 0.30032E-09 0.34691E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E=  0.139993 -0.004510 N=338 PREL=-0.42133E-11-0.35929E-13 QREL=-0.12448E-08-0.13358E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139802 -0.024347 N=336 PREL=-0.14885E-10-0.31550E-12 QREL= 0.99605E-09-0.32565E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139802 -0.024347 N=337 PREL= 0.16389E-10 0.36567E-12 QREL=-0.11940E-08 0.44030E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139802 -0.024347 N=338 PREL=-0.12737E-10-0.31873E-12 QREL= 0.11617E-08-0.63574E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=336 PREL=-0.14884E-10-0.58443E-13 QREL= 0.11098E-08-0.67971E-10****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=337 PREL= 0.16388E-10 0.67735E-13 QREL=-0.13667E-08 0.94611E-10****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=338 PREL=-0.12736E-10-0.59041E-13 QREL= 0.15238E-08-0.15779E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.160007 -0.004510 N=339 PREL=-0.10423E-11-0.64017E-14 QREL= 0.32235E-09-0.11941E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E=  0.139993 -0.004510 N=336 PREL=-0.52590E-11-0.36170E-13 QREL=-0.13525E-08-0.74639E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E=  0.139993 -0.004510 N=337 PREL= 0.57647E-11 0.43061E-13 QREL= 0.30032E-09 0.34691E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E=  0.139993 -0.004510 N=338 PREL=-0.42133E-11-0.35929E-13 QREL=-0.12448E-08-0.13358E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=336 PREL=-0.14884E-10-0.58443E-13 QREL= 0.11098E-08-0.67971E-10****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=337 PREL= 0.16388E-10 0.67735E-13 QREL=-0.13667E-08 0.94611E-10****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=338 PREL=-0.12736E-10-0.59041E-13 QREL= 0.15238E-08-0.15779E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.138699 -0.062461 N=336 PREL=-0.13992E-10-0.78372E-12 QREL=-0.40926E-09-0.92137E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.138699 -0.062461 N=337 PREL= 0.15426E-10 0.90843E-12 QREL= 0.41710E-09 0.10405E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139802 -0.024347 N=336 PREL=-0.13987E-10-0.30534E-12 QREL=-0.13572E-08-0.10318E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139802 -0.024347 N=337 PREL= 0.15420E-10 0.35393E-12 QREL= 0.15124E-08 0.12450E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139802 -0.024347 N=338 PREL=-0.10794E-10-0.27560E-12 QREL=-0.95689E-09-0.60479E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=335 PREL= 0.93937E-11 0.34574E-13 QREL= 0.10356E-08 0.10119E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=336 PREL=-0.13986E-10-0.56562E-13 QREL=-0.20526E-08-0.28256E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=337 PREL= 0.15419E-10 0.65562E-13 QREL= 0.24163E-08 0.35899E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=338 PREL=-0.10794E-10-0.51051E-13 QREL=-0.12922E-08-0.14807E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.160007 -0.004510 N=337 PREL=-0.36763E-11-0.16715E-13 QREL= 0.15798E-08-0.73941E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=335 PREL= 0.93937E-11 0.34574E-13 QREL= 0.10356E-08 0.10119E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=336 PREL=-0.13986E-10-0.56562E-13 QREL=-0.20526E-08-0.28256E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=337 PREL= 0.15419E-10 0.65562E-13 QREL= 0.24163E-08 0.35899E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E=  0.139993 -0.004510 N=338 PREL=-0.10794E-10-0.51051E-13 QREL=-0.12922E-08-0.14807E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E= -0.160007 -0.004510 N=336 PREL=-0.53484E-11-0.32916E-13 QREL=-0.14418E-08-0.23204E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=333 PREL= 0.10451E-11 0.32595E-14 QREL= 0.32084E-09 0.13249E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.460007 -0.004510 N=353 PREL=-0.31055E-11-0.13441E-13 QREL= 0.10729E-08-0.26619E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E= -0.160007 -0.004510 N=338 PREL=-0.30740E-11-0.22402E-13 QREL=-0.91632E-09-0.10710E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E= -0.160007 -0.004510 N=339 PREL=-0.68614E-11-0.62750E-13 QREL= 0.15062E-08-0.18644E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=334 PREL=-0.45308E-11-0.15742E-13 QREL=-0.17608E-08-0.67664E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=335 PREL= 0.84059E-11 0.28828E-13 QREL=-0.15275E-08 0.23062E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=339 PREL=-0.22025E-10-0.11328E-12 QREL= 0.11022E-08-0.62372E-10****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=335 PREL= 0.74001E-11 0.25759E-13 QREL= 0.13535E-08 0.21873E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=336 PREL=-0.97413E-11-0.37048E-13 QREL= 0.50972E-08-0.33867E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=337 PREL= 0.11293E-10 0.44818E-13 QREL=-0.18701E-08 0.27415E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=339 PREL=-0.22132E-10-0.11467E-12 QREL= 0.23141E-08-0.28872E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.460007 -0.004510 N=353 PREL=-0.39260E-11-0.17109E-13 QREL=-0.16977E-08-0.99920E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=336 PREL=-0.76927E-11-0.29727E-13 QREL=-0.16348E-08-0.32890E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=337 PREL= 0.91289E-11 0.36770E-13 QREL=-0.63896E-09 0.10125E-07****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=338 PREL=-0.52539E-11-0.22363E-13 QREL= 0.22347E-08-0.93960E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=339 PREL=-0.21841E-10-0.11455E-12 QREL= 0.87632E-08-0.66942E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.460007 -0.004510 N=353 PREL=-0.42182E-11-0.18334E-13 QREL= 0.18703E-08-0.11137E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.460007 -0.004510 N=353 PREL=-0.26858E-11-0.11811E-13 QREL=-0.12489E-08-0.89402E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=337 PREL= 0.78014E-11 0.31840E-13 QREL= 0.10644E-08 0.13874E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=338 PREL=-0.43964E-11-0.18806E-13 QREL=-0.10047E-08-0.20917E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=339 PREL=-0.21321E-10-0.11259E-12 QREL=-0.32961E-08-0.65836E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=339 PREL=-0.20474E-10-0.10936E-12 QREL=-0.17206E-08-0.18505E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.460007 -0.004510 N=353 PREL=-0.48490E-11-0.21187E-13 QREL=-0.24078E-08-0.22142E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.460007 -0.004510 N=335 PREL=-0.18379E-11-0.68554E-14 QREL= 0.98257E-09-0.73151E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.160007 -0.004510 N=339 PREL=-0.19778E-10-0.10616E-12 QREL=-0.10916E-08-0.78784E-10****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.460007 -0.004510 N=335 PREL=-0.16564E-11-0.62261E-14 QREL= 0.90821E-09-0.10266E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.460007 -0.004510 N=353 PREL=-0.52904E-11-0.23235E-13 QREL=-0.12949E-08-0.34496E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E= -0.460007 -0.004510 N=339 PREL=-0.54657E-11-0.44421E-13 QREL= 0.12096E-08-0.83661E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E= -0.460007 -0.004510 N=339 PREL=-0.51545E-11-0.42094E-13 QREL=-0.34126E-09-0.23518E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E= -0.460007 -0.004510 N=339 PREL=-0.48559E-11-0.39851E-13 QREL=-0.10285E-08-0.68267E-09****
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.506726 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.496936 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.605333     -0.608780
+
+ KGRN:  Iteration no.   1 Etot =      -69.791786 erren = 1.00000000
+
+        Magn. mom. =  1.375
+
+        Dyson loops    32 EF   =        0.174997 erref = 0.08295940
+
+ KGRN:  QTR  =  0.146255 -0.635052 -0.663412 -0.548266  0.401063
+
+ KGRN:  QSCA =  0.531442  0.692195  0.712311  0.664562
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.057573  0.057573  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 5 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.423007 -0.003584 N=339 PREL=-0.92535E-11-0.37012E-13 QREL= 0.25014E-08-0.65960E-09****
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  5 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  5 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.2671 0.3471 0.0000 0.0000-0.0000-0.0000-0.0000 0.0092-0.0260 0.0101 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000
+   2  9.2671 0.3471-0.0000 0.0000 0.0000-0.0088-0.0225 0.0092 0.0130-0.0051-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000
+   3  9.2671 0.3471-0.0000-0.0000-0.0000 0.0088 0.0225 0.0092 0.0130-0.0051-0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000
+   4 13.8178-0.0776 0.0000-0.0000-0.0000 0.0000-0.0000-0.0328-0.0000-0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000
+   5 13.4906-0.0663-0.0000 0.0000 0.0000-0.0000-0.0000 0.0384 0.0000 0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000 0.0000
+   6  6.4816-0.0806-0.0000-0.0434-0.0000-0.0000-0.0000 0.0130 0.0000 0.0000 0.0000 0.0000-0.0000 0.0096 0.0000 0.0000 0.0083
+   7  6.4816-0.0806 0.0000 0.0434 0.0000-0.0000-0.0000 0.0130-0.0000-0.0000-0.0000-0.0000 0.0000-0.0096 0.0000-0.0000-0.0083
+ Tot 68.0731
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.003855
+            22 -0.000728
+            23  0.010428
+            24 -0.005108
+            25  0.003962
+            43 -0.000033
+            44  0.000056
+            45 -0.000041
+            46 -0.000022
+            47  0.000054
+            48 -0.000048
+            49  0.000108
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003431
+            19 -0.009031
+            20 -0.000631
+            21 -0.003855
+            22  0.000364
+            23 -0.005214
+            24 -0.005108
+            25 -0.001981
+            38  0.000042
+            39  0.000046
+            41  0.000036
+            42  0.000048
+            43 -0.000033
+            44 -0.000028
+            45  0.000021
+            46 -0.000022
+            47 -0.000027
+            48  0.000024
+            49  0.000108
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003431
+            19  0.009031
+            20  0.000631
+            21 -0.003855
+            22  0.000364
+            23 -0.005214
+            24 -0.005108
+            25 -0.001981
+            38 -0.000042
+            39 -0.000046
+            41 -0.000036
+            42 -0.000048
+            43 -0.000033
+            44 -0.000028
+            45  0.000021
+            46 -0.000022
+            47 -0.000027
+            48  0.000024
+            49  0.000108
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.006936
+            24 -0.003049
+            43  0.000936
+            46  0.000184
+            49  0.000405
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.004974
+            24  0.003410
+            43  0.000206
+            46 -0.000785
+            49  0.000332
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.004378
+            24  0.003124
+            31 -0.000890
+            34 -0.003728
+            43 -0.000156
+            46  0.000264
+            49 -0.000024
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.004378
+            24  0.003124
+            31  0.000890
+            34  0.003728
+            43 -0.000156
+            46  0.000264
+            49 -0.000024
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.423007 -0.003584 N=339 PREL=-0.84813E-11-0.34367E-13 QREL=-0.38935E-08-0.22305E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.423007 -0.003584 N=339 PREL=-0.77547E-11-0.31820E-13 QREL=-0.12473E-08-0.19847E-09****
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.607128 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.605485 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.606051     -0.607462
+
+ KGRN:  Iteration no.   2 Etot =      -69.657665 erren = 0.13412081
+
+        Magn. mom. = -0.734
+
+        Dyson loops    32 EF   =        0.113936 erref = 0.09630018
+
+ KGRN:  QTR  =  0.138959 -0.578163 -0.529886 -0.323386  0.293961
+
+ KGRN:  QSCA =  0.211393  0.275336  0.283338  0.264344
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.103250  0.103250  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 5 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 5 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  5 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  5 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.3079-0.0951 0.0000-0.0000-0.0000 0.0000-0.0000 0.0134-0.0531 0.0247 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000
+   2  9.3079-0.0951-0.0000-0.0000 0.0000-0.0214-0.0460 0.0134 0.0265-0.0124 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000 0.0000
+   3  9.3079-0.0951 0.0000 0.0000-0.0000 0.0214 0.0460 0.0134 0.0265-0.0124-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000
+   4 13.7791 0.0005 0.0000 0.0000-0.0000 0.0000-0.0000-0.0554 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000
+   5 13.4025 0.0014 0.0000 0.0000-0.0000-0.0000-0.0000 0.0569 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000
+   6  7.1106-0.0047-0.0000-0.1449 0.0000-0.0000-0.0000 0.0242 0.0000 0.0000-0.0000 0.0000-0.0000 0.0148-0.0000 0.0000 0.0167
+   7  7.1106-0.0047 0.0000 0.1449-0.0000-0.0000-0.0000 0.0242 0.0000 0.0000 0.0000-0.0000 0.0000-0.0148-0.0000 0.0000-0.0167
+ Tot 69.3267
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004663
+            22 -0.001826
+            23  0.013583
+            24 -0.007212
+            25  0.004402
+            43 -0.000108
+            44  0.000123
+            45  0.000020
+            46 -0.000211
+            47  0.000163
+            48 -0.000082
+            49  0.000132
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003812
+            19 -0.011764
+            20 -0.001581
+            21 -0.004663
+            22  0.000913
+            23 -0.006792
+            24 -0.007212
+            25 -0.002201
+            38  0.000071
+            39  0.000141
+            41 -0.000018
+            42  0.000106
+            43 -0.000108
+            44 -0.000061
+            45 -0.000010
+            46 -0.000211
+            47 -0.000082
+            48  0.000041
+            49  0.000132
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003812
+            19  0.011764
+            20  0.001581
+            21 -0.004663
+            22  0.000913
+            23 -0.006792
+            24 -0.007212
+            25 -0.002201
+            38 -0.000071
+            39 -0.000141
+            41  0.000018
+            42 -0.000106
+            43 -0.000108
+            44 -0.000061
+            45 -0.000010
+            46 -0.000211
+            47 -0.000082
+            48  0.000041
+            49  0.000132
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010009
+            24 -0.003774
+            43  0.001001
+            46  0.000207
+            49  0.000357
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.006977
+            24  0.005422
+            43  0.000172
+            46 -0.000776
+            49  0.000301
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002134
+            24 -0.000233
+            31 -0.001361
+            34 -0.004829
+            43 -0.000133
+            46  0.000546
+            49 -0.000048
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002134
+            24 -0.000233
+            31  0.001361
+            34  0.004829
+            43 -0.000133
+            46  0.000546
+            49 -0.000048
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.536302 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.537906 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.550252     -0.551817
+
+ KGRN:  Iteration no.   3 Etot =      -69.785587 erren = 0.12792196
+
+        Magn. mom. = -1.450
+
+        Dyson loops    32 EF   =        0.153965 erref = 0.07031563
+
+ KGRN:  QTR  =  0.071862 -0.626595 -0.616572 -0.399095  0.459422
+
+ KGRN:  QSCA =  0.398376  0.518879  0.533958  0.498164
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.108738  0.108738  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  5 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  5 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4121-0.2644 0.0000-0.0000-0.0000-0.0000-0.0000 0.0137-0.0456 0.0207 0.0000 0.0000 0.0000 0.0000-0.0000 0.0000 0.0000
+   2  9.4121-0.2644-0.0000 0.0000-0.0000-0.0179-0.0395 0.0137 0.0228-0.0103-0.0000 0.0000-0.0000-0.0000 0.0000 0.0000-0.0000
+   3  9.4121-0.2644-0.0000-0.0000 0.0000 0.0179 0.0395 0.0137 0.0228-0.0103 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000
+   4 13.7972 0.0374 0.0000-0.0000-0.0000 0.0000-0.0000-0.0420 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000
+   5 13.4437 0.0395 0.0000-0.0000-0.0000-0.0000-0.0000 0.0487 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000
+   6  6.7284 0.0147-0.0000-0.1050 0.0000-0.0000 0.0000 0.0229 0.0000 0.0000 0.0000 0.0000-0.0000 0.0139-0.0000 0.0000 0.0144
+   7  6.7284 0.0147 0.0000 0.1050-0.0000-0.0000 0.0000 0.0229 0.0000-0.0000-0.0000-0.0000 0.0000-0.0139 0.0000-0.0000-0.0144
+ Tot 68.9340
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004300
+            22 -0.001105
+            23  0.012680
+            24 -0.006264
+            25  0.004450
+            43 -0.000058
+            44  0.000084
+            45 -0.000016
+            46 -0.000118
+            47  0.000120
+            48 -0.000068
+            49  0.000120
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003854
+            19 -0.010981
+            20 -0.000957
+            21 -0.004300
+            22  0.000552
+            23 -0.006340
+            24 -0.006264
+            25 -0.002225
+            38  0.000059
+            39  0.000104
+            41  0.000014
+            42  0.000073
+            43 -0.000058
+            44 -0.000042
+            45  0.000008
+            46 -0.000118
+            47 -0.000060
+            48  0.000034
+            49  0.000120
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003854
+            19  0.010981
+            20  0.000957
+            21 -0.004300
+            22  0.000552
+            23 -0.006340
+            24 -0.006264
+            25 -0.002225
+            38 -0.000059
+            39 -0.000104
+            41 -0.000014
+            42 -0.000073
+            43 -0.000058
+            44 -0.000042
+            45  0.000008
+            46 -0.000118
+            47 -0.000060
+            48  0.000034
+            49  0.000120
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.009897
+            24 -0.003020
+            43  0.000974
+            46  0.000178
+            49  0.000393
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005656
+            24  0.005613
+            43  0.000190
+            46 -0.000777
+            49  0.000362
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.003129
+            24  0.000826
+            31 -0.000912
+            34 -0.004086
+            43 -0.000174
+            46  0.000355
+            49 -0.000013
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.003129
+            24  0.000826
+            31  0.000912
+            34  0.004086
+            43 -0.000174
+            46  0.000355
+            49 -0.000013
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.554323 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.558440 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.554323     -0.558440
+
+ KGRN:  Iteration no.   4 Etot =      -69.734669 erren = 0.05091804
+
+        Magn. mom. =  0.030
+
+        Dyson loops    32 EF   =        0.137863 erref = 0.04234332
+
+ KGRN:  QTR  =  0.111645 -0.624741 -0.611834 -0.400484  0.397983
+
+ KGRN:  QSCA =  0.337114  0.439085  0.451846  0.421557
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.105675  0.105675  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 5 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  5 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  5 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.3745-0.1358-0.0000 0.0000-0.0000-0.0000-0.0000 0.0142-0.0498 0.0233 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000
+   2  9.3745-0.1358-0.0000 0.0000 0.0000-0.0202-0.0431 0.0142 0.0249-0.0117-0.0000 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000
+   3  9.3745-0.1358 0.0000 0.0000-0.0000 0.0202 0.0431 0.0142 0.0249-0.0117-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000-0.0000
+   4 13.8054 0.0212 0.0000-0.0000-0.0000-0.0000-0.0000-0.0476 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000
+   5 13.4445 0.0213 0.0000-0.0000-0.0000-0.0000-0.0000 0.0538 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000 0.0000 0.0000-0.0000
+   6  6.8826 0.0060-0.0000-0.1305-0.0000-0.0000-0.0000 0.0261-0.0000 0.0000-0.0000 0.0000-0.0000 0.0150 0.0000-0.0000 0.0161
+   7  6.8826 0.0060 0.0000 0.1305 0.0000-0.0000-0.0000 0.0261 0.0000 0.0000 0.0000-0.0000 0.0000-0.0150-0.0000-0.0000-0.0161
+ Tot 69.1384
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004486
+            22 -0.001259
+            23  0.013221
+            24 -0.006634
+            25  0.004599
+            43 -0.000064
+            44  0.000087
+            45 -0.000012
+            46 -0.000139
+            47  0.000132
+            48 -0.000072
+            49  0.000128
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003982
+            19 -0.011450
+            20 -0.001090
+            21 -0.004486
+            22  0.000629
+            23 -0.006611
+            24 -0.006634
+            25 -0.002299
+            38  0.000062
+            39  0.000115
+            41  0.000011
+            42  0.000075
+            43 -0.000064
+            44 -0.000043
+            45  0.000006
+            46 -0.000139
+            47 -0.000066
+            48  0.000036
+            49  0.000128
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003982
+            19  0.011450
+            20  0.001090
+            21 -0.004486
+            22  0.000629
+            23 -0.006611
+            24 -0.006634
+            25 -0.002299
+            38 -0.000062
+            39 -0.000115
+            41 -0.000011
+            42 -0.000075
+            43 -0.000064
+            44 -0.000043
+            45  0.000006
+            46 -0.000139
+            47 -0.000066
+            48  0.000036
+            49  0.000128
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010511
+            24 -0.003119
+            43  0.000997
+            46  0.000181
+            49  0.000399
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.006020
+            24  0.006060
+            43  0.000188
+            46 -0.000786
+            49  0.000366
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002666
+            24  0.000196
+            31 -0.001012
+            34 -0.004334
+            43 -0.000169
+            46  0.000415
+            49 -0.000003
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002666
+            24  0.000196
+            31  0.001012
+            34  0.004334
+            43 -0.000169
+            46  0.000415
+            49 -0.000003
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.541934 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.544470 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.541934     -0.544470
+
+ KGRN:  Iteration no.   5 Etot =      -69.767734 erren = 0.03306471
+
+        Magn. mom. = -0.786
+
+        Dyson loops    32 EF   =        0.143759 erref = 0.01350713
+
+ KGRN:  QTR  =  0.081549 -0.626143 -0.617175 -0.404243  0.446103
+
+ KGRN:  QSCA =  0.371322  0.483641  0.497697  0.464334
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.106466  0.106466  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 5 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  5 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  5 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4297-0.2127 0.0000-0.0000 0.0000-0.0000-0.0000 0.0141-0.0486 0.0226 0.0000 0.0000 0.0000-0.0000 0.0000-0.0000 0.0000
+   2  9.4297-0.2127 0.0000 0.0000-0.0000-0.0196-0.0421 0.0141 0.0243-0.0113 0.0000 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000
+   3  9.4297-0.2127-0.0000-0.0000 0.0000 0.0196 0.0421 0.0141 0.0243-0.0113-0.0000-0.0000-0.0000-0.0000 0.0000-0.0000-0.0000
+   4 13.7973 0.0272 0.0000-0.0000 0.0000-0.0000-0.0000-0.0443 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000 0.0000
+   5 13.4343 0.0277 0.0000 0.0000-0.0000-0.0000-0.0000 0.0517 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000 0.0000 0.0000
+   6  6.7714 0.0076-0.0000-0.1227 0.0000 0.0000-0.0000 0.0259 0.0000 0.0000-0.0000 0.0000-0.0000 0.0149 0.0000 0.0000 0.0158
+   7  6.7714 0.0076 0.0000 0.1227 0.0000 0.0000-0.0000 0.0259 0.0000-0.0000 0.0000-0.0000 0.0000-0.0149-0.0000 0.0000-0.0158
+ Tot 69.0636
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004350
+            22 -0.001163
+            23  0.013030
+            24 -0.006430
+            25  0.004538
+            43 -0.000057
+            44  0.000083
+            45 -0.000016
+            46 -0.000128
+            47  0.000130
+            48 -0.000071
+            49  0.000123
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003930
+            19 -0.011285
+            20 -0.001007
+            21 -0.004350
+            22  0.000582
+            23 -0.006515
+            24 -0.006430
+            25 -0.002269
+            38  0.000061
+            39  0.000113
+            41  0.000014
+            42  0.000072
+            43 -0.000057
+            44 -0.000042
+            45  0.000008
+            46 -0.000128
+            47 -0.000065
+            48  0.000035
+            49  0.000123
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003930
+            19  0.011285
+            20  0.001007
+            21 -0.004350
+            22  0.000582
+            23 -0.006515
+            24 -0.006430
+            25 -0.002269
+            38 -0.000061
+            39 -0.000113
+            41 -0.000014
+            42 -0.000072
+            43 -0.000057
+            44 -0.000042
+            45  0.000008
+            46 -0.000128
+            47 -0.000065
+            48  0.000035
+            49  0.000123
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010462
+            24 -0.002954
+            43  0.000976
+            46  0.000177
+            49  0.000395
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005721
+            24  0.006089
+            43  0.000183
+            46 -0.000770
+            49  0.000369
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002724
+            24  0.000186
+            31 -0.000900
+            34 -0.004129
+            43 -0.000177
+            46  0.000373
+            49 -0.000002
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002724
+            24  0.000186
+            31  0.000900
+            34  0.004129
+            43 -0.000177
+            46  0.000373
+            49 -0.000002
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543969 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.547254 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543969     -0.547254
+
+ KGRN:  Iteration no.   6 Etot =      -69.754281 erren = 0.01345255
+
+        Magn. mom. = -0.450
+
+        Dyson loops    32 EF   =        0.141417 erref = 0.00502727
+
+ KGRN:  QTR  =  0.093862 -0.633958 -0.619231 -0.414649  0.434656
+
+ KGRN:  QSCA =  0.361899  0.471368  0.485067  0.452551
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.102291  0.102291  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  5 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  5 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4133-0.1919-0.0000-0.0000 0.0000-0.0000-0.0000 0.0141-0.0488 0.0228-0.0000 0.0000-0.0000-0.0000 0.0000-0.0000-0.0000
+   2  9.4133-0.1919-0.0000 0.0000-0.0000-0.0197-0.0423 0.0141 0.0244-0.0114 0.0000-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000
+   3  9.4133-0.1919 0.0000 0.0000-0.0000 0.0197 0.0423 0.0141 0.0244-0.0114 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000
+   4 13.8091 0.0259 0.0000-0.0000-0.0000 0.0000-0.0000-0.0452-0.0000 0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000-0.0000
+   5 13.4420 0.0264 0.0000-0.0000 0.0000-0.0000-0.0000 0.0524-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000 0.0000
+   6  6.7967 0.0077-0.0000-0.1255 0.0000-0.0000-0.0000 0.0262 0.0000 0.0000-0.0000 0.0000-0.0000 0.0150 0.0000 0.0000 0.0160
+   7  6.7967 0.0077 0.0000 0.1255-0.0000-0.0000-0.0000 0.0262-0.0000 0.0000 0.0000-0.0000 0.0000-0.0150-0.0000 0.0000-0.0160
+ Tot 69.0842
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004373
+            22 -0.001172
+            23  0.013075
+            24 -0.006457
+            25  0.004563
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000125
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003952
+            19 -0.011323
+            20 -0.001015
+            21 -0.004373
+            22  0.000586
+            23 -0.006537
+            24 -0.006457
+            25 -0.002282
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000008
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000125
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003952
+            19  0.011323
+            20  0.001015
+            21 -0.004373
+            22  0.000586
+            23 -0.006537
+            24 -0.006457
+            25 -0.002282
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000008
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000125
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010519
+            24 -0.002978
+            43  0.000983
+            46  0.000179
+            49  0.000399
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005781
+            24  0.006140
+            43  0.000184
+            46 -0.000776
+            49  0.000369
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002721
+            24  0.000178
+            31 -0.000916
+            34 -0.004180
+            43 -0.000179
+            46  0.000381
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002721
+            24  0.000178
+            31  0.000916
+            34  0.004180
+            43 -0.000179
+            46  0.000381
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543001 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546085 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543001     -0.546085
+
+ KGRN:  Iteration no.   7 Etot =      -69.758483 erren = 0.00420169
+
+        Magn. mom. = -0.527
+
+        Dyson loops    32 EF   =        0.141550 erref = 0.00140789
+
+ KGRN:  QTR  =  0.089242 -0.633717 -0.618291 -0.414270  0.441136
+
+ KGRN:  QSCA =  0.365060  0.475485  0.489304  0.456504
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.102011  0.102011  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  5 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4219-0.1949 0.0000-0.0000 0.0000-0.0000-0.0000 0.0141-0.0488 0.0227 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000
+   2  9.4219-0.1949 0.0000 0.0000-0.0000-0.0197-0.0422 0.0141 0.0244-0.0114-0.0000 0.0000 0.0000 0.0000 0.0000-0.0000 0.0000
+   3  9.4219-0.1949 0.0000-0.0000 0.0000 0.0197 0.0422 0.0141 0.0244-0.0114 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000 0.0000
+   4 13.8062 0.0257 0.0000-0.0000 0.0000-0.0000-0.0000-0.0448-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000
+   5 13.4380 0.0261 0.0000 0.0000 0.0000 0.0000-0.0000 0.0522 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000
+   6  6.7839 0.0075-0.0000-0.1247-0.0000 0.0000-0.0000 0.0262-0.0000-0.0000-0.0000 0.0000-0.0000 0.0150-0.0000 0.0000 0.0159
+   7  6.7839 0.0075 0.0000 0.1247-0.0000 0.0000-0.0000 0.0262 0.0000-0.0000 0.0000-0.0000 0.0000-0.0150 0.0000 0.0000-0.0159
+ Tot 69.0776
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004356
+            22 -0.001166
+            23  0.013055
+            24 -0.006437
+            25  0.004557
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000130
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003946
+            19 -0.011306
+            20 -0.001010
+            21 -0.004356
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002278
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003946
+            19  0.011306
+            20  0.001010
+            21 -0.004356
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002278
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010516
+            24 -0.002955
+            43  0.000979
+            46  0.000178
+            49  0.000397
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005740
+            24  0.006140
+            43  0.000183
+            46 -0.000772
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002715
+            24  0.000162
+            31 -0.000904
+            34 -0.004153
+            43 -0.000178
+            46  0.000377
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002715
+            24  0.000162
+            31  0.000904
+            34  0.004153
+            43 -0.000178
+            46  0.000377
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543216 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546314 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543216     -0.546314
+
+ KGRN:  Iteration no.   8 Etot =      -69.757309 erren = 0.00117396
+
+        Magn. mom. = -0.513
+
+        Dyson loops    32 EF   =        0.141297 erref = 0.00000066
+
+ KGRN:  QTR  =  0.090650 -0.634426 -0.618974 -0.415163  0.439773
+
+ KGRN:  QSCA =  0.364274  0.474461  0.488250  0.455520
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101906  0.101906  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4204-0.1937 0.0000-0.0000 0.0000-0.0000-0.0000 0.0141-0.0488 0.0227 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000
+   2  9.4204-0.1937-0.0000-0.0000 0.0000-0.0197-0.0422 0.0141 0.0244-0.0114-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000 0.0000
+   3  9.4204-0.1937-0.0000-0.0000 0.0000 0.0197 0.0422 0.0141 0.0244-0.0114 0.0000-0.0000-0.0000-0.0000 0.0000-0.0000 0.0000
+   4 13.8069 0.0258-0.0000-0.0000-0.0000-0.0000-0.0000-0.0449-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000
+   5 13.4390 0.0261 0.0000-0.0000 0.0000-0.0000-0.0000 0.0522 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000
+   6  6.7863 0.0076-0.0000-0.1250 0.0000-0.0000-0.0000 0.0262 0.0000-0.0000-0.0000 0.0000-0.0000 0.0150 0.0000 0.0000 0.0159
+   7  6.7863 0.0076 0.0000 0.1250-0.0000-0.0000-0.0000 0.0262 0.0000 0.0000 0.0000-0.0000 0.0000-0.0150 0.0000-0.0000-0.0159
+ Tot 69.0798
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004358
+            22 -0.001166
+            23  0.013058
+            24 -0.006439
+            25  0.004558
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003947
+            19 -0.011308
+            20 -0.001010
+            21 -0.004358
+            22  0.000583
+            23 -0.006529
+            24 -0.006439
+            25 -0.002279
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003947
+            19  0.011308
+            20  0.001010
+            21 -0.004358
+            22  0.000583
+            23 -0.006529
+            24 -0.006439
+            25 -0.002279
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010521
+            24 -0.002958
+            43  0.000980
+            46  0.000178
+            49  0.000398
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005747
+            24  0.006146
+            43  0.000183
+            46 -0.000773
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002713
+            24  0.000161
+            31 -0.000906
+            34 -0.004158
+            43 -0.000178
+            46  0.000378
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002713
+            24  0.000161
+            31  0.000906
+            34  0.004158
+            43 -0.000178
+            46  0.000378
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543107 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546196 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543107     -0.546196
+
+ KGRN:  Iteration no.   9 Etot =      -69.757692 erren = 0.00038251
+
+        Magn. mom. = -0.514
+
+        Dyson loops    32 EF   =        0.141279 erref = 0.00015755
+
+ KGRN:  QTR  =  0.090092 -0.634387 -0.618851 -0.415104  0.440544
+
+ KGRN:  QSCA =  0.364608  0.474896  0.488698  0.455938
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101873  0.101873  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4210-0.1933 0.0000-0.0000 0.0000-0.0000-0.0000 0.0141-0.0488 0.0227 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000-0.0000
+   2  9.4210-0.1933 0.0000 0.0000 0.0000-0.0197-0.0422 0.0141 0.0244-0.0114 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000 0.0000
+   3  9.4210-0.1933 0.0000 0.0000 0.0000 0.0197 0.0422 0.0141 0.0244-0.0114-0.0000-0.0000 0.0000-0.0000 0.0000 0.0000 0.0000
+   4 13.8068 0.0257 0.0000-0.0000 0.0000 0.0000-0.0000-0.0449-0.0000-0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000 0.0000
+   5 13.4387 0.0261 0.0000-0.0000-0.0000 0.0000-0.0000 0.0522 0.0000 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000
+   6  6.7854 0.0076-0.0000-0.1249-0.0000 0.0000-0.0000 0.0262-0.0000-0.0000-0.0000 0.0000-0.0000 0.0150 0.0000-0.0000 0.0159
+   7  6.7854 0.0076 0.0000 0.1249 0.0000 0.0000-0.0000 0.0262-0.0000 0.0000 0.0000-0.0000 0.0000-0.0150-0.0000-0.0000-0.0159
+ Tot 69.0793
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004357
+            22 -0.001165
+            23  0.013057
+            24 -0.006437
+            25  0.004558
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003948
+            19 -0.011308
+            20 -0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003948
+            19  0.011308
+            20  0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010521
+            24 -0.002955
+            43  0.000980
+            46  0.000178
+            49  0.000398
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005743
+            24  0.006147
+            43  0.000183
+            46 -0.000773
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002714
+            24  0.000161
+            31 -0.000905
+            34 -0.004156
+            43 -0.000178
+            46  0.000377
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002714
+            24  0.000161
+            31  0.000905
+            34  0.004156
+            43 -0.000178
+            46  0.000377
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543135 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546217 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543135     -0.546217
+
+ KGRN:  Iteration no.  10 Etot =      -69.757638 erren = 0.00005375
+
+        Magn. mom. = -0.509
+
+        Dyson loops    32 EF   =        0.141228 erref = 0.00000843
+
+ KGRN:  QTR  =  0.090246 -0.634411 -0.618895 -0.415141  0.440346
+
+ KGRN:  QSCA =  0.364525  0.474788  0.488586  0.455834
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101877  0.101877  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS = 2 not converged
+         number of iterations performed  6 to  7
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4208-0.1925 0.0000 0.0000-0.0000-0.0000-0.0000 0.0141-0.0488 0.0227 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000
+   2  9.4208-0.1925 0.0000-0.0000-0.0000-0.0197-0.0422 0.0141 0.0244-0.0114 0.0000 0.0000-0.0000-0.0000 0.0000-0.0000 0.0000
+   3  9.4208-0.1925 0.0000-0.0000-0.0000 0.0197 0.0422 0.0141 0.0244-0.0114 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000 0.0000
+   4 13.8068 0.0256 0.0000 0.0000-0.0000 0.0000-0.0000-0.0449-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000
+   5 13.4388 0.0259-0.0000-0.0000-0.0000-0.0000-0.0000 0.0522 0.0000-0.0000-0.0000 0.0000 0.0000-0.0000-0.0000 0.0000 0.0000
+   6  6.7857 0.0076-0.0000-0.1250 0.0000-0.0000-0.0000 0.0262 0.0000-0.0000-0.0000 0.0000-0.0000 0.0150-0.0000 0.0000 0.0159
+   7  6.7857 0.0076 0.0000 0.1250 0.0000-0.0000-0.0000 0.0262-0.0000 0.0000 0.0000-0.0000 0.0000-0.0150-0.0000-0.0000-0.0159
+ Tot 69.0795
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004357
+            22 -0.001165
+            23  0.013057
+            24 -0.006437
+            25  0.004559
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003948
+            19 -0.011308
+            20 -0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006529
+            24 -0.006437
+            25 -0.002279
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003948
+            19  0.011308
+            20  0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006529
+            24 -0.006437
+            25 -0.002279
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010522
+            24 -0.002955
+            43  0.000980
+            46  0.000178
+            49  0.000398
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005743
+            24  0.006148
+            43  0.000183
+            46 -0.000773
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002713
+            24  0.000160
+            31 -0.000905
+            34 -0.004156
+            43 -0.000178
+            46  0.000377
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002713
+            24  0.000160
+            31  0.000905
+            34  0.004156
+            43 -0.000178
+            46  0.000377
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543126 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546195 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543126     -0.546195
+
+ KGRN:  Iteration no.  11 Etot =      -69.757711 erren = 0.00007322
+
+        Magn. mom. = -0.511
+
+        Dyson loops    32 EF   =        0.141223 erref = 0.00002269
+
+ KGRN:  QTR  =  0.090169 -0.634413 -0.618880 -0.415140  0.440459
+
+ KGRN:  QSCA =  0.364567  0.474842  0.488642  0.455886
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101870  0.101870  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  6 to  7
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4210-0.1925 0.0000-0.0000-0.0000-0.0000-0.0000 0.0141-0.0488 0.0227 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000
+   2  9.4210-0.1925 0.0000-0.0000 0.0000-0.0197-0.0422 0.0141 0.0244-0.0114-0.0000 0.0000-0.0000-0.0000-0.0000 0.0000-0.0000
+   3  9.4210-0.1925 0.0000 0.0000 0.0000 0.0197 0.0422 0.0141 0.0244-0.0114-0.0000 0.0000-0.0000-0.0000 0.0000 0.0000 0.0000
+   4 13.8067 0.0255 0.0000 0.0000-0.0000 0.0000-0.0000-0.0449-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000
+   5 13.4387 0.0259 0.0000-0.0000 0.0000-0.0000-0.0000 0.0522 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000 0.0000-0.0000-0.0000
+   6  6.7855 0.0075-0.0000-0.1250 0.0000 0.0000-0.0000 0.0262 0.0000 0.0000-0.0000 0.0000-0.0000 0.0150 0.0000 0.0000 0.0159
+   7  6.7855 0.0075 0.0000 0.1250 0.0000 0.0000-0.0000 0.0262 0.0000-0.0000 0.0000-0.0000 0.0000-0.0150-0.0000-0.0000-0.0159
+ Tot 69.0794
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004357
+            22 -0.001165
+            23  0.013057
+            24 -0.006437
+            25  0.004559
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003948
+            19 -0.011308
+            20 -0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003948
+            19  0.011308
+            20  0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010522
+            24 -0.002955
+            43  0.000980
+            46  0.000178
+            49  0.000398
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005742
+            24  0.006148
+            43  0.000183
+            46 -0.000773
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002713
+            24  0.000160
+            31 -0.000904
+            34 -0.004156
+            43 -0.000178
+            46  0.000377
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002713
+            24  0.000160
+            31  0.000904
+            34  0.004156
+            43 -0.000178
+            46  0.000377
+
+ Linear loop not converged
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543129 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546195 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543129     -0.546195
+
+ KGRN:  Iteration no.  12 Etot =      -69.757695 erren = 0.00001565
+
+        Magn. mom. = -0.511
+
+        Dyson loops    32 EF   =        0.141220 erref = 0.00000619
+
+ KGRN:  QTR  =  0.090182 -0.634425 -0.618893 -0.415160  0.440453
+
+ KGRN:  QSCA =  0.364558  0.474831  0.488631  0.455876
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101866  0.101866  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS = 1 not converged
+         number of iterations performed  5 to  7
+
+ PATHOP: CPA equation for IS =  2 converged in  5- 7 iterations
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4210-0.1925-0.0000 0.0000-0.0000-0.0000-0.0000 0.0141-0.0488 0.0227-0.0000-0.0000 0.0000 0.0000 0.0000-0.0000 0.0000
+   2  9.4210-0.1925-0.0000-0.0000-0.0000-0.0197-0.0422 0.0141 0.0244-0.0114-0.0000 0.0000 0.0000-0.0000 0.0000-0.0000-0.0000
+   3  9.4210-0.1925 0.0000 0.0000-0.0000 0.0197 0.0422 0.0141 0.0244-0.0114 0.0000 0.0000-0.0000 0.0000-0.0000 0.0000 0.0000
+   4 13.8067 0.0255 0.0000-0.0000-0.0000 0.0000-0.0000-0.0449 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000 0.0000
+   5 13.4387 0.0259 0.0000-0.0000 0.0000 0.0000-0.0000 0.0522 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000-0.0000-0.0000
+   6  6.7855 0.0075-0.0000-0.1250 0.0000 0.0000 0.0000 0.0262 0.0000 0.0000-0.0000 0.0000-0.0000 0.0150 0.0000 0.0000 0.0159
+   7  6.7855 0.0075 0.0000 0.1250 0.0000 0.0000 0.0000 0.0262 0.0000-0.0000 0.0000-0.0000 0.0000-0.0150 0.0000-0.0000-0.0159
+ Tot 69.0794
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004357
+            22 -0.001165
+            23  0.013057
+            24 -0.006437
+            25  0.004558
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003948
+            19 -0.011308
+            20 -0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003948
+            19  0.011308
+            20  0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010522
+            24 -0.002955
+            43  0.000980
+            46  0.000178
+            49  0.000398
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005742
+            24  0.006148
+            43  0.000183
+            46 -0.000773
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002713
+            24  0.000160
+            31 -0.000905
+            34 -0.004156
+            43 -0.000178
+            46  0.000377
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002713
+            24  0.000160
+            31  0.000905
+            34  0.004156
+            43 -0.000178
+            46  0.000377
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543128 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546195 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543128     -0.546195
+
+ KGRN:  Iteration no.  13 Etot =      -69.757696 erren = 0.00000072
+
+        Magn. mom. = -0.511
+
+        Dyson loops    30 EF   =        0.141219 erref = 0.00000321
+
+ KGRN:  QTR  =  0.090175 -0.634427 -0.618893 -0.415158  0.440464
+
+ KGRN:  QSCA =  0.364560  0.474834  0.488634  0.455878
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101867  0.101867  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  5- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  5- 6 iterations
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4210-0.1925 0.0000 0.0000 0.0000-0.0000-0.0000 0.0141-0.0488 0.0227 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000-0.0000
+   2  9.4210-0.1925 0.0000 0.0000-0.0000-0.0197-0.0422 0.0141 0.0244-0.0114 0.0000-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000
+   3  9.4210-0.1925 0.0000-0.0000 0.0000 0.0197 0.0422 0.0141 0.0244-0.0114-0.0000 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000
+   4 13.8067 0.0255-0.0000-0.0000 0.0000-0.0000-0.0000-0.0449 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000
+   5 13.4387 0.0259-0.0000 0.0000 0.0000-0.0000-0.0000 0.0522 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000
+   6  6.7855 0.0075-0.0000-0.1250-0.0000 0.0000-0.0000 0.0262-0.0000 0.0000-0.0000 0.0000-0.0000 0.0150 0.0000 0.0000 0.0159
+   7  6.7855 0.0075 0.0000 0.1250 0.0000 0.0000-0.0000 0.0262-0.0000 0.0000 0.0000-0.0000 0.0000-0.0150-0.0000-0.0000-0.0159
+ Tot 69.0794
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004357
+            22 -0.001165
+            23  0.013057
+            24 -0.006437
+            25  0.004558
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003948
+            19 -0.011308
+            20 -0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003948
+            19  0.011308
+            20  0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010522
+            24 -0.002955
+            43  0.000980
+            46  0.000178
+            49  0.000398
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005742
+            24  0.006148
+            43  0.000183
+            46 -0.000773
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002713
+            24  0.000160
+            31 -0.000904
+            34 -0.004156
+            43 -0.000178
+            46  0.000377
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002713
+            24  0.000160
+            31  0.000904
+            34  0.004156
+            43 -0.000178
+            46  0.000377
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543128 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546195 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543128     -0.546195
+
+ KGRN:  Iteration no.  14 Etot =      -69.757698 erren = 0.00000138
+
+        Magn. mom. = -0.511
+
+        Dyson loops    31 EF   =        0.141218 erref = 0.00000095
+
+ KGRN:  QTR  =  0.090179 -0.634429 -0.618895 -0.415161  0.440460
+
+ KGRN:  QSCA =  0.364561  0.474834  0.488634  0.455879
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101867  0.101867  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  5- 7 iterations
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4210-0.1925 0.0000 0.0000-0.0000-0.0000-0.0000 0.0141-0.0488 0.0227 0.0000 0.0000-0.0000-0.0000-0.0000-0.0000 0.0000
+   2  9.4210-0.1925 0.0000-0.0000 0.0000-0.0197-0.0422 0.0141 0.0244-0.0114-0.0000-0.0000 0.0000-0.0000 0.0000 0.0000 0.0000
+   3  9.4210-0.1925 0.0000-0.0000 0.0000 0.0197 0.0422 0.0141 0.0244-0.0114 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000
+   4 13.8067 0.0255 0.0000-0.0000-0.0000 0.0000-0.0000-0.0449-0.0000 0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000 0.0000
+   5 13.4387 0.0259-0.0000-0.0000 0.0000 0.0000-0.0000 0.0522 0.0000-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000
+   6  6.7855 0.0075-0.0000-0.1250 0.0000 0.0000-0.0000 0.0262 0.0000 0.0000-0.0000 0.0000-0.0000 0.0150 0.0000-0.0000 0.0159
+   7  6.7855 0.0075 0.0000 0.1250 0.0000 0.0000-0.0000 0.0262-0.0000-0.0000 0.0000-0.0000 0.0000-0.0150-0.0000-0.0000-0.0159
+ Tot 69.0794
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004357
+            22 -0.001165
+            23  0.013057
+            24 -0.006437
+            25  0.004558
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003948
+            19 -0.011308
+            20 -0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003948
+            19  0.011308
+            20  0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010522
+            24 -0.002955
+            43  0.000980
+            46  0.000178
+            49  0.000398
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005742
+            24  0.006148
+            43  0.000183
+            46 -0.000773
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002713
+            24  0.000160
+            31 -0.000904
+            34 -0.004156
+            43 -0.000178
+            46  0.000377
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002713
+            24  0.000160
+            31  0.000904
+            34  0.004156
+            43 -0.000178
+            46  0.000377
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543127 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546195 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543127     -0.546195
+
+ KGRN:  Iteration no.  15 Etot =      -69.757698 erren = 0.00000027
+
+        Magn. mom. = -0.511
+
+        Dyson loops     3 EF   =        0.141216 erref = 0.00000228
+
+ KGRN:  QTR  =  0.090179 -0.634429 -0.618896 -0.415161  0.440460
+
+ KGRN:  QSCA =  0.364561  0.474834  0.488634  0.455879
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101868  0.101868  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 7 iterations
+
+ MLTPM:    Multipole moments
+
+  IQ    s    Spin     y      z      x      xy     yz   3zz-1    xz   xx-yy
+ 3xx y   xyz   5zz y  5zz z  5zz x  xx  z  3yy x
+
+   1  9.4210-0.1925-0.0000 0.0000-0.0000-0.0000-0.0000 0.0141-0.0488 0.0227 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000
+   2  9.4210-0.1925 0.0000-0.0000-0.0000-0.0197-0.0422 0.0141 0.0244-0.0114 0.0000-0.0000-0.0000-0.0000 0.0000-0.0000-0.0000
+   3  9.4210-0.1925-0.0000-0.0000 0.0000 0.0197 0.0422 0.0141 0.0244-0.0114-0.0000-0.0000 0.0000 0.0000 0.0000-0.0000 0.0000
+   4 13.8067 0.0255 0.0000 0.0000-0.0000-0.0000-0.0000-0.0449-0.0000-0.0000-0.0000 0.0000 0.0000-0.0000 0.0000 0.0000-0.0000
+   5 13.4387 0.0259 0.0000 0.0000 0.0000-0.0000-0.0000 0.0522-0.0000 0.0000 0.0000 0.0000 0.0000 0.0000-0.0000-0.0000 0.0000
+   6  6.7855 0.0075-0.0000-0.1250 0.0000-0.0000-0.0000 0.0262 0.0000 0.0000-0.0000 0.0000-0.0000 0.0150-0.0000 0.0000 0.0159
+   7  6.7855 0.0075 0.0000 0.1250 0.0000-0.0000-0.0000 0.0262 0.0000 0.0000 0.0000-0.0000 0.0000-0.0150-0.0000 0.0000-0.0159
+ Tot 69.0794
+
+ MLTPM:    Non vanishing higher moments for IQ =  1
+
+            21 -0.004357
+            22 -0.001165
+            23  0.013057
+            24 -0.006437
+            25  0.004558
+            43 -0.000057
+            44  0.000082
+            45 -0.000017
+            46 -0.000127
+            47  0.000129
+            48 -0.000070
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  2
+
+            17  0.003948
+            19 -0.011308
+            20 -0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38  0.000061
+            39  0.000112
+            41  0.000015
+            42  0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  3
+
+            17 -0.003948
+            19  0.011308
+            20  0.001009
+            21 -0.004357
+            22  0.000583
+            23 -0.006528
+            24 -0.006437
+            25 -0.002279
+            38 -0.000061
+            39 -0.000112
+            41 -0.000015
+            42 -0.000071
+            43 -0.000057
+            44 -0.000041
+            45  0.000009
+            46 -0.000127
+            47 -0.000065
+            48  0.000035
+            49  0.000124
+
+ MLTPM:    Non vanishing higher moments for IQ =  4
+
+            21  0.010522
+            24 -0.002955
+            43  0.000980
+            46  0.000178
+            49  0.000398
+
+ MLTPM:    Non vanishing higher moments for IQ =  5
+
+            21 -0.005742
+            24  0.006148
+            43  0.000183
+            46 -0.000773
+            49  0.000370
+
+ MLTPM:    Non vanishing higher moments for IQ =  6
+
+            21  0.002713
+            24  0.000160
+            31 -0.000904
+            34 -0.004156
+            43 -0.000178
+            46  0.000377
+
+ MLTPM:    Non vanishing higher moments for IQ =  7
+
+            21  0.002713
+            24  0.000160
+            31  0.000904
+            34  0.004156
+            43 -0.000178
+            46  0.000377
+
+ OPTPOT:   Fbar =  0.000000 g = -0.543127 VolI =  0.000000
+
+ OPTPOT:   Fbar =  0.000000 g = -0.546195 VolI =  0.000000
+
+           VMTZ(Up,Dwn) =      -0.543127     -0.546195
+
+ KGRN:  Iteration no.  16 Etot =      -69.757698 erren = 0.00000012
+
+        Magn. mom. = -0.511
+
+        Dyson loops    13 EF   =        0.141215 erref = 0.00000082
+
+ KGRN:  QTR  =  0.090179 -0.634429 -0.618895 -0.415160  0.440460
+
+ KGRN:  QSCA =  0.364561  0.474835  0.488634  0.455879
+
+ KGRN:  QCPA =  0.000000  0.000000 -0.101867  0.101867  0.000000
+
+ Potential parameters, charge densities, and potential stored on:    07-Feb-23
+
+ PATHOP: CPA equation for IS =  1 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  2- 6 iterations
+
+ PATHOP: CPA equation for IS =  1 converged in  6- 7 iterations
+
+ PATHOP: CPA equation for IS =  2 converged in  6- 6 iterations
+
+ EBTOP:      Bot       Top
+
+            -1.515164 10.071207
+
+ FESPTH: CPA equation for IS =  1 converged in  6- 6 iterations
+
+         DOS(EF) = 39.539440
+
+ FESPTH: CPA equation for IS =  2 converged in  6- 6 iterations
+
+         DOS(EF) =  8.881420
+
+ ZMESH:    Semi-elliptic contour
+
+ ZMESH:    ELT  = 66.500000 EB   =  0.061594 EFX=  0.141215
+           DELTA=  0.079621 b/a  = -0.062500 EPS=  0.200000
+
+           LZ     Re(z)     Im(z)    Weight
+
+            1   0.062381 -0.000698  0.004037 -0.001782
+            2   0.078889 -0.003097  0.029479 -0.002318
+            3   0.108040 -0.004524  0.023505 -0.000673
+            4   0.124733 -0.004869  0.011188 -0.000148
+            5   0.132710 -0.004948  0.005561 -0.000037
+            6   0.136898 -0.004969  0.003139 -0.000011
+            7   0.139387 -0.004975  0.001942 -0.000003
+            8   0.140841 -0.004976  0.000937 -0.000000
+            9   0.141589 -0.004976  0.000937  0.000000
+           10   0.143043 -0.004975  0.001942  0.000003
+           11   0.145531 -0.004969  0.003139  0.000011
+           12   0.149720 -0.004948  0.005561  0.000037
+           13   0.157696 -0.004869  0.011188  0.000148
+           14   0.174390 -0.004524  0.023505  0.000673
+           15   0.203541 -0.003097  0.029479  0.002318
+           16   0.220049 -0.000698  0.004037  0.001782
+
+ DOSPTH: CPA equation for IS =  1 converged in  5- 7 iterations
+
+ DOSPTH: CPA equation for IS =  2 converged in  5- 6 iterations
+
+ ZMESH:    Semi-circular contour
+
+
+           ELT  = 66.500000 EB   = -4.358785 EFX=  0.141215
+           DEPTH=  3.000000 DELTA=  0.079621 EPS=  0.200000
+
+           LZ     Re(z)     Im(z)    Weight
+
+            1  -2.858661 -0.019272  0.000634 -0.049337
+            2  -2.855418 -0.100445  0.007537 -0.112295
+            3  -2.839208 -0.241554  0.027460 -0.168297
+            4  -2.795015 -0.432718  0.063665 -0.211311
+            5  -2.706931 -0.657649  0.114537 -0.234794
+            6  -2.563197 -0.894088  0.173527 -0.233755
+            7  -2.360440 -1.116552  0.230819 -0.207067
+            8  -2.105524 -1.300915  0.276312 -0.158606
+            9  -1.814241 -1.429182  0.302694 -0.096463
+           10  -1.507449 -1.492615  0.307300 -0.030607
+           11  -1.206270 -1.492226  0.292125  0.029857
+           12  -0.928077 -1.436833  0.262353  0.078643
+           13  -0.684303 -1.339804  0.224343  0.112939
+           14  -0.480175 -1.215748  0.183926  0.132922
+           15  -0.315787 -1.078033  0.145439  0.140713
+           16  -0.187766 -0.937398  0.111493  0.139279
+           17  -0.090902 -0.801544  0.083210  0.131621
+           18  -0.019429 -0.675370  0.060661  0.120301
+           19   0.032153 -0.561507  0.043304  0.107270
+           20   0.068636 -0.460944  0.030316  0.093880
+           21   0.093950 -0.373578  0.020825  0.080981
+           22   0.111182 -0.298657  0.014028  0.069047
+           23   0.122678 -0.235092  0.009250  0.058287
+           24   0.130172 -0.181675  0.005948  0.048747
+           25   0.134926 -0.137211  0.003708  0.040366
+           26   0.137838 -0.100594  0.002220  0.033030
+           27   0.139541 -0.070848  0.001258  0.026600
+           28   0.140474 -0.047142  0.000658  0.020926
+           29   0.140938 -0.028792  0.000305  0.015863
+           30   0.141137 -0.015259  0.000115  0.011270
+           31   0.141202 -0.006139  0.000029  0.007015
+           32   0.141214 -0.001158  0.000002  0.002976
+
+           LX     Re(z)     Im(z)
+
+            1   0.132152 -0.001158
+            2   0.136683 -0.001158
+            3   0.141214 -0.001158
+            4   0.145746 -0.001158
+            5   0.150277 -0.001158
+
+ Atom:Co              S =    2.787554        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -0.336395   -0.200288    0.002816   -0.097305   -0.334572   -0.196570    0.009922   -0.095180
+ D-nu       =   -0.316312    0.487112   -1.400619    2.544571   -0.319053    0.479561   -1.258856    2.539531
+ Dnud       =    6.023855    7.668081    1.911546   12.361400    6.032541    7.671303    1.925580   12.361661
+ Omega-     =    0.247561    1.044421    0.047795    4.066530    0.247143    1.041965    0.055632    4.063365
+ S*Phisq-   =   -0.326851    0.311905    0.020152    0.372815   -0.327798    0.312484    0.020657    0.373007
+ Phi-/Phi+  =    0.857628    0.689701   -0.018009    0.572164    0.857804    0.689804   -0.015109    0.572171
+
+ Mu         =    0.787469    0.825203   12.772044    0.690383    0.785195    0.823675   12.459903    0.690027
+ Tau        =    0.868805    0.981345    0.014499    1.017052    0.866652    0.979823    0.009955    1.016552
+ A          =    2.206922    3.859659    0.149589   10.069001    2.217824    3.867519    0.167303   10.071207
+ C          =   -0.088834    0.844132    0.050611    3.969224   -0.087429    0.845394    0.065555    3.968185
+ B          =   -0.469944    0.057618   -0.104727    1.995410   -0.469565    0.057490   -0.092966    1.993363
+ V          =   -0.469944   -0.512567    5.645517   -0.591893   -0.469565   -0.513617    6.901582   -0.595230
+ D(Ef)      =   -1.806566   -0.174923 -575.312477    2.308620   -1.798107   -0.174801  -23.300197    2.305611
+
+ Bot, Top   =   -1.515164   10.071207
+ V-Madelung =   -0.076992
+ V(S) Up,Dwn=   -0.536952                                       -0.540914
+ V(W) Up,Dwn=   -0.536952                                       -0.540914
+
+ Atom:Sn              S =    3.044253        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -0.475079   -0.159945   -1.434991   -0.056392   -0.480375   -0.155888   -1.433721   -0.052084
+ D-nu       =   -2.324999   -0.788259   16.449450    2.108004   -2.296854   -0.809911   15.273804    2.098139
+ Dnud       =    3.961878    5.645896    2.906237   10.352588    3.974573    5.629921    2.898002   10.335273
+ Omega-     =   -0.225111    0.295114   -0.046417    2.645642   -0.221488    0.289000   -0.047877    2.636689
+ S*Phisq-   =    0.215263   -0.204948    0.005472    0.248811    0.215313   -0.204962    0.005498    0.248446
+ Phi-/Phi+  =    0.798463    0.607633    0.153437    0.512283    0.798978    0.606811    0.152255    0.511694
+
+ Mu         =    1.002533    1.052991   39.435314    0.867358    1.002303    1.052922   39.255627    0.868634
+ Tau        =    0.958738    0.971957    3.249490    1.024309    0.959753    0.969266    3.185038    1.023458
+ A          =    0.367920    1.702181   -1.449086    6.160337    0.369226    1.696953   -1.449174    6.146144
+ C          =   -0.700190    0.135169   -1.481408    2.589250   -0.701863    0.133112   -1.481598    2.584605
+ B          =   -0.969787   -0.419928   -1.514772    1.209465   -0.971349   -0.422434   -1.515164    1.206203
+ V          =   -0.969787   -0.876699   -1.659737   -0.810588   -0.971349   -0.880193   -1.662135   -0.814147
+ D(Ef)      =  -27.848800   -2.041765    0.906158    1.837106  -28.032080   -2.051474    0.901181    1.832769
+
+ Bot, Top   =   -1.515164   10.071207
+ V-Madelung =    0.158783
+ V(S) Up,Dwn=   -0.653259                                       -0.657069
+ V(W) Up,Dwn=   -0.653259                                       -0.657069
+
+ Atom:Sn              S =    3.073462        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -0.435674   -0.141821   -1.423999   -0.061528   -0.437948   -0.138356   -1.422980   -0.057463
+ D-nu       =   -2.592536   -0.823361   10.915213    2.138899   -2.587522   -0.843998   10.510152    2.129463
+ Dnud       =    3.817783    5.573117    2.915583   10.444620    3.820451    5.557869    2.908254   10.427076
+ Omega-     =   -0.251483    0.276819   -0.052507    2.633588   -0.251124    0.271168   -0.053836    2.624780
+ S*Phisq-   =    0.210112   -0.198709    0.005103    0.246677    0.210282   -0.198695    0.005127    0.246289
+ Phi-/Phi+  =    0.792436    0.603862    0.154775    0.515391    0.792551    0.603063    0.153726    0.514801
+
+ Mu         =    1.007681    1.065506   41.493217    0.858313    1.006867    1.065583   41.294793    0.859665
+ Tau        =    0.949166    0.971340    3.478929    1.025961    0.948675    0.968840    3.415540    1.025228
+ A          =    0.325119    1.639848   -1.446321    6.135216    0.324582    1.634523   -1.446523    6.120549
+ C          =   -0.687157    0.134998   -1.476506    2.572061   -0.689072    0.132812   -1.476816    2.567317
+ B          =   -0.952304   -0.405041   -1.507565    1.207471   -0.954395   -0.407579   -1.508064    1.204238
+ V          =   -0.952304   -0.852196   -1.641348   -0.778290   -0.954395   -0.855618   -1.643579   -0.781595
+ D(Ef)      =  -33.765929   -2.042592    0.907414    1.857711  -34.172974   -2.053364    0.902562    1.853516
+
+ Bot, Top   =   -1.515164   10.071207
+ V-Madelung =    0.157339
+ V(S) Up,Dwn=   -0.627155                                       -0.630499
+ V(W) Up,Dwn=   -0.627155                                       -0.630499
+
+ Atom:In              S =    3.073462        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -0.391764   -0.139385   -0.944546   -0.061649   -0.392714   -0.135688   -0.943941   -0.057504
+ D-nu       =   -1.633261   -0.405147   -7.556625    2.203334   -1.638524   -0.423257   -7.897295    2.193935
+ Dnud       =    4.487878    6.265882    2.576843   10.805152    4.486261    6.250250    2.570434   10.787997
+ Omega-     =   -0.128931    0.435298   -0.022219    2.761261   -0.130020    0.429249   -0.023160    2.752384
+ S*Phisq-   =    0.227092   -0.220277   -0.008860    0.258619    0.227325   -0.220209   -0.008887    0.258245
+ Phi-/Phi+  =    0.817780    0.637062    0.103435    0.527192    0.817727    0.636375    0.102404    0.526643
+
+ Mu         =    0.932335    0.961180   23.896046    0.818681    0.931381    0.961477   23.825206    0.819866
+ Tau        =    0.935269    0.975233    0.894814    1.023916    0.934189    0.973430    0.874454    1.023265
+ A          =    0.725559    2.116698   -0.917353    6.528499    0.724431    2.110342   -0.917598    6.513801
+ C          =   -0.520695    0.295913   -0.966765    2.699612   -0.522734    0.293562   -0.967101    2.694879
+ B          =   -0.798389   -0.285262   -1.024292    1.282182   -0.800730   -0.287785   -1.024876    1.278890
+ V          =   -0.798389   -0.741398   -1.395066   -0.734300   -0.800730   -0.744549   -1.401002   -0.737640
+ D(Ef)      =   -7.816256   -1.358795    1.255540    1.929922   -7.851696   -1.367580    1.251078    1.925741
+
+ Bot, Top   =   -1.515164   10.071207
+ V-Madelung =    0.031976
+ V(S) Up,Dwn=   -0.614817                                       -0.618223
+ V(W) Up,Dwn=   -0.614817                                       -0.618223
+
+ Atom:S               S =    3.003192        SWS =    2.931790
+ Exch:PBE                              Date : 07-Feb-23
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ E-nu       =   -0.802880   -0.166631   -0.068243   -0.039744   -0.803750   -0.167211   -0.066246   -0.034965
+ D-nu       =   -3.149704   -1.594944    1.154292    2.496678   -3.156487   -1.599385    1.148887    2.490378
+ Dnud       =    2.718891    3.232880    7.213407   12.217252    2.718348    3.231222    7.202543   12.203287
+ Omega-     =   -0.148581    0.047343    1.340362    3.434490   -0.148868    0.046771    1.336235    3.426627
+ S*Phisq-   =    0.109070   -0.107833    0.191410    0.316873    0.109069   -0.107808    0.191100    0.316478
+ Phi-/Phi+  =    0.731103    0.426702    0.510447    0.568361    0.731063    0.426520    0.509926    0.567989
+
+ Mu         =    2.033101    2.056422    1.158511    0.699807    2.033124    2.056907    1.160388    0.700682
+ Tau        =    1.630072    0.936055    1.056501    1.017277    1.629916    0.935479    1.056053    1.017216
+ A          =   -0.545841    0.444989    3.227064    8.533559   -0.547063    0.443525    3.219695    8.519639
+ C          =   -0.951460   -0.119288    1.272119    3.394746   -0.952618   -0.120440    1.269989    3.391661
+ B          =   -1.100646   -0.468375    0.459073    1.712268   -1.101810   -0.469512    0.457899    1.710810
+ V          =   -1.100646   -0.877426   -0.602801   -0.507902   -1.101810   -0.878722   -0.603811   -0.508667
+ D(Ef)      =    2.776944   -6.953218    0.741782    2.287011    2.772758   -7.001061    0.739720    2.286073
+
+ Bot, Top   =   -1.515164   10.071207
+ V-Madelung =   -0.330862
+ V(S) Up,Dwn=   -0.469716                                       -0.469199
+ V(W) Up,Dwn=   -0.469716                                       -0.469199
+
+ EF         =    0.141215
+
+ VMTZ Up,Dwn=   -0.543127                                       -0.546195
+
+ Atom:Co
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.259708    0.335557    3.917982    0.013832    0.260129    0.339464    3.721079    0.013910
+ Nos(Ef)    =    8.861661
+ Dos(Ef)    =    0.042765    0.147540   10.394628    0.036051    0.021214    0.037299    4.131371    0.018711
+ Dos(Ef)    =   14.829578
+ Magn. mom. =   -0.192498   -0.510976
+ Stoner-I   =    0.007297    0.006556    0.077632   -0.005395
+ Hopfield   =    0.013988 (Ry/Bohr^2),     0.679618 (eV/AA^2)
+ Hopfield   =    0.006853 (Ry/Bohr^2),     0.332965 (eV/AA^2)
+
+ Atom:Sn
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.786741    1.006111    5.130514    0.044484    0.782730    1.030808    5.134941    0.044903
+ Nos(Ef)    =   13.961231
+ Dos(Ef)    =    0.448016    0.631495    0.092183    0.074471    0.246922    0.105602    0.050963    0.039640
+ Dos(Ef)    =    1.689293
+ Magn. mom. =    0.025532   -0.510976
+ Stoner-I   =    0.065533    0.080573    0.007457    0.181930
+ Hopfield   =    0.006477 (Ry/Bohr^2),     0.314686 (eV/AA^2)
+ Hopfield   =    0.001719 (Ry/Bohr^2),     0.083525 (eV/AA^2)
+
+ Atom:Sn
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.791401    0.937780    5.161493    0.043068    0.791678    0.958942    5.165612    0.043362
+ Nos(Ef)    =   13.893335
+ Dos(Ef)    =    0.301148    0.878365    0.080758    0.073123    0.107821    0.435687    0.016664    0.040108
+ Dos(Ef)    =    1.933674
+ Magn. mom. =    0.025852   -0.510976
+ Stoner-I   =    0.074082    0.084545    0.011995    0.183496
+ Hopfield   =    0.006656 (Ry/Bohr^2),     0.323403 (eV/AA^2)
+ Hopfield   =    0.001590 (Ry/Bohr^2),     0.077255 (eV/AA^2)
+
+ Atom:In
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.698124    0.839493    5.045347    0.042813    0.700461    0.858734    5.049419    0.043117
+ Nos(Ef)    =   13.277508
+ Dos(Ef)    =    0.174914    0.774245    0.087613    0.071833    0.058495    0.386096    0.018114    0.039294
+ Dos(Ef)    =    1.610605
+ Magn. mom. =    0.025954   -0.510976
+ Stoner-I   =    0.078541    0.090585    0.012920    0.182349
+ Hopfield   =    0.004803 (Ry/Bohr^2),     0.233376 (eV/AA^2)
+ Hopfield   =    0.001108 (Ry/Bohr^2),     0.053848 (eV/AA^2)
+
+ Atom:S
+
+ Panel	    =  1   s -1/2      p -1/2      d -1/2      f -1/2      s  1/2      p  1/2      d  1/2      f  1/2
+
+ Nos(Ef)    =    0.917410    1.979168    0.168277    0.023465    0.917919    1.986073    0.168447    0.023422
+ Nos(Ef)    =    6.184182
+ Dos(Ef)    =   -0.001311    1.578705    0.452577    0.046023   -0.002678    0.648399    0.217773    0.024885
+ Dos(Ef)    =    2.964372
+ Magn. mom. =    0.007542   -0.510976
+ Stoner-I   =    0.153540    0.152704    0.282474    0.408997
+ Hopfield   =    0.070716 (Ry/Bohr^2),     3.435891 (eV/AA^2)
+ Hopfield   =    0.032740 (Ry/Bohr^2),     1.590749 (eV/AA^2)
+
+ PRNPRM:   EONE =     -0.263048 VINT =   -115.979144 EKIN =    115.716096
+           ECOR =    325.388328 ENUC =   -543.333188 EMADL=      0.041301
+           EVAL =     58.994730 EXCT =   -119.173298 EXCC =   -102.160618
+           ETOT =    -60.205413 OKAE =      0.000118 E[n] =    -60.205295
+            T*S =      0.000000 E-TS =    -60.205413
+
+ PRNPRM:   EONE =    -15.800543 VINT =   -272.273592 EKIN =    256.473049
+           ECOR =    907.514023 ENUC =  -1394.175641 EMADL=     -0.102688
+           EVAL =    118.352778 EXCT =   -330.458385 EXCC =   -303.538230
+           ETOT =   -138.858635 OKAE =     -0.000075 E[n] =   -138.858710
+            T*S =      0.000000 E-TS =   -138.858635
+
+ PRNPRM:   EONE =    -15.662841 VINT =   -271.989248 EKIN =    256.326406
+           ECOR =    907.304194 ENUC =  -1393.804653 EMADL=     -0.071091
+           EVAL =    118.330542 EXCT =   -330.443074 EXCC =   -303.538218
+           ETOT =   -138.819458 OKAE =     -0.000018 E[n] =   -138.819476
+            T*S =      0.000000 E-TS =   -138.819458
+
+ PRNPRM:   EONE =    -10.319150 VINT =   -231.128304 EKIN =    220.809154
+           ECOR =    826.096649 ENUC =  -1240.470248 EMADL=     -0.071091
+           EVAL =    102.361181 EXCT =   -319.895195 EXCC =   -295.520200
+           ETOT =   -115.649351 OKAE =     -0.000015 E[n] =   -115.649366
+            T*S =      0.000000 E-TS =   -115.649351
+
+ PRNPRM:   EONE =     -2.160626 VINT =    -27.383387 EKIN =     25.222761
+           ECOR =     82.053784 ENUC =   -141.887542 EMADL=     -0.002534
+           EVAL =     19.528210 EXCT =    -51.375190 EXCC =    -45.663209
+           ETOT =    -20.797303 OKAE =      0.000130 E[n] =    -20.797173
+            T*S =      0.000000 E-TS =    -20.797303
+
+           Valence energies in the frozen core approximation (Rydbergs)
+           calculated from output charge density:
+
+           Kinetic energy       115.716096
+           Madelung energy        0.041301
+           El-ion energy       -543.333188
+           El-el energy         384.383058
+           Exc energy           -17.012680
+                              ------------
+           Total                -60.205413
+           Total+OKAE           -60.205295
+           Total+Ewald          -59.179706 4pi SS n(S)=  4.084948
+
+           Kinetic energy       256.473049
+           Madelung energy       -0.102688
+           El-ion energy      -1394.175641
+           El-el energy        1025.866800
+           Exc energy           -26.920155
+                              ------------
+           Total               -138.858635
+           Total+OKAE          -138.858710
+           Total+Ewald         -138.969200 4pi SS n(S)=  3.428591
+
+           Kinetic energy       256.326406
+           Madelung energy       -0.071091
+           El-ion energy      -1393.804653
+           El-el energy        1025.634735
+           Exc energy           -26.904856
+                              ------------
+           Total               -138.819458
+           Total+OKAE          -138.819476
+           Total+Ewald         -138.963571 4pi SS n(S)=  3.370897
+
+           Kinetic energy       220.809154
+           Madelung energy       -0.071091
+           El-ion energy      -1240.470248
+           El-el energy         928.457829
+           Exc energy           -24.374995
+                              ------------
+           Total               -115.649351
+           Total+OKAE          -115.649366
+           Total+Ewald         -115.785279 4pi SS n(S)=  3.273765
+
+           Kinetic energy        25.222761
+           Madelung energy       -0.002534
+           El-ion energy       -141.887542
+           El-el energy         101.581993
+           Exc energy            -5.711981
+                              ------------
+           Total                -20.797303
+           Total+OKAE           -20.797173
+           Total+Ewald          -20.506976 4pi SS n(S)=  3.777509
+
+           Total energy         -69.757698
+
+           Total energy+OKA     -69.757623
+
+           Total+Ewald          -69.270956
+                              ============
+
+ Converged in 17 iterations at 04:38  08-Feb-23
+
+ Potential parameters, charge densities, and potential stored on:    08-Feb-23
+
+ ZMESH:    Horizontal mesh for the DOS
+
+
+ KKRDOS: DOS calculation for IBZ =  7 and NZD =  5000
+
+         DOS stored in: co3sn2s2.dos
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 3 IS= 1 E= -0.797185  0.001000 N=353 PREL=-0.10123E-11 0.14312E-14 QREL= 0.91697E-09 0.55842E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 3 IS= 1 E= -0.796385  0.001000 N=353 PREL=-0.10112E-11 0.14301E-14 QREL= 0.10133E-08 0.12085E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 3 IS= 1 E= -0.795585  0.001000 N=353 PREL=-0.10100E-11 0.14294E-14 QREL= 0.76243E-10 0.20493E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 3 IS= 1 E= -0.794785  0.001000 N=353 PREL=-0.10090E-11 0.14285E-14 QREL=-0.98635E-09 0.12949E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 3 IS= 1 E= -0.793985  0.001000 N=353 PREL=-0.10078E-11 0.14279E-14 QREL=-0.92736E-09 0.59509E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.501185  0.001000 N=340 PREL= 0.11674E-12-0.71239E-16 QREL= 0.27281E-09-0.10426E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.365185  0.001000 N=341 PREL= 0.26159E-12-0.14053E-15 QREL=-0.10920E-08-0.83059E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.364385  0.001000 N=341 PREL= 0.26153E-12-0.14047E-15 QREL=-0.92071E-09-0.17912E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.363585  0.001000 N=341 PREL= 0.26136E-12-0.14039E-15 QREL= 0.59838E-09-0.20917E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.362785  0.001000 N=341 PREL= 0.26119E-12-0.14031E-15 QREL= 0.11268E-08-0.10380E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.361985  0.001000 N=341 PREL= 0.26113E-12-0.14031E-15 QREL= 0.93556E-09-0.49646E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.241985  0.001000 N=342 PREL= 0.30604E-12-0.18530E-15 QREL=-0.10507E-08-0.73828E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.241185  0.001000 N=342 PREL= 0.30590E-12-0.18519E-15 QREL=-0.10012E-08-0.16087E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.240385  0.001000 N=342 PREL= 0.30576E-12-0.18513E-15 QREL= 0.38440E-09-0.21615E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.239585  0.001000 N=342 PREL= 0.30562E-12-0.18502E-15 QREL= 0.11137E-08-0.11395E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.238785  0.001000 N=342 PREL= 0.30548E-12-0.18491E-15 QREL= 0.95166E-09-0.53579E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.036385  0.001000 N=344 PREL=-0.20222E-12 0.20246E-16 QREL= 0.10699E-08 0.84107E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.035585  0.001000 N=344 PREL=-0.20227E-12 0.20332E-16 QREL= 0.84871E-09 0.18003E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.034785  0.001000 N=344 PREL=-0.20232E-12 0.20377E-16 QREL=-0.65215E-09 0.19844E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.033985  0.001000 N=344 PREL=-0.20237E-12 0.20421E-16 QREL=-0.10906E-08 0.96680E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -1.033185  0.001000 N=344 PREL=-0.20225E-12 0.20518E-16 QREL=-0.89761E-09 0.46582E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.953185  0.001000 N=345 PREL=-0.38090E-12 0.14188E-15 QREL= 0.11857E-08 0.55542E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.952385  0.001000 N=345 PREL=-0.38084E-12 0.14192E-15 QREL= 0.14803E-08 0.11103E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.951585  0.001000 N=345 PREL=-0.38062E-12 0.14202E-15 QREL= 0.12780E-08 0.24007E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.950785  0.001000 N=345 PREL=-0.38072E-12 0.14197E-15 QREL=-0.76907E-09 0.28723E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.949985  0.001000 N=345 PREL=-0.38051E-12 0.14206E-15 QREL=-0.15345E-08 0.14379E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.949185  0.001000 N=345 PREL=-0.38029E-12 0.14212E-15 QREL=-0.12793E-08 0.68567E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.948385  0.001000 N=345 PREL=-0.38039E-12 0.14211E-15 QREL=-0.10101E-08 0.37920E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.878785  0.001000 N=346 PREL=-0.26387E-12 0.12412E-15 QREL= 0.87549E-09 0.78375E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.877985  0.001000 N=346 PREL=-0.26380E-12 0.12420E-15 QREL= 0.50597E-09 0.15998E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.877185  0.001000 N=346 PREL=-0.26373E-12 0.12421E-15 QREL=-0.68900E-09 0.14246E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.876385  0.001000 N=346 PREL=-0.26366E-12 0.12422E-15 QREL=-0.85146E-09 0.66382E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.757985  0.001000 N=348 PREL= 0.12811E-12-0.78530E-16 QREL=-0.16568E-10-0.10400E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.601185  0.001000 N=353 PREL=-0.22806E-11 0.21656E-14 QREL= 0.10026E-08 0.98621E-10****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.600385  0.001000 N=353 PREL=-0.22789E-11 0.21648E-14 QREL= 0.10864E-08 0.11619E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.599585  0.001000 N=353 PREL=-0.22772E-11 0.21641E-14 QREL= 0.11855E-08 0.13889E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.598785  0.001000 N=353 PREL=-0.22754E-11 0.21633E-14 QREL= 0.13043E-08 0.16891E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.597985  0.001000 N=353 PREL=-0.22737E-11 0.21625E-14 QREL= 0.14492E-08 0.20974E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.597185  0.001000 N=353 PREL=-0.22718E-11 0.21618E-14 QREL= 0.16297E-08 0.26721E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.596385  0.001000 N=353 PREL=-0.22701E-11 0.21610E-14 QREL= 0.18599E-08 0.35163E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.595585  0.001000 N=353 PREL=-0.22684E-11 0.21603E-14 QREL= 0.21623E-08 0.48252E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.594785  0.001000 N=353 PREL=-0.22667E-11 0.21594E-14 QREL= 0.25732E-08 0.70029E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.593985  0.001000 N=353 PREL=-0.22650E-11 0.21587E-14 QREL= 0.31510E-08 0.10983E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.593185  0.001000 N=353 PREL=-0.22633E-11 0.21579E-14 QREL= 0.39706E-08 0.19228E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.592385  0.001000 N=353 PREL=-0.22616E-11 0.21571E-14 QREL= 0.49186E-08 0.38967E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.591585  0.001000 N=353 PREL=-0.22598E-11 0.21563E-14 QREL= 0.38346E-08 0.83214E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.590785  0.001000 N=353 PREL=-0.22581E-11 0.21555E-14 QREL=-0.30644E-08 0.90320E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.589985  0.001000 N=353 PREL=-0.22564E-11 0.21547E-14 QREL=-0.49857E-08 0.43809E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.589185  0.001000 N=353 PREL=-0.22547E-11 0.21539E-14 QREL=-0.40936E-08 0.21150E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.588385  0.001000 N=353 PREL=-0.22528E-11 0.21533E-14 QREL=-0.32352E-08 0.11843E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.587585  0.001000 N=353 PREL=-0.22512E-11 0.21524E-14 QREL=-0.26260E-08 0.74466E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.586785  0.001000 N=353 PREL=-0.22495E-11 0.21516E-14 QREL=-0.21946E-08 0.50801E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.585985  0.001000 N=353 PREL=-0.22478E-11 0.21508E-14 QREL=-0.18787E-08 0.36751E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.585185  0.001000 N=353 PREL=-0.22460E-11 0.21501E-14 QREL=-0.16394E-08 0.27773E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.584385  0.001000 N=353 PREL=-0.22443E-11 0.21493E-14 QREL=-0.14526E-08 0.21706E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.583585  0.001000 N=353 PREL=-0.22426E-11 0.21485E-14 QREL=-0.13031E-08 0.17420E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.582785  0.001000 N=353 PREL=-0.22410E-11 0.21476E-14 QREL=-0.11809E-08 0.14283E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 1 E= -0.581985  0.001000 N=353 PREL=-0.22391E-11 0.21469E-14 QREL=-0.10792E-08 0.11921E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 1 E= -2.589185  0.001000 N=323 PREL=-0.34716E-12-0.28662E-16 QREL= 0.11177E-08 0.50934E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 1 E= -2.588385  0.001000 N=323 PREL=-0.34694E-12-0.28662E-16 QREL= 0.14034E-08 0.10063E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 1 E= -2.587585  0.001000 N=323 PREL=-0.34717E-12-0.28664E-16 QREL= 0.13017E-08 0.21889E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 1 E= -2.586785  0.001000 N=323 PREL=-0.34717E-12-0.28665E-16 QREL=-0.58380E-09 0.28440E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 1 E= -2.585985  0.001000 N=323 PREL=-0.34717E-12-0.28666E-16 QREL=-0.14822E-08 0.14743E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 1 E= -2.585185  0.001000 N=323 PREL=-0.34717E-12-0.28668E-16 QREL=-0.12563E-08 0.69584E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 1 E= -2.584385  0.001000 N=323 PREL=-0.34717E-12-0.28669E-16 QREL=-0.99181E-09 0.38062E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 1 E= -0.376385  0.001000 N=321 PREL= 0.93845E-13 0.67234E-17 QREL=-0.94452E-09-0.50668E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 1 E= -0.375585  0.001000 N=321 PREL= 0.93845E-13 0.67234E-17 QREL=-0.11313E-08-0.10629E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 1 E= -0.374785  0.001000 N=321 PREL= 0.94030E-13 0.67233E-17 QREL=-0.56043E-09-0.21198E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 1 E= -0.373985  0.001000 N=321 PREL= 0.93844E-13 0.67234E-17 QREL= 0.94402E-09-0.17624E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 1 E= -0.373185  0.001000 N=321 PREL= 0.93844E-13 0.67242E-17 QREL= 0.10883E-08-0.81477E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 1 IL= 2 IS= 1 E= -1.603585  0.001000 N=321 PREL= 0.64960E-13 0.44226E-17 QREL=-0.82957E-09-0.76214E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 1 IL= 2 IS= 1 E= -1.602785  0.001000 N=321 PREL= 0.64960E-13 0.44226E-17 QREL=-0.44343E-09-0.15367E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 1 IL= 2 IS= 1 E= -1.601985  0.001000 N=321 PREL= 0.64959E-13 0.44219E-17 QREL= 0.67525E-09-0.13203E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 1 IL= 2 IS= 1 E= -1.601185  0.001000 N=321 PREL= 0.64959E-13 0.44219E-17 QREL= 0.80314E-09-0.61235E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 1 E= -2.997985  0.001000 N=324 PREL=-0.31724E-12-0.29360E-16 QREL= 0.10702E-08 0.55499E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 1 E= -2.997185  0.001000 N=324 PREL=-0.31725E-12-0.29361E-16 QREL= 0.13001E-08 0.11520E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 1 E= -2.996385  0.001000 N=324 PREL=-0.31725E-12-0.29362E-16 QREL= 0.77693E-09 0.23643E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 1 E= -2.995585  0.001000 N=324 PREL=-0.31725E-12-0.29364E-16 QREL=-0.10103E-08 0.21432E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 1 E= -2.994785  0.001000 N=324 PREL=-0.31725E-12-0.29365E-16 QREL=-0.12732E-08 0.10013E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 1 E= -2.993985  0.001000 N=324 PREL=-0.31725E-12-0.29366E-16 QREL=-0.10262E-08 0.49534E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 2 IS= 1 E= -1.038785  0.001000 N=322 PREL= 0.77095E-13 0.62628E-17 QREL=-0.85418E-09-0.66492E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 2 IS= 1 E= -1.037985  0.001000 N=322 PREL= 0.76920E-13 0.62643E-17 QREL=-0.69167E-09-0.14268E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 2 IS= 1 E= -1.037185  0.001000 N=322 PREL= 0.76920E-13 0.62643E-17 QREL= 0.50543E-09-0.16034E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 2 IS= 1 E= -1.036385  0.001000 N=322 PREL= 0.77094E-13 0.62636E-17 QREL= 0.87621E-09-0.78561E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 1 E= -0.623585  0.001000 N=338 PREL=-0.53979E-12 0.89427E-15 QREL= 0.45052E-09 0.97345E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 1 E= -0.622785  0.001000 N=338 PREL=-0.53889E-12 0.89382E-15 QREL=-0.35694E-09 0.10580E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -1.950785  0.001000 N=322 PREL= 0.14419E-12-0.93832E-16 QREL=-0.39929E-10-0.10378E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.717985  0.001000 N=333 PREL= 0.19528E-12-0.13225E-15 QREL=-0.50882E-09-0.10727E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.717185  0.001000 N=333 PREL= 0.19518E-12-0.13219E-15 QREL= 0.38658E-09-0.11867E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.660385  0.001000 N=334 PREL= 0.34301E-12-0.27246E-15 QREL=-0.86764E-09-0.57522E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.659585  0.001000 N=334 PREL= 0.34268E-12-0.27230E-15 QREL=-0.88687E-09-0.12545E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.658785  0.001000 N=334 PREL= 0.34250E-12-0.27215E-15 QREL= 0.17410E-09-0.18628E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.657985  0.001000 N=334 PREL= 0.34232E-12-0.27207E-15 QREL= 0.93231E-09-0.10442E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.612385  0.001000 N=335 PREL= 0.54772E-12-0.50325E-15 QREL=-0.95723E-09-0.43417E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.611585  0.001000 N=335 PREL= 0.54725E-12-0.50307E-15 QREL=-0.12012E-08-0.85674E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.610785  0.001000 N=335 PREL= 0.54691E-12-0.50275E-15 QREL=-0.11197E-08-0.18646E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.609985  0.001000 N=335 PREL= 0.54629E-12-0.50256E-15 QREL= 0.48667E-09-0.24359E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.609185  0.001000 N=335 PREL= 0.54595E-12-0.50224E-15 QREL= 0.12647E-08-0.12661E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.608385  0.001000 N=335 PREL= 0.54561E-12-0.50199E-15 QREL= 0.10732E-08-0.59728E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.544385  0.001000 N=337 PREL=-0.73291E-12 0.55897E-15 QREL= 0.11756E-08 0.44440E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.543585  0.001000 N=337 PREL=-0.73233E-12 0.55897E-15 QREL= 0.14881E-08 0.80790E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.542785  0.001000 N=337 PREL=-0.73197E-12 0.55897E-15 QREL= 0.17703E-08 0.17028E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.541985  0.001000 N=337 PREL=-0.73139E-12 0.55897E-15 QREL= 0.79894E-09 0.33472E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.541185  0.001000 N=337 PREL=-0.73103E-12 0.55908E-15 QREL=-0.15074E-08 0.26867E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.540385  0.001000 N=337 PREL=-0.73045E-12 0.55908E-15 QREL=-0.16835E-08 0.12382E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.539585  0.001000 N=337 PREL=-0.73009E-12 0.55907E-15 QREL=-0.13439E-08 0.62306E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.538785  0.001000 N=337 PREL=-0.72951E-12 0.55908E-15 QREL=-0.10682E-08 0.36175E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.525985  0.001000 N=338 PREL=-0.14155E-11 0.14169E-14 QREL= 0.10271E-08 0.18769E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.525185  0.001000 N=338 PREL=-0.14144E-11 0.14164E-14 QREL= 0.11887E-08 0.25490E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.524385  0.001000 N=338 PREL=-0.14132E-11 0.14160E-14 QREL= 0.14065E-08 0.36478E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.523585  0.001000 N=338 PREL=-0.14122E-11 0.14154E-14 QREL= 0.17106E-08 0.56094E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.522785  0.001000 N=338 PREL=-0.14111E-11 0.14149E-14 QREL= 0.21436E-08 0.95498E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.521985  0.001000 N=338 PREL=-0.14099E-11 0.14145E-14 QREL= 0.26960E-08 0.18704E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.521185  0.001000 N=338 PREL=-0.14088E-11 0.14141E-14 QREL= 0.26081E-08 0.40782E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.520385  0.001000 N=338 PREL=-0.14076E-11 0.14137E-14 QREL=-0.89962E-09 0.55911E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.519585  0.001000 N=338 PREL=-0.14064E-11 0.14132E-14 QREL=-0.28604E-08 0.29799E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.518785  0.001000 N=338 PREL=-0.14053E-11 0.14127E-14 QREL=-0.24566E-08 0.13978E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.517985  0.001000 N=338 PREL=-0.14041E-11 0.14123E-14 QREL=-0.19371E-08 0.75856E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.517185  0.001000 N=338 PREL=-0.14031E-11 0.14118E-14 QREL=-0.15615E-08 0.46636E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.516385  0.001000 N=338 PREL=-0.14022E-11 0.14112E-14 QREL=-0.12969E-08 0.31316E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.515585  0.001000 N=338 PREL=-0.14010E-11 0.14108E-14 QREL=-0.11048E-08 0.22394E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.509185  0.001000 N=339 PREL=-0.90271E-12 0.11962E-14 QREL= 0.10308E-08 0.46962E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.508385  0.001000 N=339 PREL=-0.90189E-12 0.11955E-14 QREL= 0.12921E-08 0.92888E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.507585  0.001000 N=339 PREL=-0.90072E-12 0.11949E-14 QREL= 0.11892E-08 0.20198E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.506785  0.001000 N=339 PREL=-0.89990E-12 0.11942E-14 QREL=-0.54977E-09 0.25976E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.505985  0.001000 N=339 PREL=-0.89890E-12 0.11936E-14 QREL=-0.13539E-08 0.13401E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 1 E= -0.505185  0.001000 N=339 PREL=-0.89791E-12 0.11929E-14 QREL=-0.11446E-08 0.63340E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 3 IS= 2 E= -0.795585  0.001000 N=353 PREL=-0.85247E-12 0.12116E-14 QREL= 0.85146E-09 0.10580E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 3 IS= 2 E= -0.794785  0.001000 N=353 PREL=-0.85168E-12 0.12107E-14 QREL= 0.62437E-11 0.17382E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 3 IS= 2 E= -0.793985  0.001000 N=353 PREL=-0.85075E-12 0.12098E-14 QREL=-0.84432E-09 0.10617E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.493185  0.001000 N=340 PREL= 0.11914E-12-0.69920E-16 QREL= 0.94995E-10-0.11725E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.357985  0.001000 N=341 PREL= 0.28030E-12-0.14619E-15 QREL=-0.10115E-08-0.52600E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.357185  0.001000 N=341 PREL= 0.28013E-12-0.14616E-15 QREL=-0.12265E-08-0.10933E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.356385  0.001000 N=341 PREL= 0.27997E-12-0.14614E-15 QREL=-0.71878E-09-0.22365E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.355585  0.001000 N=341 PREL= 0.27991E-12-0.14603E-15 QREL= 0.96012E-09-0.20063E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.354785  0.001000 N=341 PREL= 0.27974E-12-0.14600E-15 QREL= 0.11958E-08-0.93577E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.353985  0.001000 N=341 PREL= 0.27969E-12-0.14595E-15 QREL= 0.96244E-09-0.46345E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.235585  0.001000 N=342 PREL= 0.33662E-12-0.19818E-15 QREL=-0.91819E-09-0.40128E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.234785  0.001000 N=342 PREL= 0.33649E-12-0.19813E-15 QREL=-0.11579E-08-0.77889E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.233985  0.001000 N=342 PREL= 0.33615E-12-0.19802E-15 QREL=-0.11650E-08-0.16992E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.233185  0.001000 N=342 PREL= 0.33622E-12-0.19791E-15 QREL= 0.28236E-09-0.24635E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.232385  0.001000 N=342 PREL= 0.33608E-12-0.19781E-15 QREL= 0.12419E-08-0.13585E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.231585  0.001000 N=342 PREL= 0.33574E-12-0.19776E-15 QREL= 0.10848E-08-0.63327E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.031585  0.001000 N=344 PREL=-0.20603E-12 0.18284E-16 QREL= 0.93101E-09 0.48170E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.030785  0.001000 N=344 PREL=-0.20591E-12 0.18422E-16 QREL= 0.11310E-08 0.99950E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.029985  0.001000 N=344 PREL=-0.20596E-12 0.18466E-16 QREL= 0.67960E-09 0.20527E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.029185  0.001000 N=344 PREL=-0.20584E-12 0.18562E-16 QREL=-0.87485E-09 0.18658E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -1.028385  0.001000 N=344 PREL=-0.20589E-12 0.18605E-16 QREL=-0.11058E-08 0.87192E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.949985  0.001000 N=345 PREL=-0.40968E-12 0.15391E-15 QREL= 0.95947E-09 0.30333E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.949185  0.001000 N=345 PREL=-0.40948E-12 0.15397E-15 QREL= 0.11979E-08 0.50744E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.948385  0.001000 N=345 PREL=-0.40942E-12 0.15401E-15 QREL= 0.15144E-08 0.97147E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.947585  0.001000 N=345 PREL=-0.40937E-12 0.15402E-15 QREL= 0.16026E-08 0.21147E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.946785  0.001000 N=345 PREL=-0.40916E-12 0.15411E-15 QREL=-0.14109E-09 0.33202E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.945985  0.001000 N=345 PREL=-0.40911E-12 0.15412E-15 QREL=-0.16373E-08 0.19444E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.945185  0.001000 N=345 PREL=-0.40891E-12 0.15418E-15 QREL=-0.14754E-08 0.89910E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.944385  0.001000 N=345 PREL=-0.40885E-12 0.15419E-15 QREL=-0.11643E-08 0.47734E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.876385  0.001000 N=346 PREL=-0.29503E-12 0.14092E-15 QREL= 0.89694E-09 0.56546E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.875585  0.001000 N=346 PREL=-0.29483E-12 0.14098E-15 QREL= 0.96459E-09 0.12289E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.874785  0.001000 N=346 PREL=-0.29477E-12 0.14100E-15 QREL=-0.30751E-10 0.19834E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.873985  0.001000 N=346 PREL=-0.29456E-12 0.14106E-15 QREL=-0.97050E-09 0.11907E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.873185  0.001000 N=346 PREL=-0.29450E-12 0.14100E-15 QREL=-0.88634E-09 0.54925E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.757985  0.001000 N=348 PREL= 0.13225E-12-0.78454E-16 QREL=-0.23008E-09-0.10351E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.602785  0.001000 N=353 PREL=-0.19345E-11 0.18432E-14 QREL= 0.10168E-08 0.12075E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.601985  0.001000 N=353 PREL=-0.19330E-11 0.18425E-14 QREL= 0.11201E-08 0.14724E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.601185  0.001000 N=353 PREL=-0.19315E-11 0.18419E-14 QREL= 0.12465E-08 0.18343E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.600385  0.001000 N=353 PREL=-0.19301E-11 0.18413E-14 QREL= 0.14044E-08 0.23466E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.599585  0.001000 N=353 PREL=-0.19285E-11 0.18406E-14 QREL= 0.16066E-08 0.31042E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.598785  0.001000 N=353 PREL=-0.19271E-11 0.18399E-14 QREL= 0.18734E-08 0.42892E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.597985  0.001000 N=353 PREL=-0.19257E-11 0.18392E-14 QREL= 0.22376E-08 0.62837E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.597185  0.001000 N=353 PREL=-0.19241E-11 0.18387E-14 QREL= 0.27520E-08 0.99861E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.596385  0.001000 N=353 PREL=-0.19227E-11 0.18380E-14 QREL= 0.34771E-08 0.17814E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.595585  0.001000 N=353 PREL=-0.19211E-11 0.18373E-14 QREL= 0.42359E-08 0.36857E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.594785  0.001000 N=353 PREL=-0.19198E-11 0.18365E-14 QREL= 0.26510E-08 0.76170E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.593985  0.001000 N=353 PREL=-0.19183E-11 0.18360E-14 QREL=-0.31992E-08 0.70798E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.593185  0.001000 N=353 PREL=-0.19167E-11 0.18354E-14 QREL=-0.41515E-08 0.33200E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.592385  0.001000 N=353 PREL=-0.19154E-11 0.18346E-14 QREL=-0.33505E-08 0.16362E-08****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.591585  0.001000 N=353 PREL=-0.19140E-11 0.18340E-14 QREL=-0.26548E-08 0.93361E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.590785  0.001000 N=353 PREL=-0.19124E-11 0.18333E-14 QREL=-0.21642E-08 0.59486E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.589985  0.001000 N=353 PREL=-0.19110E-11 0.18327E-14 QREL=-0.18154E-08 0.40966E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.589185  0.001000 N=353 PREL=-0.19095E-11 0.18319E-14 QREL=-0.15588E-08 0.29842E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.588385  0.001000 N=353 PREL=-0.19079E-11 0.18314E-14 QREL=-0.13634E-08 0.22671E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.587585  0.001000 N=353 PREL=-0.19066E-11 0.18306E-14 QREL=-0.12104E-08 0.17791E-09****
+ Hard test in <CDIRAC> : IT= 1 ITA= 1 IL= 4 IS= 2 E= -0.586785  0.001000 N=353 PREL=-0.19051E-11 0.18300E-14 QREL=-0.10875E-08 0.14325E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 2 E= -2.589185  0.001000 N=323 PREL=-0.34716E-12-0.28666E-16 QREL= 0.11348E-08 0.52900E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 2 E= -2.588385  0.001000 N=323 PREL=-0.34716E-12-0.28667E-16 QREL= 0.14189E-08 0.10546E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 2 E= -2.587585  0.001000 N=323 PREL=-0.34717E-12-0.28668E-16 QREL= 0.12461E-08 0.22843E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 2 E= -2.586785  0.001000 N=323 PREL=-0.34717E-12-0.28669E-16 QREL=-0.70846E-09 0.27839E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 2 E= -2.585985  0.001000 N=323 PREL=-0.34739E-12-0.28671E-16 QREL=-0.14803E-08 0.14037E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 2 E= -2.585185  0.001000 N=323 PREL=-0.34717E-12-0.28671E-16 QREL=-0.12385E-08 0.66776E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 1 IS= 2 E= -2.584385  0.001000 N=323 PREL=-0.34739E-12-0.28673E-16 QREL=-0.97815E-09 0.36842E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 2 E= -0.376385  0.001000 N=321 PREL= 0.93845E-13 0.67205E-17 QREL=-0.95466E-09-0.52223E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 2 E= -0.375585  0.001000 N=321 PREL= 0.94031E-13 0.67204E-17 QREL=-0.11332E-08-0.11021E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 2 E= -0.374785  0.001000 N=321 PREL= 0.94030E-13 0.67205E-17 QREL=-0.49217E-09-0.21559E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 2 E= -0.373985  0.001000 N=321 PREL= 0.94030E-13 0.67212E-17 QREL= 0.97728E-09-0.17093E-08****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 2 IS= 2 E= -0.373185  0.001000 N=321 PREL= 0.93844E-13 0.67213E-17 QREL= 0.10797E-08-0.78704E-09****
+ Hard test in <CDIRAC> : IT= 2 ITA= 1 IL= 4 IS= 2 E= -0.806785  0.001000 N=377 PREL= 0.30844E-12-0.33530E-15 QREL=-0.44705E-10-0.12519E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 1 IL= 2 IS= 2 E= -1.603585  0.001000 N=321 PREL= 0.64773E-13 0.44156E-17 QREL=-0.83193E-09-0.82316E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 1 IL= 2 IS= 2 E= -1.602785  0.001000 N=321 PREL= 0.64773E-13 0.44149E-17 QREL=-0.33570E-09-0.15930E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 1 IL= 2 IS= 2 E= -1.601985  0.001000 N=321 PREL= 0.64959E-13 0.44134E-17 QREL= 0.72790E-09-0.12352E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 2 E= -2.997985  0.001000 N=324 PREL=-0.31703E-12-0.29360E-16 QREL= 0.11141E-08 0.62082E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 2 E= -2.997185  0.001000 N=324 PREL=-0.31725E-12-0.29362E-16 QREL= 0.13102E-08 0.13170E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 2 E= -2.996385  0.001000 N=324 PREL=-0.31725E-12-0.29363E-16 QREL= 0.49209E-09 0.25250E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 2 E= -2.995585  0.001000 N=324 PREL=-0.31725E-12-0.29364E-16 QREL=-0.11610E-08 0.19185E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 2 E= -2.994785  0.001000 N=324 PREL=-0.31725E-12-0.29366E-16 QREL=-0.12383E-08 0.88116E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 1 IS= 2 E= -2.993985  0.001000 N=324 PREL=-0.31725E-12-0.29367E-16 QREL=-0.98602E-09 0.44707E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 2 IS= 2 E= -1.038785  0.001000 N=322 PREL= 0.76920E-13 0.62556E-17 QREL=-0.86634E-09-0.72341E-09****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 2 IS= 2 E= -1.037985  0.001000 N=322 PREL= 0.76920E-13 0.62550E-17 QREL=-0.60462E-09-0.15203E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 2 IS= 2 E= -1.037185  0.001000 N=322 PREL= 0.76920E-13 0.62557E-17 QREL= 0.60973E-09-0.15156E-08****
+ Hard test in <CDIRAC> : IT= 3 ITA= 2 IL= 2 IS= 2 E= -1.036385  0.001000 N=322 PREL= 0.76920E-13 0.62564E-17 QREL= 0.86628E-09-0.72045E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 3 IS= 2 E= -0.624385  0.001000 N=338 PREL=-0.53192E-12 0.88531E-15 QREL= 0.16935E-09 0.11336E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.719585  0.001000 N=333 PREL= 0.20636E-12-0.14148E-15 QREL=-0.66241E-09-0.85072E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.718785  0.001000 N=333 PREL= 0.20626E-12-0.14134E-15 QREL= 0.29701E-10-0.13644E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.717985  0.001000 N=333 PREL= 0.20616E-12-0.14129E-15 QREL= 0.66877E-09-0.81427E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.661185  0.001000 N=334 PREL= 0.35137E-12-0.28170E-15 QREL=-0.95284E-09-0.10167E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.660385  0.001000 N=334 PREL= 0.35104E-12-0.28162E-15 QREL=-0.25551E-09-0.18723E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.659585  0.001000 N=334 PREL= 0.35086E-12-0.28147E-15 QREL= 0.87733E-09-0.13229E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.658785  0.001000 N=334 PREL= 0.35069E-12-0.28124E-15 QREL= 0.88646E-09-0.60641E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.613185  0.001000 N=335 PREL= 0.54064E-12-0.50193E-15 QREL=-0.11239E-08-0.70959E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.612385  0.001000 N=335 PREL= 0.54030E-12-0.50162E-15 QREL=-0.12063E-08-0.15425E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.611585  0.001000 N=335 PREL= 0.53982E-12-0.50136E-15 QREL= 0.46010E-10-0.24812E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.610785  0.001000 N=335 PREL= 0.53948E-12-0.50105E-15 QREL= 0.12145E-08-0.14849E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.609985  0.001000 N=335 PREL= 0.53900E-12-0.50086E-15 QREL= 0.11073E-08-0.68516E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.545985  0.001000 N=337 PREL=-0.77013E-12 0.59421E-15 QREL= 0.11272E-08 0.38127E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.545185  0.001000 N=337 PREL=-0.76956E-12 0.59423E-15 QREL= 0.14169E-08 0.65826E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.544385  0.001000 N=337 PREL=-0.76900E-12 0.59424E-15 QREL= 0.17709E-08 0.13120E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.543585  0.001000 N=337 PREL=-0.76866E-12 0.59414E-15 QREL= 0.15583E-08 0.28422E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.542785  0.001000 N=337 PREL=-0.76809E-12 0.59427E-15 QREL=-0.87444E-09 0.34705E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.541985  0.001000 N=337 PREL=-0.76775E-12 0.59406E-15 QREL=-0.18403E-08 0.17510E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.541185  0.001000 N=337 PREL=-0.76718E-12 0.59408E-15 QREL=-0.15397E-08 0.83287E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.540385  0.001000 N=337 PREL=-0.76662E-12 0.59420E-15 QREL=-0.12151E-08 0.45937E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.539585  0.001000 N=337 PREL=-0.76627E-12 0.59410E-15 QREL=-0.98308E-09 0.28573E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.526785  0.001000 N=338 PREL=-0.14040E-11 0.14104E-14 QREL= 0.10611E-08 0.20358E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.525985  0.001000 N=338 PREL=-0.14028E-11 0.14100E-14 QREL= 0.12361E-08 0.28071E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.525185  0.001000 N=338 PREL=-0.14016E-11 0.14096E-14 QREL= 0.14747E-08 0.41007E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.524385  0.001000 N=338 PREL=-0.14007E-11 0.14089E-14 QREL= 0.18112E-08 0.64906E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.523585  0.001000 N=338 PREL=-0.13995E-11 0.14086E-14 QREL= 0.22866E-08 0.11513E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.522785  0.001000 N=338 PREL=-0.13984E-11 0.14081E-14 QREL= 0.28015E-08 0.23675E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.521985  0.001000 N=338 PREL=-0.13972E-11 0.14077E-14 QREL= 0.18905E-08 0.49503E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.521185  0.001000 N=338 PREL=-0.13960E-11 0.14072E-14 QREL=-0.20150E-08 0.48197E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.520385  0.001000 N=338 PREL=-0.13950E-11 0.14067E-14 QREL=-0.27725E-08 0.22789E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.519585  0.001000 N=338 PREL=-0.13939E-11 0.14063E-14 QREL=-0.22475E-08 0.11161E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.518785  0.001000 N=338 PREL=-0.13927E-11 0.14059E-14 QREL=-0.17792E-08 0.63331E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.517985  0.001000 N=338 PREL=-0.13915E-11 0.14054E-14 QREL=-0.14484E-08 0.40195E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.517185  0.001000 N=338 PREL=-0.13906E-11 0.14048E-14 QREL=-0.12136E-08 0.27604E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.516385  0.001000 N=338 PREL=-0.13894E-11 0.14045E-14 QREL=-0.10410E-08 0.20067E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.511585  0.001000 N=339 PREL=-0.13994E-11 0.17468E-14 QREL= 0.11301E-08 0.29144E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.510785  0.001000 N=339 PREL=-0.13981E-11 0.17458E-14 QREL= 0.13732E-08 0.44728E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.509985  0.001000 N=339 PREL=-0.13966E-11 0.17449E-14 QREL= 0.17196E-08 0.75935E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.509185  0.001000 N=339 PREL=-0.13953E-11 0.17439E-14 QREL= 0.21647E-08 0.14820E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.508385  0.001000 N=339 PREL=-0.13939E-11 0.17430E-14 QREL= 0.21284E-08 0.32326E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.507585  0.001000 N=339 PREL=-0.13924E-11 0.17422E-14 QREL=-0.64413E-09 0.45327E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.506785  0.001000 N=339 PREL=-0.13913E-11 0.17411E-14 QREL=-0.23030E-08 0.24475E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.505985  0.001000 N=339 PREL=-0.13896E-11 0.17404E-14 QREL=-0.19904E-08 0.11452E-08****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.505185  0.001000 N=339 PREL=-0.13883E-11 0.17394E-14 QREL=-0.15692E-08 0.61935E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.504385  0.001000 N=339 PREL=-0.13870E-11 0.17385E-14 QREL=-0.12639E-08 0.37984E-09****
+ Hard test in <CDIRAC> : IT= 4 ITA= 1 IL= 4 IS= 2 E= -0.503585  0.001000 N=339 PREL=-0.13857E-11 0.17375E-14 QREL=-0.10489E-08 0.25462E-09****
+
+ DOSPTH: CPA equation for IS =  1 not converged
+         number of iterations performed  7- 7
+
+ DOSPTH: CPA equation for IS =  2 not converged
+         number of iterations performed  7- 7
+
+ KGRN calculation finished at 10:10 on 10-Feb-23

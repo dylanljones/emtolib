@@ -63,6 +63,7 @@ def test_empty_file():
         TEST_ROOT / "CPA" / "Nb" / "nb.dat",
         TEST_ROOT / "CPA" / "Nb25" / "nb.dat",
         TEST_ROOT / "CPA" / "Fe040_DLM" / "fe0484.dat",
+        TEST_ROOT / "CPA" / "Sn50" / "co3sn2s2.dat",
     ],
 )
 def test_parse_format_cpa(path):
