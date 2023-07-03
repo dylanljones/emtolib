@@ -10,8 +10,8 @@ import json
 import logging
 from pathlib import Path
 from typing import Union
-import numpy as np
 from collections import abc
+import numpy as np
 
 logger = logging.getLogger("emtolib")
 sh = logging.StreamHandler()
@@ -103,7 +103,11 @@ class EmtoFile:
         pass
 
     def load(self, file: Union[str, Path] = "", missing_ok: bool = False):
-        file = file or self.path
+        file = Path(file or self.path)
+        if file.is_dir():
+            if missing_ok:
+                return None
+            raise IsADirectoryError(f"{file} is a directory!")
         try:
             with open(file, "r") as fp:
                 data = fp.read()
