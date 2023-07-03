@@ -9,9 +9,7 @@ import shutil
 import warnings
 from pathlib import Path
 from typing import Union
-from .input_files import EmtoKgrnFile
-from .output_files import EmtoPrnFile, EmtoDosFile
-from .slurm import SlurmScript
+from .files import EmtoKgrnFile, EmtoPrnFile, EmtoDosFile, SlurmScript
 
 RE_COMP = re.compile(r"(\w+?)(\d+)")
 

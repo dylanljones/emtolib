@@ -7,8 +7,19 @@
 from .common import logger, elements
 from .config import read_config
 
-from .input_files import EmtoKgrnFile, Atom, KGRNError, EmtoBmdlFile
-from .output_files import EmtoPrnFile, EmtoDosFile
-from .slurm import SlurmScript
+from .files import (
+    EmtoKgrnFile,
+    Atom,
+    KGRNError,
+    EmtoBmdlFile,
+    EmtoPrnFile,
+    EmtoDosFile,
+    read_dos,
+    load_dos,
+    SlurmScript,
+)
+# from .input_files import EmtoKgrnFile, Atom, KGRNError, EmtoBmdlFile
+# from .output_files import EmtoPrnFile, EmtoDosFile
+# from .slurm import SlurmScript
 
 from .directory import EmtoDirectory, walk_emtodirs

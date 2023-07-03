@@ -5,7 +5,7 @@
 # Copyright (c) 2023, Dylan Jones
 
 import re
-from .common import EmtoFile
+from ..common import EmtoFile
 
 RE_SBATCH = re.compile("#SBATCH --(.*?)=(.*?)$")
 

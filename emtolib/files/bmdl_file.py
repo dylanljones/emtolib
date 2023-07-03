@@ -10,7 +10,7 @@ from datetime import datetime
 from ..common import EmtoFile
 
 
-RE_KEYVAL = re.compile(r"([a-zA-Z\(\)0-9]+).*?=.*?([a-zA-Z0-9_\-.]+)")
+RE_KEYVAL = re.compile(r"([a-zA-Z()0-9]+).*?=.*?([a-zA-Z0-9_\-.]+)")
 
 LAT2IBZ = {
     "sc": 1,
