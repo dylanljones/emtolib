@@ -56,6 +56,6 @@ def update_emto_paths(dat: EmtoKgrnFile, conf, kstr, bmdl, kstr2=""):
 
 
 try:
-    config = read_config()
+    CONFIG = read_config()
 except FileNotFoundError:
-    config = dict()
+    CONFIG = dict()
