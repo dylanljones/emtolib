@@ -5,8 +5,7 @@
 # Copyright (c) 2022, Dylan Jones
 
 from .common import logger, elements
-from .config import read_config
-
+from .configuration import read_config, config
 from .files import (
     EmtoKgrnFile,
     Atom,
@@ -18,8 +17,5 @@ from .files import (
     load_dos,
     SlurmScript,
 )
-# from .input_files import EmtoKgrnFile, Atom, KGRNError, EmtoBmdlFile
-# from .output_files import EmtoPrnFile, EmtoDosFile
-# from .slurm import SlurmScript
-
 from .directory import EmtoDirectory, walk_emtodirs
+from .xarr import update_datasets, load_dataset, load_datasets
