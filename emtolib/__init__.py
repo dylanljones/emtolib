@@ -5,7 +5,7 @@
 # Copyright (c) 2022, Dylan Jones
 
 from .common import logger, elements
-from .configuration import read_config, CONFIG
+from .config import read_config, CONFIG
 from .files import (
     EmtoKgrnFile,
     Atom,
