@@ -35,9 +35,7 @@ class SlurmScript(EmtoFile):
         self.mem = mem
         self.commands = list()
 
-        if self.path.exists():
-            self.load()
-
+        self.load(missing_ok=True)
         if commands:
             if isinstance(commands, str):
                 commands = commands.splitlines(keepends=False)
