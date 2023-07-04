@@ -422,7 +422,7 @@ class EmtoKgrnFile(EmtoFile):
         self.dir006 = ""
         self.dir009 = "pot/"
         self.dir010 = "chd/"
-        self.dir011 = "/tmp/"
+        self.dir011 = "tmp/"
 
         self.atoms = list()
 
