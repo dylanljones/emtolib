@@ -88,13 +88,25 @@ def parse_filepath(line: str) -> str:
     return line.split("=")[1].strip()
 
 
-class EmtoFile:
+class PostInitCaller(type):
+    """Metaclass to call __post_init__ after __init__."""
+    def __call__(cls, *args, **kwargs):
+        obj = type.__call__(cls, *args, **kwargs)
+        obj.__post_init__()
+        return obj
+
+
+class EmtoFile(metaclass=PostInitCaller):
     """Base class for EMTO input and output files."""
 
     def __init__(self, path: Union[str, Path] = None):
         if path is None:
             path = ""
         self.path = Path(path)
+
+    def __post_init__(self):
+        """Called after __init__."""
+        pass
 
     def loads(self, data: str) -> None:
         pass
@@ -103,6 +115,7 @@ class EmtoFile:
         pass
 
     def load(self, file: Union[str, Path] = "", missing_ok: bool = False):
+        """Load data from file."""
         file = Path(file or self.path)
         if file.is_dir():
             if missing_ok:
@@ -119,6 +132,7 @@ class EmtoFile:
         return self
 
     def dump(self, file: Union[str, Path] = "") -> None:
+        """Dump data to file."""
         file = file or self.path
         # Encode contents to UTF-8 and replace DOS with UNIX line endings
         # This is probably not necessary, but it's done anyway for good measure
@@ -127,6 +141,7 @@ class EmtoFile:
             fp.write(data)
 
     def move(self, dst: Union[str, Path], exist_ok: bool = False) -> None:
+        """Move file to new location."""
         dst = Path(dst)
         if dst.exists() and not exist_ok:
             raise FileExistsError(f"Destination {dst} already exists!")
@@ -134,9 +149,11 @@ class EmtoFile:
         self.path = dst
 
     def rename(self, name: str, exist_ok: bool = False) -> None:
+        """Rename file."""
         self.move(self.path.parent / name, exist_ok)
 
     def copy(self, dst: Union[str, Path], exist_ok: bool = False):
+        """Copy file to new location."""
         dst = Path(dst)
         if dst.exists():
             if not exist_ok:
