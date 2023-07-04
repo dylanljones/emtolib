@@ -173,8 +173,10 @@ class EmtoDirectory:
             path.unlink(missing_ok=True)
         if aux:
             for name in dat.aux_dirs():
+                if name.startswith("/"):
+                    name = name[1:]
                 path = self.path / name
-                if path.exists():
+                if path.is_dir() and path.exists():
                     shutil.rmtree(path)
             self.mkdirs()
 
