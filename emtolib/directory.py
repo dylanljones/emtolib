@@ -9,7 +9,7 @@ import shutil
 import warnings
 from pathlib import Path
 from typing import Union
-from .files import EmtoKgrnFile, EmtoPrnFile, EmtoDosFile, SlurmScript
+from .files import EmtoKgrnFile, EmtoPrnFile, EmtoDosFile, SlurmScript, EmtoBmdlFile
 
 RE_COMP = re.compile(r"(\w+?)(\d+)")
 
@@ -134,6 +134,16 @@ class EmtoDirectory:
                 if path.name.startswith("slurm") and path.suffix == ".out":
                     paths.append(path)
         return paths
+
+    def get_mdl_path(self, base=""):
+        path = Path(self.dat.for004).with_suffix(".dat")
+        if base:
+            path = Path(base) / path.name
+        return path
+
+    def get_mdl(self, base=""):
+        path = self.get_mdl_path(base)
+        return EmtoBmdlFile(path)
 
     def move(self, dst):
         dst = Path(dst)
