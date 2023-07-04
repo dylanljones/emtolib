@@ -16,6 +16,8 @@ from .files import (
     read_dos,
     load_dos,
     SlurmScript,
+    Makefile,
+    generate_makefile
 )
 from .directory import EmtoDirectory, walk_emtodirs
 from .xarr import update_datasets, load_dataset, load_datasets
