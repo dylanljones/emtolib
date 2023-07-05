@@ -29,8 +29,10 @@ def find_input_file(folder: Union[Path, str]) -> Path:
 class EmtoDirectory:
     """Class to handle EMTO simulation directories."""
 
-    def __init__(self, path):
+    def __init__(self, path, missing_ok=True):
         self.path = Path(path)
+        if not missing_ok and not self.path.exists():
+            raise FileNotFoundError(f"Directory {self.path} does not exist!")
 
         self._dat: Union[KgrnFile, None] = None
         self._prn: Union[PrnFile, None] = None
@@ -145,6 +147,9 @@ class EmtoDirectory:
     def get_mdl(self, base=""):
         path = self.get_mdl_path(base)
         return BmdlFile(path)
+
+    def exists(self):
+        return self.path.exists()
 
     def move(self, dst):
         dst = Path(dst)
