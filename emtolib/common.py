@@ -90,6 +90,7 @@ def parse_filepath(line: str) -> str:
 
 class PostInitCaller(type):
     """Metaclass to call __post_init__ after __init__."""
+
     def __call__(cls, *args, **kwargs):
         obj = type.__call__(cls, *args, **kwargs)
         obj.__post_init__()
@@ -139,6 +140,10 @@ class EmtoFile(metaclass=PostInitCaller):
         data = self.dumps().encode("utf-8").replace(b"\r\n", b"\n")
         with open(file, "wb") as fp:
             fp.write(data)
+
+    def exists(self) -> bool:
+        """Check if file exists."""
+        return self.path.exists()
 
     def move(self, dst: Union[str, Path], exist_ok: bool = False) -> None:
         """Move file to new location."""
