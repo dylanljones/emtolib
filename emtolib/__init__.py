@@ -7,17 +7,17 @@
 from .common import logger, elements
 from .config import read_config, CONFIG
 from .files import (
-    EmtoKgrnFile,
+    KgrnFile,
     Atom,
     KGRNError,
-    EmtoBmdlFile,
-    EmtoPrnFile,
-    EmtoDosFile,
+    BmdlFile,
+    PrnFile,
+    DosFile,
     read_dos,
     load_dos,
     SlurmScript,
     Makefile,
-    generate_makefile
+    generate_makefile,
 )
 from .directory import EmtoDirectory, walk_emtodirs
 from .xarr import update_datasets, load_dataset, load_datasets
