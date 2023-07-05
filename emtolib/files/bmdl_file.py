@@ -153,23 +153,34 @@ class EmtoBmdlFile(EmtoFile):
     def get_lattice_vectors(self, scaled=True):
         """Returns the lattice vectors in units of A
 
-        Vectors are the rows of the returned matrix
+        If the BMDL file contains lattice vectors, those are returned.
+        Otherwise, the lattice vectors are computed from the angles:
+        The first vector is along the x-axis
+        and the second vector is in the xy-plane. The third vector is computed
+        using all three angles. The angles are the opposite angles of the vectors,
+        so alpha is the angles between a_2 and a_3, beta is the angle between
+        a_1 and a_3 and gamma is the angles beteen a_1 and a_2.
+              a_3
+               |
+               | α
+             β +------>a_2
+              ╱ γ
+             ╱
+           a_1
+
+        Parameters
+        ----------
+        scaled : bool
+            If True, the lattice vectors are scaled by the lattice constants.
+
+        Returns
+        -------
+        (N, N) np.ndarray
+            Lattice vectors in units of A. The vectors are the rows of the matrix.
         """
         if self.lat_vecs is not None:
             vectors = self.lat_vecs
         else:
-            # Compute lattice vectors from angle. The first vector is along the x-axis
-            # and the second vector is in the xy-plane. The third vector is computed
-            # using all three angles. The angles are the opposite angles of the vectors,
-            # so alpha is the angles between a_2 and a_3, beta is the angle between
-            # a_1 and a_3 and gamma is the angles beteen a_1 and a_2.
-            #       a_3
-            #        |
-            #        | α
-            #      β +------>a_2
-            #       ╱ γ
-            #      ╱
-            #     a_1
             alpha, beta, gamma = np.deg2rad(self.angles)
             v1 = np.array([1, 0, 0])
             v2 = np.array([np.cos(gamma), np.sin(gamma), 0])
@@ -183,7 +194,12 @@ class EmtoBmdlFile(EmtoFile):
         return vectors
 
     def transform(self, positions):
-        """Transforms positions from fractional to cartesian coordinates
+        r"""Transforms positions from fractional to cartesian coordinates
+
+        The given positions .math:`x_i` are transformed to cartesian coordinates
+        using the lattice vectors .math:`A = \sum_{ij} a_{ij}` as
+        .. math::
+            x'_i = \sum_j x_j a_{ij}
 
         Parameters
         ----------
@@ -222,6 +238,7 @@ class EmtoBmdlFile(EmtoFile):
         return trans
 
     def get_site_ratio(self, tol=1e-7):
+        """Computes the ration of a site in the unit cell."""
         positions = np.asarray(self.basis_vecs)
         # get fractional coordinates (inversed basis transformation)
         coord = self.itransform(positions)
