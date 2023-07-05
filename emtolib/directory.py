@@ -9,7 +9,7 @@ import shutil
 import warnings
 from pathlib import Path
 from typing import Union
-from .files import EmtoKgrnFile, EmtoPrnFile, EmtoDosFile, SlurmScript, EmtoBmdlFile
+from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript
 
 RE_COMP = re.compile(r"(\w+?)(\d+)")
 
@@ -31,9 +31,10 @@ class EmtoDirectory:
 
     def __init__(self, path):
         self.path = Path(path)
-        self._dat: Union[EmtoKgrnFile, None] = None
-        self._prn: Union[EmtoPrnFile, None] = None
-        self._dos: Union[EmtoDosFile, None] = None
+
+        self._dat: Union[KgrnFile, None] = None
+        self._prn: Union[PrnFile, None] = None
+        self._dos: Union[DosFile, None] = None
         self._slurm: Union[SlurmScript, None] = None
 
     @property
@@ -78,7 +79,7 @@ class EmtoDirectory:
     def get_dat(self, path=""):
         if not path:
             path = self.get_dat_path()
-        dat = EmtoKgrnFile(path)
+        dat = KgrnFile(path)
         self._dat = dat
         return dat
 
@@ -102,7 +103,7 @@ class EmtoDirectory:
 
     def get_dos(self, name=""):
         path = self.get_dos_path(name)
-        dos = EmtoDosFile(path)
+        dos = DosFile(path)
         self._dos = dos
         return dos
 
@@ -113,7 +114,7 @@ class EmtoDirectory:
 
     def get_prn(self, name=""):
         path = self.get_prn_path(name)
-        prn = EmtoPrnFile(path)
+        prn = PrnFile(path)
         self._prn = prn
         return prn
 
@@ -143,7 +144,7 @@ class EmtoDirectory:
 
     def get_mdl(self, base=""):
         path = self.get_mdl_path(base)
-        return EmtoBmdlFile(path)
+        return BmdlFile(path)
 
     def move(self, dst):
         dst = Path(dst)

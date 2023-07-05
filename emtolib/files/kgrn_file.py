@@ -319,7 +319,7 @@ class Atom:
         return self.to_dict() == other.to_dict()
 
 
-class EmtoKgrnFile(EmtoFile):
+class KgrnFile(EmtoFile):
     """KGRN input file."""
 
     extension = ".dat"

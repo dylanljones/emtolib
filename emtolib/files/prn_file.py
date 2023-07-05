@@ -14,7 +14,7 @@ def extract_hopfields(prn, unit="ev/aa^2"):
 
     Parameters
     ----------
-    prn : emtolib.input_files.EmtoPrnFile
+    prn : PrnFile
         The PRN file to extract the Hopfield parameters from.
     unit : str, optional
         The unit of the Hopfield parameters. Can be 'Ry/Bohr^2' or 'eV/AA^2'.
@@ -80,7 +80,7 @@ def extract_hopfields(prn, unit="ev/aa^2"):
     return hopfields
 
 
-class EmtoPrnFile(EmtoFile):
+class PrnFile(EmtoFile):
 
     RE_ATOM = re.compile("^Atom:(?P<atom>.*)")
 

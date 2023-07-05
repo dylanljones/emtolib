@@ -214,7 +214,7 @@ def _index_dataframe(df, args, drop):
     return df
 
 
-class EmtoDosFile(EmtoFile):
+class DosFile(EmtoFile):
 
     extensions = [".dos"]
 

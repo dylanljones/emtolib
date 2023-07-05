@@ -108,7 +108,7 @@ def parse_cell(cell, raise_errors=True):
     return params
 
 
-class EmtoBmdlFile(EmtoFile):
+class BmdlFile(EmtoFile):
 
     extension = ".dat"
     template = Template(TEMPLATE, ignore_case=True)

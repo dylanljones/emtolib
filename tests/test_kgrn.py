@@ -7,7 +7,7 @@
 from pathlib import Path
 from pytest import mark
 from numpy.testing import assert_array_equal
-from emtolib.files import EmtoKgrnFile
+from emtolib.files import KgrnFile
 
 TEST_ROOT = Path(__file__).parent.parent / ".testdata"
 
@@ -53,8 +53,8 @@ V_AT_PARAMS = {
 
 
 def test_empty_file():
-    _ = EmtoKgrnFile()
-    _ = EmtoKgrnFile("test.dat")
+    _ = KgrnFile()
+    _ = KgrnFile("test.dat")
 
 
 @mark.parametrize(
@@ -68,7 +68,7 @@ def test_empty_file():
 )
 def test_parse_format_cpa(path):
     text = path.read_text()
-    dat = EmtoKgrnFile(path)
+    dat = KgrnFile(path)
     text2 = dat.dumps()
     text = "\n".join(text.splitlines()[1:])
     text2 = "\n".join(text2.splitlines()[1:])
@@ -78,7 +78,7 @@ def test_parse_format_cpa(path):
 def test_parse_format_dmft_pure():
     path = TEST_ROOT / "DMFT" / "Nb" / "nb.dat"
     text = path.read_text()
-    dat = EmtoKgrnFile(path)
+    dat = KgrnFile(path)
     text2 = dat.dumps()
     text = "\n".join(text.splitlines()[1:])
     text2 = "\n".join(text2.splitlines()[1:])
@@ -88,7 +88,7 @@ def test_parse_format_dmft_pure():
 def test_parse_format_dmft():
     path = TEST_ROOT / "DMFT" / "Nb25" / "nb.dat"
     text = path.read_text()
-    dat = EmtoKgrnFile(path)
+    dat = KgrnFile(path)
     text2 = dat.dumps()
     text = "\n".join(text.splitlines()[1:])
     text2 = "\n".join(text2.splitlines()[1:])
@@ -188,7 +188,7 @@ def test_parse_1():
     }
 
     path = TEST_ROOT / "CPA" / "Nb" / "nb.dat"
-    dat = EmtoKgrnFile(path)
+    dat = KgrnFile(path)
     for k, v in params.items():
         assert dat[k] == v
         assert getattr(dat, k) == v
@@ -299,7 +299,7 @@ def test_parse_2():
     }
 
     path = TEST_ROOT / "CPA" / "Nb25" / "nb.dat"
-    dat = EmtoKgrnFile(path)
+    dat = KgrnFile(path)
     for k, v in expected.items():
         assert dat[k] == v
         assert getattr(dat, k) == v

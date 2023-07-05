@@ -6,7 +6,6 @@
 
 from pathlib import Path
 from configparser import ConfigParser
-from .files import EmtoKgrnFile
 
 
 def read_config(file="emto.ini"):
@@ -43,7 +42,7 @@ def update_slurm_settings(slurm, conf, executable, jobname):
     slurm.commands[i] = f"time {executable} < {jobname}.dat"
 
 
-def update_emto_paths(dat: EmtoKgrnFile, conf, kstr, bmdl, kstr2=""):
+def update_emto_paths(dat, conf, kstr, bmdl, kstr2=""):
     kstr_path = conf["emto"]["kstr"] + "/" + kstr
     if not kstr2:
         kstr2 = kstr
