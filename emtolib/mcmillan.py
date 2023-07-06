@@ -28,11 +28,11 @@ def phonon_coupling(eta, mass, theta_d):
     kelvin_to_ev = const.k / const.eV
 
     factor = const.eV / (const.angstrom**2 * const.m_u)
-    x = factor * eta / mass                         # SI Unit: 1/s²
-    x /= (2 * np.pi * const.c)**2                   # SI Unit: 1/m²
-    theta = kelvin_to_ev * theta_d                  # SI Unit: eV
+    x = factor * eta / mass  # SI Unit: 1/s²
+    x /= (2 * np.pi * const.c) ** 2  # SI Unit: 1/m²
+    theta = kelvin_to_ev * theta_d  # SI Unit: eV
     theta = theta * const.eV / (const.h * const.c)  # SI Unit: 1/m
-    lamb = x / (theta**2)                           # Dimension-less
+    lamb = x / (theta**2)  # Dimension-less
     return lamb
 
 
@@ -53,10 +53,10 @@ def mcmillan(theta_d, lamb, mu_star):
 
     Returns
     -------
-    tc : float
+    tc : float or np.ndarray
         The critical temperature .math:`T_C` of the superconductor.
     """
-    arg = -1.04 * (1. + lamb) / (lamb - mu_star * (1. + 0.62 * lamb))
+    arg = -1.04 * (1.0 + lamb) / (lamb - mu_star * (1.0 + 0.62 * lamb))
     return theta_d / 1.45 * np.exp(arg)
 
 

@@ -483,7 +483,11 @@ class KgrnFile(EmtoFile):
             return 0.0
 
     def param_diff(self, other, exclude=None):
-        return dict_diff(self.to_dict(), other.to_dict(), exclude=exclude)
+        if isinstance(other, KgrnFile):
+            other = other.to_dict()
+        elif not isinstance(other, dict):
+            raise TypeError(f"other has to be a KgrnFile or dict, not {type(other)}")
+        return dict_diff(self.to_dict(), other, exclude=exclude)
 
     def update(self, *args, **kwargs):
         data = dict(*args, **kwargs)

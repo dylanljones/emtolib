@@ -189,5 +189,5 @@ def dict_diff(d1, d2, exclude=None):
     diff = dict()
     for key in dict(diffset).keys():
         if exclude is None or key not in exclude:
-            diff[key] = (d1[key], d2[key])
+            diff[key] = (d1.get(key, None), d2.get(key, None))
     return diff
