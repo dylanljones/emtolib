@@ -88,6 +88,31 @@ def parse_filepath(line: str) -> str:
     return line.split("=")[1].strip()
 
 
+def truncpad(s, n=10, align="<", trunc="right"):
+    s = str(s)
+    if len(s) > (n - 3):
+        s = ("..." + s[-n+3:]) if "left".startswith(trunc) else (s[:n-3] + "...")
+    return f"{s:{align}{n}}"
+
+
+def pformat_diff(diff, w=32, sort_keys=True, delim="   "):
+    keys = list(diff.keys())
+    if sort_keys:
+        keys.sort()
+    lines = list()
+    for k in keys:
+        v1, v2 = diff[k]
+        kstr = truncpad(k, 10)
+        v1_str = truncpad(v1, w, trunc="l")
+        v2_str = truncpad(v2, w, trunc="l")
+        lines.append(f"{kstr}{delim}{v1_str}{delim}{v2_str}")
+    return "\n".join(lines)
+
+
+def pprint_diff(diff, w=32, sort_keys=True, delim="   "):
+    print(pformat_diff(diff, sort_keys=sort_keys, w=w, delim=delim))
+
+
 class PostInitCaller(type):
     """Metaclass to call __post_init__ after __init__."""
 
