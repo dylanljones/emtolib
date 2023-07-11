@@ -73,11 +73,51 @@ class Elements(Mapping):
         return f"<Elements ({len(self)})>"
 
 
-# Atomic masses in 1u ~ 1.660 10-27 kg
-# Debye temperatures (in K)
-# https://www.knowledgedoor.com/2/elements_handbook/debye_temperature.html
-with open(Path(__file__).parent / "elements.json", "r") as _fp:
-    elements = Elements(json.load(_fp))
+def read_elements():
+    # Atomic masses in 1u ~ 1.660 10-27 kg
+    # Debye temperatures (in K)
+    # https://www.knowledgedoor.com/2/elements_handbook/debye_temperature.html
+    with open(Path(__file__).parent / "elements.json", "r") as _fp:
+        data = json.load(_fp)
+    for key, values in data.items():
+        try:
+            values["n"] = [int(x) for x in values["n"].split()]
+            values["kappa"] = [int(x) for x in values["kappa"].split()]
+            values["occup"] = [int(x) for x in values["occup"].split()]
+            values["valen"] = [int(x) for x in values["valen"].split()]
+        except KeyError:
+            pass
+    return data
+
+
+elements = Elements(read_elements())
+
+
+def read_atom_cfg():
+    nheader = 7
+    nblock = 6
+    file = Path(__file__).parent / "atom.cfg"
+    text = file.read_text()
+    lines = text.splitlines()[nheader:]
+    config = dict()
+    while len(lines) > nblock:
+        assert lines.pop(0).strip() == ""
+        symbol = lines.pop(0).strip()
+        # Parameters
+        line = lines.pop(0).strip()
+        parts = [x for x in line.split(" ") if x]
+        keys = [s.replace("=", "").lower() for s in parts[::2]]
+        values = parts[1::2]
+        item = {k: v for k, v in zip(keys, values)}
+        item["iz"] = int(item["iz"])
+        item["norb"] = int(item["norb"])
+        item["ion"] = int(item["ion"])
+        # Config
+        for i in range(4):  # n kappa, occup, valen
+            name, values = lines.pop(0).split(" ", maxsplit=1)
+            item[name.strip().lower()] = [int(x) for x in values.strip().split()]
+        config[symbol] = item
+    return config
 
 
 def parse_params(data: str) -> dict:
@@ -91,7 +131,7 @@ def parse_filepath(line: str) -> str:
 def truncpad(s, n=10, align="<", trunc="right"):
     s = str(s)
     if len(s) > (n - 3):
-        s = ("..." + s[-n+3:]) if "left".startswith(trunc) else (s[:n-3] + "...")
+        s = ("..." + s[-n + 3 :]) if "left".startswith(trunc) else (s[: n - 3] + "...")
     return f"{s:{align}{n}}"
 
 

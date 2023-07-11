@@ -285,10 +285,10 @@ class Atom:
         ion = ion or element.get("ion", 0)
         norb = norb or element.get("norb", 0)
         config = config or element.get("config", "")
-        n = n or [int(x) for x in element.get("n", "").split() if x.strip()]
-        kappa = kappa or [int(x) for x in element.get("kappa", "").split() if x.strip()]
-        occup = occup or [int(x) for x in element.get("occup", "").split() if x.strip()]
-        valen = valen or [int(x) for x in element.get("valen", "").split() if x.strip()]
+        n = n or element.get("n", [])
+        kappa = kappa or element.get("kappa", [])
+        occup = occup or element.get("occup", [])
+        valen = valen or element.get("valen", [])
 
         self.symbol = symbol
         self.iz = iz
@@ -474,7 +474,7 @@ class KgrnFile(EmtoFile):
         self.sws = 0.0  # Average Wigner-Seitz radius, volume of the unit cell (bohr)
         self.nsws = 1  # *Not used!*
         self.dsws = 0.05  # *Not used!*
-        self.alpcpa = 0.6  # The screened impurity model parameter of CPA
+        self.alpcpa = 0.602  # The screened impurity model parameter of CPA
         self.efgs = 0.0  # Initial guess for Fermi level
         self.hx = 0.1  # The distance between points on the linear path
         self.nx = 5  # The number of trial points on the z-mesh linear path
@@ -512,7 +512,7 @@ class KgrnFile(EmtoFile):
         self.dir006 = ""
         self.dir009 = "pot/"
         self.dir010 = "chd/"
-        self.dir011 = "tmp/"
+        self.dir011 = ""
 
         self.atoms = list()
 
