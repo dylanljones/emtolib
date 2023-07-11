@@ -4,6 +4,7 @@
 #
 # Copyright (c) 2022, Dylan Jones
 
+from pathlib import Path  # noqa: F401
 from .common import logger, elements
 from .config import read_config, CONFIG
 from .files import (

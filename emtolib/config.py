@@ -24,8 +24,11 @@ def read_config(file="emto.ini"):
         bmdl=str(root / emto["bmdl"]).replace("\\", "/"),
     )
     conf["slurm"] = dict(parser["slurm"])
-    conf.update(**parser["general"])
-
+    general = parser["general"]
+    conf["data_dir"] = Path(general["data_dir"])
+    conf["xarr_dir"] = Path(general["xarr_dir"])
+    conf["fig_dir"] = Path(general["fig_dir"])
+    conf["exp_dir"] = Path(general["exp_dir"])
     return conf
 
 
