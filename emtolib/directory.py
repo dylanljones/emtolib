@@ -78,9 +78,11 @@ class EmtoDirectory:
     def get_dat_path(self):
         return find_input_file(self.path)
 
-    def get_dat(self, path=""):
-        if not path:
+    def get_dat(self, relpath=""):
+        if not relpath:
             path = self.get_dat_path()
+        else:
+            path = self.path / relpath
         dat = KgrnFile(path)
         self._dat = dat
         return dat
