@@ -40,6 +40,14 @@ class EmtoDirectory:
         self._slurm: Union[SlurmScript, None] = None
 
     @property
+    def name(self):
+        return self.path.name
+
+    @property
+    def parent(self):
+        return self.path.parent
+
+    @property
     def dat(self):
         if self._dat is None:
             try:
@@ -78,59 +86,25 @@ class EmtoDirectory:
     def get_dat_path(self):
         return find_input_file(self.path)
 
-    def get_dat(self, relpath=""):
-        if not relpath:
-            path = self.get_dat_path()
-        else:
-            path = self.path / relpath
-        dat = KgrnFile(path)
-        self._dat = dat
-        return dat
-
-    def get_input_path(self):
-        warnings.warn(
-            "get_input_path() is deprecated, use get_dat_path() instead",
-            DeprecationWarning,
-        )
-        return self.get_dat_path()
-
-    def get_input(self, path=""):
-        warnings.warn(
-            "get_input() is deprecated, use get_dat() instead", DeprecationWarning
-        )
-        return self.get_dat(path)
-
     def get_dos_path(self, name=""):
         if not name:
             name = self.dat.jobnam
         return self.path / f"{name}.dos"
-
-    def get_dos(self, name=""):
-        path = self.get_dos_path(name)
-        dos = DosFile(path)
-        self._dos = dos
-        return dos
 
     def get_prn_path(self, name=""):
         if not name:
             name = self.dat.jobnam
         return self.path / f"{name}.prn"
 
-    def get_prn(self, name=""):
-        path = self.get_prn_path(name)
-        prn = PrnFile(path)
-        self._prn = prn
-        return prn
+    def get_mdl_path(self, base=""):
+        path = Path(self.dat.for004).with_suffix(".dat")
+        if base:
+            path = Path(base) / path.name
+        return path
 
     def get_slurm_path(self, name=""):
         name = name or "run_emto"
         return self.path / name
-
-    def get_slurm(self, name=""):
-        path = self.get_slurm_path(name)
-        slurm = SlurmScript(path)
-        self._slurm = slurm
-        return slurm
 
     def get_slurm_out_paths(self):
         paths = list()
@@ -140,11 +114,38 @@ class EmtoDirectory:
                     paths.append(path)
         return paths
 
-    def get_mdl_path(self, base=""):
-        path = Path(self.dat.for004).with_suffix(".dat")
-        if base:
-            path = Path(base) / path.name
-        return path
+    def get_dat(self, path="", reload=False):
+        if not reload and self._dat is not None:
+            return self._dat
+        if not path:
+            path = self.get_dat_path()
+        dat = KgrnFile(path)
+        self._dat = dat
+        return dat
+
+    def get_dos(self, name="", reload=False):
+        if not reload and self._dos is not None:
+            return self._dos
+        path = self.get_dos_path(name)
+        dos = DosFile(path)
+        self._dos = dos
+        return dos
+
+    def get_prn(self, name="", reload=False):
+        if not reload and self._prn is not None:
+            return self._prn
+        path = self.get_prn_path(name)
+        prn = PrnFile(path)
+        self._prn = prn
+        return prn
+
+    def get_slurm(self, name="", reload=False):
+        if not reload and self._slurm is not None:
+            return self._slurm
+        path = self.get_slurm_path(name)
+        slurm = SlurmScript(path)
+        self._slurm = slurm
+        return slurm
 
     def get_mdl(self, base=""):
         path = self.get_mdl_path(base)
@@ -152,6 +153,21 @@ class EmtoDirectory:
 
     def exists(self):
         return self.path.exists()
+
+    def mkdir(self, parents=True, exist_ok=True):
+        self.path.mkdir(parents=parents, exist_ok=exist_ok)
+
+    def iter_dir(self):
+        return self.path.iterdir()
+
+    def glob(self, pattern="*", recursive=False):
+        if recursive:
+            return self.path.rglob(pattern)
+        else:
+            return self.path.glob(pattern)
+
+    def relpath(self, path):
+        return self.path.relative_to(path)
 
     def move(self, dst):
         dst = Path(dst)
@@ -198,8 +214,18 @@ class EmtoDirectory:
                     shutil.rmtree(path)
             self.mkdirs()
 
+    def __truediv__(self, other):
+        new_path = self.path / other
+        if new_path.is_dir():
+            return self.__class__(new_path)
+        else:
+            return new_path
+
     def __repr__(self):
         return f"<{self.__class__.__name__}({self.path})>"
+
+    def __str__(self):
+        return str(self.path)
 
 
 def walk_emtodirs(root):
