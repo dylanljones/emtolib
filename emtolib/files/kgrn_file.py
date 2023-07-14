@@ -596,6 +596,8 @@ class KgrnFile(EmtoFile):
             raise KGRNError(f"'strt' has to be 'A', 'B' or 'N', not '{self.strt}'!")
         if self.expan not in ("S", "D", "M"):
             raise KGRNError(f"'expan' has to be 'S', 'D' or 'M', not '{self.expan}'!")
+        if self.expan == "M" and not self.for001_2:
+            raise KGRNError("for001_2 has to be given when expan='M'!")
         if self.fcd not in ("Y", "N"):
             raise KGRNError(f"'fcd' has to be 'Y' or 'N', not '{self.fcd}'!")
         if self.func not in ("SCA", "ASA"):
@@ -607,6 +609,9 @@ class KgrnFile(EmtoFile):
         mnta = max(atom.ita for atom in self.atoms)
         if self.mnta != mnta:
             raise KGRNError(f"maximal ita={mnta} does not match mnta={self.mnta}!")
+
+    def update_mnta(self):
+        self.mnta = max(atom.ita for atom in self.atoms)
 
     # ----------------------------------------------------------------------------------
 
