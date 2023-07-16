@@ -9,6 +9,26 @@ from ..common import EmtoFile
 
 RE_SBATCH = re.compile("#SBATCH --(.*?)=(.*?)$")
 
+DEFAULT_COMMANDS = r"""\
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+export OMP_PROC_BIND=false
+export OMP_STACKSIZE=256M
+ulimit -Ss unlimited
+
+echo - Host machine:\ \ \ $HOSTNAME
+echo - I/O directory:\ \ $PWD
+echo - SCF directory:\ \ $SCFDIR
+echo - Calculation started:\ \ `date`
+echo - PATH:\ \ $PATH
+echo - E_RAND:\ \ $E_RAND
+
+time ~/EMTO/kgrn/kgrn_cpa < nb.dat
+
+echo
+echo - Calculation finished: `date`
+"""
+
 
 class SlurmScript(EmtoFile):
     def __init__(
