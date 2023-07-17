@@ -4,13 +4,10 @@
 #
 # Copyright (c) 2022, Dylan Jones
 
-import re
 import shutil
 from pathlib import Path
 from typing import Union
 from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
-
-RE_COMP = re.compile(r"(\w+?)(\d+)")
 
 
 def find_input_file(folder: Union[Path, str]) -> Path:
