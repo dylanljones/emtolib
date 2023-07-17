@@ -238,6 +238,13 @@ class DosFile(EmtoFile):
         dos = np.array(series)
         return energy, dos
 
+    def get_total_nos(self, spin=None):
+        df = self.get_tnos(spin, drop=True)
+        series = df.groupby("E")["Total"].sum()
+        energy = np.array(series.index)
+        dos = np.array(series)
+        return energy, dos
+
     def get_partial_dos(self, sublatt=None, atom=None, spin=None):
         df = self.get_pdos(sublatt, atom, spin, drop=True)
         series = df.groupby("E")["Total"].sum()
