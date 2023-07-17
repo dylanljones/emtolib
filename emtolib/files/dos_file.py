@@ -216,7 +216,7 @@ def _index_dataframe(df, args, drop):
 
 class DosFile(EmtoFile):
 
-    extensions = [".dos"]
+    extension = ".dos"
 
     def __init__(self, *path):
         super().__init__(*path)

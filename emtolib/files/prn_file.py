@@ -82,6 +82,8 @@ def extract_hopfields(prn, unit="ev/aa^2"):
 
 class PrnFile(EmtoFile):
 
+    extension = ".prn"
+
     RE_ATOM = re.compile("^Atom:(?P<atom>.*)")
 
     RE_HOPFIELD = re.compile(r"^Hopfield\s+=\s+(?P<field1>.*),\s+(?P<field2>.*)")

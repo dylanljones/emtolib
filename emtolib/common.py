@@ -153,6 +153,14 @@ def pprint_diff(diff, w=32, sort_keys=True, delim="   "):
     print(pformat_diff(diff, sort_keys=sort_keys, w=w, delim=delim))
 
 
+def fort2py_float(text):
+    return text.replace(".d", ".e").replace("d0", "")
+
+
+def py2fort_float(text):
+    return text.replace(".0e", ".d")
+
+
 class PostInitCaller(type):
     """Metaclass to call __post_init__ after __init__."""
 
@@ -164,6 +172,8 @@ class PostInitCaller(type):
 
 class EmtoFile(metaclass=PostInitCaller):
     """Base class for EMTO input and output files."""
+
+    extension = ""
 
     def __init__(self, path: Union[str, Path] = None):
         if path is None:
@@ -180,6 +190,14 @@ class EmtoFile(metaclass=PostInitCaller):
     def dumps(self) -> str:
         pass
 
+    def _check_extension(self, file):
+        if self.extension:
+            ext = file.suffix
+            if ext != self.extension:
+                raise ValueError(
+                    f"File extension of '{file}' does not match '{self.extension}'"
+                )
+
     def load(self, file: Union[str, Path] = "", missing_ok: bool = False):
         """Load data from file."""
         file = Path(file or self.path)
@@ -187,6 +205,9 @@ class EmtoFile(metaclass=PostInitCaller):
             if missing_ok:
                 return None
             raise IsADirectoryError(f"{file} is a directory!")
+        # Check extension if specified
+        self._check_extension(file)
+        # Load file contents
         try:
             with open(file, "r") as fp:
                 data = fp.read()
@@ -200,6 +221,8 @@ class EmtoFile(metaclass=PostInitCaller):
     def dump(self, file: Union[str, Path] = "") -> None:
         """Dump data to file."""
         file = file or self.path
+        # Check extension if specified
+        self._check_extension(file)
         # Encode contents to UTF-8 and replace DOS with UNIX line endings
         # This is probably not necessary, but it's done anyway for good measure
         data = self.dumps().encode("utf-8").replace(b"\r\n", b"\n")
