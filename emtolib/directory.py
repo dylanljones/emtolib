@@ -9,7 +9,7 @@ import shutil
 import warnings
 from pathlib import Path
 from typing import Union
-from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript
+from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
 
 RE_COMP = re.compile(r"(\w+?)(\d+)")
 
@@ -38,6 +38,7 @@ class EmtoDirectory:
         self._prn: Union[PrnFile, None] = None
         self._dos: Union[DosFile, None] = None
         self._slurm: Union[SlurmScript, None] = None
+        self._dmft: Union[DmftFile, None] = None
 
     @property
     def name(self):
@@ -83,6 +84,15 @@ class EmtoDirectory:
                 return None
         return self._slurm
 
+    @property
+    def dmft(self):
+        if self._dmft is None:
+            try:
+                return self.get_dmft()
+            except FileNotFoundError:
+                return None
+        return self._dmft
+
     def get_dat_path(self):
         return find_input_file(self.path)
 
@@ -113,6 +123,12 @@ class EmtoDirectory:
                 if path.name.startswith("slurm") and path.suffix == ".out":
                     paths.append(path)
         return paths
+
+    def get_dmft_path(self, name=""):
+        if not name:
+            name = "dmft.dat"
+        path = self.path / name
+        return path
 
     def get_dat(self, path="", reload=False):
         if not reload and self._dat is not None:
@@ -150,6 +166,10 @@ class EmtoDirectory:
     def get_mdl(self, base=""):
         path = self.get_mdl_path(base)
         return BmdlFile(path)
+
+    def get_dmft(self, name=""):
+        path = self.get_dmft_path(name)
+        return DmftFile(path)
 
     def exists(self):
         return self.path.exists()
@@ -194,7 +214,7 @@ class EmtoDirectory:
             path = self.path / name
             path.mkdir(parents=True, exist_ok=True)
 
-    def clear(self, slurm=True, prn=True, dos=True, aux=True):
+    def clear(self, slurm=True, prn=True, dos=True, aux=True, fort=True):
         dat = self.dat
         if slurm:
             for path in self.get_slurm_out_paths():
@@ -213,6 +233,12 @@ class EmtoDirectory:
                 if path.is_dir() and path.exists():
                     shutil.rmtree(path)
             self.mkdirs()
+        if fort:
+            for file in self.path.iterdir():
+                if file.name.startswith("fort"):
+                    file.unlink(missing_ok=True)
+                elif file.name == "Sig":
+                    file.unlink(missing_ok=True)
 
     def __truediv__(self, other):
         new_path = self.path / other
