@@ -6,7 +6,6 @@
 
 import re
 import shutil
-import warnings
 from pathlib import Path
 from typing import Union
 from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
