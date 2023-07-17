@@ -32,7 +32,13 @@ def read_config(file="emto.ini"):
     return conf
 
 
-def update_slurm_settings(slurm, conf, executable, jobname):
+try:
+    CONFIG = read_config()
+except (FileNotFoundError, KeyError):
+    CONFIG = dict()
+
+
+def update_slurm_settings(slurm, conf, executable, dat_filename):
     slurm.ntasks = conf["slurm"]["ntasks"]
     slurm.nodes = conf["slurm"]["nodes"]
     slurm.mail_user = conf["slurm"]["mail_user"]
@@ -42,7 +48,7 @@ def update_slurm_settings(slurm, conf, executable, jobname):
 
     executable = executable.replace("\\", "/")
     i, _ = slurm.find_command("time")
-    slurm.commands[i] = f"time {executable} < {jobname}.dat"
+    slurm.commands[i] = f"time {executable} < {dat_filename}"
 
 
 def update_emto_paths(dat, conf, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp="tmp/"):
@@ -61,9 +67,3 @@ def update_emto_paths(dat, conf, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", t
     dat.dir009 = pot
     dat.dir010 = chd
     dat.dir011 = tmp
-
-
-try:
-    CONFIG = read_config()
-except (FileNotFoundError, KeyError):
-    CONFIG = dict()
