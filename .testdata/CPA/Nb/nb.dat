@@ -25,7 +25,7 @@ SWS......= 3.0710000 NSWS.=  1 DSWS..=   0.05 ALPCPA= 0.6020
 Setup: 2 + NQ*NS lines
 EFGS...=  0.100 HX....=  0.300 NX...=  7 NZ0..= 16 STMP..= N
 Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT Fix
-Nb      1  1  1  41  1.000  1.000  1.000  1.000  0.0  0.0   N
+Nb      1  1  1  41  1.000  1.000  1.000  1.000  0.0  0.0  N
 Atom:  4 lines + NT*NTA*6 lines
 IEX...=  4 NP..= 251 NES..= 15 NITER=100 IWAT.=  0 NPRNA=  0
 VMIX.....=  0.300000 RWAT....=  3.500000 RMAX....= 20.000000
