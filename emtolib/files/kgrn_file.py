@@ -56,7 +56,7 @@ ATOM_COLUMNS = tuple("iq it ita nz conc sms sws wswst qtr splt fix".split())
 ATCONF_TEMPLATE = "Iz= {iz:3d} Norb={norb:3d} Ion=  {ion:d} Config= {config}"
 ATLINE_TEMPLATE = (
     "{symbol:2}    {iq:3d} {it:2d} {ita:2d}  {nz:2d}  {conc:5.3f}  "
-    "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f} {splt:4.1f}   {fix}"
+    "{sms:5.3f}  {sws:5.3f}  {wswst:5.3f} {qtr:4.1f} {splt:4.1f}  {fix}"
 )
 ORBITALS = ["s", "p", "d", "f", "g", "h"]
 
@@ -588,6 +588,22 @@ class KgrnFile(EmtoFile):
                 v = v.strip()
             self.__setattr__(k, v)
 
+    def to_dict(self):
+        data = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
+        data.pop("atoms", None)
+        data.pop("path", None)
+        return data
+
+    def __getitem__(self, key):
+        if not hasattr(self, key):
+            raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
+        return self.__getattribute__(key)
+
+    def __setitem__(self, key, value):
+        if not hasattr(self, key):
+            raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
+        self.__setattr__(key, value)
+
     def check(self):
         """Check if the input is consistent."""
         if self.jobnam is None:
@@ -614,24 +630,6 @@ class KgrnFile(EmtoFile):
         self.mnta = max(atom.ita for atom in self.atoms)
 
     # ----------------------------------------------------------------------------------
-
-    def to_dict(self):
-        data = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
-        data.pop("atoms", None)
-        data.pop("path", None)
-        # if data["for001_2"] is None:
-        #     data["for001_2"] = data["for001"]
-        return data
-
-    def __getitem__(self, key):
-        if not hasattr(self, key):
-            raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
-        return self.__getattribute__(key)
-
-    def __setitem__(self, key, value):
-        if not hasattr(self, key):
-            raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
-        self.__setattr__(key, value)
 
     def loads(self, text):
         data = self.template.parse(text.replace(".d", ".e"))
