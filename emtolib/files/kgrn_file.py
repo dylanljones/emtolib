@@ -552,6 +552,16 @@ class KgrnFile(EmtoFile):
                 res.append(at)
         return res[idx]
 
+    def get_atoms(self, it=None, ita=None):
+        atoms = list()
+        for at in self.atoms:
+            if it is not None and at.it != it:
+                continue
+            if ita is not None and at.ita != ita:
+                continue
+            atoms.append(at)
+        return atoms
+
     def add_atom(self, atom: Union[str, Atom]):
         if isinstance(atom, str):
             atom = Atom(atom)
@@ -571,6 +581,16 @@ class KgrnFile(EmtoFile):
             return self.get_atom(key).conc
         except IndexError:
             return 0.0
+
+    def get_max_it(self):
+        return max(at.it for at in self.atoms)
+
+    def get_max_ita(self, it=None):
+        if it is None:
+            atoms = self.atoms
+        else:
+            atoms = self.get_atoms(it=it)
+        return max(at.ita for at in atoms)
 
     def param_diff(self, other, exclude=None):
         if isinstance(other, KgrnFile):

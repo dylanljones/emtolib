@@ -205,12 +205,15 @@ class EmtoDirectory:
         folder = self.__class__(dst)
         return folder
 
-    def mkdirs(self):
+    def mkdirs(self, keep=False):
         for name in self.dat.aux_dirs():
             path = self.path / name
             path.mkdir(parents=True, exist_ok=True)
+            if keep:
+                keep = path / ".keep"
+                keep.touch(exist_ok=True)
 
-    def clear(self, slurm=True, prn=True, dos=True, aux=True, fort=True):
+    def clear(self, slurm=True, prn=True, dos=True, aux=True, fort=True, keep=False):
         dat = self.dat
         if slurm:
             for path in self.get_slurm_out_paths():
@@ -228,7 +231,7 @@ class EmtoDirectory:
                 path = self.path / name
                 if path.is_dir() and path.exists():
                     shutil.rmtree(path)
-            self.mkdirs()
+            self.mkdirs(keep=keep)
         if fort:
             for file in self.path.iterdir():
                 if file.name.startswith("fort"):

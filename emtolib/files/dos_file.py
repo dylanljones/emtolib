@@ -251,3 +251,29 @@ class DosFile(EmtoFile):
         energy = np.array(series.index)
         dos = np.array(series)
         return energy, dos
+
+    def get_total_slice(self, ita, it, s):
+        dos = self.get_pdos()
+        idx_ita = dos.index.unique("Sublatt")
+        idx_it = dos.index.unique("Atom")
+        idx_is = dos.index.unique("Spin")
+        data = dos.loc[idx_ita[ita], idx_it[it], idx_is[s]]
+        return data["Total"].array
+
+    def get_total_array(self):
+        dos = self.get_pdos()
+        idx_ita = dos.index.unique("Sublatt")
+        idx_it = dos.index.unique("Atom")
+        idx_ns = dos.index.unique("Spin")
+        nita, nit, ns = len(idx_ita), len(idx_it), len(idx_ns)
+        ncols = nita * nit * ns
+        n = len(dos) // ncols
+        shape = (nita, nit, ns, n)
+        tdos = np.zeros(shape)
+        for i, ita in enumerate(idx_ita):
+            for j, it in enumerate(idx_it):
+                for k, s in enumerate(idx_ns):
+                    data = dos.loc[ita, it, s]
+                    arr = data["Total"].array
+                    tdos[i, j, k] = arr
+        return tdos

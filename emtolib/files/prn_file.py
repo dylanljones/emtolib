@@ -120,11 +120,17 @@ class PrnFile(EmtoFile):
     def grep(self, text, ignore_case=False):
         return "\n".join(self.search_line(text, ignore_case))
 
-    def search(self, pattern):
-        return re.search(pattern, self.data)
+    def search(self, pattern, ignore_case=False):
+        if ignore_case:
+            return re.search(pattern, self.data, flags=re.IGNORECASE)
+        else:
+            return re.search(pattern, self.data)
 
-    def findall(self, pattern):
-        return re.findall(pattern, self.data)
+    def findall(self, pattern, ignore_case=False):
+        if ignore_case:
+            return re.findall(pattern, self.data, flags=re.IGNORECASE)
+        else:
+            return re.findall(pattern, self.data)
 
     def extract_hopfields(self, unit="ev/aa^2"):
         return extract_hopfields(self, unit)
