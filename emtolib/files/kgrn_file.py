@@ -505,7 +505,7 @@ class KgrnFile(EmtoFile):
 
         # Input/Output directories
         self.for001 = ""
-        self.for001_2 = None
+        self.for001_2 = ""
         self.for004 = ""
         self.dir002 = "pot/"
         self.dir003 = "pot/"
@@ -638,6 +638,8 @@ class KgrnFile(EmtoFile):
             raise KGRNError(f"'fcd' has to be 'Y' or 'N', not '{self.fcd}'!")
         if self.func not in ("SCA", "ASA"):
             raise KGRNError(f"'func' has to be 'SCA' or 'ASA', not {self.func}!")
+        if len(self.atoms) == 0:
+            raise KGRNError("No atoms given!")
         # Check if atoms are consistent with parameters
         nt = max(atom.it for atom in self.atoms)
         if self.nt != nt:
