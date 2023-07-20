@@ -9,8 +9,7 @@ from ..common import EmtoFile
 
 RE_SBATCH = re.compile("#SBATCH --(.*?)=(.*?)$")
 
-DEFAULT_COMMANDS = r"""\
-
+DEFAULT_COMMANDS = r"""
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 export OMP_PROC_BIND=false
 export OMP_STACKSIZE=256M
@@ -23,10 +22,11 @@ echo - Calculation started:\ \ `date`
 echo - PATH:\ \ $PATH
 echo - E_RAND:\ \ $E_RAND
 
-time ~/EMTO/kgrn/kgrn_cpa < nb.dat
+time {executable} < {file}
 
 echo
 echo - Calculation finished: `date`
+
 """
 
 
@@ -60,6 +60,19 @@ class SlurmScript(EmtoFile):
             if isinstance(commands, str):
                 commands = commands.splitlines(keepends=False)
             self.commands = list(commands)
+
+    def iter_commands(self):
+        return enumerate(list(self.commands))
+
+    def find_command(self, pattern):
+        regex = re.compile(pattern)
+        for i, line in enumerate(self.commands):
+            if regex.match(line):
+                return i, line
+
+    def set_body(self, executable, file):
+        body = DEFAULT_COMMANDS.format(executable=executable, file=file)
+        self.commands = body.splitlines(keepends=False)
 
     def dumps(self) -> str:
         if not self.jobname:
@@ -116,12 +129,3 @@ class SlurmScript(EmtoFile):
         self.mem = sbatch.get("mem")
 
         self.commands = commands
-
-    def iter_commands(self):
-        return enumerate(list(self.commands))
-
-    def find_command(self, pattern):
-        regex = re.compile(pattern)
-        for i, line in enumerate(self.commands):
-            if regex.match(line):
-                return i, line
