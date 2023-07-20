@@ -32,13 +32,7 @@ def read_config(file="emto.ini"):
     return conf
 
 
-try:
-    CONFIG = read_config()
-except (FileNotFoundError, KeyError):
-    CONFIG = dict()
-
-
-def update_slurm_settings(slurm, conf, executable, dat_filename):
+def update_slurm_settings(slurm, conf, executable="", jobname=""):
     slurm.ntasks = conf["slurm"]["ntasks"]
     slurm.nodes = conf["slurm"]["nodes"]
     slurm.mail_user = conf["slurm"]["mail_user"]
@@ -46,19 +40,20 @@ def update_slurm_settings(slurm, conf, executable, dat_filename):
     slurm.mem = conf["slurm"]["mem"]
     slurm.time = conf["slurm"]["time"]
 
-    executable = executable.replace("\\", "/")
-    i, _ = slurm.find_command("time")
-    slurm.commands[i] = f"time {executable} < {dat_filename}"
+    if executable:
+        executable = executable.replace("\\", "/")
+        i, _ = slurm.find_command("time")
+        slurm.commands[i] = f"time {executable} < {jobname}.dat"
 
 
-def update_emto_paths(dat, conf, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp="tmp/"):
+def update_emto_paths(dat, conf, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp=""):
     kstr_path = conf["emto"]["kstr"] + "/" + kstr
-    if not kstr2:
-        kstr2 = kstr
-    kstr2_path = conf["emto"]["kstr"] + "/" + kstr2
+
     bmdl_path = conf["emto"]["bmdl"] + "/" + bmdl
     dat.for001 = kstr_path
-    dat.for001_2 = kstr2_path
+    if kstr2:
+        kstr2_path = conf["emto"]["kstr"] + "/" + kstr2
+        dat.for001_2 = kstr2_path
     dat.for004 = bmdl_path
 
     dat.dir002 = pot
@@ -67,3 +62,9 @@ def update_emto_paths(dat, conf, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", t
     dat.dir009 = pot
     dat.dir010 = chd
     dat.dir011 = tmp
+
+
+try:
+    CONFIG = read_config()
+except (FileNotFoundError, KeyError):
+    CONFIG = dict()
