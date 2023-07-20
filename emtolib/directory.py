@@ -131,6 +131,8 @@ class EmtoDirectory:
             return self._dat
         if not path:
             path = self.get_dat_path()
+        else:
+            path = self.path / path
         dat = KgrnFile(path)
         self._dat = dat
         return dat
