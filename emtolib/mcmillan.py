@@ -1,8 +1,6 @@
-# coding: utf-8
-#
-# This code is part of emtolib.
-#
-# Copyright (c) 2023, Dylan Jones
+# -*- coding: utf-8 -*
+# Author: Dylan Jones
+# Date:   2023-07-07
 
 import numpy as np
 from scipy import constants as const

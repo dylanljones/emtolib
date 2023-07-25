@@ -1,8 +1,6 @@
-# coding: utf-8
-#
-# This code is part of emto.
-#
-# Copyright (c) 2023, Dylan Jones
+# -*- coding: utf-8 -*
+# Author: Dylan Jones
+# Date:   2023-07-07
 
 from datetime import datetime
 import numpy as np

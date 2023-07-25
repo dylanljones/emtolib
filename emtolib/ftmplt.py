@@ -1,8 +1,6 @@
-# coding: utf-8
-#
-# This code is part of ftmplt.
-#
-# Copyright (c) 2023, Dylan Jones
+# -*- coding: utf-8 -*
+# Author: Dylan Jones
+# Date:   2023-06-22
 
 """fTmplt: Simple string parsing and formatting using Python's format strings
 
