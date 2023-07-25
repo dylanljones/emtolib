@@ -20,5 +20,5 @@ from .files import (
     Makefile,
     generate_makefile,
 )
-from .directory import EmtoDirectory, walk_emtodirs
+from .directory import EmtoDirectory, is_emtodir, walk_emtodirs
 from .xarr import update_datasets, load_dataset, load_datasets
