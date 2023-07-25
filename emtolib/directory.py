@@ -255,12 +255,25 @@ class EmtoDirectory:
         return str(self.path)
 
 
-def walk_emtodirs(root):
+def is_emtodir(path):
+    """Checks if path is an EMTO directory containing at least the input *.dat file."""
+    path = Path(path)
+    if not path.is_dir():
+        return False
+    try:
+        find_input_file(path)
+        return True
+    except FileNotFoundError:
+        return False
+
+
+def walk_emtodirs(root, recursive=False, missing_dat_ok=False):
     root = Path(root)
-    for folder in root.glob("*"):
+    iterator = root.rglob("*") if recursive else root.glob("*")
+    for folder in iterator:
         if not folder.is_dir():
             continue
         folder = EmtoDirectory(folder)
-        if folder.dat is None:
+        if folder.dat is None and not missing_dat_ok:
             continue
         yield folder
