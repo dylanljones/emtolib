@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*
 # Author: Dylan Jones
 # Date:   2023-07-04
-
+import string
 from collections import OrderedDict
 from ..common import EmtoFile
 from ..directory import walk_emtodirs
@@ -127,8 +127,9 @@ def generate_makefile(root):
     folders, max_depth = get_folders(root)
 
     # Add sbatch rules
-    for folder, relpath in folders:
-        name = folder.path.name.lower()
+    for i, (folder, relpath) in enumerate(folders):
+        # name = folder.path.name.lower()
+        name = string.ascii_lowercase[i]
         cmd = f"cd {relpath} && sbatch {slurm_name}"
         makefile.add_rule(name, cmd)
 
