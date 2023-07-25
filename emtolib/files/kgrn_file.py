@@ -615,11 +615,19 @@ class KgrnFile(EmtoFile):
         return data
 
     def __getitem__(self, key):
+        key = key.strip().lower()
         if not hasattr(self, key):
             raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
         return self.__getattribute__(key)
 
     def __setitem__(self, key, value):
+        key = key.strip().lower()
+        # Try to convert type
+        dtype = type(self.__getattribute__(key))
+        try:
+            value = dtype(value)
+        except ValueError:
+            pass
         if not hasattr(self, key):
             raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
         self.__setattr__(key, value)
@@ -665,7 +673,7 @@ class KgrnFile(EmtoFile):
 
         self.update(params)
         self.atoms = [Atom.from_dict(at) for at in atoms]
-        self.check()
+        # self.check()
         return self
 
     def dumps(self):
