@@ -2,10 +2,14 @@
 # Author: Dylan Jones
 # Date:   2023-06-21
 
+import logging
 import shutil
 from pathlib import Path
 from typing import Union
-from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile, KGRNError
+from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
+from .errors import KGRNError
+
+logger = logging.getLogger(__name__)
 
 
 def find_input_file(folder: Union[Path, str]) -> Path:
@@ -277,7 +281,29 @@ def walk_emtodirs(root, recursive=False, missing_dat_ok=False):
             if folder.dat is None and not missing_dat_ok:
                 continue
         except KGRNError as e:
-            print(e)
+            logger.exception(e)
             continue
 
         yield folder
+
+
+def diff_emtodirs(root, exclude=None):
+    """Find difference of the input files of all EMTO directories in root.
+
+    Does not support diffing the atom configs, only the parameters!
+    """
+    # Find all parameters that change
+    changing_params = set()
+    folders = list(walk_emtodirs(root))
+    dat_base = folders[0].dat
+    for folder in folders[1:]:
+        diff = dat_base.param_diff(folder.dat, exclude)
+        changing_params.update(diff.keys())
+
+    # Exract values of changing parameters
+    diffs = dict()
+    for folder in folders:
+        diff = {k: folder.dat[k] for k in changing_params}
+        diffs[folder.path] = diff
+
+    return diffs
