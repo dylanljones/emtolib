@@ -8,7 +8,6 @@ from .config import read_config, CONFIG
 from .files import (
     KgrnFile,
     Atom,
-    KGRNError,
     BmdlFile,
     PrnFile,
     DosFile,
@@ -19,6 +18,16 @@ from .files import (
     generate_makefile,
 )
 from .directory import EmtoDirectory, is_emtodir, walk_emtodirs
+from .errors import (
+    EmtoException,
+    KGRNError,
+    BMDLError,
+    PRNError,
+    DOSError,
+    SlurmError,
+    MakefileError,
+    EmtoDirectoryError,
+)
 from .xarr import update_datasets, load_dataset, load_datasets
 
 __version__ = "0.1.0"
