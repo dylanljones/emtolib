@@ -301,6 +301,8 @@ def diff_emtodirs(root, exclude=None):
         changing_params.update(diff.keys())
 
     # Exract values of changing parameters
+    if not changing_params:
+        return dict()
     diffs = dict()
     for folder in folders:
         diff = {k: folder.dat[k] for k in changing_params}
