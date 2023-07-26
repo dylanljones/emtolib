@@ -5,7 +5,7 @@
 import shutil
 from pathlib import Path
 from typing import Union
-from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
+from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile, KGRNError
 
 
 def find_input_file(folder: Union[Path, str]) -> Path:
@@ -271,7 +271,13 @@ def walk_emtodirs(root, recursive=False, missing_dat_ok=False):
     for folder in iterator:
         if not folder.is_dir():
             continue
+
         folder = EmtoDirectory(folder)
-        if folder.dat is None and not missing_dat_ok:
+        try:
+            if folder.dat is None and not missing_dat_ok:
+                continue
+        except KGRNError as e:
+            print(e)
             continue
+
         yield folder

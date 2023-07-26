@@ -660,7 +660,11 @@ class KgrnFile(EmtoFile):
     # ----------------------------------------------------------------------------------
 
     def loads(self, text):
-        data = self.template.parse(text.replace(".d", ".e"))
+        try:
+            data = self.template.parse(text.replace(".d", ".e"))
+        except Exception as e:
+            raise KGRNError(f"Failed to parse file: {self.path}") from e
+
         params = dict(data.copy())
         atomstr = params.pop("atoms")
         confstr = params.pop("atomconf")
