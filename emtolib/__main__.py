@@ -4,7 +4,8 @@
 
 import sys
 from argparse import ArgumentParser
-from .files import KGRNError
+from pathlib import Path
+from .files import KGRNError, generate_makefile
 from .directory import walk_emtodirs, is_emtodir, EmtoDirectory
 from . import __version__
 
@@ -60,6 +61,13 @@ def init_argparser():
 
     # Check DOS command
     parser_set = subparsers.add_parser("check_dos", help="Check DOS output")
+    add_path_arg(parser_set)
+
+    # Makefile command
+    parser_set = subparsers.add_parser(
+        "makefile", help="Create makefile to run all EMTO folders"
+    )
+    # parser_set.add_argument("-l", "--local", action="store_true", help="Local run (dont use slurm!)")
     add_path_arg(parser_set)
 
     return parser
@@ -126,6 +134,15 @@ def handle_check_dos(args):
             continue
 
 
+def handle_makefile(args):
+    if len(args.paths) > 1:
+        raise ValueError("Only one path allowed")
+
+    path = Path(args.paths[0])
+    make = generate_makefile(path)
+    make.dump()
+
+
 HANDLERS = {
     "grep": handle_grep,
     "converged": handle_converged,
@@ -133,6 +150,7 @@ HANDLERS = {
     "set": handle_set,
     "get": handle_get,
     "check_dos": handle_check_dos,
+    "makefile": handle_makefile
 }
 
 
