@@ -2,7 +2,7 @@
 # Author: Dylan Jones
 # Date:   2023-07-03
 
-from .kgrn_file import KgrnFile, Atom, KGRNError
+from .kgrn_file import KgrnFile, Atom
 from .bmdl_file import BmdlFile
 from .prn_file import PrnFile
 from .dos_file import DosFile, load_dos, read_dos

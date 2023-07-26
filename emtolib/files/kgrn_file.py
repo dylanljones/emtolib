@@ -8,6 +8,7 @@ import logging
 import numpy as np
 from typing import Union
 from ..common import EmtoFile, parse_params, elements, dict_diff
+from ..errors import KGRNError, KGRNReadError, KGRNWriteError
 from ..ftmplt import Template
 
 logger = logging.getLogger(__name__)
@@ -150,10 +151,6 @@ DEFAULT_PARAMS = {
 }
 
 
-class KGRNError(Exception):
-    pass
-
-
 def format_atom_line(params):
     line = ATLINE_TEMPLATE.format(**params)
     uj = params["u"] + params["j"]
@@ -219,7 +216,7 @@ def parse_atoms(atomstr, atomconfstr):
     header = atom_lines.pop(0).lower()
     columns = header.replace("(", "").replace(")", "").split()[1:]
     if tuple(columns) != ATOM_COLUMNS[: len(columns)]:
-        raise KGRNError(f"Invalid atom header: {header}")
+        raise KGRNReadError(f"Invalid atom header: {header}")
     atom_params = [parse_atom_line(line, columns) for line in atom_lines]
 
     lines = atomconfstr.splitlines()
@@ -663,7 +660,7 @@ class KgrnFile(EmtoFile):
         try:
             data = self.template.parse(text.replace(".d", ".e"))
         except Exception as e:
-            raise KGRNError(f"Failed to parse file: {self.path}") from e
+            raise KGRNReadError(f"Failed to parse file: {self.path}") from e
 
         params = dict(data.copy())
         atomstr = params.pop("atoms")
@@ -671,7 +668,7 @@ class KgrnFile(EmtoFile):
         try:
             atoms = parse_atoms(atomstr, confstr)
         except Exception as e:
-            raise KGRNError(f"Failed to parse atoms: {self.path}\n{atomstr}") from e
+            raise KGRNReadError(f"Failed to parse atoms: {self.path}\n{atomstr}") from e
 
         self.update(params)
         self.atoms = [Atom.from_dict(at) for at in atoms]
@@ -679,7 +676,10 @@ class KgrnFile(EmtoFile):
         return self
 
     def dumps(self):
-        self.check()
+        try:
+            self.check()
+        except KGRNError as e:
+            raise KGRNWriteError(f"Invalid input: {e}") from e
         params = self.to_dict()
 
         # Pre-format header and comment fields to allow for nested formatting
