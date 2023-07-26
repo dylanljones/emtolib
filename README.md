@@ -7,47 +7,103 @@
 python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git
 ```
 
-
-## Usage
-
-### CLI
+## CLI
 
 There are a few commands that can be run from the command line:
+
+```bash
+usage: emtolib v0.1.0 [-h] {grep,conv,iter,set,get,check_dos,makefile,diff} ...
+
+positional arguments:
+  {grep,conv,iter,set,get,check_dos,makefile,diff}
+    grep                Grep emto directories
+    conv                Grep converged
+    iter                Grep iter
+    set                 Set variable of EMTO input file
+    get                 Get variable of EMTO input file
+    check_dos           Check DOS output
+    makefile            Create makefile to run all EMTO folders
+    diff                Diff multiple EMTO folders
+
+options:
+  -h, --help            show this help message and exit
+```
+
+#### Examples
+
+As an example, we will use the following directory structure:
+
+```
+app/
+├── Nb
+│   ├── Nb1
+│   │   ├── nb.dat
+│   │   ├── run_emto
+│   │   ├── ...
+│   ├── Nb2
+│   │   ├── ...
+├── V
+...
+```
 
 
 - `grep`:
     Same as the grep command, but with automatic EMTO directory lookup. Example:
 
     ```bash
-    emtolib grep "total energy" app/Nb/
+    emtolib grep "total energy" app/Nb
     ``` 
 
-- `converged`:
+- `conv`:
     Check if a calculation has converged. Example:
 
     ```bash
-    emtolib converged app/Nb/
+    emtolib conv app/Nb
     ```
 
 - `iter`:
     Check the iterations of one or more calculations.
 
     ```bash
-    emtolib iter app/Nb/
+    emtolib iter app/Nb
     ```
 
 - `set`:
     Set paramters of the EMTO input file(s) for all EMTO directories in a 
     given root directory.
     ```bash
-    emtolib set NKY=25 app/Nb/
+    emtolib set NKY=25 app/Nb
     ```
+  
+- `get`:
+    Get paramters of the EMTO input file(s) for all EMTO directories in a 
+    given root directory.
+    ```bash
+    emtolib get NKY app/Nb
+    ```
+
 - `check_dos`:
     Check the DOS of one or more calculations for unphysical values.
 
     ```bash
-    emtolib check_dos app/Nb/
+    emtolib check_dos app/Nb
     ```
+
+- `makefile`:
+    Create a makefile to run all EMTO folders in a given root directory.
+
+    ```bash
+    emtolib makefile app/Nb
+    ```
+
+- `diff`:
+    Diff all EMTO folders in a given root directory.
+
+    ```bash
+    emtolib diff app/Nb
+    ```
+
+## Usage
 
 ### Configuration
 
