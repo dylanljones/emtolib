@@ -48,6 +48,7 @@ def init_argparser():
 
     # Iter command
     parser_iter = subparsers.add_parser("iter", help="Grep iter")
+    parser_iter.add_argument("-l", "--last", action="store_true", default=False)
     add_path_arg(parser_iter)
 
     # Set command
@@ -110,11 +111,21 @@ def handle_converged(args):
 
 def handle_iter(args):
     folders = list(iter_emtodirs(args))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         prn = folder.prn
-        line = prn.grep("Iter", ignore_case=False).strip()
-        if line:
-            print(f"{folder.path}\n {line}")
+        lines = prn.grep("Iter", ignore_case=False).strip().splitlines()
+        if not lines:
+            continue
+
+        if args.last:
+            path = f"{str(folder.path) + ':':<{maxw}}"
+            line = lines[-1].strip()
+            print(f"{path} {line}")
+        else:
+            print(f"{folder.path}")
+            for line in lines:
+                print(f"  {line.strip()}")
 
 
 def handle_set(args):
@@ -191,9 +202,9 @@ def handle_diff(args):
         maxww = [max(len(str(val)) for val in diff.keys()) for diff in diffs.values()]
         maxw = max(maxww) + 1
         for path, diff in diffs.items():
-            p = str(path)
-            vals = "\n".join(f"  {key + '=':<{maxw}} {val}" for key, val in diff.items())
-            print(f"{p}\n{vals}")
+            print(f"{path}")
+            for key, val in diff.items():
+                print(f"  {key + '=':<{maxw}} {val}")
 
 
 HANDLERS = {
