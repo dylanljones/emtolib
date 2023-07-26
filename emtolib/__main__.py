@@ -75,6 +75,7 @@ def init_argparser():
     parser_diff.add_argument(
         "-x", "--exclude", nargs="*", type=str, help="Exclude keys"
     )
+    parser_diff.add_argument("-k", "--only_keys", action="store_true", default=False)
     add_path_arg(parser_diff)
 
     # parser_set.add_argument(
@@ -179,11 +180,20 @@ def handle_diff(args):
     if not diffs:
         print("No differences found")
         return
-    maxw = max(len(str(path)) for path in diffs.keys())
-    for path, diff in diffs.items():
-        p = f"{str(path) + ':':<{maxw}}"
-        vals = ", ".join(f"{key}={val}" for key, val in diff.items())
-        print(f"{p} {vals}")
+
+    maxw = max(len(str(path)) for path in diffs.keys()) + 1
+    if args.only_keys:
+        for path, diff in diffs.items():
+            p = f"{str(path) + ':':<{maxw}}"
+            vals = ", ".join(diff.keys())
+            print(f"{p} {vals}")
+    else:
+        maxww = [max(len(str(val)) for val in diff.keys()) for diff in diffs.values()]
+        maxw = max(maxww) + 1
+        for path, diff in diffs.items():
+            p = str(path)
+            vals = "\n".join(f"  {key + '=':<{maxw}} {val}" for key, val in diff.items())
+            print(f"{p}\n{vals}")
 
 
 HANDLERS = {
