@@ -40,6 +40,8 @@ def init_argparser():
     parser_grep = subparsers.add_parser("grep", help="Grep emto directories")
     parser_grep.add_argument("pattern", type=str, help="Pattern to grep for")
     parser_grep.add_argument("-t", "--type", type=str, help="File types")
+    parser_grep.add_argument("-l", "--last", action="store_true", default=False)
+    parser_grep.add_argument("-f", "--first", action="store_true", default=False)
     add_path_arg(parser_grep)
 
     # Converged command
@@ -88,12 +90,26 @@ def init_argparser():
 
 def handle_grep(args):
     folders = list(iter_emtodirs(args))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
-        path = folder.path
         prn = folder.prn
-        line = prn.grep(args.pattern).strip()
-        if line:
-            print(f"{path}\n{line.strip()}")
+        lines = prn.grep(args.pattern).strip().splitlines()
+
+        if not lines:
+            continue
+        if args.first or args.last:
+            if args.first:
+                path = f"{str(folder.path) + ':':<{maxw}}"
+                line = lines[0].strip()
+                print(f"{path} {line}")
+            if args.last:
+                path = f"{str(folder.path) + ':':<{maxw}}"
+                line = lines[-1].strip()
+                print(f"{path} {line}")
+        else:
+            print(f"{folder.path}")
+            for line in lines:
+                print(f"  {line.strip()}")
 
 
 def handle_converged(args):
