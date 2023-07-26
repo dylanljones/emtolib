@@ -3,6 +3,7 @@
 # Date:   2023-07-17
 
 from ..common import EmtoFile, fort2py_float, py2fort_float
+from ..errors import DMFTReadError, DMFTWriteError
 from ..ftmplt import Template
 
 
@@ -61,11 +62,16 @@ class DmftFile(EmtoFile):
             self.__setattr__(k, v)
 
     def loads(self, text):
-        text = fort2py_float(text)
-        data = self.template.parse(text)
+        try:
+            data = self.template.parse(fort2py_float(text))
+        except Exception as e:
+            raise DMFTReadError(f"Failed to parse file: {self.path}") from e
         self.update(data)
         return self
 
     def dumps(self) -> str:
         params = self.to_dict()
-        return py2fort_float(self.template.format(params))
+        try:
+            return py2fort_float(self.template.format(params))
+        except Exception as e:
+            raise DMFTWriteError(f"Failed to write file: {self.path}") from e

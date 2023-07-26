@@ -10,18 +10,18 @@ class EmtoException(Exception):
     pass
 
 
-# Input and Output file errors
-
 class KGRNError(EmtoException):
     """Base class for all errors related to KGRN files."""
     pass
 
 
 class KGRNReadError(KGRNError):
+    """Errors related to reading KGRN files."""
     pass
 
 
 class KGRNWriteError(KGRNError):
+    """Errors related to writing KGRN files."""
     pass
 
 
@@ -30,13 +30,13 @@ class DMFTError(EmtoException):
     pass
 
 
-class BMDLError(EmtoException):
-    """Base class for all errors related to BMDL files."""
+class DMFTReadError(DMFTError):
+    """Errors related to reading DMFT files."""
     pass
 
 
-class PRNError(EmtoException):
-    """Base class for all errors related to PRN files."""
+class DMFTWriteError(DMFTError):
+    """Errors related to writing DMFT files."""
     pass
 
 
@@ -45,18 +45,6 @@ class DOSError(EmtoException):
     pass
 
 
-class SlurmError(EmtoException):
-    """Base class for all errors related to SLURM files."""
-    pass
-
-
-class MakefileError(EmtoException):
-    """Base class for all errors related to Makefiles."""
-    pass
-
-
-# Directory errors
-
-class EmtoDirectoryError(EmtoException):
-    """Base class for all errors related to directories."""
+class DOSReadError(DOSError):
+    """Errors related to reading DOS files."""
     pass

@@ -697,5 +697,7 @@ class KgrnFile(EmtoFile):
         data = dict(params.copy())
         data["atoms"] = atomstr
         data["atomconf"] = atomconf
-
-        return self.template.format(data).replace(".0e", ".d")
+        try:
+            return self.template.format(data).replace(".0e", ".d")
+        except Exception as e:
+            raise KGRNWriteError(f"Failed to format file: {self.path}") from e

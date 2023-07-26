@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from typing import TextIO
 from ..common import EmtoFile
+from ..errors import DOSReadError
 
 RE_DOS_TOTAL = re.compile(r"Total DOS and NOS and partial \(IT\) (?P<spin>.*)$")
 RE_DOS_SUBLAT = re.compile("Sublattice (?P<idx>.*) Atom (?P<atom>.*) spin (?P<spin>.*)")
@@ -218,7 +219,10 @@ class DosFile(EmtoFile):
 
     def __init__(self, *path):
         super().__init__(*path)
-        self.tdos, self.pdos, self.tnos = load_dos(self.path)
+        try:
+            self.tdos, self.pdos, self.tnos = load_dos(self.path)
+        except Exception as e:
+            raise DOSReadError(f"Could not read DOS file: {self.path}") from e
 
     def get_tdos(self, spin=None, drop=True):
         return _index_dataframe(self.tdos, [spin], drop)

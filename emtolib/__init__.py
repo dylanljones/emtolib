@@ -21,12 +21,13 @@ from .directory import EmtoDirectory, is_emtodir, walk_emtodirs
 from .errors import (
     EmtoException,
     KGRNError,
-    BMDLError,
-    PRNError,
+    KGRNReadError,
+    KGRNWriteError,
+    DMFTError,
+    DMFTReadError,
+    DMFTWriteError,
     DOSError,
-    SlurmError,
-    MakefileError,
-    EmtoDirectoryError,
+    DOSReadError,
 )
 from .xarr import update_datasets, load_dataset, load_datasets
 
