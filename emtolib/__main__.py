@@ -160,6 +160,9 @@ def handle_diff(args):
 
     root = Path(args.paths[0])
     diffs = diff_emtodirs(root, exclude=args.exclude)
+    if not diffs:
+        print("No differences found")
+        return
     maxw = max(len(str(path)) for path in diffs.keys())
     for path, diff in diffs.items():
         vals = ", ".join(f"{key}={val}" for key, val in diff.items())
