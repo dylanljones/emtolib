@@ -43,7 +43,7 @@ def init_argparser():
     add_path_arg(parser_grep)
 
     # Converged command
-    parser_conv = subparsers.add_parser("converged", help="Grep converged")
+    parser_conv = subparsers.add_parser("conv", help="Grep converged")
     add_path_arg(parser_conv)
 
     # Iter command
@@ -85,63 +85,79 @@ def init_argparser():
 
 
 def handle_grep(args):
-    for folder in iter_emtodirs(args):
+    folders = list(iter_emtodirs(args))
+    for folder in folders:
+        path = folder.path
         prn = folder.prn
         line = prn.grep(args.pattern).strip()
         if line:
-            print(f"{folder.path}:\n{line.strip()}")
+            print(f"{path}\n{line.strip()}")
 
 
 def handle_converged(args):
-    for folder in iter_emtodirs(args):
+    folders = list(iter_emtodirs(args))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        path = f"{str(folder.path) + ':':<{maxw}}"
         prn = folder.prn
         line = prn.grep("Converged", ignore_case=False).strip()
         if line:
-            print(f"{folder.path}: {line}")
+            print(f"{path} {line}")
         else:
-            print(f"{folder.path}: Not converged")
+            print(f"{path} Not converged")
 
 
 def handle_iter(args):
-    for folder in iter_emtodirs(args):
+    folders = list(iter_emtodirs(args))
+    for folder in folders:
         prn = folder.prn
         line = prn.grep("Iter", ignore_case=False).strip()
         if line:
-            print(f"{folder.path}: {line}")
+            print(f"{folder.path}\n {line}")
 
 
 def handle_set(args):
+    folders = list(iter_emtodirs(args))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+
     argvalue = args.value[0]
     key, value = argvalue.split("=")
     key = key.strip()
     value = value.strip()
-    for folder in iter_emtodirs(args):
+    for folder in folders:
+        path = f"{str(folder.path) + ':':<{maxw}}"
         dat = folder.dat
-        print(f"{folder.path}: Setting {key} to {value}")
+        print(f"{path} Setting {key} to {value}")
         dat[key] = value
         dat.dump()
 
 
 def handle_get(args):
     key = args.key[0]
-    for folder in iter_emtodirs(args):
+    folders = list(iter_emtodirs(args))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        path = f"{str(folder.path) + ':':<{maxw}}"
         dat = folder.dat
-        print(f"{folder.path}: {dat[key]}")
+        print(f"{path} {dat[key]}")
 
 
 def handle_check_dos(args):
-    for folder in iter_emtodirs(args):
+    folders = list(iter_emtodirs(args))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        path = f"{str(folder.path) + ':':<{maxw}}"
         dosfile = folder.dos
         try:
             energy, dos = dosfile.get_total_dos()
             # Check for unphysical (negative) DOS values
             if (dos < 0).any():
-                print(f"{folder.path}: Negative DOS values found")
+                print(f"{path} Negative DOS values found")
                 continue
             else:
-                print(f"{folder.path}: DOS ok")
+                print(f"{path} DOS ok")
         except AttributeError:
-            print(f"{folder.path}: No DOS file found")
+            print(f"{path} No DOS file found")
             continue
 
 
@@ -165,13 +181,14 @@ def handle_diff(args):
         return
     maxw = max(len(str(path)) for path in diffs.keys())
     for path, diff in diffs.items():
+        p = f"{str(path) + ':':<{maxw}}"
         vals = ", ".join(f"{key}={val}" for key, val in diff.items())
-        print(f"{str(path):<{maxw}}  {vals}")
+        print(f"{p} {vals}")
 
 
 HANDLERS = {
     "grep": handle_grep,
-    "converged": handle_converged,
+    "conv": handle_converged,
     "iter": handle_iter,
     "set": handle_set,
     "get": handle_get,
