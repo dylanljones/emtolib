@@ -6,6 +6,7 @@ import sys
 from argparse import ArgumentParser
 from .files import KGRNError
 from .directory import walk_emtodirs, is_emtodir, EmtoDirectory
+from . import __version__
 
 
 def iter_emtodirs(args):
@@ -30,7 +31,7 @@ def add_path_arg(parser):
 
 
 def init_argparser():
-    parser = ArgumentParser("emtolib")
+    parser = ArgumentParser(f"emtolib v{__version__}")
     subparsers = parser.add_subparsers(dest="command")
 
     # Grep command

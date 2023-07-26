@@ -20,3 +20,5 @@ from .files import (
 )
 from .directory import EmtoDirectory, is_emtodir, walk_emtodirs
 from .xarr import update_datasets, load_dataset, load_datasets
+
+__version__ = "0.1.0"
