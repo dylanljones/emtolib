@@ -136,11 +136,12 @@ HANDLERS = {
 
 
 def cli(argv):
-    if not argv:
-        raise RuntimeError("No arguments given")
-
     # Initialize argument parser and parse arguments
     parser = init_argparser()
+    if not argv:
+        parser.print_help(sys.stderr)
+        return
+
     args = parser.parse_args(argv)
     try:
         handler = HANDLERS[args.command]
