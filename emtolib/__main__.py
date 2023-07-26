@@ -5,8 +5,9 @@
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from .files import KGRNError, generate_makefile
-from .directory import walk_emtodirs, is_emtodir, EmtoDirectory
+from .files import generate_makefile
+from .errors import KGRNError
+from .directory import walk_emtodirs, is_emtodir, EmtoDirectory, diff_emtodirs
 from . import __version__
 
 
@@ -26,9 +27,9 @@ def iter_emtodirs(args):
             yield folder
 
 
-def add_path_arg(parser):
+def add_path_arg(parser, nargs="*", default=""):
     helpstr = "Path to one or more EMTO directories"
-    parser.add_argument("paths", type=str, nargs="*", default=[""], help=helpstr)
+    parser.add_argument("paths", type=str, nargs=nargs, default=[default], help=helpstr)
 
 
 def init_argparser():
@@ -64,11 +65,21 @@ def init_argparser():
     add_path_arg(parser_set)
 
     # Makefile command
-    parser_set = subparsers.add_parser(
+    parser_make = subparsers.add_parser(
         "makefile", help="Create makefile to run all EMTO folders"
     )
-    # parser_set.add_argument("-l", "--local", action="store_true", help="Local run (dont use slurm!)")
-    add_path_arg(parser_set)
+    add_path_arg(parser_make)
+
+    # Diff command
+    parser_diff = subparsers.add_parser("diff", help="Diff multiple EMTO folders")
+    parser_diff.add_argument(
+        "-x", "--exclude", nargs="*", type=str, help="Exclude keys"
+    )
+    add_path_arg(parser_diff)
+
+    # parser_set.add_argument(
+    #     "-l", "--local", action="store_true", help="Local run (dont use slurm!)"
+    # )
 
     return parser
 
@@ -136,11 +147,23 @@ def handle_check_dos(args):
 
 def handle_makefile(args):
     if len(args.paths) > 1:
-        raise ValueError("Only one path allowed")
+        raise ValueError("Only one root path allowed")
 
     path = Path(args.paths[0])
     make = generate_makefile(path)
     make.dump()
+
+
+def handle_diff(args):
+    if len(args.paths) > 1:
+        raise ValueError("Only one root path allowed")
+
+    root = Path(args.paths[0])
+    diffs = diff_emtodirs(root, exclude=args.exclude)
+    maxw = max(len(str(path)) for path in diffs.keys())
+    for path, diff in diffs.items():
+        vals = ", ".join(f"{key}={val}" for key, val in diff.items())
+        print(f"{str(path):<{maxw}}  {vals}")
 
 
 HANDLERS = {
@@ -150,7 +173,8 @@ HANDLERS = {
     "set": handle_set,
     "get": handle_get,
     "check_dos": handle_check_dos,
-    "makefile": handle_makefile
+    "makefile": handle_makefile,
+    "diff": handle_diff
 }
 
 
