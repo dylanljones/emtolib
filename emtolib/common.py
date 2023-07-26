@@ -11,7 +11,7 @@ from typing import Union
 from collections import abc
 import numpy as np
 
-logger = logging.getLogger("emtolib")
+logger = logging.getLogger(__package__)
 sh = logging.StreamHandler()
 sh.setLevel(logging.DEBUG)
 logger.addHandler(sh)
