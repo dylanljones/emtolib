@@ -10,34 +10,6 @@ python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git
 
 ## Usage
 
-### Configuration
-
-Minimal example of the ``emto.ini`` configuration file:
-
-```ini
-[emto]
-
-root = ~/EMTO
-# The following paths are relative to `root`
-kstr = kstr/smx
-bmdl = bmdl/mdl
-executable = kgrn/kgrn_cpa
-executable2 = kgrn/kgrn_cpa
-executable_dmft = kgrn/kgrn_cpa
-
-
-[slurm]
-
-# Your slurm settings
-partition = epyc
-ntasks = 1
-nodes = 1
-mail_user = name@example.com
-mail_type = FAIL,END,INVALID_DEPEND,TIME_LIMIT
-mem = 2gb
-time = 7-0
-```
-
 ### CLI
 
 There are a few commands that can be run from the command line:
@@ -76,3 +48,35 @@ There are a few commands that can be run from the command line:
     ```bash
     emtolib check_dos app/Nb/
     ```
+
+### Configuration
+
+To use more advanced features of the library, you will need to create a
+configuration file. This file should be named ``emto.ini`` and placed in the
+root directory of your EMTO calculations.
+
+Minimal example of the ``emto.ini`` configuration file:
+
+```ini
+[emto]
+
+root = ~/EMTO
+# The following paths are relative to `root`
+kstr = kstr/smx
+bmdl = bmdl/mdl
+executable = kgrn/kgrn_cpa
+executable2 = kgrn/kgrn_cpa
+executable_dmft = kgrn/kgrn_cpa
+
+
+[slurm]
+
+# Your slurm settings
+partition = epyc
+ntasks = 1
+nodes = 1
+mail_user = name@example.com
+mail_type = FAIL,END,INVALID_DEPEND,TIME_LIMIT
+mem = 2gb
+time = 7-0
+```
