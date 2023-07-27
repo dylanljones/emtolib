@@ -85,14 +85,13 @@ def read_data(datasets):
         thetas[i] = theta
 
     concs = np.array(concs)
-    concs = np.array([concs, 1-concs]).T
+    concs = np.array([concs, 1 - concs]).T
     return concs, hopfields, masses, thetas
 
 
-def fit_mustar(lamb, theta_d, tc):
-
+def fit_mustar(lamb, theta_d, tc, factor=1):
     def cost_funct(mu_star):
-        return np.sum((tc - mcmillan(theta_d, lamb, mu_star))**2)
+        return np.sum((tc - factor * mcmillan(theta_d, lamb, mu_star)) ** 2)
 
     sol = optimize.minimize(cost_funct, x0=0.13 * np.ones_like(tc))
     return sol
@@ -103,12 +102,14 @@ def main():
     dirname = "CPA_4_275"
     mu_star = 0.13
     c_eta = 1
-    savefig = False
+    savefig = True
 
     # Update and read datasets
     root = DATADIR / f"{at1}-{at2}" / dirname
     xarr_root = XARRDIR / f"{at1}-{at2}" / dirname
     update_datasets(root, location=xarr_root, force=False)
+    if not root.exists():
+        raise FileNotFoundError(f"Could not find data directory: {root}")
     datasets = load_datasets(xarr_root, keyfunc)
 
     # Read experimental data
@@ -116,24 +117,70 @@ def main():
     data = np.loadtxt(exp)
     x_exp = 1 - data[:, 0]
     tc_exp = data[:, 1]
+    idx = np.argsort(x_exp)
+    x_exp = x_exp[idx]
+    tc_exp = tc_exp[idx]
 
+    # reverse order
     # Compute McMillan Tc with fixed mu_star
     concs, hopfields, masses, thetas = read_data(datasets)
     x = concs[:, 0]
     hopfields *= c_eta
     hopfields_avg = np.sum(concs * hopfields, axis=-1)
     lambdas = phonon_coupling(hopfields_avg, masses, thetas)
-    tc = mcmillan(thetas, lambdas, mu_star=mu_star)
+    tc: np.ndarray = mcmillan(thetas, lambdas, mu_star=mu_star)
 
+    print(tc.shape)
+    factor1 = tc_exp[0] / tc[0]
+    factor2 = tc_exp[-1] / tc[-1]
+    factor = np.mean([factor1, factor2])
+    print(f"Factor1: {factor1:.2f}")
+    print(f"Factor2: {factor2:.2f}")
+    print(f"Factor: {factor:.2f}")
+    tc_scaled = tc * factor
+
+    tc_exp_inter = np.interp(x, x_exp, tc_exp)
+
+    res = fit_mustar(lambdas, thetas, tc_exp_inter)
+    mu_star_fit = res.x
+    print(res)
+    print(f"mu_star: {mu_star_fit}")
+
+    # tc_fit = mcmillan(thetas, lambdas, mu_star=mu_star_fit) * factor
+
+    # return
     # ===================== #
     #         Plots         #
     # ===================== #
-    title = at1 + r"$_{x}$" + at2 + r"$_{1-x}$"
     use_mplstyle("figure", "aps", color_cycle="seaborn-colorblind")
+
+    fig, ax = plt.subplots()
+    ax.plot(x, mu_star_fit)
+
+    title = at1 + r"$_{x}$" + at2 + r"$_{1-x}$"
     fig1, axs = plot_eta_lambda(x, hopfields_avg, lambdas, grid=True)
-    axs[0].set_title(f"{title} {dirname} $C_\eta$={c_eta}")
-    fig2, ax = plot_tc(x, tc, x_exp, tc_exp, grid=True)
-    ax.set_title(f"{title} {dirname} $C_\eta$={c_eta}")
+    axs[0].set_title(rf"{title} {dirname} $C_\eta$={c_eta}")
+
+    # fig2, ax = plot_tc(x, tc, x_exp, tc_exp, grid=True)
+    fig2, ax = plt.subplots()
+    # ax.plot(x, tc_exp_inter, "o-", color="k", label="Exp", ms=2)
+    ax.plot(x_exp, tc_exp, "o-", color="k", label="Exp", ms=2)
+    ax.plot(x, tc, "o-", label="McMillan", ms=2)
+    ax.plot(
+        x,
+        tc_scaled,
+        "o-",
+        label=f"scaled (f1={factor1:.2f} f2={factor2:.2f} f={factor:.2f})",
+        ms=2,
+    )
+    # ax.plot(x, tc_fit, "o", label="McMillan scaled+fitted", ms=2)
+    ax.set_xlabel("x")
+    ax.set_ylabel(r"$T_C$ (K)")
+    ax.set_ylim(0, None)
+    ax.legend()
+    ax.set_xmargin(0.02)
+
+    ax.set_title(rf"{title} {dirname} $C_\eta$={c_eta}")
     if savefig:
         fig1.savefig(FIGDIR / f"{at1}{at2}_{dirname}_eta_lambda.png")
         fig2.savefig(FIGDIR / f"{at1}{at2}_{dirname}_tc.png")
