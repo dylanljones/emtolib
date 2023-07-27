@@ -262,20 +262,32 @@ class DosFile(EmtoFile):
         data = dos.loc[idx_ita[ita], idx_it[it], idx_is[s]]
         return data["Total"].array
 
-    def get_total_array(self):
+    def dos_array(self):
+        """Return a 5D array of the total DOS with shape (ns, nit, nita, lmax, nzd)."""
         dos = self.get_pdos()
-        idx_ita = dos.index.unique("Sublatt")
-        idx_it = dos.index.unique("Atom")
+        idx_it = dos.index.unique("Sublatt")
+        idx_ita = dos.index.unique("Atom")
         idx_ns = dos.index.unique("Spin")
         nita, nit, ns = len(idx_ita), len(idx_it), len(idx_ns)
         ncols = nita * nit * ns
         n = len(dos) // ncols
-        shape = (nita, nit, ns, n)
+        columns = dos.columns[2:]  # Skip Energy and Total columns
+        lmax = len(columns)
+        shape = (ns, nit, nita, lmax, n)
         tdos = np.zeros(shape)
+        energy = np.zeros(n)
         for i, ita in enumerate(idx_ita):
             for j, it in enumerate(idx_it):
                 for k, s in enumerate(idx_ns):
-                    data = dos.loc[ita, it, s]
-                    arr = data["Total"].array
-                    tdos[i, j, k] = arr
-        return tdos
+                    data = dos.loc[it, ita, s]
+                    energy[:] = data["E"].array
+                    for c, col in enumerate(columns):
+                        tdos[k, j, i, c] = data[col].array
+
+        return energy, tdos
+
+    def total_dos_array(self):
+        dos = self.get_tdos()
+        energy = dos["E"].array
+        dos = dos["Total"].array
+        return np.array(energy), np.array(dos)
