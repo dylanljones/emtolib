@@ -27,8 +27,8 @@ def find_input_file(folder: Union[Path, str]) -> Path:
 class EmtoDirectory:
     """Class to handle EMTO simulation directories."""
 
-    def __init__(self, path, missing_ok=True):
-        self.path = Path(path)
+    def __init__(self, *path, missing_ok=True):
+        self.path = Path(*path)
         if not missing_ok and not self.path.exists():
             raise FileNotFoundError(f"Directory {self.path} does not exist!")
 
