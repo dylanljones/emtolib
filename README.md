@@ -3,9 +3,16 @@
 
 ## Installation
 
+Run the following command to install `emtolib`:
 ```bash
 python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git
 ```
+
+You can add the following line to your `.bashrc` to create an alias:
+```bash
+alias emtolib="python3 -m emtolib"
+```
+
 
 ## CLI
 
@@ -52,7 +59,7 @@ app/
 
     ```bash
     emtolib grep "total energy" app/Nb
-    ``` 
+    ```
 
 - `conv`:
     Check if a calculation has converged. Example:
@@ -69,14 +76,14 @@ app/
     ```
 
 - `set`:
-    Set paramters of the EMTO input file(s) for all EMTO directories in a 
+    Set paramters of the EMTO input file(s) for all EMTO directories in a
     given root directory.
     ```bash
     emtolib set NKY=25 app/Nb
     ```
-  
+
 - `get`:
-    Get paramters of the EMTO input file(s) for all EMTO directories in a 
+    Get paramters of the EMTO input file(s) for all EMTO directories in a
     given root directory.
     ```bash
     emtolib get NKY app/Nb
@@ -121,18 +128,13 @@ root = ~/EMTO
 kstr = kstr/smx
 bmdl = bmdl/mdl
 executable = kgrn/kgrn_cpa
-executable2 = kgrn/kgrn_cpa
-executable_dmft = kgrn/kgrn_cpa
+executable_dmft = kgrn_dmft/kgrn_cpa
 
 
 [slurm]
 
 # Your slurm settings
-partition = epyc
-ntasks = 1
-nodes = 1
 mail_user = name@example.com
 mail_type = FAIL,END,INVALID_DEPEND,TIME_LIMIT
 mem = 2gb
-time = 7-0
 ```
