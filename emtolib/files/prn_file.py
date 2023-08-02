@@ -240,3 +240,10 @@ class PrnFile(EmtoFile):
         if match:
             return float(match.group("value"))
         return None
+
+    def find_atom_panels(self):
+        regex = re.compile("^ Atom:(?P<atom>.*) S = (?P<s>.*) SWS = (?P<sws>.*)")
+        for i, line in enumerate(self.data.splitlines(keepends=False)):
+            match = regex.match(line)
+            if match:
+                yield i, match
