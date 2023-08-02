@@ -2,31 +2,80 @@
 # Author: Dylan Jones
 # Date:   2023-07-21
 
+import logging
 from pathlib import Path
 from configparser import ConfigParser
 
+logger = logging.getLogger(__name__)
 
-def read_config(file="emto.ini"):
+# Locations to search for the config file (in order):
+# Current working directory, Home directory, emtolib directory
+LOCATIONS = [Path.cwd(), Path.home(), Path(__file__).parent.parent]
+
+
+def _find_config_file(filename):
+    logger.info("Looking for config file '%s'", filename)
+
+    # Look for the config file in the supported locations
+    for loc in LOCATIONS:
+        logger.debug("Checking directory '%s'", loc)
+        file = loc / filename
+        if file.exists():
+            logger.info("Found config file '%s'", file)
+            return file
+    logger.info("Config file '%s' not found!", filename)
+    # Raise an error if none of the above worked
+    raise FileNotFoundError(
+        f"Could not find the config files {filename} in any of the directories: " +
+        ", ".join(str(loc) for loc in LOCATIONS)
+    )
+
+
+def _unixpath(path):
+    """Convert a path to a unix-style path, regardless of the current OS."""
+    return str(path).replace("\\", "/")
+
+
+def _load_config(file):
     parser = ConfigParser()
     parser.read(file)
     conf = dict()
-    emto = parser["emto"]
-    root = Path(emto["root"])
-    conf["emto"] = dict(
-        root=root,
-        executable=str(root / emto["executable"]).replace("\\", "/"),
-        executable1=str(root / emto["executable1"]).replace("\\", "/"),
-        executable2=str(root / emto["executable2"]).replace("\\", "/"),
-        executable_dmft=str(root / emto["executable_dmft"]).replace("\\", "/"),
-        kstr=str(root / emto["kstr"]).replace("\\", "/"),
-        bmdl=str(root / emto["bmdl"]).replace("\\", "/"),
-    )
-    conf["slurm"] = dict(parser["slurm"])
-    general = parser["general"]
-    conf["data_dir"] = Path(general["data_dir"])
-    conf["xarr_dir"] = Path(general["xarr_dir"])
-    conf["fig_dir"] = Path(general["fig_dir"])
-    conf["exp_dir"] = Path(general["exp_dir"])
+    # Parse general section
+    if "general" in parser:
+        general = parser["general"]
+        for key, val in general.items():
+            try:
+                conf[key] = Path(val)
+            except TypeError:
+                conf[key] = val
+
+    # Parse emto section
+    section = dict(parser["emto"])  # required section!
+    root = Path(section.pop("root"))  # required key!
+    # Ensure the following keys are present:
+    emto = {
+        "root": _unixpath(root),
+        "kstr": _unixpath(root / section.pop("kstr", "kstr/smx")),
+        "bmdl": _unixpath(root / section.pop("bmdl", "bmdl/mdl")),
+        "executable": _unixpath(root / section.pop("executable", "kgrn/kgrn_cpa")),
+    }
+    # Other keys are optional, but valid
+    for key, val in section.items():
+        emto[key] = _unixpath(root / val)
+    conf["emto"] = emto
+
+    # Parse slurm section
+    if "slurm" in parser:
+        conf["slurm"] = dict(parser["slurm"])
+    else:
+        conf["slurm"] = dict()
+    return conf
+
+
+def read_config():
+    # Find and read the default config file
+    file = _find_config_file("emto.ini")
+    conf = _load_config(file)
     return conf
 
 
