@@ -3,6 +3,7 @@
 
 data/
 app/
+app
 exp/
 figs/
 dev*.py
