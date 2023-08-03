@@ -4,7 +4,7 @@
 
 import re
 import numpy as np
-from ..common import EmtoFile
+from ..common import EmtoFile, parse_params
 
 
 def extract_hopfields(prn, unit="ev/aa^2"):
@@ -78,14 +78,70 @@ def extract_hopfields(prn, unit="ev/aa^2"):
     return hopfields
 
 
+def parse_atom_panel(lines, istart):
+    """Parse the atom panel from the PRN output file.
+
+    Parameters
+    ----------
+    lines : list[str]
+        The lines of the PRN file.
+    istart : int
+        The index of the first line of the atom panel.
+
+    Returns
+    -------
+    data : dict
+    """
+    data = dict()
+
+    i = istart
+    # read header of panel:
+    # Exch: ...
+    while lines[i] != "":
+        line = lines[i].strip()
+        i += 1
+        if line.startswith("Exch:"):
+            exch = line.split()[0].split(":")[1]
+            data["exch"] = exch
+        elif line.startswith("Indices:"):
+            indices = parse_params(line.split(" ", maxsplit=1)[1])
+            data["it"] = int(indices["IT"])
+            data["ita"] = int(indices["ITA"])
+
+    i += 1
+    # Read panel line
+    #  Panel	    =  1   s -1/2 ...
+    line = lines[i].strip()
+    name, vals = line.split("=")
+    assert name.strip() == "Panel"
+    vals = [x.strip() for x in vals.split("  ") if x.strip()]
+    data["panel"] = int(vals.pop(0))
+    data["columns"] = vals
+
+    i += 2
+    # read first part of panel
+    while lines[i] != "":
+        line = lines[i]
+        key, line = line.split("=")
+        data[key.strip()] = [float(x) for x in line.split()]
+        i += 1
+    i += 1
+
+    # Read second part of panel
+    while lines[i] != "":
+        line = lines[i]
+        key, line = line.split("=")
+        data[key.strip()] = [float(x) for x in line.split()]
+        i += 1
+
+    return data
+
+
 class PrnFile(EmtoFile):
 
     extension = ".prn"
 
     RE_ATOM = re.compile("^Atom:(?P<atom>.*)")
-
-    RE_HOPFIELD = re.compile(r"^Hopfield\s+=\s+(?P<field1>.*),\s+(?P<field2>.*)")
-    RE_FIELD = re.compile(r"(?P<value>.*)\((?P<unit>.*)\)")
 
     RE_MAG = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)")
     RE_MAG_ITER = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)$")
@@ -157,47 +213,6 @@ class PrnFile(EmtoFile):
 
         return np.array(hopfields)
 
-    def get_hopfield(self, unit="ev/aa^2"):
-        # Prepare and check unit
-        unit = unit.lower()
-        if unit.startswith("ev"):
-            unit = "ev/aa^2"
-        elif unit.startswith("ry"):
-            unit = "ry/bohr^2"
-        if unit not in ("ry/bohr^2", "ev/aa^2"):
-            raise ValueError(f"Unit must be 'Ry/Bohr^2' or 'eV/AA^2', not '{unit}'")
-
-        fields = dict()
-
-        current_atom = ""
-        lines = self.data.splitlines(keepends=False)
-        for line in lines:
-            line = line.strip()
-            match = self.RE_ATOM.match(line)
-            if match:
-                current_atom = match["atom"]
-
-            match = self.RE_HOPFIELD.match(line)
-            if match:
-                s1 = match["field1"]
-                s2 = match["field2"]
-                match = self.RE_FIELD.match(s1)
-                field1 = float(match["value"])
-                unit1 = match["unit"].lower()
-                if unit == unit1:
-                    fields[current_atom] = field1
-                    continue
-                match = self.RE_FIELD.match(s2)
-                field2 = float(match["value"])
-                unit2 = match["unit"].lower()
-                assert unit == unit2
-                fields[current_atom] = field2
-        return fields
-
-    def read_hopfield(self, unit="ev/aa^2"):
-        """Backwards compatibility"""
-        return self.get_hopfield(unit)
-
     def get_magnetic_moment(self):
         pre = True
         current_atom = ""
@@ -241,9 +256,19 @@ class PrnFile(EmtoFile):
             return float(match.group("value"))
         return None
 
-    def find_atom_panels(self):
+    def get_atom_panels(self):
+        """Get the last atom output panels in the file."""
+        panels = dict()
         regex = re.compile("^ Atom:(?P<atom>.*) S = (?P<s>.*) SWS = (?P<sws>.*)")
-        for i, line in enumerate(self.data.splitlines(keepends=False)):
+        lines = self.data.splitlines(keepends=False)
+        for i, line in enumerate(lines):
             match = regex.match(line)
             if match:
-                yield i, match
+                atom = match.group("atom").strip()
+                s = float(match.group("s"))
+                sws = float(match.group("sws"))
+                data = parse_atom_panel(lines, i)
+                data["sws"] = sws
+                data["s"] = s
+                panels[atom] = data
+        return panels
