@@ -587,6 +587,43 @@ class KgrnFile(EmtoFile):
             atoms = self.get_atoms(it=it)
         return max(at.ita for at in atoms)
 
+    def update_mnta(self):
+        self.mnta = max(atom.ita for atom in self.atoms)
+
+    def set_kstr_path(self, path):
+        self.for001 = path
+
+    def set_kstr2_path(self, path):
+        self.for001_2 = path
+
+    def set_bmdl_path(self, path):
+        self.for004 = path
+
+    def set_pot_path(self, path):
+        self.dir002 = path
+        self.dir003 = path
+        self.dir009 = path
+
+    def set_chd_path(self, path):
+        self.dir010 = path
+
+    def set_tmp_path(self, path):
+        self.dir011 = path
+
+    def update_paths(self, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp=""):
+        self.for001 = kstr
+        if kstr2:
+            self.for001_2 = kstr2
+        else:
+            self.for001_2 = ""
+        self.for004 = bmdl
+        self.dir002 = pot
+        self.dir003 = pot
+        self.dir006 = ""
+        self.dir009 = pot
+        self.dir010 = chd
+        self.dir011 = tmp
+
     def param_diff(self, other, exclude=None):
         if isinstance(other, KgrnFile):
             other = other.to_dict()
@@ -650,9 +687,6 @@ class KgrnFile(EmtoFile):
         mnta = max(atom.ita for atom in self.atoms)
         if self.mnta != mnta:
             raise KGRNError(f"maximal ita={mnta} does not match mnta={self.mnta}!")
-
-    def update_mnta(self):
-        self.mnta = max(atom.ita for atom in self.atoms)
 
     # ----------------------------------------------------------------------------------
 
