@@ -4,7 +4,7 @@
 
 from pathlib import Path  # noqa: F401
 from .common import logger, elements
-from .config import read_config, CONFIG
+from .config import read_config, CONFIG, update_emto_paths, update_slurm_settings
 from .files import (
     KgrnFile,
     Atom,
@@ -30,5 +30,3 @@ from .errors import (
     DOSReadError,
 )
 from .xarr import update_datasets, load_dataset, load_datasets
-
-__version__ = "0.1.0"

@@ -120,6 +120,9 @@ def update_emto_paths(
 def update_slurm_settings(slurm, executable="", input_file="", conf=None):
     if not conf:
         conf = CONFIG
+    emto_conf = conf["emto"]
+    root = emto_conf["root"]
+
     slurm.ntasks = conf["slurm"]["ntasks"]
     slurm.nodes = conf["slurm"]["nodes"]
     slurm.mail_user = conf["slurm"]["mail_user"]
@@ -129,4 +132,4 @@ def update_slurm_settings(slurm, executable="", input_file="", conf=None):
 
     if executable:
         executable = executable.replace("\\", "/")
-        slurm.set_body(executable, input_file)
+        slurm.set_body(root + "/" + executable, input_file)
