@@ -8,7 +8,6 @@ from pathlib import Path
 from .files import generate_makefile
 from .errors import KGRNError
 from .directory import walk_emtodirs, is_emtodir, EmtoDirectory, diff_emtodirs
-from . import __version__
 
 
 def iter_emtodirs(args):
@@ -33,7 +32,7 @@ def add_path_arg(parser, nargs="*", default=""):
 
 
 def init_argparser():
-    parser = ArgumentParser(f"emtolib v{__version__}")
+    parser = ArgumentParser("emtolib")
     subparsers = parser.add_subparsers(dest="command")
 
     # Grep command
