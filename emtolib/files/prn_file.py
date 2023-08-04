@@ -35,7 +35,7 @@ def extract_hopfields(prn, unit="ev/aa^2"):
     if unit not in ("ry/bohr^2", "ev/aa^2"):
         raise ValueError(f"Unit must be 'Ry/Bohr^2' or 'eV/AA^2', not '{unit}'")
 
-    text = prn.data
+    text = prn.text
     hopfields = list()
     current_atom = ""
     ihf = 0 if unit == "ry/bohr^2" else 1
@@ -140,29 +140,28 @@ def parse_atom_panel(lines, istart):
 class PrnFile(EmtoFile):
 
     extension = ".prn"
+    autoload = True
+    missing_ok = False
 
     RE_ATOM = re.compile("^Atom:(?P<atom>.*)")
-
     RE_MAG = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)")
     RE_MAG_ITER = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)$")
-
     RE_DOS_EF = re.compile(r"DOS\(EF\)\s=\s+(?P<value>.*)")
 
     def __init__(self, path):
         super().__init__(path)
-        self.data = ""
-        self.load(missing_ok=True)
+        self.text = ""
 
     def loads(self, data: str) -> None:
-        self.data = data
+        self.text = data
 
     @property
     def converged(self):
-        return "Converged" in self.data
+        return "Converged" in self.text
 
     def search_line(self, text, ignore_case=False):
         lines = list()
-        for line in self.data.splitlines(keepends=False):
+        for line in self.text.splitlines(keepends=False):
             if ignore_case:
                 if text.lower() in line.lower():
                     lines.append(line)
@@ -176,15 +175,15 @@ class PrnFile(EmtoFile):
 
     def search(self, pattern, ignore_case=False):
         if ignore_case:
-            return re.search(pattern, self.data, flags=re.IGNORECASE)
+            return re.search(pattern, self.text, flags=re.IGNORECASE)
         else:
-            return re.search(pattern, self.data)
+            return re.search(pattern, self.text)
 
     def findall(self, pattern, ignore_case=False):
         if ignore_case:
-            return re.findall(pattern, self.data, flags=re.IGNORECASE)
+            return re.findall(pattern, self.text, flags=re.IGNORECASE)
         else:
-            return re.findall(pattern, self.data)
+            return re.findall(pattern, self.text)
 
     def extract_hopfields(self, unit="ev/aa^2"):
         return extract_hopfields(self, unit)
@@ -216,7 +215,7 @@ class PrnFile(EmtoFile):
     def get_magnetic_moment(self):
         pre = True
         current_atom = ""
-        lines = self.data.splitlines(keepends=False)
+        lines = self.text.splitlines(keepends=False)
         mag_pre, mag_post, mag_iter = list(), list(), list()
         for line in lines:
             line = line.strip()
@@ -251,7 +250,7 @@ class PrnFile(EmtoFile):
         return [(at, m) for at, m, _ in moments]
 
     def get_dos_ef(self):
-        match = self.RE_DOS_EF.search(self.data)
+        match = self.RE_DOS_EF.search(self.text)
         if match:
             return float(match.group("value"))
         return None
@@ -260,7 +259,7 @@ class PrnFile(EmtoFile):
         """Get the last atom output panels in the file."""
         panels = dict()
         regex = re.compile("^ Atom:(?P<atom>.*) S = (?P<s>.*) SWS = (?P<sws>.*)")
-        lines = self.data.splitlines(keepends=False)
+        lines = self.text.splitlines(keepends=False)
         for i, line in enumerate(lines):
             match = regex.match(line)
             if match:
