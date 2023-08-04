@@ -591,12 +591,15 @@ class KgrnFile(EmtoFile):
         self.mnta = max(atom.ita for atom in self.atoms)
 
     def set_kstr_path(self, path):
+        assert path.endswith(".tfh")
         self.for001 = path
 
     def set_kstr2_path(self, path):
+        assert path.endswith(".tfh")
         self.for001_2 = path
 
     def set_bmdl_path(self, path):
+        assert path.endswith(".mdl")
         self.for004 = path
 
     def set_pot_path(self, path):
@@ -611,8 +614,12 @@ class KgrnFile(EmtoFile):
         self.dir011 = path
 
     def update_paths(self, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp=""):
+        assert kstr.endswith(".tfh")
+        assert bmdl.endswith(".mdl")
+
         self.for001 = kstr
         if kstr2:
+            assert kstr2.endswith(".tfh")
             self.for001_2 = kstr2
         else:
             self.for001_2 = ""
