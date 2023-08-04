@@ -12,6 +12,27 @@ logger = logging.getLogger(__name__)
 # Current working directory, Home directory, emtolib directory
 LOCATIONS = [Path.cwd(), Path.home(), Path(__file__).parent.parent]
 
+# Default config values
+CONFIG = {
+    # EMTO paths: Should all be unix paths relative to the EMTO root
+    "emto": {
+        "root": "~/EMTO",
+        "kstr": "kstr/smx",
+        "bmdl": "bmdl/mdl",
+        "executable": "kgrn/kgrn_cpa",
+        "executable_dmft": "kgrn_dmft/kgrn_cpa",
+    },
+    # General Slurm settings (without user-mail)
+    "slurm": {
+        "partition": "epyc",
+        "ntasks": 1,
+        "nodes": 1,
+        "mail_type": "FAIL,END,INVALID_DEPEND,TIME_LIMIT",
+        "mem": "2gb",
+        "time": "7-0",
+    },
+}
+
 
 def _find_config_file(filename):
     logger.info("Looking for config file '%s'", filename)
@@ -26,14 +47,9 @@ def _find_config_file(filename):
     logger.info("Config file '%s' not found!", filename)
     # Raise an error if none of the above worked
     raise FileNotFoundError(
-        f"Could not find the config files {filename} in any of the directories: " +
+        f"Could not find the config files {filename} in any of the directories: "
         ", ".join(str(loc) for loc in LOCATIONS)
     )
-
-
-def _unixpath(path):
-    """Convert a path to a unix-style path, regardless of the current OS."""
-    return str(path).replace("\\", "/")
 
 
 def _load_config(file):
@@ -48,38 +64,62 @@ def _load_config(file):
                 conf[key] = Path(val)
             except TypeError:
                 conf[key] = val
-
     # Parse emto section
-    section = dict(parser["emto"])  # required section!
-    root = Path(section.pop("root"))  # required key!
-    # Ensure the following keys are present:
-    emto = {
-        "root": _unixpath(root),
-        "kstr": _unixpath(root / section.pop("kstr", "kstr/smx")),
-        "bmdl": _unixpath(root / section.pop("bmdl", "bmdl/mdl")),
-        "executable": _unixpath(root / section.pop("executable", "kgrn/kgrn_cpa")),
-    }
-    # Other keys are optional, but valid
-    for key, val in section.items():
-        emto[key] = _unixpath(root / val)
-    conf["emto"] = emto
-
+    conf["emto"] = dict(parser["emto"])
     # Parse slurm section
-    if "slurm" in parser:
-        conf["slurm"] = dict(parser["slurm"])
-    else:
-        conf["slurm"] = dict()
+    conf["slurm"] = dict(parser["slurm"])
+
     return conf
 
 
-def read_config():
-    # Find and read the default config file
-    file = _find_config_file("emto.ini")
+def read_config(filename="emto.ini"):
+    """Find and read the default config file"""
+    file = _find_config_file(filename)
     conf = _load_config(file)
     return conf
 
 
-def update_slurm_settings(slurm, conf, executable="", jobname=""):
+def update_config(filename="emto.ini"):
+    """Update the default config with the values from the config file"""
+    logger.debug("Updating emtolib config")
+
+    file = _find_config_file(filename)
+    conf = _load_config(file)
+    for key, values in conf.items():
+        if isinstance(values, dict):
+            if key in CONFIG:
+                CONFIG[key].update(values)
+            else:
+                CONFIG[key] = dict(values)
+        else:
+            CONFIG[key] = values  # noqa
+
+
+try:
+    update_config()
+except (FileNotFoundError, KeyError):
+    pass
+
+
+def update_emto_paths(
+    dat, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp="", conf=None
+):
+    if not conf:
+        conf = CONFIG
+    emto_conf = conf["emto"]
+    root = emto_conf["root"]
+    kstr_path = root + "/" + emto_conf["kstr"] + "/" + kstr
+    if kstr2:
+        kstr2_path = root + "/" + emto_conf["kstr"] + "/" + kstr2
+    else:
+        kstr2_path = ""
+    bmdl_path = root + "/" + emto_conf["bmdl"] + "/" + bmdl
+    dat.update_paths(kstr_path, bmdl_path, kstr2_path, pot, chd, tmp)
+
+
+def update_slurm_settings(slurm, executable="", jobname="", conf=None):
+    if not conf:
+        conf = CONFIG
     slurm.ntasks = conf["slurm"]["ntasks"]
     slurm.nodes = conf["slurm"]["nodes"]
     slurm.mail_user = conf["slurm"]["mail_user"]
@@ -91,27 +131,3 @@ def update_slurm_settings(slurm, conf, executable="", jobname=""):
         executable = executable.replace("\\", "/")
         i, _ = slurm.find_command("time")
         slurm.commands[i] = f"time {executable} < {jobname}.dat"
-
-
-def update_emto_paths(dat, conf, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp=""):
-    kstr_path = conf["emto"]["kstr"] + "/" + kstr
-
-    bmdl_path = conf["emto"]["bmdl"] + "/" + bmdl
-    dat.for001 = kstr_path
-    if kstr2:
-        kstr2_path = conf["emto"]["kstr"] + "/" + kstr2
-        dat.for001_2 = kstr2_path
-    dat.for004 = bmdl_path
-
-    dat.dir002 = pot
-    dat.dir003 = pot
-    dat.dir006 = ""
-    dat.dir009 = pot
-    dat.dir010 = chd
-    dat.dir011 = tmp
-
-
-try:
-    CONFIG = read_config()
-except (FileNotFoundError, KeyError):
-    CONFIG = dict()
