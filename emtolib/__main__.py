@@ -81,9 +81,11 @@ def init_argparser():
     parser_diff.add_argument("-k", "--only_keys", action="store_true", default=False)
     add_path_arg(parser_diff)
 
-    # parser_set.add_argument(
-    #     "-l", "--local", action="store_true", help="Local run (dont use slurm!)"
-    # )
+    # Clear command
+    parser_clear = subparsers.add_parser(
+        "clear", help="Clear outputs of one or multiple EMTO folders"
+    )
+    add_path_arg(parser_clear)
 
     return parser
 
@@ -223,6 +225,18 @@ def handle_diff(args):
                 print(f"  {key + '=':<{maxw}} {val}")
 
 
+def handle_clear(args):
+    if len(args.paths) > 1:
+        raise ValueError("Only one root path allowed")
+
+    folders = list(iter_emtodirs(args))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = f"{str(folder.path) + ':':<{maxw}}"
+        print(f"{p} Clearing folder")
+        folder.clear()
+
+
 HANDLERS = {
     "grep": handle_grep,
     "conv": handle_converged,
@@ -231,7 +245,8 @@ HANDLERS = {
     "get": handle_get,
     "check_dos": handle_check_dos,
     "makefile": handle_makefile,
-    "diff": handle_diff
+    "diff": handle_diff,
+    "clear": handle_clear,
 }
 
 
