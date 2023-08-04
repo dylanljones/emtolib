@@ -172,6 +172,8 @@ class EmtoFile(metaclass=PostInitCaller):
     """Base class for EMTO input and output files."""
 
     extension = ""
+    autoload = False
+    missing_ok = True
 
     def __init__(self, path: Union[str, Path] = None):
         if path is None:
@@ -180,13 +182,14 @@ class EmtoFile(metaclass=PostInitCaller):
 
     def __post_init__(self):
         """Called after __init__."""
-        pass
+        if self.autoload:
+            self.load(missing_ok=self.missing_ok)
 
     def loads(self, data: str) -> None:
         pass
 
     def dumps(self) -> str:
-        pass
+        raise NotImplementedError(f"{self.__class__.__name__} files cannot be written!")
 
     def _check_extension(self, file):
         if self.extension:
@@ -197,7 +200,7 @@ class EmtoFile(metaclass=PostInitCaller):
                 )
 
     def load(self, file: Union[str, Path] = "", missing_ok: bool = False):
-        """Load data from file."""
+        """Load text from file."""
         file = Path(file or self.path)
         if file.is_dir():
             if missing_ok:
@@ -217,7 +220,7 @@ class EmtoFile(metaclass=PostInitCaller):
         return self
 
     def dump(self, file: Union[str, Path] = "") -> None:
-        """Dump data to file."""
+        """Dump text to file."""
         file = file or self.path
         # Check extension if specified
         self._check_extension(file)
