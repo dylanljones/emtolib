@@ -234,7 +234,9 @@ class EmtoDirectory:
                     name = name[1:]
                 path = self.path / name
                 if path.is_dir() and path.exists():
-                    shutil.rmtree(path)
+                    for file in path.iterdir():
+                        file.unlink(missing_ok=True)
+                    # shutil.rmtree(path)
             self.mkdirs(keep=keep)
         if fort:
             for file in self.path.iterdir():
