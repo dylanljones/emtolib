@@ -85,6 +85,8 @@ def init_argparser():
     parser_clear = subparsers.add_parser(
         "clear", help="Clear outputs of one or multiple EMTO folders"
     )
+    parser_clear.add_argument("-a", "--aux", action="store_false", default=True)
+    parser_clear.add_argument("-k", "--keep", action="store_true", default=False)
     add_path_arg(parser_clear)
 
     return parser
@@ -234,7 +236,7 @@ def handle_clear(args):
     for folder in folders:
         p = f"{str(folder.path) + ':':<{maxw}}"
         print(f"{p} Clearing folder")
-        folder.clear()
+        folder.clear(aux=args.aux, keep=args.keep)
 
 
 HANDLERS = {
