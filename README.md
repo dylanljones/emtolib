@@ -1,4 +1,6 @@
-# Python EMTO tools
+# emtolib v0.1.0
+
+> Python tools for the EMTO package by L. Vitos et al.
 
 
 ## Installation
@@ -31,6 +33,7 @@ positional arguments:
     check_dos           Check DOS output
     makefile            Create makefile to run all EMTO folders
     diff                Diff multiple EMTO folders
+    clear               Clear outputs of one or multiple EMTO folders
 
 options:
   -h, --help            show this help message and exit
@@ -109,6 +112,14 @@ app/
     ```bash
     emtolib diff app/Nb
     ```
+
+- `clear`:
+    Clear all output files of all EMTO folders in a given root directory.
+
+    ```bash
+    emtolib clear app/Nb
+    ```
+
 
 ## Usage
 
