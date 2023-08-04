@@ -117,7 +117,7 @@ def update_emto_paths(
     dat.update_paths(kstr_path, bmdl_path, kstr2_path, pot, chd, tmp)
 
 
-def update_slurm_settings(slurm, executable="", jobname="", conf=None):
+def update_slurm_settings(slurm, executable="", input_file="", conf=None):
     if not conf:
         conf = CONFIG
     slurm.ntasks = conf["slurm"]["ntasks"]
@@ -129,5 +129,4 @@ def update_slurm_settings(slurm, executable="", jobname="", conf=None):
 
     if executable:
         executable = executable.replace("\\", "/")
-        i, _ = slurm.find_command("time")
-        slurm.commands[i] = f"time {executable} < {jobname}.dat"
+        slurm.set_body(executable, input_file)
