@@ -147,6 +147,7 @@ class PrnFile(EmtoFile):
     RE_MAG = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)")
     RE_MAG_ITER = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)$")
     RE_DOS_EF = re.compile(r"DOS\(EF\)\s=\s+(?P<value>.*)")
+    RE_SECTION = re.compile(r"^ (?P<key>[A-Z]+):")
 
     def __init__(self, path):
         super().__init__(path)
@@ -271,3 +272,33 @@ class PrnFile(EmtoFile):
                 data["s"] = s
                 panels[atom] = data
         return panels
+
+    def iter_sections(self):
+        """Iterate over the sections of the form ' KEY:' in the file.
+
+        Yields
+        ------
+        key : str
+            The key of the section (name of subroutine that wrote the section).
+            The keys are *not* unique!
+        lines : list of str
+            The lines of the section.
+        """
+        lines = self.text.splitlines(keepends=False)
+        i = 0
+        start = -1
+        last_key = ""
+        while i < len(lines):
+            line = lines[i]
+            match = self.RE_SECTION.match(line)
+            if match:
+                key = match.group("key")
+                if start >= 0:
+                    end = i - 1
+                    sec_lines = [line for line in lines[start:end] if line]
+                    yield last_key, sec_lines
+                last_key = key
+                start = i
+            i += 1
+        sec_lines = [line for line in lines[start:] if line]
+        yield last_key, sec_lines
