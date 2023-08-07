@@ -142,7 +142,10 @@ def read_dos(fp: TextIO):
         if key.startswith("Tot"):
             # Total DOS section
             match = RE_DOS_TOTAL.search(key)
-            spin = match.group("spin").removeprefix("DOS")
+            spin = match.group("spin")
+            if spin.startswith("DOS"):
+                spin = spin[3:]
+            # spin = match.group("spin").removeprefix("DOS")
 
             _parse_columns(lines)
             columns = ["E", "Total", "TNOS", "Partial"]
