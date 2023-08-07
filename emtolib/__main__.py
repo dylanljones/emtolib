@@ -25,7 +25,7 @@ def error(s):
     return click.style(s, fg="red")
 
 
-def _grep(pattern, types, first, last, recursive, paths):
+def _grep(pattern, first, last, recursive, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
@@ -57,32 +57,29 @@ def cli():
 
 @cli.command()
 @click.argument("pattern")
-@click.option("--types", "-t", type=str, default="")
 @click.option("--last", "-l", is_flag=True, default=False)
 @click.option("--first", "-f", is_flag=True, default=False)
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
-def grep(pattern, types, first, last, recursive, paths):
-    _grep(pattern, types, first, last, recursive, paths)
+def grep(pattern, first, last, recursive, paths):
+    _grep(pattern, first, last, recursive, paths)
 
 
 # noinspection PyShadowingBuiltins
 @cli.command()
-@click.option("--types", "-t", type=str, default="")
 @click.option("--last", "-l", is_flag=True, default=False)
 @click.option("--first", "-f", is_flag=True, default=False)
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
-def iter(types, first, last, recursive, paths):
-    _grep("Iteration", types, first, last, recursive, paths)
+def iter(first, last, recursive, paths):
+    _grep("Iteration", first, last, recursive, paths)
 
 
 @cli.command()
-@click.option("--types", "-t", type=str, default="")
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
-def conv(types, recursive, paths):
-    _grep("Converged", types, first=False, last=True, recursive=recursive, paths=paths)
+def conv(recursive, paths):
+    _grep("Converged", first=False, last=True, recursive=recursive, paths=paths)
 
 
 @cli.command()
