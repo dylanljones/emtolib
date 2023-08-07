@@ -7,6 +7,7 @@ import shutil
 from pathlib import Path
 from typing import Union
 from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
+from .errors import KGRNReadError
 
 logger = logging.getLogger(__name__)
 
@@ -290,15 +291,21 @@ def walk_emtodirs(*paths, recursive=False, missing_dat_ok=False):
         # Check if the given root path is an EMTO directory
         if root.is_dir():
             folder = EmtoDirectory(root)
-            if folder.dat is not None or missing_dat_ok:
-                yield folder
+            try:
+                if folder.dat is not None or missing_dat_ok:
+                    yield folder
+            except KGRNReadError as e:
+                logger.exception(e)
         # Iterate (recursively) over all folders in the given root path
         iterator = root.rglob("*") if recursive else root.glob("*")
         for folder in iterator:
             if folder.is_dir():
                 folder = EmtoDirectory(folder)
-                if folder.dat is not None or missing_dat_ok:
-                    yield folder
+                try:
+                    if folder.dat is not None or missing_dat_ok:
+                        yield folder
+                except KGRNReadError as e:
+                    logger.exception(e)
 
 
 def diff_emtodirs(root, exclude=None):
