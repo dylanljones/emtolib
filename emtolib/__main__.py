@@ -26,17 +26,6 @@ def error(s):
 
 
 def _grep(pattern, types, first, last, recursive, paths):
-    s = f"Grep {pattern}"
-    if types:
-        s += f" type={types}"
-    if first:
-        s += " first"
-    if last:
-        s += " last"
-    if paths:
-        s += f" paths={paths}"
-    click.echo(s)
-
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
