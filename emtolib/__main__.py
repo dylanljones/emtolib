@@ -8,10 +8,15 @@ from pathlib import Path
 from emtolib.directory import walk_emtodirs, diff_emtodirs
 from emtolib.errors import DOSReadError
 from emtolib.files import generate_makefile
+from emtolib.common import elements
 
 
 def frmt_file(s):
     return click.style(s, fg="blue")
+
+
+def frmt_header(s, maxw=0, color="blue"):
+    return click.style(f"{str(s) + ':':<{maxw}}", fg=color)
 
 
 def frmt_grep_line(line, pattern):
@@ -50,7 +55,7 @@ def _grep(pattern, first, last, recursive, paths):
                 click.echo(f"  {line}")
 
 
-@click.group()
+@click.group("emtolib")
 def cli():
     pass
 
@@ -181,8 +186,44 @@ def clear(aux, keep, path):
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-        print(f"{p} Clearing folder")
+        click.echo(f"{p} Clearing folder")
         folder.clear(aux=aux, keep=keep)
+
+
+@cli.command()
+@click.option("--header", "-h", type=str, default="")
+@click.option("--frmt", "-f", type=str, default="%d %b %y")
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def set_header(header, frmt, recursive, paths):
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        dat = folder.dat
+        click.echo(f"{p} Setting header: '{header}'")
+        dat.set_header(header, frmt)
+        dat.dump()
+
+
+@cli.command()
+@click.argument("symbol", type=click.Path(), nargs=1, required=True)
+@click.argument("keys", type=str, nargs=-1, required=False)
+def element(symbol, keys):
+    try:
+        el = elements[symbol]
+    except KeyError:
+        click.echo(error(f"Element {symbol} not found"))
+        return
+
+    click.echo(f"Element {el.symbol}:")
+    if not keys:
+        keys = list(el.keys())
+    keys = sorted(list(keys))
+    maxw = max(len(key) for key in keys) + 1
+    for key in keys:
+        click.echo("  " + frmt_header(key, maxw) + f" {el[key]}")
+
 
 
 if __name__ == "__main__":
