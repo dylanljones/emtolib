@@ -1,271 +1,203 @@
 # -*- coding: utf-8 -*
 # Author: Dylan Jones
 # Date:   2023-07-25
+"""This module defines the command line interface for emtolib."""
 
-import sys
-from argparse import ArgumentParser
+import click
 from pathlib import Path
-from .files import generate_makefile
-from .errors import KGRNError
-from .directory import walk_emtodirs, is_emtodir, EmtoDirectory, diff_emtodirs
+from emtolib.directory import walk_emtodirs, diff_emtodirs
+from emtolib.errors import DOSReadError
+from emtolib.files import generate_makefile
 
 
-def iter_emtodirs(args):
-    try:
-        recursive = args.recursive
-    except AttributeError:
-        recursive = True
-    for argpath in args.paths:
-        try:
-            if is_emtodir(argpath):
-                yield EmtoDirectory(argpath)
-        except KGRNError as e:
-            print(e)
-
-        for folder in walk_emtodirs(argpath, recursive=recursive):
-            yield folder
+def frmt_file(s):
+    return click.style(s, fg="blue")
 
 
-def add_path_arg(parser, nargs="*", default=""):
-    helpstr = "Path to one or more EMTO directories"
-    parser.add_argument("paths", type=str, nargs=nargs, default=[default], help=helpstr)
+def frmt_grep_line(line, pattern):
+    line = line.strip()
+    if pattern in line:
+        line = line.replace(pattern, click.style(pattern, fg="green"))
+    return line
 
 
-def init_argparser():
-    parser = ArgumentParser("emtolib")
-    subparsers = parser.add_subparsers(dest="command")
-
-    # Grep command
-    parser_grep = subparsers.add_parser("grep", help="Grep emto directories")
-    parser_grep.add_argument("pattern", type=str, help="Pattern to grep for")
-    parser_grep.add_argument("-t", "--type", type=str, help="File types")
-    parser_grep.add_argument("-l", "--last", action="store_true", default=False)
-    parser_grep.add_argument("-f", "--first", action="store_true", default=False)
-    add_path_arg(parser_grep)
-
-    # Converged command
-    parser_conv = subparsers.add_parser("conv", help="Grep converged")
-    add_path_arg(parser_conv)
-
-    # Iter command
-    parser_iter = subparsers.add_parser("iter", help="Grep iter")
-    parser_iter.add_argument("-l", "--last", action="store_true", default=False)
-    add_path_arg(parser_iter)
-
-    # Set command
-    parser_set = subparsers.add_parser("set", help="Set variable of EMTO input file")
-    parser_set.add_argument("value", type=str, nargs=1, help="Value to set (key=value)")
-    add_path_arg(parser_set)
-
-    # Set command
-    parser_get = subparsers.add_parser("get", help="Get variable of EMTO input file")
-    parser_get.add_argument("key", type=str, nargs=1, help="Key to get")
-    add_path_arg(parser_get)
-
-    # Check DOS command
-    parser_set = subparsers.add_parser("check_dos", help="Check DOS output")
-    add_path_arg(parser_set)
-
-    # Makefile command
-    parser_make = subparsers.add_parser(
-        "makefile", help="Create makefile to run all EMTO folders"
-    )
-    add_path_arg(parser_make)
-
-    # Diff command
-    parser_diff = subparsers.add_parser("diff", help="Diff multiple EMTO folders")
-    parser_diff.add_argument(
-        "-x", "--exclude", nargs="*", type=str, help="Exclude keys"
-    )
-    parser_diff.add_argument("-k", "--only_keys", action="store_true", default=False)
-    add_path_arg(parser_diff)
-
-    # Clear command
-    parser_clear = subparsers.add_parser(
-        "clear", help="Clear outputs of one or multiple EMTO folders"
-    )
-    parser_clear.add_argument("-a", "--aux", action="store_false", default=True)
-    parser_clear.add_argument("-k", "--keep", action="store_true", default=False)
-    add_path_arg(parser_clear)
-
-    return parser
+def error(s):
+    return click.style(s, fg="red")
 
 
-def handle_grep(args):
-    folders = list(iter_emtodirs(args))
+def _grep(pattern, types, first, last, recursive, paths):
+    s = f"Grep {pattern}"
+    if types:
+        s += f" type={types}"
+    if first:
+        s += " first"
+    if last:
+        s += " last"
+    if paths:
+        s += f" paths={paths}"
+    click.echo(s)
+
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         prn = folder.prn
-        lines = prn.grep(args.pattern).strip().splitlines()
-
+        if not prn:
+            continue
+        lines = prn.grep(pattern).strip().splitlines()
         if not lines:
             continue
-        if args.first or args.last:
-            if args.first:
-                path = f"{str(folder.path) + ':':<{maxw}}"
-                line = lines[0].strip()
-                print(f"{path} {line}")
-            if args.last:
-                path = f"{str(folder.path) + ':':<{maxw}}"
-                line = lines[-1].strip()
-                print(f"{path} {line}")
+        if first or last:
+            path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+            if first:
+                line = frmt_grep_line(lines[0].strip(), pattern)
+                click.echo(f"{path} {line}")
+            if last:
+                line = frmt_grep_line(lines[-1].strip(), pattern)
+                click.echo(f"{path} {line}")
         else:
-            print(f"{folder.path}")
+            click.echo(frmt_file(folder.path))
             for line in lines:
-                print(f"  {line.strip()}")
+                line = frmt_grep_line(line.strip(), pattern)
+                click.echo(f"  {line}")
 
 
-def handle_converged(args):
-    folders = list(iter_emtodirs(args))
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+@click.argument("pattern")
+@click.option("--types", "-t", type=str, default="")
+@click.option("--last", "-l", is_flag=True, default=False)
+@click.option("--first", "-f", is_flag=True, default=False)
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def grep(pattern, types, first, last, recursive, paths):
+    _grep(pattern, types, first, last, recursive, paths)
+
+
+# noinspection PyShadowingBuiltins
+@cli.command()
+@click.option("--types", "-t", type=str, default="")
+@click.option("--last", "-l", is_flag=True, default=False)
+@click.option("--first", "-f", is_flag=True, default=False)
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def iter(types, first, last, recursive, paths):
+    _grep("Iteration", types, first, last, recursive, paths)
+
+
+@cli.command()
+@click.option("--types", "-t", type=str, default="")
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def conv(types, recursive, paths):
+    _grep("Converged", types, first=False, last=True, recursive=recursive, paths=paths)
+
+
+@cli.command()
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("key", type=str, nargs=1)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def get(recursive, key, paths):
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
-        path = f"{str(folder.path) + ':':<{maxw}}"
-        prn = folder.prn
-        line = prn.grep("Converged", ignore_case=False).strip()
-        if line:
-            print(f"{path} {line}")
-        else:
-            print(f"{path} Not converged")
-
-
-def handle_iter(args):
-    folders = list(iter_emtodirs(args))
-    maxw = max(len(str(folder.path)) for folder in folders) + 1
-    for folder in folders:
-        prn = folder.prn
-        lines = prn.grep("Iter", ignore_case=False).strip().splitlines()
-        if not lines:
-            continue
-
-        if args.last:
-            path = f"{str(folder.path) + ':':<{maxw}}"
-            line = lines[-1].strip()
-            print(f"{path} {line}")
-        else:
-            print(f"{folder.path}")
-            for line in lines:
-                print(f"  {line.strip()}")
-
-
-def handle_set(args):
-    folders = list(iter_emtodirs(args))
-    maxw = max(len(str(folder.path)) for folder in folders) + 1
-
-    argvalue = args.value[0]
-    key, value = argvalue.split("=")
-    key = key.strip()
-    value = value.strip()
-    for folder in folders:
-        path = f"{str(folder.path) + ':':<{maxw}}"
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
         dat = folder.dat
-        print(f"{path} Setting {key} to {value}")
-        dat[key] = value
+        click.echo(f"{path} {key}={dat[key]}")
+
+
+# noinspection PyShadowingBuiltins
+@cli.command()
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("value", type=str, nargs=1)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def set(recursive, value, paths):
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    key, val = value.split("=")
+    key, val = key.strip(), val.strip()
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        dat = folder.dat
+        click.echo(f"{path} Setting {key} to {val}")
+        dat[key] = val
         dat.dump()
 
 
-def handle_get(args):
-    key = args.key[0]
-    folders = list(iter_emtodirs(args))
+@cli.command()
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def checkdos(recursive, paths):
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
-        path = f"{str(folder.path) + ':':<{maxw}}"
-        dat = folder.dat
-        print(f"{path} {dat[key]}")
-
-
-def handle_check_dos(args):
-    folders = list(iter_emtodirs(args))
-    maxw = max(len(str(folder.path)) for folder in folders) + 1
-    for folder in folders:
-        path = f"{str(folder.path) + ':':<{maxw}}"
-        dosfile = folder.dos
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        try:
+            dosfile = folder.dos
+        except DOSReadError:
+            click.echo(f"{path} " + error("Could not not read DOS file"))
+            continue
         try:
             energy, dos = dosfile.get_total_dos()
             # Check for unphysical (negative) DOS values
             if (dos < 0).any():
-                print(f"{path} Negative DOS values found")
+                click.echo(f"{path} " + error("Negative DOS values found"))
                 continue
             else:
-                print(f"{path} DOS ok")
+                click.echo(f"{path} " + click.style("DOS ok", fg="green"))
         except AttributeError:
-            print(f"{path} No DOS file found")
+            click.echo(f"{path} " + error("Could not not read DOS file"))
             continue
 
 
-def handle_makefile(args):
-    if len(args.paths) > 1:
-        raise ValueError("Only one root path allowed")
-
-    path = Path(args.paths[0])
+@cli.command()
+@click.argument("path", type=click.Path(), nargs=1, required=False)
+def makefile(path):
+    path = Path(path)
+    click.echo(f"Generating makefile for directories in {path}")
     make = generate_makefile(path)
     make.dump()
 
 
-def handle_diff(args):
-    if len(args.paths) > 1:
-        raise ValueError("Only one root path allowed")
-
-    root = Path(args.paths[0])
-    diffs = diff_emtodirs(root, exclude=args.exclude)
+@cli.command()
+@click.option("--only_keys", "-k", is_flag=True, default=False)
+@click.argument("path", type=click.Path(), nargs=1, required=False)
+def diff(only_keys, path):
+    root = Path(path)
+    diffs = diff_emtodirs(root)
     if not diffs:
-        print("No differences found")
+        click.echo("No differences found")
         return
-
     maxw = max(len(str(path)) for path in diffs.keys()) + 1
-    if args.only_keys:
-        for path, diff in diffs.items():
-            p = f"{str(path) + ':':<{maxw}}"
-            vals = ", ".join(diff.keys())
-            print(f"{p} {vals}")
+    if only_keys:
+        for path, d in diffs.items():
+            p = frmt_file(f"{str(path) + ':':<{maxw}}")
+            vals = ", ".join(d.keys())
+            click.echo(f"{p} {vals}")
     else:
         maxww = [max(len(str(val)) for val in diff.keys()) for diff in diffs.values()]
         maxw = max(maxww) + 1
-        for path, diff in diffs.items():
-            print(f"{path}")
-            for key, val in diff.items():
-                print(f"  {key + '=':<{maxw}} {val}")
+        for p, d in diffs.items():
+            click.echo(frmt_file(p))
+            for key, val in d.items():
+                click.echo(f"  {key + '=':<{maxw}} {val}")
 
 
-def handle_clear(args):
-    if len(args.paths) > 1:
-        raise ValueError("Only one root path allowed")
-
-    folders = list(iter_emtodirs(args))
+@cli.command()
+@click.option("--aux", "-a", is_flag=True, default=False)
+@click.option("--keep", "-k", is_flag=True, default=False)
+@click.argument("path", type=click.Path(), nargs=1, required=False)
+def clear(aux, keep, path):
+    folders = list(walk_emtodirs(path, recursive=True))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
-        p = f"{str(folder.path) + ':':<{maxw}}"
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
         print(f"{p} Clearing folder")
-        folder.clear(aux=args.aux, keep=args.keep)
-
-
-HANDLERS = {
-    "grep": handle_grep,
-    "conv": handle_converged,
-    "iter": handle_iter,
-    "set": handle_set,
-    "get": handle_get,
-    "check_dos": handle_check_dos,
-    "makefile": handle_makefile,
-    "diff": handle_diff,
-    "clear": handle_clear,
-}
-
-
-def cli(argv):
-    # Initialize argument parser and parse arguments
-    parser = init_argparser()
-    if not argv:
-        parser.print_help(sys.stderr)
-        return
-
-    args = parser.parse_args(argv)
-    try:
-        handler = HANDLERS[args.command]
-    except KeyError:
-        raise ValueError(f"No handler found, unknown command: {args.command}")
-
-    handler(args)
+        folder.clear(aux=aux, keep=keep)
 
 
 if __name__ == "__main__":
-    cli(sys.argv[1:])
+    cli()
