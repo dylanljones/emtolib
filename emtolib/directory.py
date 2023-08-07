@@ -7,7 +7,6 @@ import shutil
 from pathlib import Path
 from typing import Union
 from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
-from .errors import KGRNError
 
 logger = logging.getLogger(__name__)
 
@@ -271,22 +270,35 @@ def is_emtodir(path):
         return False
 
 
-def walk_emtodirs(root, recursive=False, missing_dat_ok=False):
-    root = Path(root)
-    iterator = root.rglob("*") if recursive else root.glob("*")
-    for folder in iterator:
-        if not folder.is_dir():
-            continue
+def walk_emtodirs(*paths, recursive=False, missing_dat_ok=False):
+    """Walks through all emto directories in the given paths.
 
-        folder = EmtoDirectory(folder)
-        try:
-            if folder.dat is None and not missing_dat_ok:
-                continue
-        except KGRNError as e:
-            logger.exception(e)
-            continue
-
-        yield folder
+    Parameters
+    ----------
+    paths : str or Path
+        The paths to walk through. Note that the paths can contain an EMTO
+        directory itself.
+    recursive : bool, optional
+        If True, the paths will be walked recursively.
+    missing_dat_ok : bool, optional
+        If True, folders without a dat file will be included. This is equivalent to
+        iterating over all directories.
+    """
+    paths = paths or (".",)  # Use current directory if no path is given
+    for root in paths:
+        root = Path(root)
+        # Check if the given root path is an EMTO directory
+        if root.is_dir():
+            folder = EmtoDirectory(root)
+            if folder.dat is not None or missing_dat_ok:
+                yield folder
+        # Iterate (recursively) over all folders in the given root path
+        iterator = root.rglob("*") if recursive else root.glob("*")
+        for folder in iterator:
+            if folder.is_dir():
+                folder = EmtoDirectory(folder)
+                if folder.dat is not None or missing_dat_ok:
+                    yield folder
 
 
 def diff_emtodirs(root, exclude=None):
