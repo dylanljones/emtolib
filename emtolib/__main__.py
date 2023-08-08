@@ -92,7 +92,21 @@ def iter_command(first, last, recursive, paths):
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
 def conv(recursive, paths):
-    _grep("Converged", first=False, last=True, recursive=recursive, paths=paths)
+    # _grep("Converged", first=False, last=True, recursive=recursive, paths=paths)
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    pattern = "Converged"
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        prn = folder.prn
+        if not prn:
+            continue
+        lines = prn.grep(pattern).strip().splitlines()
+        if lines:
+            line = frmt_grep_line(lines[-1].strip(), pattern)
+            click.echo(f"{path} {line}")
+        else:
+            click.echo(f"{path} {error('Not converged')}")
 
 
 @cli.command(help="Gets the given value from the *.dat files in the given directories.")
