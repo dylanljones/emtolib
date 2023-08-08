@@ -9,6 +9,7 @@ from emtolib.directory import walk_emtodirs, diff_emtodirs
 from emtolib.errors import DOSReadError
 from emtolib.files import generate_makefile
 from emtolib.common import elements
+from emtolib import __version__
 
 
 def frmt_file(s):
@@ -55,12 +56,15 @@ def _grep(pattern, first, last, recursive, paths):
                 click.echo(f"  {line}")
 
 
-@click.group(name="emtolib")
+@click.group(
+    name="emtolib",
+    help=f"emtolib {__version__} - Tools for the EMTO package by L. Vitos et al.",
+)
 def cli():
     pass
 
 
-@cli.command()
+@cli.command(help="Greps for a pattern in the *.prn files in the given directories.")
 @click.argument("pattern")
 @click.option("--last", "-l", is_flag=True, default=False)
 @click.option("--first", "-f", is_flag=True, default=False)
@@ -70,7 +74,10 @@ def grep(pattern, first, last, recursive, paths):
     _grep(pattern, first, last, recursive, paths)
 
 
-@cli.command(name="iter")
+@cli.command(
+    name="iter",
+    help="Greps for the iteration number in the *.prn files in the given directories.",
+)
 @click.option("--last", "-l", is_flag=True, default=False)
 @click.option("--first", "-f", is_flag=True, default=False)
 @click.option("--recursive", "-r", is_flag=True, default=False)
@@ -79,14 +86,14 @@ def iter_command(first, last, recursive, paths):
     _grep("Iteration", first, last, recursive, paths)
 
 
-@cli.command()
+@cli.command(help="Greps for Convergence in the *.prn files in the given directories.")
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
 def conv(recursive, paths):
     _grep("Converged", first=False, last=True, recursive=recursive, paths=paths)
 
 
-@cli.command()
+@cli.command(help="Gets the given value from the *.dat files in the given directories.")
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("key", type=str, nargs=1)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
@@ -99,7 +106,9 @@ def get(recursive, key, paths):
         click.echo(f"{path} {key}={dat[key]}")
 
 
-@cli.command(name="set")
+@cli.command(
+    name="set", help="Sets the given value in the *.dat files in the given directories."
+)
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("value", type=str, nargs=1)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
@@ -116,7 +125,9 @@ def set_cmd(recursive, value, paths):
         dat.dump()
 
 
-@cli.command()
+@cli.command(
+    help="Checks the *.dos files in the given directories for unphysical values."
+)
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
 def checkdos(recursive, paths):
@@ -142,7 +153,9 @@ def checkdos(recursive, paths):
             continue
 
 
-@cli.command()
+@cli.command(
+    help="Generate a makefile for running all simulations in the given directory."
+)
 @click.argument("path", type=click.Path(), nargs=1, required=False)
 def makefile(path):
     path = Path(path)
@@ -151,7 +164,9 @@ def makefile(path):
     make.dump()
 
 
-@cli.command()
+@cli.command(
+    help="Get the difference between the *.dat files in the given directories."
+)
 @click.option("--only_keys", "-k", is_flag=True, default=False)
 @click.argument("path", type=click.Path(), nargs=1, required=False)
 def diff(only_keys, path):
@@ -175,7 +190,7 @@ def diff(only_keys, path):
                 click.echo(f"  {key + '=':<{maxw}} {val}")
 
 
-@cli.command()
+@cli.command(help="Clears the output files in the given directories.")
 @click.option("--aux", "-a", is_flag=True, default=False)
 @click.option("--keep", "-k", is_flag=True, default=False)
 @click.argument("path", type=click.Path(), nargs=1, required=False)
@@ -188,7 +203,7 @@ def clear(aux, keep, path):
         folder.clear(aux=aux, keep=keep)
 
 
-@cli.command()
+@cli.command(help="Sets the header of the *.dat files in the given directories.")
 @click.option("--header", "-h", type=str, default="")
 @click.option("--frmt", "-f", type=str, default="%d %b %y")
 @click.option("--recursive", "-r", is_flag=True, default=False)
@@ -204,7 +219,7 @@ def set_header(header, frmt, recursive, paths):
         dat.dump()
 
 
-@cli.command()
+@cli.command(help="Get information about the given element.")
 @click.argument("symbol", type=click.Path(), nargs=1, required=True)
 @click.argument("keys", type=str, nargs=-1, required=False)
 def element(symbol, keys):

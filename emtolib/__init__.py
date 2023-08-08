@@ -30,3 +30,8 @@ from .errors import (
     DOSReadError,
 )
 from .xarr import update_datasets, load_dataset, load_datasets
+
+try:
+    from ._version import version as __version__
+except ImportError:
+    __version__ = "unknown"
