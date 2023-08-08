@@ -2,6 +2,8 @@
 
 > Python tools for the EMTO package by L. Vitos et al.
 
+Also check the official [pyemto](https://github.com/hpleva/pyemto) project!
+
 
 ## Installation
 
@@ -14,6 +16,7 @@ You can add the following line to your `.bashrc` to create an alias:
 ```bash
 alias emtolib="python3 -m emtolib"
 ```
+:q
 
 
 ## CLI

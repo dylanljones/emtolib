@@ -55,7 +55,7 @@ def _grep(pattern, first, last, recursive, paths):
                 click.echo(f"  {line}")
 
 
-@click.group("emtolib")
+@click.group(name="emtolib")
 def cli():
     pass
 
@@ -70,13 +70,12 @@ def grep(pattern, first, last, recursive, paths):
     _grep(pattern, first, last, recursive, paths)
 
 
-# noinspection PyShadowingBuiltins
-@cli.command()
+@cli.command(name="iter")
 @click.option("--last", "-l", is_flag=True, default=False)
 @click.option("--first", "-f", is_flag=True, default=False)
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
-def iter(first, last, recursive, paths):
+def iter_command(first, last, recursive, paths):
     _grep("Iteration", first, last, recursive, paths)
 
 
@@ -100,12 +99,11 @@ def get(recursive, key, paths):
         click.echo(f"{path} {key}={dat[key]}")
 
 
-# noinspection PyShadowingBuiltins
-@cli.command()
+@cli.command(name="set")
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("value", type=str, nargs=1)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
-def set(recursive, value, paths):
+def set_cmd(recursive, value, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     key, val = value.split("=")
@@ -223,7 +221,6 @@ def element(symbol, keys):
     maxw = max(len(key) for key in keys) + 1
     for key in keys:
         click.echo("  " + frmt_header(key, maxw) + f" {el[key]}")
-
 
 
 if __name__ == "__main__":
