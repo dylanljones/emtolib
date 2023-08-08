@@ -2,9 +2,10 @@
 # Author: Dylan Jones
 # Date:   2023-07-14
 
-import shutil
+import os
 import re
 import json
+import shutil
 import logging
 from pathlib import Path
 from typing import Union
@@ -280,3 +281,19 @@ def dict_diff(d1, d2, exclude=None):
         if exclude is None or key not in exclude:
             diff[key] = (d1.get(key, None), d2.get(key, None))
     return diff
+
+
+class WorkingDir:
+    def __init__(self, path):
+        self._prev = os.getcwd()
+        self.path = path
+
+    def __enter__(self):
+        if self.path != self._prev:
+            if not os.path.exists(self.path):
+                os.makedirs(self.path)
+            os.chdir(self.path)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.path != self._prev:
+            os.chdir(self._prev)

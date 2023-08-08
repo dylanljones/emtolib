@@ -4,11 +4,13 @@
 """This module defines the command line interface for emtolib."""
 
 import click
+import subprocess
 from pathlib import Path
 from emtolib.directory import walk_emtodirs, diff_emtodirs
 from emtolib.errors import DOSReadError
 from emtolib.files import generate_makefile
-from emtolib.common import elements
+from emtolib.common import elements, WorkingDir
+from emtolib.config import CONFIG
 from emtolib import __version__
 
 
@@ -236,6 +238,47 @@ def element(symbol, keys):
     maxw = max(len(key) for key in keys) + 1
     for key in keys:
         click.echo("  " + frmt_header(key, maxw) + f" {el[key]}")
+
+
+@cli.command(help="Create the auxillary directories in the given directories.")
+@click.option("--keep", "-k", is_flag=True, default=False)
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def auxdirs(keep, recursive, paths):
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        click.echo(f"{p} Creating aux directories")
+        folder.mkdirs(keep=keep)
+
+
+@cli.command(help="Batch-run the EMTO simulations in the given directories.")
+@click.option("--executable", "-x", type=str, default="executable")
+@click.option("--recursive", "-r", is_flag=True, default=False)
+@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+def runbatched(executable, recursive, paths):
+    emto_config = CONFIG["emto"]
+    if executable in emto_config:
+        root = Path(emto_config["root"])
+        executable = root / emto_config[executable]
+
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        slurm = folder.slurm
+        if not slurm:
+            click.echo(f"{p} {error('No slurm file found')}")
+            continue
+        # Update slurm body
+        slurm.set_body(executable, folder.dat.path.name)
+        # Run slurm
+        with WorkingDir(folder.path):
+            cmd = f"sbatch {slurm.path.name}"
+            stdout = subprocess.check_output(cmd, shell=True)
+            stdout = stdout.decode("utf-8").replace("\n", "")
+            click.echo(f"{p} {stdout}")
 
 
 if __name__ == "__main__":
