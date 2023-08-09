@@ -2,7 +2,10 @@
 
 > Python tools for the EMTO package by L. Vitos et al.
 
-Also check the official [pyemto](https://github.com/hpleva/pyemto) project!
+This project is a collection of tools to make working with the EMTO package
+easier. It was developed for **my personal** workflow, so it might not be
+useful for you. Also check the official [pyemto project](https://github.com/hpleva/pyemto)
+for a more general purpose tool.
 
 
 ## Installation
@@ -24,22 +27,32 @@ alias emtolib="python3 -m emtolib"
 There are a few commands that can be run from the command line:
 
 ```bash
-usage: emtolib v0.1.0 [-h] {grep,conv,iter,set,get,check_dos,makefile,diff} ...
+usage: emtolib [OPTIONS] COMMAND [ARGS]...
 
-positional arguments:
-  {grep,conv,iter,set,get,check_dos,makefile,diff}
-    grep                Grep emto directories
-    conv                Grep converged
-    iter                Grep iter
-    set                 Set variable of EMTO input file
-    get                 Get variable of EMTO input file
-    check_dos           Check DOS output
-    makefile            Create makefile to run all EMTO folders
-    diff                Diff multiple EMTO folders
-    clear               Clear outputs of one or multiple EMTO folders
+  emtolib 0.1.3.dev7+gbd76050 - Tools for the EMTO package by L. Vitos et
+  al.
 
-options:
-  -h, --help            show this help message and exit
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  atom        Atom configuration
+  auxdirs     Create the auxillary directories in the given directories.
+  checkdos    Checks the *.dos files in the given directories for
+              unphysical...
+  clear       Clears the output files in the given directories.
+  conv        Greps for the convergence message in the *.prn files in the...
+  diff        Get the difference between the *.dat files in the given...
+  element     Get information about the given element.
+  get         Gets the given value from the *.dat files in the given...
+  grep        Greps for a pattern in the *.prn files in the given...
+  iter        Greps for the iteration number in the *.prn files in the
+              given...
+  makefile    Generate a makefile for running all simulations in the given...
+  set         Sets the given value in the *.dat files in the given...
+  set-header  Sets the header of the *.dat files in the given directories.
+  set_paths   Sets the given value in the *.dat files in the given...
+  submit      Batch-run the EMTO simulations in the given directories using...
 ```
 
 #### Examples
@@ -59,70 +72,15 @@ app/
 ...
 ```
 
+We can use the `conv` command to check for convergence in all subdirectories:
 
-- `grep`:
-    Same as the grep command, but with automatic EMTO directory lookup. Example:
+```bash
+> emtolib conv app/Nb
 
-    ```bash
-    emtolib grep "total energy" app/Nb
-    ```
-
-- `conv`:
-    Check if a calculation has converged. Example:
-
-    ```bash
-    emtolib conv app/Nb
-    ```
-
-- `iter`:
-    Check the iterations of one or more calculations.
-
-    ```bash
-    emtolib iter app/Nb
-    ```
-
-- `set`:
-    Set paramters of the EMTO input file(s) for all EMTO directories in a
-    given root directory.
-    ```bash
-    emtolib set NKY=25 app/Nb
-    ```
-
-- `get`:
-    Get paramters of the EMTO input file(s) for all EMTO directories in a
-    given root directory.
-    ```bash
-    emtolib get NKY app/Nb
-    ```
-
-- `check_dos`:
-    Check the DOS of one or more calculations for unphysical values.
-
-    ```bash
-    emtolib check_dos app/Nb
-    ```
-
-- `makefile`:
-    Create a makefile to run all EMTO folders in a given root directory.
-
-    ```bash
-    emtolib makefile app/Nb
-    ```
-
-- `diff`:
-    Diff all EMTO folders in a given root directory.
-
-    ```bash
-    emtolib diff app/Nb
-    ```
-
-- `clear`:
-    Clear all output files of all EMTO folders in a given root directory.
-
-    ```bash
-    emtolib clear app/Nb
-    ```
-
+app/Nb/Nb1:  Converged in 36 iterations at 13:23  09-Aug-23
+app/Nb/Nb2:  Converged in 45 iterations at 13:28  09-Aug-23
+...
+```
 
 ## Usage
 
