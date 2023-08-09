@@ -19,8 +19,8 @@ CONFIG = {
         "root": "~/EMTO",
         "kstr": "kstr/smx",
         "bmdl": "bmdl/mdl",
-        "executable": "kgrn/kgrn_cpa",
-        "executable_dmft": "kgrn_dmft/kgrn_cpa",
+        "emto": "kgrn/kgrn_cpa",
+        "dmft": "kgrn_dmft/kgrn_cpa",
     },
     # General Slurm settings (without user-mail)
     "slurm": {

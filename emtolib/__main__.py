@@ -270,10 +270,10 @@ def auxdirs(keep, recursive, paths):
 
 
 @cli.command(help="Batch-run the EMTO simulations in the given directories.")
-@click.option("--executable", "-x", type=str, default="executable")
+@click.option("--executable", "-x", type=str, default="emto")
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
-def runbatched(executable, recursive, paths):
+def submit(executable, recursive, paths):
     emto_config = CONFIG["emto"]
     if executable in emto_config:
         root = Path(emto_config["root"])
