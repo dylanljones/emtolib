@@ -153,7 +153,14 @@ def conv(recursive, paths):
             line = frmt_grep_line(lines[-1].strip(), pattern)
             click.echo(f"{path} {line}")
         else:
-            click.echo(f"{path} {error('Not converged')}")
+            lines = prn.grep("Iteration").strip().splitlines()
+            if not lines:
+                click.echo(f"{path} {error('Not converged')}")
+            else:
+                line = lines[-1].strip()
+                line = line.replace("KGRN:  Iteration no.", "")
+                iteration = int(line.split()[0])
+                click.echo(f"{path} {error('Not converged')} (Iter: {iteration})")
 
 
 @cli.command()
