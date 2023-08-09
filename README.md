@@ -15,12 +15,6 @@ Run the following command to install `emtolib`:
 python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git
 ```
 
-You can add the following line to your `.bashrc` to create an alias:
-```bash
-alias emtolib="python3 -m emtolib"
-```
-:q
-
 
 ## CLI
 
