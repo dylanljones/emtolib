@@ -110,32 +110,34 @@ def conv(recursive, paths):
 
 
 @cli.command(help="Gets the given value from the *.dat files in the given directories.")
+@click.option("--dmft", "-d", is_flag=True, default=False)
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("key", type=str, nargs=1)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
-def get(recursive, key, paths):
+def get(dmft, recursive, key, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-        dat = folder.dat
+        dat = folder.dmft if dmft else folder.dat
         click.echo(f"{path} {key}={dat[key]}")
 
 
 @cli.command(
     name="set", help="Sets the given value in the *.dat files in the given directories."
 )
+@click.option("--dmft", "-d", is_flag=True, default=False)
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("value", type=str, nargs=1)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
-def set_cmd(recursive, value, paths):
+def set_cmd(dmft, recursive, value, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     key, val = value.split("=")
     key, val = key.strip(), val.strip()
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-        dat = folder.dat
+        dat = folder.dmft if dmft else folder.dat
         click.echo(f"{path} Setting {key} to {val}")
         dat[key] = val
         dat.dump()
