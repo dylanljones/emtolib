@@ -10,6 +10,8 @@ from typing import Union
 from ..common import EmtoFile, parse_params, elements, dict_diff
 from ..errors import KGRNError, KGRNReadError, KGRNWriteError
 from ..ftmplt import Template
+from ..config import update_emto_paths
+
 
 logger = logging.getLogger(__name__)
 
@@ -632,6 +634,13 @@ class KgrnFile(EmtoFile):
         self.dir009 = pot
         self.dir010 = chd
         self.dir011 = tmp
+
+    def update_from_config(
+        self, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp="", conf=None
+    ):
+        update_emto_paths(
+            self, kstr, bmdl, kstr2=kstr2, pot=pot, chd=chd, tmp=tmp, conf=conf
+        )
 
     def param_diff(self, other, exclude=None):
         if isinstance(other, KgrnFile):

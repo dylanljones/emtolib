@@ -4,6 +4,7 @@
 
 import re
 from ..common import EmtoFile
+from ..config import update_slurm_settings
 
 RE_SBATCH = re.compile("#SBATCH --(.*?)=(.*?)$")
 
@@ -127,3 +128,6 @@ class SlurmScript(EmtoFile):
         self.mem = sbatch.get("mem")
 
         self.commands = commands
+
+    def update_from_config(self, executable="", input_file="", conf=None):
+        update_slurm_settings(self, executable, input_file, conf)

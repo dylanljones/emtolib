@@ -137,5 +137,6 @@ def update_slurm_settings(slurm, executable="", input_file="", conf=None):
     slurm.time = conf["slurm"]["time"]
 
     if executable:
-        executable = executable.replace("\\", "/")
-        slurm.set_body(root + "/" + executable, input_file)
+        ex = emto_conf[executable]
+        # executable = executable.replace("\\", "/")
+        slurm.set_body(root + "/" + ex, input_file)
