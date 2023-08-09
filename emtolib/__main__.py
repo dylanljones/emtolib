@@ -270,7 +270,7 @@ def auxdirs(keep, recursive, paths):
 
 
 @cli.command(help="Batch-run the EMTO simulations in the given directories.")
-@click.option("--executable", "-x", type=str, default="emto")
+@click.option("--executable", "-x", type=str, default="")
 @click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("paths", type=click.Path(), nargs=-1, required=False)
 def submit(executable, recursive, paths):
@@ -288,7 +288,9 @@ def submit(executable, recursive, paths):
             click.echo(f"{p} {error('No slurm file found')}")
             continue
         # Update slurm body
-        slurm.set_body(executable, folder.dat.path.name)
+        if executable:
+            slurm.set_body(executable, folder.dat.path.name)
+            slurm.dump()
         # Run slurm
         with WorkingDir(folder.path):
             cmd = f"sbatch {slurm.path.name}"
