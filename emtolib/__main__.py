@@ -117,12 +117,10 @@ def grep_cmd(
 
 
 @cli.command(name="iter")
-@click.option("--last", "-l", is_flag=True, default=False, help="Only show last line")
-@click.option("--first", "-f", is_flag=True, default=False, help="Only show first line")
+@click.option("--all", "-a", is_flag=True, default=False, help="Show all line")
 @multi_path_opts
 def iter_command(
-    first,
-    last,
+    all,  # noqa
     recursive,
     paths,
 ):
@@ -130,7 +128,7 @@ def iter_command(
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    _grep("Iteration", first, last, recursive, paths)
+    _grep("Iteration", False, not all, recursive, paths)
 
 
 @cli.command()
