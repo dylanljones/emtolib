@@ -1,4 +1,4 @@
-# emtolib v0.1.0
+# emtolib
 
 > Python tools for the EMTO package by L. Vitos et al.
 
