@@ -7,11 +7,11 @@ import click
 import functools
 import subprocess
 from pathlib import Path
-from emtolib.directory import walk_emtodirs, diff_emtodirs
+from emtolib.directory import walk_emtodirs, diff_emtodirs, EmtoDirectory
 from emtolib.errors import DOSReadError
 from emtolib.files import generate_makefile
 from emtolib.common import elements, WorkingDir
-from emtolib.config import CONFIG
+from emtolib.config import CONFIG, update_emto_paths
 from emtolib import __version__
 
 
@@ -196,6 +196,32 @@ def set_cmd(dmft, recursive, value, paths):
         dat.dump()
 
 
+@cli.command(name="set_paths")
+@click.option("--kstr", "-k", type=str, help="KSTR file name", default=None)
+@click.option("--bmdl", "-b", type=str, help="BMDL file name", default=None)
+@click.option("--kstr2", "-K", type=str, help="KSTR2 file name", default="")
+@multi_path_opts
+def set_paths(kstr, bmdl, kstr2, recursive, paths):
+    """Sets the given value in the *.dat files in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        dat = folder.dat
+        if dat is None:
+            click.echo(f"{path} {error('No dat file')}")
+        click.echo(f"{path} Setting paths")
+        _kstr = dat.for001 if kstr is None else kstr
+        _bmdl = dat.for004 if bmdl is None else bmdl
+        _kstr2 = dat.for001_2 if kstr2 is None else kstr2
+        click.echo(f"KSTR={_kstr} BMDL={_bmdl} KSTR2={_kstr2}")
+        update_emto_paths(dat, _kstr, _bmdl, _kstr2)
+        dat.dump()
+
+
 @cli.command()
 @multi_path_opts
 def checkdos(recursive, paths):
@@ -268,10 +294,10 @@ def diff(only_keys, path):
                 click.echo(f"  {key + '=':<{maxw}} {val}")
 
 
-@cli.command()
+@cli.command(name="clear")
 @click.option("--aux", "-a", is_flag=True, default=False, help="Also clear aux files.")
 @multi_path_opts
-def clear(aux, recursive, paths):
+def clear_cmd(aux, recursive, paths):
     """Clears the output files in the given directories.
 
     PATHS: One or multiple paths to search for EMTO directories.
@@ -349,7 +375,7 @@ def auxdirs(keep, recursive, paths):
 @click.option("--executable", "-x", type=str, default="", help="The EMTO executable.")
 @multi_path_opts
 def submit(executable, recursive, paths):
-    """Batch-run the EMTO simulations in the given directories.
+    """Batch-run the EMTO simulations in the given directories using SLURM.
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
@@ -376,6 +402,52 @@ def submit(executable, recursive, paths):
             stdout = subprocess.check_output(cmd, shell=True)
             stdout = stdout.decode("utf-8").replace("\n", "")
             click.echo(f"{p} {stdout}")
+
+
+@cli.group(name="atom", help="Atom configuration")
+def atom_group():
+    pass
+
+
+@atom_group.command(name="add")
+@click.option(
+    "--clear", "-c", is_flag=True, default=False, help="Clear existing atoms first."
+)
+@click.argument("symbol", type=str, nargs=1, required=True)
+@click.argument("kwargs", type=str, nargs=-1, required=False)
+@single_path_opts
+def add_atom(clear, symbol, kwargs, path):
+    """Add a new atom to the input file in the given directory
+
+    SYMBOL: The symbol of the atom to add
+    KWARGS: The keyword arguments to pass to the atom constructor. Must be given as
+            'key=value' pairs.
+    PATH: The path to the directory containing the input file
+    """
+    folder = EmtoDirectory(path, missing_ok=True)
+    if not folder.exists():
+        click.echo(error(f"Directory {path} not found"))
+        return
+    dat = folder.dat
+    if not dat:
+        click.echo(error("Input file not found"))
+        return
+    if clear:
+        click.echo(frmt_header(str(folder.path)) + " Clearing existing atoms")
+        dat.atoms.clear()
+
+    if kwargs:
+        kwargs_dict = dict()
+        for kwarg in kwargs:
+            key, value = kwarg.split("=")
+            kwargs_dict[key] = value
+    else:
+        kwargs_dict = dict()
+    vals = ",".join(f"{key}={value}" for key, value in kwargs_dict.items())
+    click.echo(frmt_header(str(folder.path)) + f" Adding atom {symbol} ({vals})")
+    dat.add_atom(symbol, **kwargs_dict)
+    dat.update_mnta()
+    dat.dump()
 
 
 if __name__ == "__main__":
