@@ -217,7 +217,7 @@ class EmtoDirectory:
                 keep = path / ".keep"
                 keep.touch(exist_ok=True)
 
-    def clear(self, slurm=True, prn=True, dos=True, aux=True, fort=True, keep=False):
+    def clear(self, slurm=True, prn=True, dos=True, aux=True, fort=True):
         dat = self.dat
         if slurm:
             for path in self.get_slurm_out_paths():
@@ -237,7 +237,7 @@ class EmtoDirectory:
                     for file in path.iterdir():
                         file.unlink(missing_ok=True)
                     # shutil.rmtree(path)
-            self.mkdirs(keep=keep)
+            # self.mkdirs(keep=keep)
         if fort:
             for file in self.path.iterdir():
                 if file.name.startswith("fort"):

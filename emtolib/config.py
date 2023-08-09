@@ -102,8 +102,14 @@ except (FileNotFoundError, KeyError):
 
 
 def update_emto_paths(
-    dat, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp="", conf=None
+    dat, kstr, bmdl, kstr2="", pot=None, chd=None, tmp=None, conf=None
 ):
+    if pot is None:
+        pot = "pot/"
+    if chd is None:
+        chd = "chd/"
+    if tmp is None:
+        tmp = ""
     if not conf:
         conf = CONFIG
     emto_conf = conf["emto"]

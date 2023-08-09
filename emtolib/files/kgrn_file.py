@@ -557,9 +557,11 @@ class KgrnFile(EmtoFile):
             atoms.append(at)
         return atoms
 
-    def add_atom(self, atom: Union[str, Atom]):
+    def add_atom(self, atom: Union[str, Atom], **kwargs):
         if isinstance(atom, str):
             atom = Atom(atom)
+        if kwargs:
+            atom.update(**kwargs)
         self.atoms.append(atom)
         return atom
 
