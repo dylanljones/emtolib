@@ -156,9 +156,8 @@ def conv(recursive, paths):
                 click.echo(f"{path} {error('Not converged')}")
             else:
                 line = lines[-1].strip()
-                line = line.replace("KGRN:  Iteration no.", "")
-                iteration = int(line.split()[0])
-                click.echo(f"{path} {error('Not converged')} (Iter: {iteration})")
+                line = line.replace("KGRN:  ", "").strip()
+                click.echo(f"{path} {error('Not converged')} ({line})")
 
 
 @cli.command()
