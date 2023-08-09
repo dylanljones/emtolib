@@ -4,6 +4,7 @@
 """This module defines the command line interface for emtolib."""
 
 import click
+import functools
 import subprocess
 from pathlib import Path
 from emtolib.directory import walk_emtodirs, diff_emtodirs
@@ -58,6 +59,29 @@ def _grep(pattern, first, last, recursive, paths):
                 click.echo(f"  {line}")
 
 
+def single_path_opts(func):
+    """Click argument decorator for commands accepting a single input path."""
+
+    @click.argument("path", type=click.Path(), nargs=1, required=False, default=".")
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def multi_path_opts(func):
+    """Click argument decorator for commands accepting multiple input paths."""
+
+    @click.option("--recursive", "-r", is_flag=True, default=False)
+    @click.argument("paths", type=click.Path(), nargs=-1, required=False)
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 @click.group(
     name="emtolib",
     help=f"emtolib {__version__} - Tools for the EMTO package by L. Vitos et al.",
@@ -70,8 +94,7 @@ def cli():
 @click.argument("pattern")
 @click.option("--last", "-l", is_flag=True, default=False)
 @click.option("--first", "-f", is_flag=True, default=False)
-@click.option("--recursive", "-r", is_flag=True, default=False)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def grep(pattern, first, last, recursive, paths):
     _grep(pattern, first, last, recursive, paths)
 
@@ -82,15 +105,13 @@ def grep(pattern, first, last, recursive, paths):
 )
 @click.option("--last", "-l", is_flag=True, default=False)
 @click.option("--first", "-f", is_flag=True, default=False)
-@click.option("--recursive", "-r", is_flag=True, default=False)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def iter_command(first, last, recursive, paths):
     _grep("Iteration", first, last, recursive, paths)
 
 
 @cli.command(help="Greps for Convergence in the *.prn files in the given directories.")
-@click.option("--recursive", "-r", is_flag=True, default=False)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def conv(recursive, paths):
     # _grep("Converged", first=False, last=True, recursive=recursive, paths=paths)
     folders = list(walk_emtodirs(*paths, recursive=recursive))
@@ -111,9 +132,8 @@ def conv(recursive, paths):
 
 @cli.command(help="Gets the given value from the *.dat files in the given directories.")
 @click.option("--dmft", "-d", is_flag=True, default=False)
-@click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("key", type=str, nargs=1)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def get(dmft, recursive, key, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
@@ -127,9 +147,8 @@ def get(dmft, recursive, key, paths):
     name="set", help="Sets the given value in the *.dat files in the given directories."
 )
 @click.option("--dmft", "-d", is_flag=True, default=False)
-@click.option("--recursive", "-r", is_flag=True, default=False)
 @click.argument("value", type=str, nargs=1)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def set_cmd(dmft, recursive, value, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
@@ -146,8 +165,7 @@ def set_cmd(dmft, recursive, value, paths):
 @cli.command(
     help="Checks the *.dos files in the given directories for unphysical values."
 )
-@click.option("--recursive", "-r", is_flag=True, default=False)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def checkdos(recursive, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
@@ -174,7 +192,7 @@ def checkdos(recursive, paths):
 @cli.command(
     help="Generate a makefile for running all simulations in the given directory."
 )
-@click.argument("path", type=click.Path(), nargs=1, required=False)
+@single_path_opts
 def makefile(path):
     path = Path(path)
     click.echo(f"Generating makefile for directories in {path}")
@@ -186,7 +204,7 @@ def makefile(path):
     help="Get the difference between the *.dat files in the given directories."
 )
 @click.option("--only_keys", "-k", is_flag=True, default=False)
-@click.argument("path", type=click.Path(), nargs=1, required=False)
+@single_path_opts
 def diff(only_keys, path):
     root = Path(path)
     diffs = diff_emtodirs(root)
@@ -210,22 +228,20 @@ def diff(only_keys, path):
 
 @cli.command(help="Clears the output files in the given directories.")
 @click.option("--aux", "-a", is_flag=True, default=False)
-@click.option("--keep", "-k", is_flag=True, default=False)
-@click.argument("path", type=click.Path(), nargs=1, required=False)
-def clear(aux, keep, path):
+@single_path_opts
+def clear(aux, path):
     folders = list(walk_emtodirs(path, recursive=True))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
         click.echo(f"{p} Clearing folder")
-        folder.clear(aux=aux, keep=keep)
+        folder.clear(aux=aux)
 
 
 @cli.command(help="Sets the header of the *.dat files in the given directories.")
 @click.option("--header", "-h", type=str, default="")
 @click.option("--frmt", "-f", type=str, default="%d %b %y")
-@click.option("--recursive", "-r", is_flag=True, default=False)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def set_header(header, frmt, recursive, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
@@ -238,7 +254,7 @@ def set_header(header, frmt, recursive, paths):
 
 
 @cli.command(help="Get information about the given element.")
-@click.argument("symbol", type=click.Path(), nargs=1, required=True)
+@click.argument("symbol", type=str, nargs=1, required=True)
 @click.argument("keys", type=str, nargs=-1, required=False)
 def element(symbol, keys):
     try:
@@ -258,8 +274,7 @@ def element(symbol, keys):
 
 @cli.command(help="Create the auxillary directories in the given directories.")
 @click.option("--keep", "-k", is_flag=True, default=False)
-@click.option("--recursive", "-r", is_flag=True, default=False)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def auxdirs(keep, recursive, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
@@ -271,8 +286,7 @@ def auxdirs(keep, recursive, paths):
 
 @cli.command(help="Batch-run the EMTO simulations in the given directories.")
 @click.option("--executable", "-x", type=str, default="")
-@click.option("--recursive", "-r", is_flag=True, default=False)
-@click.argument("paths", type=click.Path(), nargs=-1, required=False)
+@multi_path_opts
 def submit(executable, recursive, paths):
     emto_config = CONFIG["emto"]
     if executable in emto_config:
