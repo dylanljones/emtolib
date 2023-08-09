@@ -53,7 +53,7 @@ def _grep(pattern, first, last, recursive, paths):
                 line = frmt_grep_line(lines[-1].strip(), pattern)
                 click.echo(f"{path} {line}")
         else:
-            click.echo(frmt_file(folder.path))
+            click.echo(frmt_file(str(folder.path)))
             for line in lines:
                 line = frmt_grep_line(line.strip(), pattern)
                 click.echo(f"  {line}")
@@ -73,7 +73,13 @@ def single_path_opts(func):
 def multi_path_opts(func):
     """Click argument decorator for commands accepting multiple input paths."""
 
-    @click.option("--recursive", "-r", is_flag=True, default=False)
+    @click.option(
+        "--recursive",
+        "-r",
+        is_flag=True,
+        default=False,
+        help="Recursively search for EMTO directories.",
+    )
     @click.argument("paths", type=click.Path(), nargs=-1, required=False)
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -90,30 +96,50 @@ def cli():
     pass
 
 
-@cli.command(help="Greps for a pattern in the *.prn files in the given directories.")
+@cli.command(name="grep")
 @click.argument("pattern")
-@click.option("--last", "-l", is_flag=True, default=False)
-@click.option("--first", "-f", is_flag=True, default=False)
+@click.option("--last", "-l", is_flag=True, default=False, help="Only show last line")
+@click.option("--first", "-f", is_flag=True, default=False, help="Only show first line")
 @multi_path_opts
-def grep(pattern, first, last, recursive, paths):
+def grep_cmd(
+    pattern,
+    first,
+    last,
+    recursive,
+    paths,
+):
+    """Greps for a pattern in the *.prn files in the given directories.
+
+    PATTERN: The pattern to search for.
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     _grep(pattern, first, last, recursive, paths)
 
 
-@cli.command(
-    name="iter",
-    help="Greps for the iteration number in the *.prn files in the given directories.",
-)
-@click.option("--last", "-l", is_flag=True, default=False)
-@click.option("--first", "-f", is_flag=True, default=False)
+@cli.command(name="iter")
+@click.option("--last", "-l", is_flag=True, default=False, help="Only show last line")
+@click.option("--first", "-f", is_flag=True, default=False, help="Only show first line")
 @multi_path_opts
-def iter_command(first, last, recursive, paths):
+def iter_command(
+    first,
+    last,
+    recursive,
+    paths,
+):
+    """Greps for the iteration number in the *.prn files in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     _grep("Iteration", first, last, recursive, paths)
 
 
-@cli.command(help="Greps for Convergence in the *.prn files in the given directories.")
+@cli.command()
 @multi_path_opts
 def conv(recursive, paths):
-    # _grep("Converged", first=False, last=True, recursive=recursive, paths=paths)
+    """Greps for the convergence message in the *.prn files in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     pattern = "Converged"
@@ -130,11 +156,16 @@ def conv(recursive, paths):
             click.echo(f"{path} {error('Not converged')}")
 
 
-@cli.command(help="Gets the given value from the *.dat files in the given directories.")
-@click.option("--dmft", "-d", is_flag=True, default=False)
+@cli.command()
+@click.option("--dmft", "-d", is_flag=True, default=False, help="Use DMFT input files.")
 @click.argument("key", type=str, nargs=1)
 @multi_path_opts
 def get(dmft, recursive, key, paths):
+    """Gets the given value from the *.dat files in the given directories.
+
+    KEY: The key of the value to get.
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
@@ -143,13 +174,16 @@ def get(dmft, recursive, key, paths):
         click.echo(f"{path} {key}={dat[key]}")
 
 
-@cli.command(
-    name="set", help="Sets the given value in the *.dat files in the given directories."
-)
-@click.option("--dmft", "-d", is_flag=True, default=False)
+@cli.command(name="set")
+@click.option("--dmft", "-d", is_flag=True, default=False, help="Use DMFT input files.")
 @click.argument("value", type=str, nargs=1)
 @multi_path_opts
 def set_cmd(dmft, recursive, value, paths):
+    """Sets the given value in the *.dat files in the given directories.
+
+    VALUE: The key of the value to set. Must be in the form KEY=VALUE.
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     key, val = value.split("=")
@@ -162,11 +196,13 @@ def set_cmd(dmft, recursive, value, paths):
         dat.dump()
 
 
-@cli.command(
-    help="Checks the *.dos files in the given directories for unphysical values."
-)
+@cli.command()
 @multi_path_opts
 def checkdos(recursive, paths):
+    """Checks the *.dos files in the given directories for unphysical values.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
@@ -189,23 +225,29 @@ def checkdos(recursive, paths):
             continue
 
 
-@cli.command(
-    help="Generate a makefile for running all simulations in the given directory."
-)
+@cli.command()
 @single_path_opts
 def makefile(path):
+    """Generate a makefile for running all simulations in the given directory.
+
+    PATH: The root path containing the EMTO directories.
+    """
     path = Path(path)
     click.echo(f"Generating makefile for directories in {path}")
     make = generate_makefile(path)
     make.dump()
 
 
-@cli.command(
-    help="Get the difference between the *.dat files in the given directories."
+@cli.command()
+@click.option(
+    "--only_keys", "-k", is_flag=True, default=False, help="Only show key as output."
 )
-@click.option("--only_keys", "-k", is_flag=True, default=False)
 @single_path_opts
 def diff(only_keys, path):
+    """Get the difference between the *.dat files in the given directories.
+
+    PATH: The root path containing the EMTO directories.
+    """
     root = Path(path)
     diffs = diff_emtodirs(root)
     if not diffs:
@@ -226,11 +268,15 @@ def diff(only_keys, path):
                 click.echo(f"  {key + '=':<{maxw}} {val}")
 
 
-@cli.command(help="Clears the output files in the given directories.")
-@click.option("--aux", "-a", is_flag=True, default=False)
-@single_path_opts
-def clear(aux, path):
-    folders = list(walk_emtodirs(path, recursive=True))
+@cli.command()
+@click.option("--aux", "-a", is_flag=True, default=False, help="Also clear aux files.")
+@multi_path_opts
+def clear(aux, recursive, paths):
+    """Clears the output files in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -238,11 +284,17 @@ def clear(aux, path):
         folder.clear(aux=aux)
 
 
-@cli.command(help="Sets the header of the *.dat files in the given directories.")
-@click.option("--header", "-h", type=str, default="")
-@click.option("--frmt", "-f", type=str, default="%d %b %y")
+@cli.command()
+@click.option("--header", "-h", type=str, default="", help="The header to set.")
+@click.option(
+    "--frmt", "-f", type=str, default="%d %b %y", help="The date format of the header."
+)
 @multi_path_opts
 def set_header(header, frmt, recursive, paths):
+    """Sets the header of the *.dat files in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
@@ -253,10 +305,15 @@ def set_header(header, frmt, recursive, paths):
         dat.dump()
 
 
-@cli.command(help="Get information about the given element.")
+@cli.command()
 @click.argument("symbol", type=str, nargs=1, required=True)
 @click.argument("keys", type=str, nargs=-1, required=False)
 def element(symbol, keys):
+    """Get information about the given element.
+
+    SYMBOL: The symbol of the element to get information about.
+    KEYS: The keys to get information about. If not given, all keys will be shown.
+    """
     try:
         el = elements[symbol]
     except KeyError:
@@ -272,10 +329,14 @@ def element(symbol, keys):
         click.echo("  " + frmt_header(key, maxw) + f" {el[key]}")
 
 
-@cli.command(help="Create the auxillary directories in the given directories.")
-@click.option("--keep", "-k", is_flag=True, default=False)
+@cli.command()
+@click.option("--keep", "-k", is_flag=True, default=False, help="Create keep files.")
 @multi_path_opts
 def auxdirs(keep, recursive, paths):
+    """Create the auxillary directories in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
@@ -284,10 +345,14 @@ def auxdirs(keep, recursive, paths):
         folder.mkdirs(keep=keep)
 
 
-@cli.command(help="Batch-run the EMTO simulations in the given directories.")
-@click.option("--executable", "-x", type=str, default="")
+@cli.command()
+@click.option("--executable", "-x", type=str, default="", help="The EMTO executable.")
 @multi_path_opts
 def submit(executable, recursive, paths):
+    """Batch-run the EMTO simulations in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
     emto_config = CONFIG["emto"]
     if executable in emto_config:
         root = Path(emto_config["root"])
