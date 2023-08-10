@@ -9,13 +9,13 @@ from ..ftmplt import Template
 
 TEMPLATE = """\
 #LMTO structure constants, number Matsubaras, Temp (Kelvin), Solver, DC, Mixing Sigma, Nomis
-{for001:}
-{nmats:d}
-{temp:g}
+{for007:}
+{nom:d}
+{ttt:g}
 {solver}
 {dc:d}
-{mixsig:g}
-{nomis:d}
+{smix:g}
+{nomi:d}
 """  # noqa
 
 
@@ -26,13 +26,13 @@ class DmftFile(EmtoFile):
 
     def __init__(self, path, **kwargs):
         super().__init__(path)
-        self.for001 = "bcc.dat"
-        self.nmats = 1024
-        self.temp = 400.0
+        self.for007 = "bcc.dat"
+        self.nom = 1024
+        self.ttt = 400.0
         self.solver = "uppsalasolver"
         self.dc = 1
-        self.mixsig = 0.1
-        self.nomis = 80
+        self.smix = 0.1
+        self.nomi = 80
 
         self.load(missing_ok=True)
         if kwargs:

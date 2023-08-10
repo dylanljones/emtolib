@@ -16,11 +16,12 @@ def find_input_file(folder: Union[Path, str]) -> Path:
     folder = Path(folder)
     # get *.dat files
     for file in folder.glob("*.dat"):
-        if file.is_file() and not folder.name.startswith("dmft"):
+        if file.is_file() and not file.name.startswith("dmft"):
             # Check contents of file
-            text = file.read_text().strip()
-            if text.startswith("KGRN"):
-                return file
+            with open(file, "r") as fh:
+                fkey = fh.read(4)
+                if fkey in ("KGRN", "DMFT"):
+                    return file
     raise FileNotFoundError(f"No input file found in {folder}!")
 
 
@@ -177,6 +178,11 @@ class EmtoDirectory:
     def mkdir(self, parents=True, exist_ok=True):
         self.path.mkdir(parents=parents, exist_ok=exist_ok)
 
+    def rmdir(self, missing_ok=True):
+        if not missing_ok and not self.path.exists():
+            raise FileNotFoundError(f"Directory {self.path} does not exist!")
+        shutil.rmtree(self.path)
+
     def iter_dir(self):
         return self.path.iterdir()
 
@@ -257,6 +263,45 @@ class EmtoDirectory:
 
     def __str__(self):
         return str(self.path)
+
+    def convert_dmft_to_kgrn(self, dst=None):
+        assert self.dat.is_dmft
+        folder = self if dst is None else self.copy(dst, exist_ok=False)
+        dat = folder.dat
+
+        # Create dmft.dat file from KGRN-DMFT parameters
+        dmft = DmftFile(folder / "dmft.dat")
+        dmft.for007 = dat.for007
+        dmft.nom = dat.nom
+        dmft.ttt = dat.ttt
+        dmft.solver = dat.solver
+        dmft.dc = dat.dc
+        dmft.smix = dat.smix
+        dmft.nomi = dat.nomi
+
+        # Save files
+        dat.force_dmft(False)
+        dat.dump()
+        dmft.dump()
+
+        return folder
+
+    def convert_kgrn_to_dmft(self, dst=None):
+        assert not self.dat.is_dmft
+        folder = self if dst is None else self.copy(dst, exist_ok=False)
+        dat = folder.dat
+        dmft = folder.dmft
+
+        # Update parameters of KGRN-DMFT from dmft.dat file
+        dat.update(dmft.to_dict())
+
+        # remove dmft.dat file
+        dmft.path.unlink()
+        folder._dmft = None
+
+        # Save *.dat file
+        dat.force_dmft(True)
+        dat.dump()
 
 
 def is_emtodir(path):

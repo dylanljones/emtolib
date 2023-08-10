@@ -179,7 +179,11 @@ class EmtoFile(metaclass=PostInitCaller):
     def __init__(self, path: Union[str, Path] = None):
         if path is None:
             path = ""
-        self.path = Path(path)
+        self._path = Path(path)
+
+    @property
+    def path(self):
+        return self._path
 
     def __post_init__(self):
         """Called after __init__."""
@@ -241,7 +245,7 @@ class EmtoFile(metaclass=PostInitCaller):
         if dst.exists() and not exist_ok:
             raise FileExistsError(f"Destination {dst} already exists!")
         shutil.move(self.path, dst)
-        self.path = dst
+        self._path = dst
 
     def rename(self, name: str, exist_ok: bool = False) -> None:
         """Rename file."""

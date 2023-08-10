@@ -17,10 +17,10 @@ logger = logging.getLogger(__name__)
 
 RE_BAND_SECTION = re.compile(r"Band: (.*?) lines")
 
-TEMPLATE = """\
+TEMPLATE_KGRN = """\
 KGRN {header:>55}
 JOBNAM={jobnam}
-STRT..=  {strt} MSGL.=  {msgl:d} EXPAN.= {expan} FCD..=  {fcd} FUNC..= {func}
+STRT..=  {strt} MSGL.={msgl:3d} EXPAN.= {expan} FCD..=  {fcd} FUNC..= {func}
 FOR001={for001}
 FOR001={for001_2}
 DIR002={dir002}
@@ -32,23 +32,62 @@ DIR010={dir010}
 DIR011={dir011}
 {comment}
 Band: 10 lines
-NITER.={niter:3d} NLIN.={nlin:3d} NPRN.=  {nprn:d} NCPA.={ncpa:3d} NT...={nt:3d} MNTA.={mnta:3d}
+NITER.={niter:3d} NLIN.={nlin:3d} NPRN.={nprn:3d} NCPA.={ncpa:3d} NT...={nt:3d} MNTA.={mnta:3d}
 MODE..= {mode:2} FRC..=  {frc} DOS..=  {dos} OPS..=  {ops} AFM..=  {afm} CRT..=  {crt}
-Lmaxh.={lmaxh:3d} Lmaxt={lmaxt:3d} NFI..={nfi:3d} FIXG.={fixg:3d} SHF..=  {shf:1d} SOFC.=  {sofc}
+Lmaxh.={lmaxh:3d} Lmaxt={lmaxt:3d} NFI..={nfi:3d} FIXG.={fixg:3d} SHF..={shf:3d} SOFC.=  {sofc}
 KMSH...= {kmsh} IBZ..={ibz:3d} NKX..={nkx:3d} NKY..={nky:3d} NKZ..={nkz:3d} FBZ..=  {fbz}
 KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d}
 ZMSH...= {zmsh} NZ1..={nz1:3d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
-DEPTH..= {depth:6.3f} IMAGZ.={imagz:7.5f} EPS...={eps:7.5f} ELIM..= {elim:6.3f}
-AMIX...= {amix:6.3f} EFMIX.= {efmix:6.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
-TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI= {tfermi:6.1f} (K)
-SWS......={sws:10.7f} NSWS.={nsws:3d} DSWS..=   {dsws:4.2f} ALPCPA= {alpcpa:6.4f}
+DEPTH..={depth:7.3f} IMAGZ.={imagz:7.3f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
+AMIX...={amix:7.3f} EFMIX.={efmix:7.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
+TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.4f} (K)
+SWS......={sws:10.6f} NSWS.={nsws:3d} DSWS..={dsws:7.2f} ALPCPA={alpcpa:7.4f}
 Setup: 2 + NQ*NS lines
-EFGS...= {efgs:6.3f} HX....= {hx:6.3f} NX...= {nx:2d} NZ0..= {nz0:2d} STMP..= {stmp}
+EFGS...={efgs:7.3f} HX....={hx:7.3f} NX...={nx:3d} NZ0..={nz0:3d} STMP..= {stmp}
 {atoms}
 Atom:  4 lines + NT*NTA*6 lines
-IEX...= {iex:2d} NP..={np:4d} NES..={nes:3d} NITER={dirac_niter:3d} IWAT.={iwat:3d} NPRNA={nprna:3d}
-VMIX.....=  {vmix:8.6f} RWAT....=  {rwat:8.6f} RMAX....={rmax:10.6f}
-DX.......=  {dx:8.6f} DR1.....=  {dr1:8.6f} TEST....=  {test:8.2E}
+IEX...={iex:3d} NP..= {np:3d} NES..={nes:3d} NITER={dirac_niter:3d} IWAT.={iwat:3d} NPRNA={nprna:3d}
+VMIX.....={vmix:10.6f} RWAT....={rwat:10.6f} RMAX....={rmax:10.6f}
+DX.......={dx:10.6f} DR1.....={dr1:10.6f} TEST....=  {test:8.2E}
+TESTE....=  {teste:8.2E} TESTY...=  {testy:8.2E} TESTV...=  {testv:8.2E}
+{atomconf}
+"""  # noqa
+
+TEMPLATE_DMFT = """\
+DMFT {header:>55}
+JOBNAM={jobnam}
+STRT..=  {strt} MSGL.={msgl:3d} EXPAN.= {expan} FCD..=  {fcd} FUNC..= {func}
+FOR001={for001}
+FOR001={for001_2}
+DIR002={dir002}
+DIR003={dir003}
+FOR004={for004}
+FOR007={for007}
+DIR006={dir006}
+DIR009={dir009}
+DIR010={dir010}
+DIR011={dir011}
+{comment}
+Band: 10 lines
+NITER.={niter:3d} NLIN.={nlin:3d} NPRN.={nprn:3d} NCPA.={ncpa:3d} NT...={nt:3d} MNTA.={mnta:3d}
+MODE..= {mode:2} FRC..=  {frc} DOS..=  {dos} OPS..=  {ops} AFM..=  {afm} CRT..=  {crt}
+Lmaxh.={lmaxh:3d} Lmaxt={lmaxt:3d} NFI..={nfi:3d} FIXG.={fixg:3d} SHF..={shf:3d} SOFC.=  {sofc}
+KMSH...= {kmsh} IBZ..={ibz:3d} NKX..={nkx:3d} NKY..={nky:3d} NKZ..={nkz:3d} FBZ..=  {fbz}
+KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d}
+ZMSH...= {zmsh} NZ1..={nz1:3d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
+DEPTH..={depth:7.3f} IMAGZ.={imagz:7.3f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
+AMIX...={amix:7.3f} EFMIX.={efmix:7.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
+TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.4f} (K)
+SWS......={sws:10.6f} NSWS.={nsws:3d} DSWS..={dsws:7.2f} ALPCPA={alpcpa:7.4f}
+NOM...={nom:4d} NOMI.={nomi:4d} DC.={dc:3d} TTT...={ttt:7.3f} SMIX..={ttt:7.3f}
+SOLVER={solver}
+Setup: 2 + NQ*NS lines
+EFGS...={efgs:7.3f} HX....={hx:7.3f} NX...={nx:3d} NZ0..={nz0:3d} STMP..= {stmp}
+{atoms}
+Atom:  4 lines + NT*NTA*6 lines
+IEX...={iex:3d} NP..= {np:3d} NES..={nes:3d} NITER={dirac_niter:3d} IWAT.={iwat:3d} NPRNA={nprna:3d}
+VMIX.....={vmix:10.6f} RWAT....={rwat:10.6f} RMAX....={rmax:10.6f}
+DX.......={dx:10.6f} DR1.....={dr1:10.6f} TEST....=  {test:8.2E}
 TESTE....=  {teste:8.2E} TESTY...=  {testy:8.2E} TESTV...=  {testv:8.2E}
 {atomconf}
 """  # noqa
@@ -345,6 +384,17 @@ class Atom:
         self.valen[:] = 0
         self.valen[-n:] = 1
 
+    def init_dmft_energies(self, u: list = None, j: list = None):
+        u = [0.0, 0.0, 0.0, 0.0] if u is None else u
+        j = [0.0, 0.0, 0.0, 0.0] if j is None else j
+        assert len(u) == len(j)
+        self.u = list(u)
+        self.j = list(j)
+
+    def clear_dmft_energies(self):
+        self.u.clear()
+        self.j.clear()
+
     def get_u(self, item):
         if isinstance(item, str):
             item = ORBITALS.index(item)
@@ -410,10 +460,10 @@ class KgrnFile(EmtoFile):
     """KGRN input file."""
 
     extension = ".dat"
-    template = Template(TEMPLATE, ignore_case=True)
 
-    def __init__(self, path=None, **kwargs):
+    def __init__(self, path=None, dmft: bool = None, **kwargs):
         super().__init__(path)
+        self._dmft = dmft
 
         self.jobnam = "kgrn"
         self.header = ""  # first line after KGRN (usually date in the format %d %b %y)
@@ -422,6 +472,17 @@ class KgrnFile(EmtoFile):
         self.expan = "S"  # Expansion mode: single (S), double (D) or modified (M)
         self.fcd = "Y"  # Y if full charge density is calculated, N if not
         self.func = "SCA"  # SCA (spherical cell approx), ASA (atomic sphere approx)
+
+        # Input/Output directories
+        self.for001 = ""
+        self.for001_2 = ""
+        self.for004 = ""
+        self.dir002 = "pot/"
+        self.dir003 = "pot/"
+        self.dir006 = ""
+        self.dir009 = "pot/"
+        self.dir010 = "chd/"
+        self.dir011 = ""
 
         # Line after path variables, eg 'Self-consistent KKR calculation for {jobnam}'
         self.comment = "Self-consistent KKR calculation for {jobnam}"
@@ -500,22 +561,33 @@ class KgrnFile(EmtoFile):
         # Convergence criteria in the Poisson equation and the orbital Dirac equations
         self.test = self.teste = self.testy = self.testv = 1e-12
 
-        # Input/Output directories
-        self.for001 = ""
-        self.for001_2 = ""
-        self.for004 = ""
-        self.dir002 = "pot/"
-        self.dir003 = "pot/"
-        self.dir006 = ""
-        self.dir009 = "pot/"
-        self.dir010 = "chd/"
-        self.dir011 = ""
-
+        # Atoms
         self.atoms = list()
+
+        # Optional DMFT parameters
+        self.for007 = ""
+        self.nom = 1024
+        self.nomi = 40
+        self.dc = 1
+        self.ttt = 400.0
+        self.smix = 0.5
+        self.solver = "uppsalasolver"
 
         self.load(missing_ok=True)
         if kwargs:
             self.update(kwargs)
+
+    @property
+    def is_dmft(self):
+        return self._dmft
+
+    def init(self, jobname, header="", **kwargs):
+        self.jobnam = jobname
+        self.set_header(header)
+        self.update(kwargs)
+
+    def force_dmft(self, dmft=True):
+        self._dmft = dmft
 
     def aux_dirs(self):
         d = self.dir002, self.dir003, self.dir006, self.dir009, self.dir010, self.dir011
@@ -593,6 +665,14 @@ class KgrnFile(EmtoFile):
 
     def update_mnta(self):
         self.mnta = max(atom.ita for atom in self.atoms)
+
+    def init_dmft_energies(self, u=None, j=None):
+        for atom in self.atoms:
+            atom.init_dmft_energies(u=u, j=j)
+
+    def clear_dmft_energies(self):
+        for atom in self.atoms:
+            atom.clear_dmft_energies()
 
     def set_kstr_path(self, path):
         assert path.endswith(".tfh")
@@ -709,8 +789,23 @@ class KgrnFile(EmtoFile):
     # ----------------------------------------------------------------------------------
 
     def loads(self, text):
+        # get template by file key (first 4 characters, KGRN or DMFT)
+        fkey = text[:4]
+        if fkey == "KGRN":
+            tmplt_str = TEMPLATE_KGRN
+            if self._dmft is None:
+                self._dmft = False
+        elif fkey == "DMFT":
+            tmplt_str = TEMPLATE_DMFT
+            if self._dmft is None:
+                self._dmft = True
+        else:
+            raise KGRNReadError(f"Unknown file format: Invalid key '{fkey}'")
+        template = Template(tmplt_str, ignore_case=True)
+
+        # Parse file contents
         try:
-            data = self.template.parse(text.replace(".d", ".e"))
+            data = template.parse(text.replace(".d", ".e"))
         except Exception as e:
             raise KGRNReadError(f"Failed to parse file: {self.path}") from e
 
@@ -728,6 +823,13 @@ class KgrnFile(EmtoFile):
         return self
 
     def dumps(self):
+        dmft = self._dmft
+
+        # get template by file key (first 4 characters, KGRN or DMFT)
+        tmplt_str = TEMPLATE_DMFT if dmft else TEMPLATE_KGRN
+        template = Template(tmplt_str, ignore_case=True)
+
+        # Check if input is consistent and convert to dict
         try:
             self.check()
         except KGRNError as e:
@@ -738,7 +840,7 @@ class KgrnFile(EmtoFile):
         params["header"] = self.header.format(**params)
         params["comment"] = self.comment.format(**params)
 
-        # format atom info
+        # Format atom info
         atomstr = "Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT"
         if not self.atoms or self.atoms[0].fix:
             atomstr += " Fix"
@@ -750,6 +852,6 @@ class KgrnFile(EmtoFile):
         data["atoms"] = atomstr
         data["atomconf"] = atomconf
         try:
-            return self.template.format(data).replace(".0e", ".d")
+            return template.format(data).replace(".0e", ".d")
         except Exception as e:
             raise KGRNWriteError(f"Failed to format file: {self.path}") from e
