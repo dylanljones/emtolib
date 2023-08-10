@@ -16,10 +16,10 @@ from emtolib import __version__
 
 
 def frmt_file(s):
-    return click.style(s, fg="blue")
+    return click.style(s, fg="magenta")
 
 
-def frmt_header(s, maxw=0, color="blue"):
+def frmt_header(s, maxw=0, color="magenta"):
     return click.style(f"{str(s) + ':':<{maxw}}", fg=color)
 
 
