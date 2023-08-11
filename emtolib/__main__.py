@@ -289,12 +289,12 @@ def diff(only_keys, recursive, paths):
             vals = ", ".join(d.keys())
             click.echo(f"{p} {vals}")
     else:
-        maxww = [max(len(str(val)) for val in diff.keys()) for diff in diffs.values()]
+        maxww = [max(len(str(val)) for val in d.keys()) for d in diffs.values()]
         maxw = max(maxww) + 1
         for p, d in diffs.items():
             click.echo(frmt_file(p))
-            for key, val in d.items():
-                click.echo(f"  {key + '=':<{maxw}} {val}")
+            for key in sorted(list(d.keys())):
+                click.echo(f"  {key + '=':<{maxw}} {d[key]}")
 
 
 @cli.command(name="clear")
