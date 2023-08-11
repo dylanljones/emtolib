@@ -146,10 +146,10 @@ def iter_command(
         if not all:
             maxw = max(len(str(folder.path)) for folder in folders) + 1
             path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-            it = iterations[-1]
             if not iterations:
                 click.echo(f"{path} {error('No iterations!')}")
             else:
+                it = iterations[-1]
                 click.echo(f"{path} {ITER_TMPLT.format(**it)}")
         else:
             click.echo(frmt_file(str(folder.path)))
