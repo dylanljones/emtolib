@@ -84,6 +84,11 @@ def update():
     os.system(cmd)
 
 
+def get_emtodirs(*paths, recursive=False):
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    return sorted(folders, key=lambda f: f.path.name)
+
+
 @cli.command(name="grep")
 @click.argument("pattern")
 @click.option("--last", "-l", is_flag=True, default=False, help="Only show last line")
@@ -101,17 +106,18 @@ def grep_cmd(
     PATTERN: The pattern to search for.
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
         prn = folder.prn
         if not prn:
+            click.echo(f"{path} {error('No *.prn file found!')}")
             continue
         lines = prn.grep(pattern).strip().splitlines()
         if not lines:
             continue
         if first or last:
-            path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
             if first:
                 line = frmt_grep_line(lines[0].strip(), pattern)
                 click.echo(f"{path} {line}")
@@ -137,15 +143,16 @@ def iter_command(
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
         prn = folder.prn
         if not prn:
+            click.echo(f"{path} {error('No *.prn file found!')}")
             continue
         iterations = prn.get_iterations()
         if not all:
-            maxw = max(len(str(folder.path)) for folder in folders) + 1
-            path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
             if not iterations:
                 click.echo(f"{path} {error('No iterations!')}")
             else:
@@ -167,13 +174,14 @@ def conv(recursive, paths):
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     pattern = "Converged"
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
         prn = folder.prn
         if not prn:
+            click.echo(f"{path} {error('No *.prn file found!')}")
             continue
         lines = prn.grep(pattern).strip().splitlines()
         if lines:
@@ -200,7 +208,7 @@ def hopfield(mean, sum, recursive, paths):  # noqa
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -243,7 +251,7 @@ def get(dmft, recursive, key, paths):
     KEY: The key of the value to get.
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -261,7 +269,7 @@ def set_cmd(dmft, recursive, value, paths):
     VALUE: The key of the value to set. Must be in the form KEY=VALUE.
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     key, val = value.split("=")
     key, val = key.strip(), val.strip()
@@ -283,7 +291,7 @@ def set_paths(kstr, bmdl, kstr2, recursive, paths):
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -306,7 +314,7 @@ def checkdos(recursive, paths):
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -365,7 +373,7 @@ def clear_cmd(aux, recursive, paths):
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -384,7 +392,7 @@ def set_header(header, frmt, recursive, paths):
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -426,7 +434,7 @@ def auxdirs(keep, recursive, paths):
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -447,7 +455,7 @@ def submit(executable, recursive, paths):
         root = Path(emto_config["root"])
         executable = root / emto_config[executable]
 
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
         p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
@@ -514,4 +522,4 @@ def add_atom(clear, symbol, kwargs, path):
 
 
 if __name__ == "__main__":
-    cli()
+    cli(["conv", "..\\app\\Ti-V\\sws"])
