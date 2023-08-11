@@ -143,17 +143,21 @@ def iter_command(
         if not prn:
             continue
         iterations = prn.get_iterations()
-        if not iterations:
-            continue
         if not all:
             maxw = max(len(str(folder.path)) for folder in folders) + 1
             path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
             it = iterations[-1]
-            click.echo(f"{path} {tmplt.format(**it)}")
+            if not iterations:
+                click.echo(f"{path} {error('No iterations!')}")
+            else:
+                click.echo(f"{path} {tmplt.format(**it)}")
         else:
             click.echo(frmt_file(str(folder.path)))
-            for it in iterations:
-                click.echo(f"  {tmplt.format(**it)}")
+            if not iterations:
+                click.echo(f"  {error('No iterations!')}")
+            else:
+                for it in iterations:
+                    click.echo(f"  {tmplt.format(**it)}")
 
 
 @cli.command()
@@ -166,6 +170,7 @@ def conv(recursive, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     pattern = "Converged"
+    tmplt = "Iteration: {iter:>3}  Etot: {etot:13.6f}  erren: {erren:10.8f}"
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
         prn = folder.prn
@@ -176,13 +181,12 @@ def conv(recursive, paths):
             line = frmt_grep_line(lines[-1].strip(), pattern)
             click.echo(f"{path} {line}")
         else:
-            lines = prn.grep("Iteration").strip().splitlines()
-            if not lines:
+            iterations = prn.get_iterations()
+            if not iterations:
                 click.echo(f"{path} {error('Not converged')}")
             else:
-                line = lines[-1].strip()
-                line = line.replace("KGRN:  ", "").strip()
-                click.echo(f"{path} {error('Not converged')} ({line})")
+                it = iterations[-1]
+                click.echo(f"{path} {error('Not converged')} ({tmplt.format(**it)})")
 
 
 @cli.command()
