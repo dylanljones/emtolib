@@ -7,6 +7,7 @@ import click
 import functools
 import subprocess
 from pathlib import Path
+import numpy as np
 from emtolib.directory import walk_emtodirs, diff_emtodirs, EmtoDirectory
 from emtolib.errors import DOSReadError
 from emtolib.common import elements, WorkingDir
@@ -187,6 +188,43 @@ def conv(recursive, paths):
                 it = iterations[-1]
                 line = ITER_TMPLT.format(**it)
                 click.echo(f"{path} {error('Not converged')} ({line})")
+
+
+@cli.command()
+@click.option(
+    "--mean", "-m", is_flag=True, default=False, help="Show sublattice Hopfields (mean)"
+)
+@click.option("--sum", "-s", is_flag=True, default=False, help="Sum over spins")
+@multi_path_opts
+def hopfield(mean, sum, recursive, paths):  # noqa
+    """Extracts the Hopfield values from the *.prn files in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        prn = folder.prn
+        if prn is None:
+            click.echo(f"{path} {error('No *.prn file found')}")
+            continue
+        if mean:
+            if folder.dat is None:
+                click.echo(f"{path} {error('No *.dat file found')}")
+                continue
+            eta = prn.get_sublat_hopfields(folder.dat)
+            if sum:
+                eta = eta.sum(axis=1)
+            click.echo(f"{path} {eta}")
+        else:
+            click.echo(frmt_file(str(folder.path)))
+            hopfields = prn.extract_hopfields()
+            for atom, eta in hopfields:
+                eta = np.array(eta)
+                if sum:
+                    eta = eta.sum(axis=0)
+                click.echo(f"  {atom:<3}  {eta}")
 
 
 @cli.command()
@@ -470,4 +508,4 @@ def add_atom(clear, symbol, kwargs, path):
 
 
 if __name__ == "__main__":
-    cli()
+    cli(["hopfield", "-r", "..\\app\\Ti-V\\nl3", "-ms"])
