@@ -40,7 +40,7 @@ KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d}
 ZMSH...= {zmsh} NZ1..={nz1:3d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
 DEPTH..={depth:7.3f} IMAGZ.={imagz:7.3f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
 AMIX...={amix:7.3f} EFMIX.={efmix:7.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
-TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.4f} (K)
+TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.3f} (K)
 SWS......={sws:10.6f} NSWS.={nsws:3d} DSWS..={dsws:7.2f} ALPCPA={alpcpa:7.4f}
 Setup: 2 + NQ*NS lines
 EFGS...={efgs:7.3f} HX....={hx:7.3f} NX...={nx:3d} NZ0..={nz0:3d} STMP..= {stmp}
@@ -77,7 +77,7 @@ KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d}
 ZMSH...= {zmsh} NZ1..={nz1:3d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
 DEPTH..={depth:7.3f} IMAGZ.={imagz:7.3f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
 AMIX...={amix:7.3f} EFMIX.={efmix:7.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
-TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.4f} (K)
+TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.3f} (K)
 SWS......={sws:10.6f} NSWS.={nsws:3d} DSWS..={dsws:7.2f} ALPCPA={alpcpa:7.4f}
 NOM...={nom:4d} NOMI.={nomi:4d} DC.={dc:3d} TTT...={ttt:7.3f} SMIX..={smix:7.3f}
 SOLVER={solver}
