@@ -79,10 +79,9 @@ def update():
 
     cmd = r"python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git"
 
-    click.echo("Updating emtolib:")
-    click.echo(f"Running command {cmd}")
+    click.echo(f"Updating emtolib: Running command '{cmd}'")
+    click.echo()
     os.system(cmd)
-    click.echo("Done.")
 
 
 @cli.command(name="grep")
@@ -515,4 +514,4 @@ def add_atom(clear, symbol, kwargs, path):
 
 
 if __name__ == "__main__":
-    cli(["hopfield", "-r", "..\\app\\Ti-V\\nl3", "-ms"])
+    cli()
