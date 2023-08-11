@@ -79,7 +79,7 @@ DEPTH..={depth:7.3f} IMAGZ.={imagz:7.3f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
 AMIX...={amix:7.3f} EFMIX.={efmix:7.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
 TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.4f} (K)
 SWS......={sws:10.6f} NSWS.={nsws:3d} DSWS..={dsws:7.2f} ALPCPA={alpcpa:7.4f}
-NOM...={nom:4d} NOMI.={nomi:4d} DC.={dc:3d} TTT...={ttt:7.3f} SMIX..={ttt:7.3f}
+NOM...={nom:4d} NOMI.={nomi:4d} DC.={dc:3d} TTT...={ttt:7.3f} SMIX..={smix:7.3f}
 SOLVER={solver}
 Setup: 2 + NQ*NS lines
 EFGS...={efgs:7.3f} HX....={hx:7.3f} NX...={nx:3d} NZ0..={nz0:3d} STMP..= {stmp}
