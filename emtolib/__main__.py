@@ -71,6 +71,18 @@ def cli():
     pass
 
 
+@cli.command(name="update")
+def update():
+    import os
+
+    cmd = r"python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git"
+
+    click.echo("Updating emtolib:")
+    click.echo(f"Running command {cmd}")
+    os.system(cmd)
+    click.echo("Done.")
+
+
 @cli.command(name="grep")
 @click.argument("pattern")
 @click.option("--last", "-l", is_flag=True, default=False, help="Only show last line")
