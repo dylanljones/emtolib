@@ -14,6 +14,9 @@ RE_SECTION = re.compile(r"^ (?P<key>[A-Z]+):")
 RE_ITER_LINE = re.compile(
     r"^\s*KGRN:\s+Iteration no\.(?P<iter>.*) Etot = (?P<etot>.*) erren = (?P<erren>.*)$"
 )
+RE_ETOT = re.compile(r"^\s*Total energy\s*(?P<value>.*)$")
+RE_ETOT_OKA = re.compile(r"^\s*Total energy\+OKA\s*(?P<value>.*)$")
+RE_ETOT_EWALD = re.compile(r"^\s*Total\+Ewald\s*(?P<value>.*)$")
 
 
 def extract_hopfields(prn, unit="ev/aa^2"):
@@ -189,6 +192,53 @@ class PrnFile(EmtoFile):
         else:
             return re.findall(pattern, self.text)
 
+    def iter_sections(self):
+        """Iterate over the sections of the form ' KEY:' in the file.
+
+        Yields
+        ------
+        key : str
+            The key of the section (name of subroutine that wrote the section).
+            The keys are *not* unique!
+        lines : list of str
+            The lines of the section.
+        """
+        lines = self.text.splitlines(keepends=False)
+        i = 0
+        start = -1
+        last_key = ""
+        while i < len(lines):
+            line = lines[i]
+            match = RE_SECTION.match(line)
+            if match:
+                key = match.group("key")
+                if start >= 0:
+                    end = i - 1
+                    sec_lines = [line for line in lines[start:end] if line]
+                    yield last_key, sec_lines
+                last_key = key
+                start = i
+            i += 1
+        sec_lines = [line for line in lines[start:] if line]
+        yield last_key, sec_lines
+
+    def get_sections(self, key):
+        """Get all sections with the given key.
+
+        Parameters
+        ----------
+        key : str
+            The key of the sections (name of subroutine that wrote the section).
+
+        Yields
+        ------
+        lines : list of str
+            The lines of the sections with the given key.
+        """
+        for sec_key, sec_lines in self.iter_sections():
+            if sec_key.lower() == key.lower():
+                yield sec_lines
+
     def get_iterations(self):
         iterations = list()
         for line in self.search_line("Iteration"):
@@ -289,32 +339,29 @@ class PrnFile(EmtoFile):
                 panels[atom] = data
         return panels
 
-    def iter_sections(self):
-        """Iterate over the sections of the form ' KEY:' in the file.
-
-        Yields
-        ------
-        key : str
-            The key of the section (name of subroutine that wrote the section).
-            The keys are *not* unique!
-        lines : list of str
-            The lines of the section.
-        """
-        lines = self.text.splitlines(keepends=False)
-        i = 0
-        start = -1
-        last_key = ""
-        while i < len(lines):
-            line = lines[i]
-            match = RE_SECTION.match(line)
+    def get_total_energy(self):
+        energies = dict()
+        for line in self.search_line("Total"):
+            match = RE_ETOT_EWALD.match(line)
             if match:
-                key = match.group("key")
-                if start >= 0:
-                    end = i - 1
-                    sec_lines = [line for line in lines[start:end] if line]
-                    yield last_key, sec_lines
-                last_key = key
-                start = i
-            i += 1
-        sec_lines = [line for line in lines[start:] if line]
-        yield last_key, sec_lines
+                try:
+                    energies["etot+ewald"] = float(match.group("value"))
+                except ValueError:
+                    pass
+                continue
+            match = RE_ETOT_OKA.match(line)
+            if match:
+                try:
+                    energies["etot+oka"] = float(match.group("value"))
+                except ValueError:
+                    pass
+                continue
+            match = RE_ETOT.match(line)
+            if match:
+                try:
+                    energies["etot"] = float(match.group("value"))
+                except ValueError:
+                    pass
+                continue
+
+        return energies
