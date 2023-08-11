@@ -213,13 +213,20 @@ def hopfield(mean, sum, recursive, paths):  # noqa
             if folder.dat is None:
                 click.echo(f"{path} {error('No *.dat file found')}")
                 continue
-            eta = prn.get_sublat_hopfields(folder.dat)
+            try:
+                eta = prn.get_sublat_hopfields(folder.dat)
+            except AssertionError:
+                click.echo(f"{path} {error('No Hopfields found')}")
+                continue
             if sum:
                 eta = eta.sum(axis=1)
             click.echo(f"{path} {eta}")
         else:
             click.echo(frmt_file(str(folder.path)))
             hopfields = prn.extract_hopfields()
+            if not hopfields:
+                click.echo(f"  {error('No Hopfields found')}")
+                continue
             for atom, eta in hopfields:
                 eta = np.array(eta)
                 if sum:
