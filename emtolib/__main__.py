@@ -14,6 +14,8 @@ from emtolib.common import elements, WorkingDir
 from emtolib.config import CONFIG, update_emto_paths
 from emtolib import __version__
 
+ITER_TMPLT = "Iteration: {iter:>3} Etot: {etot:11.6f} erren: {erren:10.8f}"
+
 
 def frmt_file(s):
     return click.style(str(s), fg="magenta")
@@ -137,7 +139,6 @@ def iter_command(
     PATHS: One or multiple paths to search for EMTO directories.
     """
     folders = list(walk_emtodirs(*paths, recursive=recursive))
-    tmplt = "Iteration: {iter:>3}  Etot: {etot:13.6f}  erren: {erren:10.8f}"
     for folder in folders:
         prn = folder.prn
         if not prn:
@@ -150,14 +151,14 @@ def iter_command(
             if not iterations:
                 click.echo(f"{path} {error('No iterations!')}")
             else:
-                click.echo(f"{path} {tmplt.format(**it)}")
+                click.echo(f"{path} {ITER_TMPLT.format(**it)}")
         else:
             click.echo(frmt_file(str(folder.path)))
             if not iterations:
                 click.echo(f"  {error('No iterations!')}")
             else:
                 for it in iterations:
-                    click.echo(f"  {tmplt.format(**it)}")
+                    click.echo(f"  {ITER_TMPLT.format(**it)}")
 
 
 @cli.command()
@@ -170,7 +171,6 @@ def conv(recursive, paths):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     pattern = "Converged"
-    tmplt = "Iteration: {iter:>3}  Etot: {etot:13.6f}  erren: {erren:10.8f}"
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
         prn = folder.prn
@@ -186,7 +186,8 @@ def conv(recursive, paths):
                 click.echo(f"{path} {error('Not converged')}")
             else:
                 it = iterations[-1]
-                click.echo(f"{path} {error('Not converged')} ({tmplt.format(**it)})")
+                line = ITER_TMPLT.format(**it)
+                click.echo(f"{path} {error('Not converged')} ({line})")
 
 
 @cli.command()
