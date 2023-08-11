@@ -9,7 +9,6 @@ import subprocess
 from pathlib import Path
 from emtolib.directory import walk_emtodirs, diff_emtodirs, EmtoDirectory
 from emtolib.errors import DOSReadError
-from emtolib.files import generate_makefile
 from emtolib.common import elements, WorkingDir
 from emtolib.config import CONFIG, update_emto_paths
 from emtolib import __version__
@@ -283,19 +282,6 @@ def checkdos(recursive, paths):
         except AttributeError:
             click.echo(f"{path} " + error("Could not not read DOS file"))
             continue
-
-
-@cli.command()
-@single_path_opts
-def makefile(path):
-    """Generate a makefile for running all simulations in the given directory.
-
-    PATH: The root path containing the EMTO directories.
-    """
-    path = Path(path)
-    click.echo(f"Generating makefile for directories in {path}")
-    make = generate_makefile(path)
-    make.dump()
 
 
 @cli.command()
