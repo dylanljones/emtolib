@@ -6,6 +6,15 @@ import re
 import numpy as np
 from ..common import EmtoFile, parse_params
 
+RE_ATOM = re.compile("^Atom:(?P<atom>.*)")
+RE_MAG = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)")
+RE_MAG_ITER = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)$")
+RE_DOS_EF = re.compile(r"DOS\(EF\)\s=\s+(?P<value>.*)")
+RE_SECTION = re.compile(r"^ (?P<key>[A-Z]+):")
+RE_ITER_LINE = re.compile(
+    r"^\s*KGRN:\s+Iteration no\.(?P<iter>.*) Etot = (?P<etot>.*) erren = (?P<erren>.*)$"
+)
+
 
 def extract_hopfields(prn, unit="ev/aa^2"):
     """Extracts the Hopfield parameters in the given unit from the given PRN file.
@@ -143,12 +152,6 @@ class PrnFile(EmtoFile):
     autoload = True
     missing_ok = False
 
-    RE_ATOM = re.compile("^Atom:(?P<atom>.*)")
-    RE_MAG = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)")
-    RE_MAG_ITER = re.compile(r"^\s?Magn\. mom\. =\s+(-?\d+\.\d+)$")
-    RE_DOS_EF = re.compile(r"DOS\(EF\)\s=\s+(?P<value>.*)")
-    RE_SECTION = re.compile(r"^ (?P<key>[A-Z]+):")
-
     def __init__(self, path):
         super().__init__(path)
         self.text = ""
@@ -186,6 +189,19 @@ class PrnFile(EmtoFile):
         else:
             return re.findall(pattern, self.text)
 
+    def get_iterations(self):
+        iterations = list()
+        for line in self.search_line("Iteration"):
+            match = RE_ITER_LINE.match(line)
+            if match:
+                it = {
+                    "iter": int(match.group("iter")),
+                    "etot": float(match.group("etot")),
+                    "erren": float(match.group("erren")),
+                }
+                iterations.append(it)
+        return iterations
+
     def extract_hopfields(self, unit="ev/aa^2"):
         return extract_hopfields(self, unit)
 
@@ -220,18 +236,18 @@ class PrnFile(EmtoFile):
         mag_pre, mag_post, mag_iter = list(), list(), list()
         for line in lines:
             line = line.strip()
-            match = self.RE_ATOM.match(line)
+            match = RE_ATOM.match(line)
             if match:
                 current_atom = match["atom"]
 
-            match = self.RE_MAG.match(line)
+            match = RE_MAG.match(line)
             if match:
                 m1, m2 = float(match.group(1)), float(match.group(2))
                 if pre:
                     mag_pre.append((current_atom, m1, m2))
                 else:
                     mag_post.append((current_atom, m1, m2))
-            match = self.RE_MAG_ITER.match(line)
+            match = RE_MAG_ITER.match(line)
             if match:
                 pre = False
                 mag_iter.append((current_atom, float(match.group(1))))
@@ -251,7 +267,7 @@ class PrnFile(EmtoFile):
         return [(at, m) for at, m, _ in moments]
 
     def get_dos_ef(self):
-        match = self.RE_DOS_EF.search(self.text)
+        match = RE_DOS_EF.search(self.text)
         if match:
             return float(match.group("value"))
         return None
@@ -290,7 +306,7 @@ class PrnFile(EmtoFile):
         last_key = ""
         while i < len(lines):
             line = lines[i]
-            match = self.RE_SECTION.match(line)
+            match = RE_SECTION.match(line)
             if match:
                 key = match.group("key")
                 if start >= 0:

@@ -34,31 +34,6 @@ def error(s):
     return click.style(s, fg="red")
 
 
-def _grep(pattern, first, last, recursive, paths):
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
-    maxw = max(len(str(folder.path)) for folder in folders) + 1
-    for folder in folders:
-        prn = folder.prn
-        if not prn:
-            continue
-        lines = prn.grep(pattern).strip().splitlines()
-        if not lines:
-            continue
-        if first or last:
-            path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-            if first:
-                line = frmt_grep_line(lines[0].strip(), pattern)
-                click.echo(f"{path} {line}")
-            if last:
-                line = frmt_grep_line(lines[-1].strip(), pattern)
-                click.echo(f"{path} {line}")
-        else:
-            click.echo(frmt_file(str(folder.path)))
-            for line in lines:
-                line = frmt_grep_line(line.strip(), pattern)
-                click.echo(f"  {line}")
-
-
 def single_path_opts(func):
     """Click argument decorator for commands accepting a single input path."""
 
@@ -113,7 +88,28 @@ def grep_cmd(
     PATTERN: The pattern to search for.
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    _grep(pattern, first, last, recursive, paths)
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        prn = folder.prn
+        if not prn:
+            continue
+        lines = prn.grep(pattern).strip().splitlines()
+        if not lines:
+            continue
+        if first or last:
+            path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+            if first:
+                line = frmt_grep_line(lines[0].strip(), pattern)
+                click.echo(f"{path} {line}")
+            if last:
+                line = frmt_grep_line(lines[-1].strip(), pattern)
+                click.echo(f"{path} {line}")
+        else:
+            click.echo(frmt_file(str(folder.path)))
+            for line in lines:
+                line = frmt_grep_line(line.strip(), pattern)
+                click.echo(f"  {line}")
 
 
 @cli.command(name="iter")
@@ -128,7 +124,24 @@ def iter_command(
 
     PATHS: One or multiple paths to search for EMTO directories.
     """
-    _grep("Iteration", False, not all, recursive, paths)
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    tmplt = "Iteration: {iter:>3}  Etot: {etot:13.6f}  erren: {erren:10.8f}"
+    for folder in folders:
+        prn = folder.prn
+        if not prn:
+            continue
+        iterations = prn.get_iterations()
+        if not iterations:
+            continue
+        if not all:
+            maxw = max(len(str(folder.path)) for folder in folders) + 1
+            path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+            it = iterations[-1]
+            click.echo(f"{path} {tmplt.format(**it)}")
+        else:
+            click.echo(frmt_file(str(folder.path)))
+            for it in iterations:
+                click.echo(f"  {tmplt.format(**it)}")
 
 
 @cli.command()
