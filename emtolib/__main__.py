@@ -272,14 +272,13 @@ def makefile(path):
 @click.option(
     "--only_keys", "-k", is_flag=True, default=False, help="Only show key as output."
 )
-@single_path_opts
-def diff(only_keys, path):
+@multi_path_opts
+def diff(only_keys, recursive, paths):
     """Get the difference between the *.dat files in the given directories.
 
     PATH: The root path containing the EMTO directories.
     """
-    root = Path(path)
-    diffs = diff_emtodirs(root)
+    diffs = diff_emtodirs(*paths, recursive=recursive)
     if not diffs:
         click.echo("No differences found")
         return

@@ -353,14 +353,14 @@ def walk_emtodirs(*paths, recursive=False, missing_dat_ok=False):
                     logger.exception(e)
 
 
-def diff_emtodirs(root, exclude=None):
+def diff_emtodirs(*paths, recursive=False, exclude=None):
     """Find difference of the input files of all EMTO directories in root.
 
     Does not support diffing the atom configs, only the parameters!
     """
     # Find all parameters that change
     changing_params = set()
-    folders = list(walk_emtodirs(root))
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
     dat_base = folders[0].dat
     for folder in folders[1:]:
         diff = dat_base.param_diff(folder.dat, exclude)
