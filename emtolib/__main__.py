@@ -276,7 +276,7 @@ def makefile(path):
 def diff(only_keys, recursive, paths):
     """Get the difference between the *.dat files in the given directories.
 
-    PATH: The root path containing the EMTO directories.
+    PATHS: One or multiple paths to search for EMTO directories.
     """
     diffs = diff_emtodirs(*paths, recursive=recursive)
     if not diffs:
