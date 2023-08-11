@@ -16,7 +16,7 @@ from emtolib import __version__
 
 
 def frmt_file(s):
-    return click.style(s, fg="magenta")
+    return click.style(str(s), fg="magenta")
 
 
 def frmt_header(s, maxw=0, color="magenta"):
