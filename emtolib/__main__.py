@@ -547,7 +547,8 @@ def submit(executable, recursive, paths):
 
 
 @cli.command()
-def running():
+@click.option("--all", "-a", is_flag=True, default=False, help="Show squeue output.")
+def running(all):  # noqa
     """Check how many slurm jobs are still running"""
     cmd = r'squeue -u $(whoami) -o "%.8i %.10P %.14j %.8T %.10M %.8N"'
     stdout = subprocess.check_output(cmd, shell=True)
@@ -555,7 +556,10 @@ def running():
     lines = stdout.splitlines(keepends=False)
     nlines = len(lines) - 1
     click.echo(f"Running jobs: {nlines}")
-    click.echo(stdout)
+    if all:
+        click.echo("")
+        for line in lines:
+            click.echo(line)
 
 
 if __name__ == "__main__":
