@@ -467,6 +467,8 @@ def submit(executable, recursive, paths):
         if executable:
             slurm.set_body(executable, folder.dat.path.name)
             slurm.dump()
+        # Assure aux dirs exist before submitting job
+        folder.mkdirs(keep=False)
         # Run slurm
         with WorkingDir(folder.path):
             cmd = f"sbatch {slurm.path.name}"
