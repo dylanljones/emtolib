@@ -3,15 +3,15 @@
 # Date:   2023-07-21
 
 import re
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Union, List, Set, Dict
+from pathlib import Path
 import numpy as np
-from typing import Union
 from ..common import EmtoFile, parse_params, elements, dict_diff
 from ..errors import KGRNError, KGRNReadError, KGRNWriteError
 from ..ftmplt import Template
 from ..config import update_emto_paths
-
 
 logger = logging.getLogger(__name__)
 
@@ -456,6 +456,19 @@ class Atom:
         return self.to_dict() == other.to_dict()
 
 
+def _frmt_atom_keys(key, iq, it, ita):
+    keystrs = []
+    if key is not None:
+        keystrs.append(f"key={key}")
+    if iq is not None:
+        keystrs.append(f"iq={iq}")
+    if it is not None:
+        keystrs.append(f"it={it}")
+    if ita is not None:
+        keystrs.append(f"ita={ita}")
+    return ", ".join(keystrs)
+
+
 class KgrnFile(EmtoFile):
     """KGRN input file."""
 
@@ -578,25 +591,25 @@ class KgrnFile(EmtoFile):
             self.update(kwargs)
 
     @property
-    def is_dmft(self):
+    def is_dmft(self) -> bool:
         return self._dmft
 
-    def init(self, jobname, header="", **kwargs):
+    def init(self, jobname: str, header: str = "", **kwargs) -> None:
         self.jobnam = jobname
         self.set_header(header)
         self.update(kwargs)
 
-    def force_dmft(self, dmft=True):
+    def force_dmft(self, dmft: bool = True) -> None:
         self._dmft = dmft
 
-    def aux_dirs(self):
+    def aux_dirs(self) -> List[str]:
         d = self.dir002, self.dir003, self.dir006, self.dir009, self.dir010, self.dir011
         return [path for path in d if path]
 
-    def set_header(self, header="", date_frmt="%d %b %y"):
+    def set_header(self, header: str = "", date_frmt: str = "%d %b %y") -> None:
         self.header = (header + " " + datetime.now().strftime(date_frmt)).strip()
 
-    def get_atom_symbols(self, include_empty=True):
+    def get_atom_symbols(self, include_empty: bool = True) -> Set[str]:
         atoms = set(
             at.symbol
             for at in self.atoms
@@ -604,34 +617,54 @@ class KgrnFile(EmtoFile):
         )
         return atoms
 
-    def get_atom(self, key) -> Atom:
+    def get_atoms(
+        self,
+        key: Union[int, str] = None,
+        iq: int = None,
+        it: int = None,
+        ita: int = None,
+    ) -> List[Atom]:
+        # Integer key
         if isinstance(key, int):
-            return self.atoms[key]
-        # Check if index in key
-        if not key.isalpha():
-            # split idx from jey
-            idx = re.findall(r"\d+", key)[0]
-            key = key.replace(idx, "").strip()
-            idx = int(idx.strip())
-        else:
-            idx = 0
-        res = list()
-        for at in self.atoms:
-            if at.symbol == key:
-                res.append(at)
-        return res[idx]
-
-    def get_atoms(self, it=None, ita=None):
+            if any([iq, it, ita]):
+                raise ValueError(
+                    "Integer key and iq, it or ita cannot be used together"
+                )
+            try:
+                return [self.atoms[key]]
+            except IndexError:
+                raise KeyError(f"Atom with index {key} not found")
+        # Other cases
         atoms = list()
         for at in self.atoms:
+            if key is not None and at.symbol.lower() != key.lower():
+                continue
+            if iq is not None and at.iq != iq:
+                continue
             if it is not None and at.it != it:
                 continue
             if ita is not None and at.ita != ita:
                 continue
             atoms.append(at)
+        if not atoms:
+            keystr = _frmt_atom_keys(key, iq, it, ita)
+            raise KeyError(f"No atoms found with {keystr}")
         return atoms
 
-    def add_atom(self, atom: Union[str, Atom], **kwargs):
+    def get_atom(
+        self,
+        key: Union[int, str] = None,
+        iq: int = None,
+        it: int = None,
+        ita: int = None,
+    ) -> Atom:
+        atoms = self.get_atoms(key, iq, it, ita)
+        if len(atoms) > 1:
+            keystr = _frmt_atom_keys(key, iq, it, ita)
+            raise KeyError(f"Multiple atoms found with {keystr}: {atoms}")
+        return atoms[0]
+
+    def add_atom(self, atom: Union[str, Atom], **kwargs) -> Atom:
         if isinstance(atom, str):
             atom = Atom(atom)
         if kwargs:
@@ -639,65 +672,85 @@ class KgrnFile(EmtoFile):
         self.atoms.append(atom)
         return atom
 
-    def set_concentrations(self, cc):
+    def set_concentrations(self, cc: List[float]) -> None:
         assert len(cc) == len(self.atoms)
         for atom, conc in zip(self.atoms, cc):
             atom.conc = conc
 
-    def get_concentrations(self):
+    def get_concentrations(self) -> List[float]:
         return [atom.conc for atom in self.atoms]
 
-    def get_concentration(self, key):
+    def get_concentration(self, key: Union[int, str]) -> float:
         try:
             return self.get_atom(key).conc
-        except IndexError:
+        except KeyError:
             return 0.0
 
-    def get_max_it(self):
+    def get_max_it(self) -> int:
         return max(at.it for at in self.atoms)
 
-    def get_max_ita(self, it=None):
+    def get_max_ita(self, it: int = None) -> int:
         if it is None:
             atoms = self.atoms
         else:
             atoms = self.get_atoms(it=it)
         return max(at.ita for at in atoms)
 
-    def update_mnta(self):
+    def update_mnta(self) -> None:
         self.mnta = max(atom.ita for atom in self.atoms)
 
-    def init_dmft_energies(self, u=None, j=None):
+    def init_dmft_energies(self, u: List[float] = None, j: List[float] = None) -> None:
         for atom in self.atoms:
             atom.init_dmft_energies(u=u, j=j)
 
-    def clear_dmft_energies(self):
+    def clear_dmft_energies(self) -> None:
         for atom in self.atoms:
             atom.clear_dmft_energies()
 
-    def set_kstr_path(self, path):
+    def set_kstr_path(self, path: Union[str, Path]) -> None:
+        path = str(path)
         assert path.endswith(".tfh")
         self.for001 = path
 
-    def set_kstr2_path(self, path):
+    def set_kstr2_path(self, path: Union[str, Path]) -> None:
+        path = str(path)
         assert path.endswith(".tfh")
         self.for001_2 = path
 
-    def set_bmdl_path(self, path):
+    def set_bmdl_path(self, path: Union[str, Path]) -> None:
+        path = str(path)
         assert path.endswith(".mdl")
         self.for004 = path
 
-    def set_pot_path(self, path):
+    def set_pot_path(self, path: Union[str, Path]) -> None:
+        path = str(path)
         self.dir002 = path
         self.dir003 = path
         self.dir009 = path
 
-    def set_chd_path(self, path):
+    def set_chd_path(self, path: Union[str, Path]) -> None:
+        path = str(path)
         self.dir010 = path
 
-    def set_tmp_path(self, path):
+    def set_tmp_path(self, path: Union[str, Path]) -> None:
+        path = str(path)
         self.dir011 = path
 
-    def update_paths(self, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp=""):
+    def update_paths(
+        self,
+        kstr: Union[str, Path],
+        bmdl: Union[str, Path],
+        kstr2: Union[str, Path] = "",
+        pot: Union[str, Path] = "pot/",
+        chd: Union[str, Path] = "chd/",
+        tmp: Union[str, Path] = "",
+    ) -> None:
+        kstr = str(kstr)
+        bmdl = str(bmdl)
+        kstr2 = str(kstr2)
+        pot = str(pot)
+        chd = str(chd)
+        tmp = str(tmp)
         assert kstr.endswith(".tfh")
         assert bmdl.endswith(".mdl")
 
@@ -716,8 +769,21 @@ class KgrnFile(EmtoFile):
         self.dir011 = tmp
 
     def update_from_config(
-        self, kstr, bmdl, kstr2="", pot="pot/", chd="chd/", tmp="", conf=None
+        self,
+        kstr: Union[str, Path],
+        bmdl: Union[str, Path],
+        kstr2: Union[str, Path] = "",
+        pot: Union[str, Path] = "pot/",
+        chd: Union[str, Path] = "chd/",
+        tmp: Union[str, Path] = "",
+        conf: dict = None,
     ):
+        kstr = str(kstr)
+        bmdl = str(bmdl)
+        kstr2 = str(kstr2)
+        pot = str(pot)
+        chd = str(chd)
+        tmp = str(tmp)
         update_emto_paths(
             self, kstr, bmdl, kstr2=kstr2, pot=pot, chd=chd, tmp=tmp, conf=conf
         )
@@ -738,19 +804,19 @@ class KgrnFile(EmtoFile):
                 v = v.strip()
             self.__setattr__(k, v)
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Union[str, int, float]]:
         data = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
         data.pop("atoms", None)
         data.pop("path", None)
         return data
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Union[str, int, float]:
         key = key.strip().lower()
         if not hasattr(self, key):
             raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
         return self.__getattribute__(key)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: Union[str, int, float]) -> None:
         key = key.strip().lower()
         # Try to convert type
         dtype = type(self.__getattribute__(key))
@@ -762,7 +828,7 @@ class KgrnFile(EmtoFile):
             raise KeyError(f"{key} is not a valid field of {self.__class__.__name__}")
         self.__setattr__(key, value)
 
-    def check(self):
+    def check(self) -> None:
         """Check if the input is consistent."""
         if self.jobnam is None:
             raise KGRNError("'jobnam' has to be given!")
@@ -788,7 +854,7 @@ class KgrnFile(EmtoFile):
 
     # ----------------------------------------------------------------------------------
 
-    def loads(self, text):
+    def loads(self, text: str) -> "KgrnFile":
         # get template by file key (first 4 characters, KGRN or DMFT)
         fkey = text[:4]
         if fkey == "KGRN":
@@ -822,7 +888,7 @@ class KgrnFile(EmtoFile):
         # self.check()
         return self
 
-    def dumps(self):
+    def dumps(self) -> str:
         dmft = self._dmft
 
         # get template by file key (first 4 characters, KGRN or DMFT)
