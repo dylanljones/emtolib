@@ -549,7 +549,7 @@ def submit(executable, recursive, paths):
 @cli.command()
 def running():
     """Check how many slurm jobs are still running"""
-    cmd = "squ"
+    cmd = "squeue -u $(whoami)"
     stdout = subprocess.check_output(cmd, shell=True)
     stdout = stdout.decode("utf-8")
     nlines = len(stdout.splitlines())
