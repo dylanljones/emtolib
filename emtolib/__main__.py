@@ -38,7 +38,11 @@ def error(s):
 
 def get_emtodirs(*paths, recursive=False):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
-    return sorted(folders, key=lambda f: f.path.name)
+    # Recursively sort the folders by path paths
+    maxparts = max([len(f.path.parts) for f in folders])
+    for i in reversed(range(maxparts)):
+        folders = sorted(folders, key=lambda f: f.path.parts[i])
+    return folders
 
 
 def single_path_opts(func):
