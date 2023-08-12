@@ -549,10 +549,11 @@ def submit(executable, recursive, paths):
 @cli.command()
 def running():
     """Check how many slurm jobs are still running"""
-    cmd = "squeue -u $(whoami)"
+    cmd = r'squeue -u $(whoami) -o "%.8i %.10P %.14j %.8T %.10M %.8N"'
     stdout = subprocess.check_output(cmd, shell=True)
     stdout = stdout.decode("utf-8")
-    nlines = len(stdout.splitlines()) - 1
+    lines = stdout.splitlines(keepends=False)
+    nlines = len(lines) - 1
     click.echo(f"Running jobs: {nlines}")
     click.echo(stdout)
 
