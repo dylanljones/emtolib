@@ -18,10 +18,10 @@ Lmaxh.=  8 Lmaxt=  4 NFI..= 31 FIXG.=  2 SHF..=  2 SOFC.=  N
 KMSH...= G IBZ..=  3 NKX..=  0 NKY..= 57 NKZ..=  0 FBZ..=  N
 KMSH2..= G IBZ2.=  1 NKX2.=  4 NKY2.=  0 NKZ2.= 51
 ZMSH...= C NZ1..= 32 NZ2..=  8 NZ3..=  8 NRES.=  4 NZD.=3000
-DEPTH..=  1.000 IMAGZ.=0.01000 EPS...=0.20000 ELIM..= -1.000
+DEPTH..=  1.000 IMAGZ.=  0.010 EPS...=  0.200 ELIM..= -1.000
 AMIX...=  0.100 EFMIX.=  1.000 VMTZ..=  0.000 MMOM..=  0.000
-TOLE...= 1.d-07 TOLEF.= 1.d-07 TOLCPA= 1.d-06 TFERMI=  500.0 (K)
-SWS......= 2.8775000 NSWS.=  1 DSWS..=   0.05 ALPCPA= 0.6020
+TOLE...= 1.d-07 TOLEF.= 1.d-07 TOLCPA= 1.d-06 TFERMI=500.000 (K)
+SWS......=  2.877500 NSWS.=  1 DSWS..=   0.05 ALPCPA= 0.6020
 Setup: 2 + NQ*NS lines
 EFGS...= -0.300 HX....=  0.300 NX...=  7 NZ0..= 16 STMP..= N
 Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT Fix

@@ -808,6 +808,10 @@ class KgrnFile(EmtoFile):
         data = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
         data.pop("atoms", None)
         data.pop("path", None)
+        if not self.is_dmft:
+            dmft_keys = ["for007", "nom", "nomi", "dc", "ttt", "smix", "solver"]
+            for key in dmft_keys:
+                data.pop(key, None)
         return data
 
     def __getitem__(self, key: str) -> Union[str, int, float]:
