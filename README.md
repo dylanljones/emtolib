@@ -21,10 +21,9 @@ python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git
 There are a few commands that can be run from the command line:
 
 ```bash
-usage: emtolib [OPTIONS] COMMAND [ARGS]...
+Usage: emtolib [OPTIONS] COMMAND [ARGS]...
 
-  emtolib 0.1.3.dev7+gbd76050 - Tools for the EMTO package by L. Vitos et
-  al.
+  emtolib 0.1.4 - Tools for the EMTO package by L. Vitos et al.
 
 Options:
   --help  Show this message and exit.
@@ -40,9 +39,11 @@ Commands:
   element     Get information about the given element.
   get         Gets the given value from the *.dat files in the given...
   grep        Greps for a pattern in the *.prn files in the given...
+  hopfield    Extracts the Hopfield values from the *.prn files in the
+              given...
   iter        Greps for the iteration number in the *.prn files in the
               given...
-  makefile    Generate a makefile for running all simulations in the given...
+  running     Check how many slurm jobs are still running
   set         Sets the given value in the *.dat files in the given...
   set-header  Sets the header of the *.dat files in the given directories.
   set_paths   Sets the given value in the *.dat files in the given...
@@ -87,20 +88,20 @@ root directory of your EMTO calculations.
 Minimal example of the ``emto.ini`` configuration file:
 
 ```ini
+[general]
+# Put your custom configuration here...
+app = app
+...
+
 [emto]
-
-root = ~/EMTO
-# The following paths are relative to `root`
-kstr = kstr/smx
-bmdl = bmdl/mdl
-executable = kgrn/kgrn_cpa
-executable_dmft = kgrn_dmft/kgrn_cpa
-
+# Optional: custom EMTO root
+root = /path/to/emto
+# Paths are relative to the EMTO root
+emto2 = kgrn2/kgrn_cpa
+...
 
 [slurm]
-
-# Your slurm settings
-mail_user = name@example.com
-mail_type = FAIL,END,INVALID_DEPEND,TIME_LIMIT
-mem = 2gb
+# Email is required for SLURM jobs
+mail_user = <your email>
+...
 ```

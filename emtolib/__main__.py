@@ -295,7 +295,7 @@ def set_cmd(dmft, recursive, value, paths):
         dat.dump()
 
 
-@cli.command(name="set_paths")
+@cli.command(name="set-paths")
 @click.option("--kstr", "-k", type=str, help="KSTR file name", default=None)
 @click.option("--bmdl", "-b", type=str, help="BMDL file name", default=None)
 @click.option("--kstr2", "-K", type=str, help="KSTR2 file name", default="")
@@ -350,7 +350,7 @@ def diff(only_keys, recursive, paths):
                 click.echo(f"  {key + '=':<{maxw}} {d[key]}")
 
 
-@cli.command()
+@cli.command("set-header")
 @click.option("--header", "-h", type=str, default="", help="The header to set.")
 @click.option(
     "--frmt", "-f", type=str, default="%d %b %y", help="The date format of the header."
