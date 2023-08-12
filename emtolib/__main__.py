@@ -546,5 +546,18 @@ def submit(executable, recursive, paths):
             click.echo(f"{p} {stdout}")
 
 
+@cli.command()
+def running():
+    """Check how many slurm jobs are still running"""
+    cmd = "squ"
+    stdout = subprocess.check_output(cmd, shell=True)
+    stdout = stdout.decode("utf-8")
+    nlines = len(stdout.splitlines())
+    click.echo("Running jobs:")
+    click.echo(stdout)
+    click.echo("")
+    click.echo(f"Number of running jobs: {nlines}")
+
+
 if __name__ == "__main__":
     cli()
