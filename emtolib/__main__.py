@@ -36,6 +36,11 @@ def error(s):
     return click.style(s, fg="red")
 
 
+def get_emtodirs(*paths, recursive=False):
+    folders = list(walk_emtodirs(*paths, recursive=recursive))
+    return sorted(folders, key=lambda f: f.path.name)
+
+
 def single_path_opts(func):
     """Click argument decorator for commands accepting a single input path."""
 
@@ -84,9 +89,9 @@ def update():
     os.system(cmd)
 
 
-def get_emtodirs(*paths, recursive=False):
-    folders = list(walk_emtodirs(*paths, recursive=recursive))
-    return sorted(folders, key=lambda f: f.path.name)
+# ======================================================================================
+#                                   PRN files
+# ======================================================================================
 
 
 @cli.command(name="grep")
@@ -241,6 +246,11 @@ def hopfield(mean, sum, recursive, paths):  # noqa
                 click.echo(f"  {atom:<3}  {eta}")
 
 
+# ======================================================================================
+#                      DAT files / Directory structure
+# ======================================================================================
+
+
 @cli.command()
 @click.option("--dmft", "-d", is_flag=True, default=False, help="Use DMFT input files.")
 @click.argument("key", type=str, nargs=1)
@@ -308,35 +318,6 @@ def set_paths(kstr, bmdl, kstr2, recursive, paths):
 
 
 @cli.command()
-@multi_path_opts
-def checkdos(recursive, paths):
-    """Checks the *.dos files in the given directories for unphysical values.
-
-    PATHS: One or multiple paths to search for EMTO directories.
-    """
-    folders = get_emtodirs(*paths, recursive=recursive)
-    maxw = max(len(str(folder.path)) for folder in folders) + 1
-    for folder in folders:
-        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-        try:
-            dosfile = folder.dos
-        except DOSReadError:
-            click.echo(f"{path} " + error("Could not not read DOS file"))
-            continue
-        try:
-            energy, dos = dosfile.get_total_dos()
-            # Check for unphysical (negative) DOS values
-            if (dos < 0).any():
-                click.echo(f"{path} " + error("Negative DOS values found"))
-                continue
-            else:
-                click.echo(f"{path} " + click.style("DOS ok", fg="green"))
-        except AttributeError:
-            click.echo(f"{path} " + error("Could not not read DOS file"))
-            continue
-
-
-@cli.command()
 @click.option(
     "--only_keys", "-k", is_flag=True, default=False, help="Only show key as output."
 )
@@ -365,22 +346,6 @@ def diff(only_keys, recursive, paths):
                 click.echo(f"  {key + '=':<{maxw}} {d[key]}")
 
 
-@cli.command(name="clear")
-@click.option("--aux", "-a", is_flag=True, default=False, help="Also clear aux files.")
-@multi_path_opts
-def clear_cmd(aux, recursive, paths):
-    """Clears the output files in the given directories.
-
-    PATHS: One or multiple paths to search for EMTO directories.
-    """
-    folders = get_emtodirs(*paths, recursive=recursive)
-    maxw = max(len(str(folder.path)) for folder in folders) + 1
-    for folder in folders:
-        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-        click.echo(f"{p} Clearing folder")
-        folder.clear(aux=aux)
-
-
 @cli.command()
 @click.option("--header", "-h", type=str, default="", help="The header to set.")
 @click.option(
@@ -402,28 +367,20 @@ def set_header(header, frmt, recursive, paths):
         dat.dump()
 
 
-@cli.command()
-@click.argument("symbol", type=str, nargs=1, required=True)
-@click.argument("keys", type=str, nargs=-1, required=False)
-def element(symbol, keys):
-    """Get information about the given element.
+@cli.command(name="clear")
+@click.option("--aux", "-a", is_flag=True, default=False, help="Also clear aux files.")
+@multi_path_opts
+def clear_cmd(aux, recursive, paths):
+    """Clears the output files in the given directories.
 
-    SYMBOL: The symbol of the element to get information about.
-    KEYS: The keys to get information about. If not given, all keys will be shown.
+    PATHS: One or multiple paths to search for EMTO directories.
     """
-    try:
-        el = elements[symbol]
-    except KeyError:
-        click.echo(error(f"Element {symbol} not found"))
-        return
-
-    click.echo(f"Element {el.symbol}:")
-    if not keys:
-        keys = list(el.keys())
-    keys = sorted(list(keys))
-    maxw = max(len(key) for key in keys) + 1
-    for key in keys:
-        click.echo("  " + frmt_header(key, maxw) + f" {el[key]}")
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        click.echo(f"{p} Clearing folder")
+        folder.clear(aux=aux)
 
 
 @cli.command()
@@ -442,39 +399,7 @@ def auxdirs(keep, recursive, paths):
         folder.mkdirs(keep=keep)
 
 
-@cli.command()
-@click.option("--executable", "-x", type=str, default="", help="The EMTO executable.")
-@multi_path_opts
-def submit(executable, recursive, paths):
-    """Batch-run the EMTO simulations in the given directories using SLURM.
-
-    PATHS: One or multiple paths to search for EMTO directories.
-    """
-    emto_config = CONFIG["emto"]
-    if executable in emto_config:
-        root = Path(emto_config["root"])
-        executable = root / emto_config[executable]
-
-    folders = get_emtodirs(*paths, recursive=recursive)
-    maxw = max(len(str(folder.path)) for folder in folders) + 1
-    for folder in folders:
-        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-        slurm = folder.slurm
-        if not slurm:
-            click.echo(f"{p} {error('No slurm file found')}")
-            continue
-        # Update slurm body
-        if executable:
-            slurm.set_body(executable, folder.dat.path.name)
-            slurm.dump()
-        # Assure aux dirs exist before submitting job
-        folder.mkdirs(keep=False)
-        # Run slurm
-        with WorkingDir(folder.path):
-            cmd = f"sbatch {slurm.path.name}"
-            stdout = subprocess.check_output(cmd, shell=True)
-            stdout = stdout.decode("utf-8").replace("\n", "")
-            click.echo(f"{p} {stdout}")
+# == Atom configuration ================================================================
 
 
 @cli.group(name="atom", help="Atom configuration")
@@ -523,5 +448,103 @@ def add_atom(clear, symbol, kwargs, path):
     dat.dump()
 
 
+# ======================================================================================
+#                               DOS files
+# ======================================================================================
+
+
+@cli.command()
+@multi_path_opts
+def checkdos(recursive, paths):
+    """Checks the *.dos files in the given directories for unphysical values.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        try:
+            dosfile = folder.dos
+        except DOSReadError:
+            click.echo(f"{path} " + error("Could not not read DOS file"))
+            continue
+        try:
+            energy, dos = dosfile.get_total_dos()
+            # Check for unphysical (negative) DOS values
+            if (dos < 0).any():
+                click.echo(f"{path} " + error("Negative DOS values found"))
+                continue
+            else:
+                click.echo(f"{path} " + click.style("DOS ok", fg="green"))
+        except AttributeError:
+            click.echo(f"{path} " + error("Could not not read DOS file"))
+            continue
+
+
+# ======================================================================================
+#                                   Other
+# ======================================================================================
+
+
+@cli.command()
+@click.argument("symbol", type=str, nargs=1, required=True)
+@click.argument("keys", type=str, nargs=-1, required=False)
+def element(symbol, keys):
+    """Get information about the given element.
+
+    SYMBOL: The symbol of the element to get information about.
+    KEYS: The keys to get information about. If not given, all keys will be shown.
+    """
+    try:
+        el = elements[symbol]
+    except KeyError:
+        click.echo(error(f"Element {symbol} not found"))
+        return
+
+    click.echo(f"Element {el.symbol}:")
+    if not keys:
+        keys = list(el.keys())
+    keys = sorted(list(keys))
+    maxw = max(len(key) for key in keys) + 1
+    for key in keys:
+        click.echo("  " + frmt_header(key, maxw) + f" {el[key]}")
+
+
+@cli.command()
+@click.option("--executable", "-x", type=str, default="", help="The EMTO executable.")
+@multi_path_opts
+def submit(executable, recursive, paths):
+    """Batch-run the EMTO simulations in the given directories using SLURM.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    emto_config = CONFIG["emto"]
+    if executable in emto_config:
+        root = Path(emto_config["root"])
+        executable = root / emto_config[executable]
+
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        slurm = folder.slurm
+        if not slurm:
+            click.echo(f"{p} {error('No slurm file found')}")
+            continue
+        # Update slurm body
+        if executable:
+            slurm.set_body(executable, folder.dat.path.name)
+            slurm.dump()
+        # Assure aux dirs exist before submitting job
+        folder.mkdirs(keep=False)
+        # Run slurm
+        with WorkingDir(folder.path):
+            cmd = f"sbatch {slurm.path.name}"
+            stdout = subprocess.check_output(cmd, shell=True)
+            stdout = stdout.decode("utf-8").replace("\n", "")
+            click.echo(f"{p} {stdout}")
+
+
 if __name__ == "__main__":
-    cli(["conv", "..\\app\\Ti-V\\sws"])
+    cli()
