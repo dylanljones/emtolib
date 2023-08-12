@@ -552,11 +552,9 @@ def running():
     cmd = "squeue -u $(whoami)"
     stdout = subprocess.check_output(cmd, shell=True)
     stdout = stdout.decode("utf-8")
-    nlines = len(stdout.splitlines())
-    click.echo("Running jobs:")
+    nlines = len(stdout.splitlines()) - 1
+    click.echo(f"Running jobs: {nlines}")
     click.echo(stdout)
-    click.echo("")
-    click.echo(f"Number of running jobs: {nlines}")
 
 
 if __name__ == "__main__":
