@@ -363,5 +363,7 @@ class PrnFile(EmtoFile):
                 except ValueError:
                     pass
                 continue
-
+        if "etot" not in energies:
+            last_iter = self.get_iterations()[-1]
+            energies["etot"] = last_iter["etot"]
         return energies
