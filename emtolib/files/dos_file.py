@@ -216,6 +216,14 @@ def _index_dataframe(df, args, drop):
     return df
 
 
+def translate_spin(spin):
+    if spin is not None:
+        spin = spin.upper()
+        if spin == "DN":
+            spin = "DOWN"
+    return spin
+
+
 class DosFile(EmtoFile):
 
     extension = ".dos"
@@ -228,12 +236,15 @@ class DosFile(EmtoFile):
             raise DOSReadError(f"Could not read DOS file: {self.path}") from e
 
     def get_tdos(self, spin=None, drop=True):
+        spin = translate_spin(spin)
         return _index_dataframe(self.tdos, [spin], drop)
 
     def get_pdos(self, sublatt=None, atom=None, spin=None, drop=True):
+        spin = translate_spin(spin)
         return _index_dataframe(self.pdos, [sublatt, atom, spin], drop)
 
     def get_tnos(self, sublatt=None, atom=None, spin=None, drop=True):
+        spin = translate_spin(spin)
         return _index_dataframe(self.tnos, [sublatt, atom, spin], drop)
 
     def get_total_dos(self, spin=None):
