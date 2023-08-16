@@ -6,6 +6,9 @@ import logging
 import shutil
 from pathlib import Path
 from typing import Union
+
+import numpy as np
+
 from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
 from .errors import KGRNReadError
 
@@ -302,6 +305,20 @@ class EmtoDirectory:
         # Save *.dat file
         dat.force_dmft(True)
         dat.dump()
+
+    def get_fort(self, num, **kwargs):
+        path = self.path / f"fort.{num}"
+        if not path.exists():
+            raise FileNotFoundError(f"File {path.name} does not exist!")
+        return np.loadtxt(path, **kwargs)
+
+    def get_aimag(self):
+        return self.get_fort(300)
+
+    def get_sigit(self):
+        return self.get_fort(400)
+
+
 
 
 def is_emtodir(path):
