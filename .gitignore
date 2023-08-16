@@ -1,6 +1,9 @@
 
 # -- Project gitignore -----------------------------------------------------------------
 
+# Configuration file
+emto.ini
+
 data/
 app/
 app
@@ -13,12 +16,12 @@ nb*.py
 v*.py
 ti*.py
 
+
+# -- Python gitignore ------------------------------------------------------------------
+
 # setuptools_scm version file
 #  Use this if the project uses pyproject.toml with setuptools_scm instead of setup.py
 */_version.py
-
-
-# -- Python gitignore ------------------------------------------------------------------
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
