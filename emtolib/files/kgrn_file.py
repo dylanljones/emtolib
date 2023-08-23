@@ -38,7 +38,7 @@ Lmaxh.={lmaxh:3d} Lmaxt={lmaxt:3d} NFI..={nfi:3d} FIXG.={fixg:3d} SHF..={shf:3d}
 KMSH...= {kmsh} IBZ..={ibz:3d} NKX..={nkx:3d} NKY..={nky:3d} NKZ..={nkz:3d} FBZ..=  {fbz}
 KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d}
 ZMSH...= {zmsh} NZ1..={nz1:3d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
-DEPTH..={depth:7.3f} IMAGZ.={imagz:7.3f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
+DEPTH..={depth:7.3f} IMAGZ.={imagz:7.5f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
 AMIX...={amix:7.3f} EFMIX.={efmix:7.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
 TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.3f} (K)
 SWS......={sws:10.6f} NSWS.={nsws:3d} DSWS..={dsws:7.2f} ALPCPA={alpcpa:7.4f}
@@ -75,7 +75,7 @@ Lmaxh.={lmaxh:3d} Lmaxt={lmaxt:3d} NFI..={nfi:3d} FIXG.={fixg:3d} SHF..={shf:3d}
 KMSH...= {kmsh} IBZ..={ibz:3d} NKX..={nkx:3d} NKY..={nky:3d} NKZ..={nkz:3d} FBZ..=  {fbz}
 KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d}
 ZMSH...= {zmsh} NZ1..={nz1:3d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
-DEPTH..={depth:7.3f} IMAGZ.={imagz:7.3f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
+DEPTH..={depth:7.3f} IMAGZ.={imagz:7.5f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
 AMIX...={amix:7.3f} EFMIX.={efmix:7.3f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
 TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.3f} (K)
 SWS......={sws:10.6f} NSWS.={nsws:3d} DSWS..={dsws:7.2f} ALPCPA={alpcpa:7.4f}
