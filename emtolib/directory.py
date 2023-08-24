@@ -315,10 +315,37 @@ class EmtoDirectory:
     def get_aimag(self):
         return self.get_fort(300)
 
-    def get_sigit(self):
-        return self.get_fort(400)
+    def get_sigma_z(self):
+        data = self.get_fort(99)
+        z = data[:, 0]
+        sig_real = data[:, 1::2]
+        sig_imag = data[:, 2::2]
+        sig = sig_real + 1j * sig_imag
+        # Remove first two rows
+        z, sig = z[2:], sig[2:]
+        # Unpack spin channels
+        _, idx = np.unique(z, return_index=True)
+        n = len(z) // len(idx)
+        z = np.split(z, n)[0]
+        sig = np.array(np.split(sig, n))
+        # Reshape to (n_channels, n_orbitals, n_energy)
+        sig = np.swapaxes(sig, 1, 2)
+        return z, sig
 
-
+    def get_sigma_iw(self):
+        data = self.get_fort(400)
+        iw = data[:, 0]
+        sig_real = data[:, 1::2]
+        sig_imag = data[:, 2::2]
+        sig = sig_real + 1j * sig_imag
+        # Unpack spin channels
+        _, idx = np.unique(iw, return_index=True)
+        n = len(iw) // len(idx)
+        iw = np.split(iw, n)[0]
+        sig = np.array(np.split(sig, n))
+        # Reshape to (n_channels, n_orbitals, n_energy)
+        sig = np.swapaxes(sig, 1, 2)
+        return iw, sig
 
 
 def is_emtodir(path):
