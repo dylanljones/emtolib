@@ -551,6 +551,28 @@ def submit(executable, recursive, paths):
 
 
 @cli.command()
+@multi_path_opts
+def cancel(recursive, paths):
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        # Find job IDs
+        paths = folder.path.glob("slurm-*.out")
+        job_ids = sorted([int(p.stem.replace("slurm-", "")) for p in paths])
+        # Cancel latest job
+        last_id = job_ids[-1]
+        with WorkingDir(folder.path):
+            cmd = f"scancel {last_id}"
+            try:
+                stdout = subprocess.check_output(cmd, shell=True)
+                stdout = stdout.decode("utf-8").replace("\n", "")
+                click.echo(f"{p} {stdout}")
+            except subprocess.CalledProcessError:
+                click.echo(f"{p} {error('Job not found')}")
+
+
+@cli.command()
 @click.option("--all", "-a", is_flag=True, default=False, help="Show squeue output.")
 def running(all):  # noqa
     """Check how many slurm jobs are still running"""
