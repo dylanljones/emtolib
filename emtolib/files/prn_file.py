@@ -14,6 +14,9 @@ RE_SECTION = re.compile(r"^ (?P<key>[A-Z]+):")
 RE_ITER_LINE = re.compile(
     r"^\s*KGRN:\s+Iteration no\.(?P<iter>.*) Etot = (?P<etot>.*) erren = (?P<erren>.*)$"
 )
+RE_SWS_ALAT = re.compile(
+    r"^\s*SWS =\s+(?P<sws>.*)\s+Alat =\s+(?P<alat_bohr>.*)\s+Bohr\s+(?P<alat>.*)\s+AA"
+)
 RE_ETOT = re.compile(r"^\s*Total energy\s*(?P<value>.*)$")
 RE_ETOT_OKA = re.compile(r"^\s*Total energy\+OKA\s*(?P<value>.*)$")
 RE_ETOT_EWALD = re.compile(r"^\s*Total\+Ewald\s*(?P<value>.*)$")
@@ -252,6 +255,16 @@ class PrnFile(EmtoFile):
                 iterations.append(it)
         return iterations
 
+    def get_lattice_constants(self):
+        for line in self.search_line("SWS"):
+            match = RE_SWS_ALAT.match(line)
+            if match:
+                sws = float(match.group("sws"))
+                alat_bohr = float(match.group("alat_bohr"))
+                alat = float(match.group("alat"))
+                return sws, alat_bohr, alat
+        return 0.0, 0.0, 0.0
+
     def extract_hopfields(self, unit="ev/aa^2"):
         return extract_hopfields(self, unit)
 
@@ -338,6 +351,11 @@ class PrnFile(EmtoFile):
                 data["s"] = s
                 panels[atom] = data
         return panels
+
+    def get_etot(self):
+        """Get the total energy from the last iteration."""
+        iterations = self.get_iterations()
+        return iterations[-1]["etot"]
 
     def get_total_energy(self):
         energies = dict()
