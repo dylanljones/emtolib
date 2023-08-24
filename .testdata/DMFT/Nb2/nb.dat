@@ -1,4 +1,4 @@
-KGRN                                               02 Jun 23
+DMFT                                               02 Jun 23
 JOBNAM=nb
 STRT..=  A MSGL.=  1 EXPAN.= S FCD..=  Y FUNC..= SCA
 FOR001=~/EMTO/EMTO5.8/kstr/smx/bcc.tfh
@@ -6,6 +6,7 @@ FOR001=~/EMTO/EMTO5.8/kstr/smx/bcc.tfh
 DIR002=pot/
 DIR003=pot/
 FOR004=~/EMTO/EMTO5.8/bmdl/mdl/bcc.mdl
+FOR007=lbccspd.tfh
 DIR006=
 DIR009=pot/
 DIR010=chd/
@@ -22,6 +23,8 @@ DEPTH..=  1.000 IMAGZ.=0.01000 EPS...=  0.200 ELIM..= -1.000
 AMIX...=0.10000 EFMIX.=0.10000 VMTZ..=  0.000 MMOM..=  0.000
 TOLE...= 1.d-07 TOLEF.= 1.d-07 TOLCPA= 1.d-06 TFERMI=500.000 (K)
 SWS......=  3.071000 NSWS.=  1 DSWS..=   0.05 ALPCPA= 0.6020
+NOM...= 256 NOMI.=  80 DC.=  1 TTT...=400.000 SMIX..=  0.050
+SOLVER=uppsalasolver
 Setup: 2 + NQ*NS lines
 EFGS...= -0.000 HX....=  0.300 NX...=  7 NZ0..= 16 STMP..= N
 Symb   IQ IT ITA NZ  CONC   Sm(s)  S(ws) WS(wst) QTR SPLT Fix

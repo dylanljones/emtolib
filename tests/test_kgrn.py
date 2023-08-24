@@ -83,6 +83,16 @@ def test_parse_format_dmft_pure():
     assert text.strip() == text2.strip()
 
 
+def test_parse_format_dmft_pure2():
+    path = TEST_ROOT / "DMFT" / "Nb2" / "nb.dat"
+    text = path.read_text()
+    dat = KgrnFile(path)
+    text2 = dat.dumps()
+    text = "\n".join(text.splitlines()[1:])
+    text2 = "\n".join(text2.splitlines()[1:])
+    assert text.strip() == text2.strip()
+
+
 def test_parse_format_dmft():
     path = TEST_ROOT / "DMFT" / "Nb25" / "nb.dat"
     text = path.read_text()
