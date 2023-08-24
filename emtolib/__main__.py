@@ -551,8 +551,9 @@ def submit(executable, recursive, paths):
 
 
 @cli.command()
+@click.option("--dry", "-d", is_flag=True, default=False, help="Run without canceling.")
 @multi_path_opts
-def cancel(recursive, paths):
+def cancel(dry, recursive, paths):
     folders = get_emtodirs(*paths, recursive=recursive)
     maxw = max(len(str(folder.path)) for folder in folders) + 1
     for folder in folders:
@@ -561,15 +562,22 @@ def cancel(recursive, paths):
         paths = folder.path.glob("slurm-*.out")
         job_ids = sorted([int(p.stem.replace("slurm-", "")) for p in paths])
         # Cancel latest job
+        if len(job_ids) == 0:
+            click.echo(f"{p} {error('No jobs found')}")
+            continue
+
         last_id = job_ids[-1]
         with WorkingDir(folder.path):
             cmd = f"scancel {last_id}"
-            try:
-                stdout = subprocess.check_output(cmd, shell=True)
-                stdout = stdout.decode("utf-8").replace("\n", "")
-                click.echo(f"{p} {stdout}")
-            except subprocess.CalledProcessError:
-                click.echo(f"{p} {error('Job not found')}")
+            if dry:
+                click.echo(f"{p} {cmd}")
+            else:
+                try:
+                    stdout = subprocess.check_output(cmd, shell=True)
+                    stdout = stdout.decode("utf-8").replace("\n", "")
+                    click.echo(f"{p} {stdout}")
+                except subprocess.CalledProcessError:
+                    click.echo(f"{p} {error('Job not found')}")
 
 
 @cli.command()
