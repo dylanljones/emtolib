@@ -645,6 +645,11 @@ class KgrnFile(EmtoFile):
     def force_dmft(self, dmft: bool = True) -> None:
         self._dmft = dmft
 
+    def force_ga(self, ga: bool = True) -> None:
+        if not self._dmft:
+            raise ValueError("DMFT must be enabled to use GA")
+        self._ga = ga
+
     def aux_dirs(self) -> List[str]:
         d = self.dir002, self.dir003, self.dir006, self.dir009, self.dir010, self.dir011
         return [path for path in d if path]
