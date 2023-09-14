@@ -13,6 +13,7 @@ from emtolib.errors import DOSReadError
 from emtolib.common import elements, WorkingDir
 from emtolib.config import CONFIG, update_emto_paths
 from emtolib import __version__
+from emtolib.easy_kgrn import run_emto_slurm, run_emto_local
 
 ITER_TMPLT = "Iteration: {iter:>3} Etot: {etot:11.6f} erren: {erren:10.8f}"
 
@@ -548,6 +549,26 @@ def submit(executable, recursive, paths):
             stdout = subprocess.check_output(cmd, shell=True)
             stdout = stdout.decode("utf-8").replace("\n", "")
             click.echo(f"{p} {stdout}")
+
+
+@cli.command()
+@click.option("--local", "-l", is_flag=True, default=False, help="Run un-batched")
+@multi_path_opts
+def run(local, recursive, paths):
+    """Run the EMTO simulations in the given directories using easy_kgrn.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        if local:
+            click.echo(f"{p} Running locally")
+            run_emto_local(folder.path)
+        else:
+            jobid = run_emto_slurm(folder.path)
+            click.echo(f"{p} Submitted bacth job {jobid}")
 
 
 @cli.command()

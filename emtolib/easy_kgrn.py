@@ -101,7 +101,7 @@ def shell_source(script):
     os.environ.update(env)
 
 
-def run_emto_local(root_dir=".", input_file=".input.ini"):
+def run_emto_local(root_dir=".", input_file="input.ini"):
     # cache cwd and cd into root_dir
     cwd = os.getcwd()
     os.chdir(root_dir)
@@ -113,7 +113,6 @@ def run_emto_local(root_dir=".", input_file=".input.ini"):
     kgrn_file.dump()
     folder = EmtoDirectory(".")
     folder.mkdirs()
-
 
     # Init shell
     if "init_script" in run_config:
@@ -129,7 +128,7 @@ def run_emto_local(root_dir=".", input_file=".input.ini"):
     return result
 
 
-def run_emto_slurm(root_dir=".", input_file=".input.ini"):
+def run_emto_slurm(root_dir=".", input_file="input.ini"):
     # cache cwd and cd into root_dir
     cwd = os.getcwd()
     os.chdir(root_dir)
@@ -154,7 +153,7 @@ def run_emto_slurm(root_dir=".", input_file=".input.ini"):
     stdout = subprocess.check_output(f"sbatch {slurm.path.name}", shell=True)
     text = stdout.decode("utf-8").replace("\n", "")
     jobid = int(text.split()[-1])
-    print(f"Submitted batch job {jobid} ({slurm.jobname})")
+    # print(f"Submitted batch job {jobid} ({slurm.jobname})")
 
     # Restore workding dir
     os.chdir(cwd)
