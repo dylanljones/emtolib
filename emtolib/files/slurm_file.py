@@ -34,13 +34,13 @@ class SlurmScript(EmtoFile):
         self,
         path="",
         jobname=None,
-        partition=None,
-        ntasks=None,
-        nodes=None,
-        mail_type=None,
         mail_user=None,
-        time=None,
-        mem=None,
+        partition="epyc",
+        ntasks=1,
+        nodes=1,
+        mail_type="FAIL,END,INVALID_DEPEND,TIME_LIMIT",
+        time="7-0",
+        mem="2gb",
         commands=None,
     ):
         super().__init__(path)
@@ -128,6 +128,24 @@ class SlurmScript(EmtoFile):
         self.mem = sbatch.get("mem")
 
         self.commands = commands
+
+    def update(self, **params):
+        if "jobname" in params:
+            self.jobname = params["jobname"]
+        if "partition" in params:
+            self.partition = params["partition"]
+        if "ntasks" in params:
+            self.ntasks = params["ntasks"]
+        if "nodes" in params:
+            self.nodes = params["nodes"]
+        if "mail_type" in params:
+            self.mail_type = params["mail_type"]
+        if "mail_user" in params:
+            self.mail_user = params["mail_user"]
+        if "time" in params:
+            self.time = params["time"]
+        if "mem" in params:
+            self.mem = params["mem"]
 
     def update_from_config(self, executable="", input_file="", conf=None):
         update_slurm_settings(self, executable, input_file, conf)

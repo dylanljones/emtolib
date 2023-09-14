@@ -646,7 +646,7 @@ class KgrnFile(EmtoFile):
         self._dmft = dmft
 
     def force_ga(self, ga: bool = True) -> None:
-        if not self._dmft:
+        if ga and not self._dmft:
             raise ValueError("DMFT must be enabled to use GA")
         self._ga = ga
 
