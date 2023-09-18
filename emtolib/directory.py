@@ -4,15 +4,17 @@
 
 import logging
 import shutil
+import numpy as np
+import xarray as xr
+from scipy import constants as cc
 from pathlib import Path
 from typing import Union
-
-import numpy as np
-
 from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
 from .errors import KGRNReadError
 
 logger = logging.getLogger(__name__)
+
+ry2ev = cc.value("Rydberg constant times hc in eV")  # 13.605693122994
 
 
 def find_kgrn_file(folder: Union[Path, str]) -> Path:
@@ -325,7 +327,10 @@ class EmtoDirectory:
     def get_aimag(self):
         return self.get_fort(300)
 
-    def get_sigma_z(self):
+    def get_sigma_z(self, unit="ry"):
+        unit = unit.lower()
+        if unit not in ("ry", "ev"):
+            raise ValueError(f"Invalid unit {unit}!")
         data = self.get_fort(99)
         z = data[:, 0]
         sig_real = data[:, 1::2]
@@ -345,9 +350,15 @@ class EmtoDirectory:
         sig = np.array(np.split(sig, n))
         # Reshape to (n_channels, n_orbitals, n_energy)
         sig = np.swapaxes(sig, 1, 2)
+        if unit == "ev":
+            z = z * ry2ev
+            sig = sig * ry2ev
         return z, sig
 
-    def get_sigma_iw(self):
+    def get_sigma_iw(self, unit="ry"):
+        unit = unit.lower()
+        if unit not in ("ry", "ev"):
+            raise ValueError(f"Invalid unit {unit}!")
         data = self.get_fort(400)
         iw = data[:, 0]
         sig_real = data[:, 1::2]
@@ -360,6 +371,16 @@ class EmtoDirectory:
         sig = np.array(np.split(sig, n))
         # Reshape to (n_channels, n_orbitals, n_energy)
         sig = np.swapaxes(sig, 1, 2)
+        # Channels are (at1_up, at1_dn, at2_up, at2_dn, ...)
+        # Reshape to (natom, nspin, n_orbitals, n_energy)
+        shape = sig.shape
+        nchannels = shape[0]
+        natom = nchannels // 2
+        nspin = 2
+        sig = sig.reshape((natom, nspin, *shape[1:]))
+
+        if unit == "ev":
+            sig = sig * ry2ev
         return iw, sig
 
 
