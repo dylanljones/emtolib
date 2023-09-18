@@ -15,7 +15,7 @@ from .errors import KGRNReadError
 logger = logging.getLogger(__name__)
 
 
-def find_input_file(folder: Union[Path, str]) -> Path:
+def find_kgrn_file(folder: Union[Path, str]) -> Path:
     folder = Path(folder)
     # get *.dat files
     for file in folder.glob("*.dat"):
@@ -95,8 +95,18 @@ class EmtoDirectory:
                 return None
         return self._dmft
 
+    def has_input_file(self, allow_ini=True):
+        try:
+            if self.dat is not None:
+                return True
+            elif allow_ini and (self.path / "input.ini").exists():
+                return True
+        except KGRNReadError as e:
+            logger.exception(e)
+        return False
+
     def get_dat_path(self):
-        return find_input_file(self.path)
+        return find_kgrn_file(self.path)
 
     def get_dos_path(self, name=""):
         if not name:
@@ -321,8 +331,13 @@ class EmtoDirectory:
         sig_real = data[:, 1::2]
         sig_imag = data[:, 2::2]
         sig = sig_real + 1j * sig_imag
-        # Remove first two rows
-        z, sig = z[2:], sig[2:]
+        nskip = 0
+        for i, _z in enumerate(z):
+            if _z != 0:
+                nskip = i
+                break
+        # Remove first rows
+        z, sig = z[nskip:], sig[nskip:]
         # Unpack spin channels
         _, idx = np.unique(z, return_index=True)
         n = len(z) // len(idx)
@@ -354,7 +369,7 @@ def is_emtodir(path):
     if not path.is_dir():
         return False
     try:
-        find_input_file(path)
+        find_kgrn_file(path)
         return True
     except FileNotFoundError:
         return False
@@ -380,21 +395,45 @@ def walk_emtodirs(*paths, recursive=False, missing_dat_ok=False):
         # Check if the given root path is an EMTO directory
         if root.is_dir():
             folder = EmtoDirectory(root)
-            try:
-                if folder.dat is not None or missing_dat_ok:
-                    yield folder
-            except KGRNReadError as e:
-                logger.exception(e)
+            if folder.has_input_file() or missing_dat_ok:
+                yield folder
+
         # Iterate (recursively) over all folders in the given root path
         iterator = root.rglob("*") if recursive else root.glob("*")
         for folder in iterator:
             if folder.is_dir():
                 folder = EmtoDirectory(folder)
-                try:
-                    if folder.dat is not None or missing_dat_ok:
-                        yield folder
-                except KGRNReadError as e:
-                    logger.exception(e)
+                if folder.has_input_file() or missing_dat_ok:
+                    yield folder
+
+
+def walk_ini_emtodirs(*paths, recursive=False):
+    """Walks through all emto directories in the given paths.
+
+    Parameters
+    ----------
+    paths : str or Path
+        The paths to walk through. Note that the paths can contain an EMTO
+        directory itself.
+    recursive : bool, optional
+        If True, the paths will be walked recursively.
+    """
+    paths = paths or (".",)  # Use current directory if no path is given
+    for root in paths:
+        root = Path(root)
+        # Check if the given root path is an EMTO directory
+        if root.is_dir():
+            folder = EmtoDirectory(root)
+            if len(list(folder.glob("*.ini"))):
+                yield folder
+
+        # Iterate (recursively) over all folders in the given root path
+        iterator = root.rglob("*") if recursive else root.glob("*")
+        for folder in iterator:
+            if folder.is_dir():
+                folder = EmtoDirectory(folder)
+                if len(list(folder.glob("*.ini"))):
+                    yield folder
 
 
 def diff_emtodirs(*paths, recursive=False, exclude=None):
