@@ -14,6 +14,7 @@ from emtolib.mcmillan import phonon_coupling, mcmillan
 
 ry2ev = constants.value("Rydberg constant times hc in eV")  # 13.605693122994
 
+FIGS = CONFIG["figs"]
 ROOT = CONFIG["app"] / "V"
 Vanadium = elements["V"]
 DEBYE_V = Vanadium.debye_0K
@@ -68,7 +69,7 @@ def plot_tc_u(save=False):
     ax.grid()
     ax.legend()
     if save:
-        fig.savefig("vanadium_tc_u.png", dpi=900)
+        fig.savefig(FIGS / "vanadium_tc_u.png", dpi=900)
 
 
 def plot_dos_2(save=False):
@@ -98,7 +99,7 @@ def plot_dos_2(save=False):
 
     ax.legend()
     if save:
-        fig.savefig("vanadium_dos_u=23.png", dpi=900)
+        fig.savefig(FIGS / "vanadium_dos_u=23.png", dpi=900)
 
 
 def addtext(ax, x, y, text, ha="center", va="center"):
@@ -169,7 +170,7 @@ def plot_dos(save=False):
     ax3.legend(loc="upper left", frameon=True, fontsize="6", )
 
     if save:
-        fig.savefig("vanadium_dos.png", dpi=900)
+        fig.savefig(FIGS / "vanadium_dos.png", dpi=900)
 
 
 def plot_dos_3(save=False):
@@ -267,7 +268,7 @@ def plot_dos_3(save=False):
     ax3.legend(frameon=True)
 
     if save:
-        fig.savefig("vanadium_dos_w_err.png", dpi=900)
+        fig.savefig(FIGS / "vanadium_dos_w_err.png", dpi=900)
 
 
 def plot_dos_4(save=False):
@@ -377,10 +378,11 @@ def plot_dos_4(save=False):
     ax3.legend(loc="upper right", frameon=True, fontsize="6", )
 
     if save:
-        fig.savefig("vanadium_dos_two_sws.png", dpi=900)
+        fig.savefig(FIGS / "vanadium_dos_two_sws.png", dpi=900)
 
 
 def plot_sigma_z(save=False):
+    print("---- Sigma(z) ----")
     xlim = -4, +4
     use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
 
@@ -391,31 +393,24 @@ def plot_sigma_z(save=False):
 
     # Linear fit of Re Σ(0) for quasiparticle weight
     idx = np.argmin(np.abs(z))
-    i1 = idx
-    i2 = idx + 1
+    i1 = idx - 3
+    i2 = idx + 3
     assert i1 < i2
-    dz = z[i2] - z[i1]
-    dsig_t2g = sig_z[0, 0, i2] - sig_z[0, 0, i1]
-    dsig_eg = sig_z[0, 2, i2] - sig_z[0, 2, i1]
-    deriv_t2g = dsig_t2g.real / dz
-    deriv_eg = dsig_eg.real / dz
-    qw_2tg = 1 / (1 - deriv_t2g)
-    qw_eg = 1 / (1 - deriv_eg)
+    deriv = (sig_z[:, :, i2] - sig_z[:, :, i1]).real / (z[i2] - z[i1])
+    meff = 1 - deriv
 
-    print(f"Z_t2g = {qw_2tg:.6f}  m* = {1 / qw_2tg:.6f}")
-    print(f"Z_eg  = {qw_eg:.6f}  m* = {1 / qw_eg:.6f}")
+    print(f"Z_t2g = {1 / meff[0, 0]:.6f}  m* = {meff[0, 0]:.6f}")
+    print(f"Z_eg  = {1 / meff[0, 2]:.6f}  m* = {meff[0, 2]:.6f}")
 
     domain = [-3, 3]
-    lin_t2g = Polynomial([sig_z[0, 0, idx], deriv_t2g])
-    lin_eg = Polynomial([sig_z[0, 2, idx], deriv_eg])
+    lin_t2g = Polynomial([sig_z[0, 0, idx].real, deriv[0, 0]])
+    lin_eg = Polynomial([sig_z[0, 2, idx].real, deriv[0, 2]])
 
     # Fit Imaginary part of Σ(0)
 
     i0, i1 = idx-3, idx+3
     poly2_t2g = Polynomial.fit(z[i0:i1], sig_z[0, 0, i0:i1].imag, 2)
     poly2_eg = Polynomial.fit(z[i0:i1], sig_z[0, 2, i0:i1].imag, 2)
-
-    print(poly2_t2g)
 
     fig = plt.figure(figsize=[3.375, 1.3 * 2.531])
     gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1])
@@ -446,8 +441,8 @@ def plot_sigma_z(save=False):
     ax2.plot(z, sig_z.real[0, 2], label=r"$e_{g}$", zorder=2)
     ax2.plot(*lin_eg.linspace(domain=domain), ls="--", lw=0.7, color="C1", zorder=1)
 
-    ax1.set_ylabel(r"Im $\Sigma(E)$ (eV)")
-    ax2.set_ylabel(r"Re $\Sigma(E)$ (eV)")
+    ax1.set_ylabel(r"Im $\Sigma$ (eV)")
+    ax2.set_ylabel(r"Re $\Sigma$ (eV)")
     ax2.set_xlabel("$E - E_F$ (eV)")
     ax1.set_xlim(*xlim)
     ax2.set_xlim(*xlim)
@@ -456,11 +451,53 @@ def plot_sigma_z(save=False):
 
     fig.subplots_adjust(wspace=0, hspace=0)
     if save:
-        fig.savefig("vanadium_selfz.png", dpi=900)
+        fig.savefig(FIGS / "vanadium_selfz.png", dpi=900)
 
 
-def plot_sigma_iw():
-    pass
+def plot_sigma_iw(save=False):
+    print("---- Sigma(iω) ----")
+    xlim = 0, +10
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    folder = EmtoDirectory(ROOT, "nl3_57_2", "u20")
+    iw, sig_iw = folder.get_sigma_iw(unit="ev")
+    iw *= ry2ev
+    sig_iw = sig_iw[0]
+
+    deriv = (sig_iw[:, :, 1] - sig_iw[:, :, 0]).imag / (iw[1] - iw[0])
+    meff = 1 - deriv
+    print(f"Z_t2g = {1 / meff[0, 0]:.6f}  m* = {meff[0, 0]:.6f}")
+    print(f"Z_eg  = {1 / meff[0, 2]:.6f}  m* = {meff[0, 2]:.6f}")
+
+    y0 = sig_iw.imag[:, :, 0] - deriv * iw[0]
+    poly_t2g = Polynomial([y0[0, 0], deriv[0, 0]])
+    poly_eg = Polynomial([y0[0, 2], deriv[0, 2]])
+
+    fig, ax = plt.subplots()
+
+    ax.set_xlabel(r"$i \omega_n$ (eV)")
+    ax.set_ylabel(r"Im $\Sigma$ (eV)")
+    ax.plot(iw, sig_iw.imag[0, 0], "-o", label=r"$t_{2g}$", ms=2, zorder=2)
+    ax.plot(iw, sig_iw.imag[0, 2], "-o", label=r"$e_{g}$", ms=2, zorder=2)
+    ax.plot(*poly_t2g.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C0", zorder=1)
+    ax.plot(*poly_eg.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C1", zorder=1)
+
+    ax.set_xlim(*xlim)
+    ax.set_ylim(-0.38, 0.01)
+    ax.legend(frameon=True)
+
+    # These are in unitless percentages of the figure size. (0,0 is bottom left)
+    left, bottom, width, height = [0.38, 0.6, 0.4, 0.3]
+    ax2 = fig.add_axes([left, bottom, width, height])
+    ax2.plot(iw, sig_iw.imag[0, 0], "-o", label=r"$t_{2g}$", ms=2, zorder=2)
+    ax2.plot(iw, sig_iw.imag[0, 2], "-o", label=r"$e_{g}$", ms=2, zorder=2)
+    ax2.plot(*poly_t2g.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C0", zorder=1)
+    ax2.plot(*poly_eg.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C1", zorder=1)
+    ax2.set_xlim(0, 0.6)
+    ax2.set_ylim(-0.1, 0)
+
+    if save:
+        fig.savefig(FIGS / "vanadium_selfiw.png", dpi=900)
 
 
 def plot_sws_lambda(save=False):
@@ -547,7 +584,7 @@ def plot_sws_lambda(save=False):
     ax3.legend(frameon=True)
 
     if save:
-        fig.savefig("V_alat_lambda_tc.png", dpi=900)
+        fig.savefig(FIGS / "V_alat_lambda_tc.png", dpi=900)
 
 
 def load_etots(u):
@@ -574,17 +611,18 @@ def plot_alat_opt_curves(save=False):
     ax.axvline(3.024, color="k", ls="-.", lw=0.5, label="$a$ (exp)")
     ax.legend(loc="upper right", frameon=True)
     if save:
-        fig.savefig("vanadium_alat_etot.png", dpi=900)
+        fig.savefig(FIGS / "vanadium_alat_etot.png", dpi=900)
 
 
 def main():
-    save = False
+    save = True
     # plot_tc_u(save=save)
     # plot_dos(save=save)
     # plot_dos(save=save)
     # plot_dos_3(save=save)
     # plot_dos_4(save=save)
-    plot_sigma_z(save=save)
+    # plot_sigma_z(save=save)
+    # plot_sigma_iw(save=save)
     # plot_sws_lambda(save=save)
     # plot_alat_opt_curves(save=save)
     plt.show()

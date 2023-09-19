@@ -12,7 +12,8 @@ from emtolib.mcmillan import phonon_coupling, mcmillan
 
 ry2ev = constants.value("Rydberg constant times hc in eV")  # 13.605693122994
 
-ROOT = CONFIG["app"]
+ROOT = CONFIG["app"] / "Ti-V"
+FIGS = CONFIG["figs"]
 Vanadium = elements["V"]
 Titan = elements["Ti"]
 DEBYE_TI = Titan.debye_0K
@@ -104,7 +105,7 @@ def plot_tc_conc_tiv(save=False):
     fig, ax = plt.subplots()
     ckey = "Ti"
     for u in [2, 4]:
-        root = ROOT / "Ti-V" / f"nl3_u{u}"
+        root = ROOT / f"nl3_u{u}"
         cc, tc = _extract_tc_c_tiv(root, ckey)
         print(cc, tc)
         ax.plot(cc, tc, "-o", lw=0.8, ms=2, label=f"U={u} eV")
@@ -142,11 +143,46 @@ def plot_tc_conc_tiv(save=False):
 
     ax.legend(loc="lower left", frameon=True)
     if save:
-        fig.savefig("TiV_conc_tc.png", dpi=900)
+        fig.savefig(FIGS / "TiV_conc_tc.png", dpi=900)
+
+
+def plot_dos_cpa(save=False):
+    xlim = -8, +8
+    root = ROOT / "nl3_u2"
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    fig, ax = plt.subplots()  # figsize=[3.375, 1.0 * 2.531])
+    ax.grid(axis="x", zorder=-1)
+    ax.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
+
+    folder = EmtoDirectory(root / "Ti10")
+    dosfile = folder.dos
+    energy, dos = dosfile.get_total_dos()
+    ax.plot(energy * ry2ev, dos, lw=0.7, color="C0", label="$x=0.10$")
+
+    folder = EmtoDirectory(root / "Ti35")
+    dosfile = folder.dos
+    energy, dos = dosfile.get_total_dos()
+    ax.plot(energy * ry2ev, dos, lw=0.7, color="C1", label="$x=0.35$")
+
+    folder = EmtoDirectory(root / "Ti60")
+    dosfile = folder.dos
+    energy, dos = dosfile.get_total_dos()
+    ax.plot(energy * ry2ev, dos, lw=0.7, color="C3", label="$x=0.60$")
+
+    ax.set_xlabel("$E - E_F$ (eV)")
+    ax.set_ylabel("DOS (states/eV)")
+    ax.set_xlim(*xlim)
+    ax.set_ylim(0, None)
+    ax.legend(frameon=True)
+    if save:
+        fig.savefig(FIGS / "TiV_DOS_CPA.png", dpi=900)
 
 
 def main():
-    plot_tc_conc_tiv(save=True)
+    save = True
+    # plot_tc_conc_tiv(save)
+    plot_dos_cpa(save)
     plt.show()
 
 

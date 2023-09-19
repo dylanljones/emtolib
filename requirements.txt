@@ -6,3 +6,4 @@ xarray
 zarr
 pytest
 click
+h5py

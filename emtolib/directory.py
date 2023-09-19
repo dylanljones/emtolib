@@ -259,6 +259,13 @@ class EmtoDirectory:
                         file.unlink(missing_ok=True)
                     # shutil.rmtree(path)
             # self.mkdirs(keep=keep)
+
+        jobname = dat.jobnam
+        file = self.path / f"{jobname}.phi"
+        file.unlink(missing_ok=True)
+        file = self.path / f"{jobname}.epm"
+        file.unlink(missing_ok=True)
+
         if fort:
             for file in self.path.iterdir():
                 if file.name.startswith("fort"):
