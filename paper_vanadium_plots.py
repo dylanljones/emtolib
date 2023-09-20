@@ -587,6 +587,53 @@ def plot_sws_lambda(save=False):
         fig.savefig(FIGS / "V_alat_lambda_tc.png", dpi=900)
 
 
+def effective_mass_iw(iw, sig_iw):
+    """Calculate the effective mass from the imaginary part of the self-energy."""
+    deriv = (sig_iw[..., 1] - sig_iw[..., 0]).imag / (iw[1] - iw[0])
+    return 1 - deriv
+
+
+def plot_sigma_iw_temp(save=False):
+    s, t2g, eg = 0, 0, 2
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    xlim = 0, 3
+    ylim = -0.3, 0
+
+    fig = plt.figure(figsize=[1.2 * 3.375, 2.531])
+    gs = gridspec.GridSpec(1, 2)
+    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.05, hspace=0.02)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax2.set_yticklabels([])
+
+    addtext(ax1, 0.5, 0.9, "t$_{2g}$")
+    addtext(ax2, 0.5, 0.9, "e$_{g}$")
+    temps = 100, 200, 300, 400
+    colors = "C0", "C1", "C3", "C4"
+    markers = "o", "s", "D", "v"
+    for temp, col, mark in zip(temps, colors, markers):
+        folder = EmtoDirectory(ROOT, f"CPA_{temp}K", "u20")
+        iw, sig_iw = folder.get_sigma_iw(unit="ev")
+        sig_iw = sig_iw[0]
+
+        kwargs = dict(marker=mark, ms=1.5, color=col, lw=0)
+        ax1.plot(iw, sig_iw[s, t2g].imag, label=f"{temp}K", **kwargs)
+        ax2.plot(iw, sig_iw[s, eg].imag, label=f"{temp}K", **kwargs)
+
+    ax1.set_xlim(*xlim)
+    ax1.set_ylim(*ylim)
+    ax2.set_xlim(*xlim)
+    ax2.set_ylim(*ylim)
+    ax1.set_xlabel(r"$i \omega_n$ (eV)")
+    ax2.set_xlabel(r"$i \omega_n$ (eV)")
+    ax1.set_ylabel(r"Im $\Sigma$ (eV)")
+    ax1.legend(frameon=True)
+    ax2.legend(frameon=True)
+    fig.savefig("sig_iw.png", dpi=900)
+    plt.show()
+
+
 def load_etots(u):
     return np.loadtxt(ROOT / "sws" / f"etot_u{int(u*10):02d}.dat", skiprows=1).T
 

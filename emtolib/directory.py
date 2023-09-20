@@ -388,6 +388,7 @@ class EmtoDirectory:
 
         if unit == "ev":
             sig = sig * ry2ev
+            iw = iw * ry2ev
         return iw, sig
 
 
