@@ -5,12 +5,12 @@
 import numpy as np
 from numpy.polynomial import Polynomial
 from scipy import constants
-from scipy import optimize
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from mplstyles import use_mplstyle, mplstyle_context, colors
+from mplstyles import use_mplstyle
 from emtolib import Path, CONFIG, walk_emtodirs, EmtoDirectory, elements
 from emtolib.mcmillan import phonon_coupling, mcmillan
+from emtolib.sws import read_data
 
 ry2ev = constants.value("Rydberg constant times hc in eV")  # 13.605693122994
 
@@ -47,66 +47,13 @@ def _extract_tc_u(root):
     return uu, tc, sws
 
 
-def plot_tc_u(save=False):
-    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
-
-    fig, ax = plt.subplots()
-
-    root = ROOT / "nl3_57"
-    uu, tc, sws = _extract_tc_u(root)
-    ax.plot(uu, tc, "-o", label=r"$a=2.9958 \AA$")
-
-    root = ROOT / "nl3_57_2"
-    uu, tc, sws = _extract_tc_u(root)
-    ax.plot(uu, tc, "-o", label=r"$a=3.0233 \AA$")
-
-    ax.set_xlabel("U (eV)")
-    ax.set_ylabel("Tc (K)")
-    # ax.set_ylim(3.15, 4.1)
-    ax.set_xlim(-0.1, 6.1)
-
-    ax.axhline(5.3, ls="--", color="r", label="Exp.")
-    ax.grid()
-    ax.legend()
-    if save:
-        fig.savefig(FIGS / "vanadium_tc_u.png", dpi=900)
-
-
-def plot_dos_2(save=False):
-    xlim = -8, +8
-    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
-
-    data_bis = np.loadtxt(Path("exp", "BIS_png.dat"))
-    data_xps = np.loadtxt(Path("exp", "XPS_png.dat"))
-
-    folder = EmtoDirectory(ROOT, "nl3_57_2", "u23")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-
-    fig, ax = plt.subplots()
-    ax.plot(energy * ry2ev, dos, label="DFT+DMFT")
-
-    x, y = data_bis.T
-    ax.plot(x, y / 3, "o", ms=1.5, color="k", label="BIS + XPS (a.u.)")
-    x, y = data_xps.T
-    ax.plot(x, y / 3, "o", ms=1.5, color="k")
-
-    ax.set_xlabel("$E - E_F$ (eV)")
-    ax.set_ylabel("TDOS (states/eV)")
-    ax.axvline(0, color="k", ls="--", lw=0.5)
-    ax.set_xlim(*xlim)
-    ax.set_ylim(0, 35)
-
-    ax.legend()
-    if save:
-        fig.savefig(FIGS / "vanadium_dos_u=23.png", dpi=900)
-
-
 def addtext(ax, x, y, text, ha="center", va="center"):
     ax.text(x, y, text, ha=ha, va=va, transform=ax.transAxes)
 
 
 def plot_dos(save=False):
+    print("---- DOS(z) ----")
+    root = ROOT / "sws_opt" / "400K"
     xlim = -8, +8
     use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
 
@@ -127,18 +74,15 @@ def plot_dos(save=False):
 
     data_xps = np.loadtxt(Path("exp", "XPS_png.dat"))
     x, y = data_xps.T
-    ax1.plot(x, y, "o", ms=1., color="k", label="BIS + XPS (a.u.)")
+    ax1.plot(x, y, "o", ms=1.0, color="k", label="BIS + XPS (a.u.)")
     addtext(ax1, 0.05, 0.9, "XPS", ha="left", va="top")
 
     data_bis = np.loadtxt(Path("exp", "BIS_png.dat"))
     x, y = data_bis.T
-    ax2.plot(x, y, "o", ms=1., color="k")
+    ax2.plot(x, y, "o", ms=1.0, color="k")
     addtext(ax2, 0.95, 0.9, "BIS", ha="right", va="top")
 
     # Panel 2
-
-    root = ROOT / "sws_opt"
-
     names = ["u00", "u20", "u40"]
     labels = ["U=0.0 eV", "U=2.0 eV", "U=4.0 eV", "U=3.0 eV"]
     cols = ["C0", "C1", "C3", "C4"]
@@ -167,240 +111,43 @@ def plot_dos(save=False):
     # addtext(ax3, 0.95, 0.9, r"$a=2.9958 \AA$", ha="right", va="top")
     # addtext(ax4, 0.95, 0.9, r"$a=3.0233 \AA$", ha="right", va="top")
 
-    ax3.legend(loc="upper left", frameon=True, fontsize="6", )
+    ax3.legend(
+        loc="upper left",
+        frameon=True,
+        fontsize="6",
+    )
 
     if save:
-        fig.savefig(FIGS / "vanadium_dos.png", dpi=900)
+        fig.savefig(FIGS / "V_dos.png", dpi=900)
 
 
-def plot_dos_3(save=False):
-    xlim = -8, +8
-    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
-
-    fig = plt.figure(figsize=[3.375, 1.3 * 2.531])
-    gs = gridspec.GridSpec(3, 2, height_ratios=[1, 2, 2])
-    gs.update(left=0.15, bottom=0.10, top=0.97, right=0.97, wspace=0.0, hspace=0.02)
-    ax1 = fig.add_subplot(gs[0, 0])
-    ax2 = fig.add_subplot(gs[0, 1])
-    ax3 = fig.add_subplot(gs[1, :])
-    ax4 = fig.add_subplot(gs[2, :])
-    ax1.set_xticklabels([])
-    ax2.set_xticklabels([])
-    ax3.set_xticklabels([])
-    ax2.set_yticklabels([])
-    ax3.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=0)
-    ax4.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=0)
-
-    data_xps = np.loadtxt(Path("exp", "XPS_png.dat"))
-    x, y = data_xps.T
-    ax1.plot(x, y, "o", ms=1., color="k", label="BIS + XPS (a.u.)")
-    addtext(ax1, 0.05, 0.9, "XPS", ha="left", va="top")
-
-    data_bis = np.loadtxt(Path("exp", "BIS_png.dat"))
-    x, y = data_bis.T
-    ax2.plot(x, y, "o", ms=1., color="k")
-    addtext(ax2, 0.95, 0.9, "BIS", ha="right", va="top")
-
-    # Panel 2
-
-    folder = EmtoDirectory(ROOT, "nl3_57", "u10")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax3.plot(energy * ry2ev, dos, lw=0.7, label="U=1.0 eV")
-
-    folder = EmtoDirectory(ROOT, "nl3_57", "u23")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax3.plot(energy * ry2ev, dos, lw=0.7, label="U=2.3 eV")
-
-    folder = EmtoDirectory(ROOT, "nl3_57", "u40")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax3.plot(energy * ry2ev, dos, lw=0.7, label="U=4.0 eV", color="C3")
-
-    # Panel 3
-
-    folder = EmtoDirectory(ROOT, "nl3_57", "u10")
-    dosfile = folder.dos
-    energy, dos1 = dosfile.get_total_dos()
-    folder = EmtoDirectory(ROOT, "nl3_57_2", "u10")
-    dosfile = folder.dos
-    energy, dos2 = dosfile.get_total_dos()
-    ax4.plot(energy * ry2ev, np.abs(dos1 - dos2), lw=0.7, label="U=1.0 eV")
-
-    folder = EmtoDirectory(ROOT, "nl3_57", "u23")
-    dosfile = folder.dos
-    energy, dos1 = dosfile.get_total_dos()
-    folder = EmtoDirectory(ROOT, "nl3_57_2", "u23")
-    dosfile = folder.dos
-    energy, dos2 = dosfile.get_total_dos()
-    ax4.plot(energy * ry2ev, np.abs(dos1 - dos2), lw=0.7, label="U=2.3 eV")
-
-    folder = EmtoDirectory(ROOT, "nl3_57", "u40")
-    dosfile = folder.dos
-    energy, dos1 = dosfile.get_total_dos()
-    folder = EmtoDirectory(ROOT, "nl3_57_2", "u40")
-    dosfile = folder.dos
-    energy, dos2 = dosfile.get_total_dos()
-    ax4.plot(energy * ry2ev, np.abs(dos1 - dos2), lw=0.7, label="U=4.0 eV", color="C3")
-
-    ax1.set_xlim(xlim[0], 0)
-    ax2.set_xlim(0, xlim[1])
-    ax3.set_xlim(*xlim)
-    ax4.set_xlim(*xlim)
-    ax1.set_ylim(0, 100)
-    ax2.set_ylim(0, 100)
-    ax3.set_ylim(0, 45)
-    # ax4.set_ylim(0, 45)
-
-    ax1.set_ylabel("Exp. (a.u.)")
-    ax4.set_xlabel("$E - E_F$ (eV)")
-    ax3.set_ylabel("DOS (states/eV)")
-    ax4.set_ylabel("DOS (states/eV)")
-
-    addtext(ax3, 0.95, 0.9, r"$a=2.9958 \AA$", ha="right", va="top")
-    addtext(ax4, 0.95, 0.9, r"$a=3.0233 \AA$", ha="right", va="top")
-
-    ax1.grid(axis="x")
-    ax2.grid(axis="x")
-    ax3.grid(axis="x")
-    ax4.grid(axis="x")
-    ax3.legend(frameon=True)
-
-    if save:
-        fig.savefig(FIGS / "vanadium_dos_w_err.png", dpi=900)
+def deriv_z(z, sig_z, i0, step=3):
+    i1 = i0 - step
+    i2 = i0 + step
+    return (sig_z[:, :, i2] - sig_z[:, :, i1]).real / (z[i2] - z[i1])
 
 
-def plot_dos_4(save=False):
-    xlim = -8, +8
-    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
-
-    fig = plt.figure(figsize=[3.375, 1.2 * 2.531])
-    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 2])
-    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.0, hspace=0.02)
-    ax1 = fig.add_subplot(gs[0, 0])
-    ax2 = fig.add_subplot(gs[0, 1])
-    ax3 = fig.add_subplot(gs[1, :])
-    ax1.set_xticklabels([])
-    ax2.set_xticklabels([])
-    ax2.set_yticklabels([])
-    ax1.grid(axis="x")
-    ax2.grid(axis="x")
-    ax3.set_axisbelow(True)
-    ax3.grid(axis="x", zorder=-1)
-    ax3.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
-
-    data_xps = np.loadtxt(Path("exp", "XPS_png.dat"))
-    x, y = data_xps.T
-    ax1.plot(x, y, "o", ms=1., color="k", label="BIS + XPS (a.u.)")
-    addtext(ax1, 0.05, 0.9, "XPS", ha="left", va="top")
-
-    data_bis = np.loadtxt(Path("exp", "BIS_png.dat"))
-    x, y = data_bis.T
-    ax2.plot(x, y, "o", ms=1., color="k")
-    addtext(ax2, 0.95, 0.9, "BIS", ha="right", va="top")
-
-    # Panel 2
-
-    root = ROOT / "nl3_57"
-    folder = EmtoDirectory(root, "u10")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax3.plot(energy * ry2ev, dos, lw=0.7, label="U=1.0 eV")
-
-    folder = EmtoDirectory(root, "u20")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax3.plot(energy * ry2ev, dos, lw=0.7, label="U=2.0 eV")
-
-    folder = EmtoDirectory(root, "u30")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax3.plot(energy * ry2ev, dos, lw=0.7, label="U=3.0 eV", color="C3")
-
-    # Errors
-    root2 = ROOT / "nl3_57_2"
-
-    folder1 = EmtoDirectory(root, "u10")
-    folder2 = EmtoDirectory(root2, "u10")
-    dosfile = folder1.dos
-    energy, dos1 = dosfile.get_total_dos()
-    dosfile = folder2.dos
-    _, dos2 = dosfile.get_total_dos()
-    err1 = np.abs(dos1 - dos2)
-
-    folder1 = EmtoDirectory(root, "u20")
-    folder2 = EmtoDirectory(root2, "u20")
-    dosfile = folder1.dos
-    energy, dos1 = dosfile.get_total_dos()
-    dosfile = folder2.dos
-    _, dos2 = dosfile.get_total_dos()
-    err2 = np.abs(dos1 - dos2)
-
-    folder1 = EmtoDirectory(root, "u30")
-    folder2 = EmtoDirectory(root2, "u30")
-    dosfile = folder1.dos
-    energy, dos1 = dosfile.get_total_dos()
-    dosfile = folder2.dos
-    _, dos2 = dosfile.get_total_dos()
-    err3 = np.abs(dos1 - dos2)
-
-    # These are in unitless percentages of the figure size. (0,0 is bottom left)
-    left, bottom, width, height = [0.22, 0.5, 0.3, 0.15]
-    ax4 = fig.add_axes([left, bottom, width, height])
-    ax4.plot(energy * ry2ev, err1, color="C0", lw=0.5)
-    ax4.plot(energy * ry2ev, err2, color="C1", lw=0.5)
-    ax4.plot(energy * ry2ev, err3, color="C3", lw=0.5)
-    ax4.set_xlim(*xlim)
-    ax4.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
-    ax4.tick_params(axis='y', which='major', labelsize=5)
-    ax4.set_xticklabels([])
-    ax4.set_ylim(0, 10)
-    # Styling
-
-    ax1.set_xlim(xlim[0], 0)
-    ax2.set_xlim(0, xlim[1])
-    ax3.set_xlim(*xlim)
-
-    ax1.set_ylim(0, 100)
-    ax2.set_ylim(0, 100)
-    ax3.set_ylim(0, 43)
-    # ax4.set_ylim(0, 45)
-
-    ax1.set_ylabel("Exp. (a.u.)")
-    ax3.set_xlabel("$E - E_F$ (eV)")
-    ax3.set_ylabel("DOS (states/eV)")
-    # ax4.set_ylabel("DOS (states/eV)")
-
-    # addtext(ax3, 0.95, 0.9, r"$a=2.9958 \AA$", ha="right", va="top")
-    # addtext(ax4, 0.95, 0.9, r"$a=3.0233 \AA$", ha="right", va="top")
-
-    ax3.legend(loc="upper right", frameon=True, fontsize="6", )
-
-    if save:
-        fig.savefig(FIGS / "vanadium_dos_two_sws.png", dpi=900)
+def effective_mass_z(z, sig_z, i0, step=3):
+    """Calculate the effective mass from the imaginary part of the self-energy."""
+    return 1 - deriv_z(z, sig_z, i0, step)
 
 
 def plot_sigma_z(save=False):
     print("---- Sigma(z) ----")
+    root = ROOT / "sws_opt" / "400K"
     xlim = -4, +4
     use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
 
-    folder = EmtoDirectory(ROOT, "nl3_57_2", "u20")
-    z, sig_z = folder.get_sigma_z()
-    z *= ry2ev
-    sig_z *= ry2ev
+    folder = EmtoDirectory(root, "u20")
+    z, sig_z = folder.get_sigma_z(unit="ev")
 
     # Linear fit of Re Σ(0) for quasiparticle weight
     idx = np.argmin(np.abs(z))
-    i1 = idx - 3
-    i2 = idx + 3
-    assert i1 < i2
-    deriv = (sig_z[:, :, i2] - sig_z[:, :, i1]).real / (z[i2] - z[i1])
+    deriv = deriv_z(z, sig_z, idx, step=3)
     meff = 1 - deriv
 
-    print(f"Z_t2g = {1 / meff[0, 0]:.6f}  m* = {meff[0, 0]:.6f}")
-    print(f"Z_eg  = {1 / meff[0, 2]:.6f}  m* = {meff[0, 2]:.6f}")
+    print(f"Z_t2g = {1 / meff[0, 0]:.6f}  m* = {meff[0, 0]:.3f}")
+    print(f"Z_eg  = {1 / meff[0, 2]:.6f}  m* = {meff[0, 2]:.3f}")
 
     domain = [-3, 3]
     lin_t2g = Polynomial([sig_z[0, 0, idx].real, deriv[0, 0]])
@@ -408,7 +155,7 @@ def plot_sigma_z(save=False):
 
     # Fit Imaginary part of Σ(0)
 
-    i0, i1 = idx-3, idx+3
+    i0, i1 = idx - 3, idx + 3
     poly2_t2g = Polynomial.fit(z[i0:i1], sig_z[0, 0, i0:i1].imag, 2)
     poly2_eg = Polynomial.fit(z[i0:i1], sig_z[0, 2, i0:i1].imag, 2)
 
@@ -451,23 +198,33 @@ def plot_sigma_z(save=False):
 
     fig.subplots_adjust(wspace=0, hspace=0)
     if save:
-        fig.savefig(FIGS / "vanadium_selfz.png", dpi=900)
+        fig.savefig(FIGS / "V_selfz.png", dpi=900)
+
+
+def deriv_iw(iw, sig_iw):
+    """Calculate the derivative from the imaginary part of the self-energy."""
+    return (sig_iw[..., 1] - sig_iw[..., 0]).imag / (iw[1] - iw[0])
+
+
+def effective_mass_iw(iw, sig_iw):
+    """Calculate the effective mass from the imaginary part of the self-energy."""
+    return 1 - deriv_iw(iw, sig_iw)
 
 
 def plot_sigma_iw(save=False):
     print("---- Sigma(iω) ----")
+    root = ROOT / "sws_opt" / "400K"
     xlim = 0, +10
     use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
 
-    folder = EmtoDirectory(ROOT, "nl3_57_2", "u20")
+    folder = EmtoDirectory(root, "u20")
     iw, sig_iw = folder.get_sigma_iw(unit="ev")
-    iw *= ry2ev
     sig_iw = sig_iw[0]
 
-    deriv = (sig_iw[:, :, 1] - sig_iw[:, :, 0]).imag / (iw[1] - iw[0])
+    deriv = deriv_iw(iw, sig_iw)
     meff = 1 - deriv
-    print(f"Z_t2g = {1 / meff[0, 0]:.6f}  m* = {meff[0, 0]:.6f}")
-    print(f"Z_eg  = {1 / meff[0, 2]:.6f}  m* = {meff[0, 2]:.6f}")
+    print(f"Z_t2g = {1 / meff[0, 0]:.6f}  m* = {meff[0, 0]:.3f}")
+    print(f"Z_eg  = {1 / meff[0, 2]:.6f}  m* = {meff[0, 2]:.3f}")
 
     y0 = sig_iw.imag[:, :, 0] - deriv * iw[0]
     poly_t2g = Polynomial([y0[0, 0], deriv[0, 0]])
@@ -497,14 +254,57 @@ def plot_sigma_iw(save=False):
     ax2.set_ylim(-0.1, 0)
 
     if save:
-        fig.savefig(FIGS / "vanadium_selfiw.png", dpi=900)
+        fig.savefig(FIGS / "V_selfiw.png", dpi=900)
+
+
+def plot_sigma_iw_temp(save=False):
+    print("---- Sigma(iω, T) ----")
+    root = ROOT / "sws_opt"
+    s, t2g, eg = 0, 0, 2
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    xlim = 0, 3
+    ylim = -0.3, 0
+
+    fig = plt.figure(figsize=[1.2 * 3.375, 2.531])
+    gs = gridspec.GridSpec(1, 2)
+    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.05, hspace=0.02)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax2.set_yticklabels([])
+
+    addtext(ax1, 0.5, 0.9, "t$_{2g}$")
+    addtext(ax2, 0.5, 0.9, "e$_{g}$")
+    temps = 100, 200, 300, 400
+    colors = "C0", "C1", "C3", "C4"
+    markers = "o", "s", "D", "v"
+    for temp, col, mark in zip(temps, colors, markers):
+        folder = EmtoDirectory(root, f"{temp}K", "u20")
+        iw, sig_iw = folder.get_sigma_iw(unit="ev")
+        sig_iw = sig_iw[0]
+
+        kwargs = dict(marker=mark, ms=1.5, color=col, lw=0)
+        ax1.plot(iw, sig_iw[s, t2g].imag, label=f"{temp}K", **kwargs)
+        ax2.plot(iw, sig_iw[s, eg].imag, label=f"{temp}K", **kwargs)
+
+    ax1.set_xlim(*xlim)
+    ax1.set_ylim(*ylim)
+    ax2.set_xlim(*xlim)
+    ax2.set_ylim(*ylim)
+    ax1.set_xlabel(r"$i \omega_n$ (eV)")
+    ax2.set_xlabel(r"$i \omega_n$ (eV)")
+    ax1.set_ylabel(r"Im $\Sigma$ (eV)")
+    ax1.legend(frameon=True)
+    ax2.legend(frameon=True)
+    if save:
+        fig.savefig(FIGS / "V_selfiw_temp.png", dpi=900)
 
 
 def plot_sws_lambda(save=False):
+    print("---- SWS, λ, Tc ----")
+    root = ROOT / "sws_opt" / "400K"
     xlim = -0.1, 5.1
     use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
-
-    root = ROOT / "sws_opt"
 
     uu = list()
     sws = list()
@@ -529,7 +329,7 @@ def plot_sws_lambda(save=False):
 
     idx = np.argsort(uu)
     uu = np.array(uu)[idx]
-    sws = np.array(sws)[idx]
+    # sws = np.array(sws)[idx]
     alat = np.array(alat)[idx]
     etas = np.array(etas)[idx]
 
@@ -587,92 +387,40 @@ def plot_sws_lambda(save=False):
         fig.savefig(FIGS / "V_alat_lambda_tc.png", dpi=900)
 
 
-def effective_mass_iw(iw, sig_iw):
-    """Calculate the effective mass from the imaginary part of the self-energy."""
-    deriv = (sig_iw[..., 1] - sig_iw[..., 0]).imag / (iw[1] - iw[0])
-    return 1 - deriv
-
-
-def plot_sigma_iw_temp(save=False):
-    s, t2g, eg = 0, 0, 2
-    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
-
-    xlim = 0, 3
-    ylim = -0.3, 0
-
-    fig = plt.figure(figsize=[1.2 * 3.375, 2.531])
-    gs = gridspec.GridSpec(1, 2)
-    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.05, hspace=0.02)
-    ax1 = fig.add_subplot(gs[0, 0])
-    ax2 = fig.add_subplot(gs[0, 1])
-    ax2.set_yticklabels([])
-
-    addtext(ax1, 0.5, 0.9, "t$_{2g}$")
-    addtext(ax2, 0.5, 0.9, "e$_{g}$")
-    temps = 100, 200, 300, 400
-    colors = "C0", "C1", "C3", "C4"
-    markers = "o", "s", "D", "v"
-    for temp, col, mark in zip(temps, colors, markers):
-        folder = EmtoDirectory(ROOT, f"CPA_{temp}K", "u20")
-        iw, sig_iw = folder.get_sigma_iw(unit="ev")
-        sig_iw = sig_iw[0]
-
-        kwargs = dict(marker=mark, ms=1.5, color=col, lw=0)
-        ax1.plot(iw, sig_iw[s, t2g].imag, label=f"{temp}K", **kwargs)
-        ax2.plot(iw, sig_iw[s, eg].imag, label=f"{temp}K", **kwargs)
-
-    ax1.set_xlim(*xlim)
-    ax1.set_ylim(*ylim)
-    ax2.set_xlim(*xlim)
-    ax2.set_ylim(*ylim)
-    ax1.set_xlabel(r"$i \omega_n$ (eV)")
-    ax2.set_xlabel(r"$i \omega_n$ (eV)")
-    ax1.set_ylabel(r"Im $\Sigma$ (eV)")
-    ax1.legend(frameon=True)
-    ax2.legend(frameon=True)
-    if save:
-        fig.savefig(FIGS / "V_selfiw_temp.png", dpi=900)
-
-
-def load_etots(u):
-    return np.loadtxt(ROOT / "sws" / f"etot_u{int(u*10):02d}.dat", skiprows=1).T
-
-
 # noinspection PyTypeChecker,PyUnresolvedReferences
 def plot_alat_opt_curves(save=False):
+    print("---- E(a) ----")
     use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
 
     fig, ax = plt.subplots(figsize=[3.375, 0.8 * 2.531])
 
     u = 2
+    alat, etot, poly, popt = read_data(
+        ROOT / "sws", key=f"u{int(u*10):02d}", quantity="sws"
+    )
 
-    sws, alat, etot = load_etots(u)
-    poly = Polynomial.fit(alat, etot, deg=3)
-    sol = optimize.minimize(poly, x0=3)
-    print(sol.x)
+    # poly = Polynomial.fit(alat, etot, deg=3)
+    # sol = optimize.minimize(poly, x0=3)
+    print(f"Alat opt: {popt[0]}")
     ax.plot(alat, etot, "o", ms=3, label="data", zorder=2)
     ax.plot(*poly.linspace(), color="k", label="poly-fit", zorder=1)
     ax.set_xlabel("$a$ ($Å$)")
     ax.set_ylabel("Total energy (Ry)")
-    ax.axvline(sol.x, color="r", ls="--", lw=0.5, label="$a_{eq}$")
+    ax.axvline(popt, color="r", ls="--", lw=0.5, label="$a_{eq}$")
     ax.axvline(3.024, color="k", ls="-.", lw=0.5, label="$a$ (exp)")
     ax.legend(loc="upper right", frameon=True)
     if save:
-        fig.savefig(FIGS / "vanadium_alat_etot.png", dpi=900)
+        fig.savefig(FIGS / "V_alat_etot.png", dpi=900)
 
 
 def main():
-    save = True
-    # plot_tc_u(save=save)
-    # plot_dos(save=save)
-    # plot_dos(save=save)
-    # plot_dos_3(save=save)
-    # plot_dos_4(save=save)
-    # plot_sigma_z(save=save)
-    # plot_sigma_iw(save=save)
+    save = False
+    plot_dos(save=save)
+    plot_sigma_z(save=save)
+    plot_sigma_iw(save=save)
     plot_sigma_iw_temp(save=save)
-    # plot_sws_lambda(save=save)
-    # plot_alat_opt_curves(save=save)
+    plot_sws_lambda(save=save)
+    plot_alat_opt_curves(save=save)
     plt.show()
 
 
