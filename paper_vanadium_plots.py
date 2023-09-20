@@ -630,8 +630,8 @@ def plot_sigma_iw_temp(save=False):
     ax1.set_ylabel(r"Im $\Sigma$ (eV)")
     ax1.legend(frameon=True)
     ax2.legend(frameon=True)
-    fig.savefig("sig_iw.png", dpi=900)
-    plt.show()
+    if save:
+        fig.savefig(FIGS / "V_selfiw_temp.png", dpi=900)
 
 
 def load_etots(u):
@@ -670,6 +670,7 @@ def main():
     # plot_dos_4(save=save)
     # plot_sigma_z(save=save)
     # plot_sigma_iw(save=save)
+    plot_sigma_iw_temp(save=save)
     # plot_sws_lambda(save=save)
     # plot_alat_opt_curves(save=save)
     plt.show()
