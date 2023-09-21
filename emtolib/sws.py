@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Author: Dylan Jones
 # Date:   2023-09-20
-
+import time
 from pathlib import Path
 import numpy as np
 from numpy.polynomial import Polynomial
@@ -40,6 +40,8 @@ def save_alat_etots(root, deg=3, filename="sws.hdf5"):
     with h5py.File(root / filename, "w") as h5:
         for folder in root.iterdir():
             if folder.is_dir():
+                relpath = folder.relative_to(root)
+                print(f"\rSaving SWS optimization data: {relpath}", end="", flush=True)
                 sws, alat, etot = extract_alat_etots(folder)
                 ds = h5.create_dataset(folder.name, data=np.array([sws, alat, etot]))
                 poly_sws, sws_opt = fit_etots(sws, etot, deg=deg)
@@ -48,6 +50,7 @@ def save_alat_etots(root, deg=3, filename="sws.hdf5"):
                 ds.attrs["alat_opt"] = alat_opt
                 ds.attrs["poly_sws"] = poly_sws.coef
                 ds.attrs["poly_alat"] = poly_alat.coef
+    print(f"\rSaving SWS optimization data: done", flush=True)
 
 
 def read_data(root, key, quantity="sws", filename="sws.hdf5"):

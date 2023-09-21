@@ -136,6 +136,7 @@ class EmtoDirectory:
             if path.is_file():
                 if path.name.startswith("slurm") and path.suffix == ".out":
                     paths.append(path)
+        paths.sort(key=lambda x: x.name.replace("slurm-", "").replace(".out", ""))
         return paths
 
     def get_dmft_path(self, name=""):
@@ -238,17 +239,30 @@ class EmtoDirectory:
                 keep = path / ".keep"
                 keep.touch(exist_ok=True)
 
-    def clear(self, slurm=True, prn=True, dos=True, aux=True, fort=True):
+    def clear(self, slurm=True, out=True, aux=True):
         dat = self.dat
         if slurm:
             for path in self.get_slurm_out_paths():
                 path.unlink(missing_ok=True)
-        if prn:
-            path = self.get_prn_path()
-            path.unlink(missing_ok=True)
-        if dos:
-            path = self.get_dos_path()
-            path.unlink(missing_ok=True)
+        if out:
+            jobname = dat.jobnam
+            # prn file
+            file = self.path / f"{jobname}.prn"
+            file.unlink(missing_ok=True)
+            # dos file
+            file = self.path / f"{jobname}.dos"
+            file.unlink(missing_ok=True)
+            # other out files
+            file = self.path / f"{jobname}.phi"
+            file.unlink(missing_ok=True)
+            file = self.path / f"{jobname}.epm"
+            file.unlink(missing_ok=True)
+            # fort files
+            for file in self.path.iterdir():
+                if file.name.startswith("fort"):
+                    file.unlink(missing_ok=True)
+                elif file.name == "Sig":
+                    file.unlink(missing_ok=True)
         if aux:
             for name in dat.aux_dirs():
                 if name.startswith("/"):
@@ -257,21 +271,6 @@ class EmtoDirectory:
                 if path.is_dir() and path.exists():
                     for file in path.iterdir():
                         file.unlink(missing_ok=True)
-                    # shutil.rmtree(path)
-            # self.mkdirs(keep=keep)
-
-        jobname = dat.jobnam
-        file = self.path / f"{jobname}.phi"
-        file.unlink(missing_ok=True)
-        file = self.path / f"{jobname}.epm"
-        file.unlink(missing_ok=True)
-
-        if fort:
-            for file in self.path.iterdir():
-                if file.name.startswith("fort"):
-                    file.unlink(missing_ok=True)
-                elif file.name == "Sig":
-                    file.unlink(missing_ok=True)
 
     def __truediv__(self, other):
         new_path = self.path / other

@@ -40,6 +40,8 @@ def error(s):
 def get_emtodirs(*paths, recursive=False):
     folders = list(walk_emtodirs(*paths, recursive=recursive))
     # Recursively sort the folders by path paths
+    if not folders:
+        raise click.ClickException("No EMTO directories found.")
     maxparts = max([len(f.path.parts) for f in folders])
     for i in reversed(range(maxparts)):
         folders = sorted(folders, key=lambda f: f.path.parts[i])
