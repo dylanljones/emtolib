@@ -6,7 +6,7 @@ import numpy as np
 from scipy import constants
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from mplstyles import use_mplstyle, mplstyle_context, colors
+from mplstyles import use_mplstyle, mplstyle_context
 from emtolib import Path, CONFIG, walk_emtodirs, EmtoDirectory, elements
 from emtolib.mcmillan import phonon_coupling, mcmillan
 
@@ -148,27 +148,23 @@ def plot_tc_conc_tiv(save=False):
 
 def plot_dos_cpa(save=False):
     xlim = -8, +8
-    root = ROOT / "nl3_u2"
+    root = ROOT / "CPA" / "u2_400K"
     use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
 
     fig, ax = plt.subplots()  # figsize=[3.375, 1.0 * 2.531])
     ax.grid(axis="x", zorder=-1)
     ax.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
 
-    folder = EmtoDirectory(root / "Ti10")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax.plot(energy * ry2ev, dos, lw=0.7, color="C0", label="$x=0.10$")
+    names = ["Ti10", "Ti35", "Ti60"]
+    labels = ["$x=0.10$", "$x=0.35$", "$x=0.60$"]
+    colors = ["C0", "C1", "C3"]
 
-    folder = EmtoDirectory(root / "Ti35")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax.plot(energy * ry2ev, dos, lw=0.7, color="C1", label="$x=0.35$")
-
-    folder = EmtoDirectory(root / "Ti60")
-    dosfile = folder.dos
-    energy, dos = dosfile.get_total_dos()
-    ax.plot(energy * ry2ev, dos, lw=0.7, color="C3", label="$x=0.60$")
+    kwargs = dict(lw=0.7, zorder=2, ls="-")
+    for name, label, color in zip(names, labels, colors):
+        folder = EmtoDirectory(root / name)
+        dosfile = folder.dos
+        energy, dos = dosfile.get_total_dos()
+        ax.plot(energy * ry2ev, dos, color=color, label=label, **kwargs)
 
     ax.set_xlabel("$E - E_F$ (eV)")
     ax.set_ylabel("DOS (states/eV)")
@@ -180,9 +176,9 @@ def plot_dos_cpa(save=False):
 
 
 def main():
-    save = True
-    # plot_tc_conc_tiv(save)
-    plot_dos_cpa(save)
+    save = False
+    plot_tc_conc_tiv(save)
+    # plot_dos_cpa(save)
     plt.show()
 
 

@@ -413,14 +413,70 @@ def plot_alat_opt_curves(save=False):
         fig.savefig(FIGS / "V_alat_etot.png", dpi=900)
 
 
+def extract_meffs(root):
+    s, t2g, eg = 0, 0, 2
+    uu = []
+    meffs = []
+    for folder in walk_emtodirs(root):
+        dat = folder.dat
+        u = dat.get_atom("V").u[2]
+        try:
+            iw, sig_iw = folder.get_sigma_iw(unit="ev")
+            sig_iw = sig_iw[0]
+            deriv = deriv_iw(iw, sig_iw)
+            meff = 1 - deriv
+            print(meff[s])
+            # print(f"Z_t2g = {1 / meff[s, t2g]:.6f}  m* = {meff[s, t2g]:.3f}")
+            # print(f"Z_eg  = {1 / meff[s, eg]:.6f}  m* = {meff[s, eg]:.3f}")
+            if 0.5 <= u <= 4.0:
+                uu.append(u)
+                meffs.append([meff[s, t2g], meff[s, eg]])
+        except FileNotFoundError:
+            continue
+
+    idx = np.argsort(uu)
+    uu = np.array(uu)[idx]
+    meffs = np.array(meffs)[idx]
+    return uu, meffs
+
+
+def plot_meff(save=False):
+    print("---- m*(U) ----")
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    root = ROOT / "sws_opt"
+
+    fig, ax = plt.subplots(figsize=[3.375, 0.75 * 2.531])
+    ax.set_xlabel(r"$U$ (eV)")
+    ax.set_ylabel(r"$m^* / m$")
+
+    uu, meffs = extract_meffs(root / "200K")
+    meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
+    # ax.plot(uu, meffs[:, 0], "o", color="C0", ms=2, label="t2g")
+    # ax.plot(uu, meffs[:, 1], "o", color="C1", ms=2, label="eg")
+    ax.plot(uu, meff_total, "o--", color="C0", ms=2, label="200K")
+
+    uu, meffs = extract_meffs(root / "400K")
+    # ax.plot(uu, meffs[:, 0], "s", color="C0", ms=2, label="t2g")
+    # ax.plot(uu, meffs[:, 1], "s", color="C1", ms=2, label="eg")
+    meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
+    ax.plot(uu, meff_total, "s-.", color="C1", ms=2, label="400K")
+    ax.set_xlim(0.45, 4.05)
+    ax.legend(frameon=True)
+    ax.grid(axis="y")
+    if save:
+        fig.savefig(FIGS / "V_u_meff.png", dpi=900)
+
+
 def main():
-    save = False
-    plot_dos(save=save)
-    plot_sigma_z(save=save)
-    plot_sigma_iw(save=save)
-    plot_sigma_iw_temp(save=save)
-    plot_sws_lambda(save=save)
-    plot_alat_opt_curves(save=save)
+    save = True
+    # plot_dos(save=save)
+    # plot_sigma_z(save=save)
+    # plot_sigma_iw(save=save)
+    # plot_sigma_iw_temp(save=save)
+    # plot_sws_lambda(save=save)
+    # plot_alat_opt_curves(save=save)
+    plot_meff(save=save)
     plt.show()
 
 
