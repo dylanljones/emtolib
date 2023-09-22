@@ -657,12 +657,13 @@ class KgrnFile(EmtoFile):
     def set_header(self, header: str = "", date_frmt: str = "%d %b %y") -> None:
         self.header = (header + " " + datetime.now().strftime(date_frmt)).strip()
 
-    def get_atom_symbols(self, include_empty: bool = True) -> Set[str]:
-        atoms = set(
-            at.symbol
-            for at in self.atoms
-            if include_empty or at.symbol not in ("E", "Va")
-        )
+    def get_atom_symbols(self, include_empty: bool = True) -> List[str]:
+        atoms = list()
+        for at in self.atoms:
+            sym = at.symbol
+            if include_empty or sym not in ("E", "Va"):
+                if sym not in atoms:
+                    atoms.append(sym)
         return atoms
 
     def get_atoms(
@@ -733,6 +734,18 @@ class KgrnFile(EmtoFile):
             return self.get_atom(key).conc
         except KeyError:
             return 0.0
+
+    def set_uj(self, atom, u, j, idx=None):
+        atoms = list()
+        for at in self.get_atoms(atom):
+            if idx is None:
+                at.u = u
+                at.j = j
+            else:
+                at.u[idx] = u
+                at.j[idx] = j
+            atoms.append(at)
+        return atoms
 
     def get_max_it(self) -> int:
         return max(at.it for at in self.atoms)
