@@ -731,7 +731,11 @@ class KgrnFile(EmtoFile):
 
     def get_concentration(self, key: Union[int, str]) -> float:
         try:
-            return self.get_atom(key).conc
+            atoms = self.get_atoms(key)
+            concs = np.unique([a.conc for a in atoms])
+            if len(concs) > 1:
+                raise ValueError(f"Multiple concentrations found: {concs}")
+            return float(concs[0])
         except KeyError:
             return 0.0
 

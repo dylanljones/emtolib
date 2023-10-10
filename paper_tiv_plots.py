@@ -104,11 +104,11 @@ def plot_tc_conc_tiv(save=False):
 
     fig, ax = plt.subplots()
     ckey = "Ti"
-    for u in [2, 4]:
-        root = ROOT / f"nl3_u{u}"
+    colors = ["C0", "C1", "C4"]
+    for u, c in zip([0, 2, 4], colors):
+        root = ROOT / "CPA" / f"u{u}_400K"  # / f"nl3_u{u}"
         cc, tc = _extract_tc_c_tiv(root, ckey)
-        print(cc, tc)
-        ax.plot(cc, tc, "-o", lw=0.8, ms=2, label=f"U={u} eV")
+        ax.plot(cc, tc, "-o", lw=0.8, ms=2, color=c, label=f"U={u} eV")
 
     regions = [1 - 0.335, 1 - 0.145, 1]
 
@@ -139,7 +139,7 @@ def plot_tc_conc_tiv(save=False):
     x = 1 - x
     mask = x < regions[0]
     # x, y = x[mask], y[mask]
-    ax.plot(x, y, "-o", lw=0.8, ms=2, label="exp", zorder=1)
+    ax.plot(x, y, "-o", lw=0.8, ms=2, color="C2", label="exp", zorder=1)
 
     ax.legend(loc="lower left", frameon=True)
     if save:
@@ -176,7 +176,7 @@ def plot_dos_cpa(save=False):
 
 
 def main():
-    save = False
+    save = True
     plot_tc_conc_tiv(save)
     # plot_dos_cpa(save)
     plt.show()
