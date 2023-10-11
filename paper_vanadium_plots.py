@@ -11,8 +11,10 @@ from mplstyles import use_mplstyle
 from emtolib import Path, CONFIG, walk_emtodirs, EmtoDirectory, elements
 from emtolib.mcmillan import phonon_coupling, mcmillan
 from emtolib.sws import read_data
+from emtolib.utils import fermi_fct, gaussian, lorentzian, convolve_func
 
 ry2ev = constants.value("Rydberg constant times hc in eV")  # 13.605693122994
+kb = constants.value("Boltzmann constant in eV/K")  # 8.617333262145e-05
 
 FIGS = CONFIG["figs"]
 ROOT = CONFIG["app"] / "V"
@@ -119,6 +121,90 @@ def plot_dos(save=False):
 
     if save:
         fig.savefig(FIGS / "V_dos.png", dpi=900)
+
+
+def plot_dos_conv(save=False):
+    print("---- DOS(z) conv ----")
+    root = ROOT / "sws_opt" / "400K"
+    xlim = -8, +8
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    fig = plt.figure(figsize=[3.375, 1.0 * 2.531])
+    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 2])
+    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.0, hspace=0.02)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax3 = fig.add_subplot(gs[1, :])
+    ax1.set_xticklabels([])
+    ax2.set_xticklabels([])
+    ax2.set_yticklabels([])
+    ax1.grid(axis="x")
+    ax2.grid(axis="x")
+    ax3.set_axisbelow(True)
+    ax3.grid(axis="x", zorder=-1)
+    ax3.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
+
+    data_xps = np.loadtxt(Path("exp", "XPS_png.dat"))
+    x, y = data_xps.T
+    ax1.plot(x, y, "o", ms=1.0, color="k", label="BIS + XPS (a.u.)")
+    addtext(ax1, 0.05, 0.9, "XPS", ha="left", va="top")
+
+    data_bis = np.loadtxt(Path("exp", "BIS_png.dat"))
+    x, y = data_bis.T
+    ax2.plot(x, y, "o", ms=1.0, color="k")
+    addtext(ax2, 0.95, 0.9, "BIS", ha="right", va="top")
+
+    # Panel 2
+    u = 2
+    folder = EmtoDirectory(root, f"u{u}0")
+    dat = folder.dat
+    dosfile = folder.dos
+    energy, dos = dosfile.get_total_dos()
+    energy *= ry2ev
+    temp = dat.ttt
+    beta = 1 / (kb * temp)
+    # Plot original DOS
+    ax3.plot(energy, dos, color="grey", label="DOS", lw=0.5, zorder=1)
+    ax3.fill_between(energy, dos, color="grey", alpha=0.15, zorder=1)
+
+    # Apply Fermi-Dirac smearing
+    dos_val = fermi_fct(energy, beta=beta) * dos
+    dos_con = fermi_fct(-energy, beta=beta) * dos
+    # Convolve with a constant Lorentzian broadening of 0.1eV
+    dos_val = convolve_func(energy, dos_val, lorentzian, width=0.1, x0=0)
+    dos_con = convolve_func(energy, dos_con, lorentzian, width=0.1, x0=0)
+    # Convolve VB (CB) with a Gaussian broadening of 0.55eV (0.7eV)
+    dos_val = convolve_func(energy, dos_val, gaussian, width=0.55, x0=0)
+    dos_con = convolve_func(energy, dos_con, gaussian, width=0.7, x0=0)
+    ax3.plot(energy, dos_val, lw=0.7, label="VB", zorder=2)
+    ax3.plot(energy, dos_con, lw=0.7, label="CB", zorder=2)
+
+    # Styling
+    ax1.set_xlim(xlim[0], 0)
+    ax2.set_xlim(0, xlim[1])
+    ax3.set_xlim(*xlim)
+
+    ax1.set_ylim(0, 100)
+    ax2.set_ylim(0, 100)
+    ax3.set_ylim(0, 29)
+    # ax4.set_ylim(0, 45)
+
+    ax1.set_ylabel("Exp. (a.u.)")
+    ax3.set_xlabel("$E - E_F$ (eV)")
+    ax3.set_ylabel("DOS (states/eV)")
+    # ax4.set_ylabel("DOS (states/eV)")
+
+    # addtext(ax3, 0.95, 0.9, r"$a=2.9958 \AA$", ha="right", va="top")
+    # addtext(ax4, 0.95, 0.9, r"$a=3.0233 \AA$", ha="right", va="top")
+
+    ax3.legend(
+        loc="upper left",
+        frameon=True,
+        fontsize="6",
+    )
+
+    if save:
+        fig.savefig(FIGS / "V_dos_conv.png", dpi=900)
 
 
 def deriv_z(z, sig_z, i0, step=3):
@@ -471,11 +557,12 @@ def plot_meff(save=False):
 def main():
     save = True
     # plot_dos(save=save)
+    plot_dos_conv(save)
     # plot_sigma_z(save=save)
     # plot_sigma_iw(save=save)
     # plot_sigma_iw_temp(save=save)
     # plot_sws_lambda(save=save)
-    plot_alat_opt_curves(save=save)
+    # plot_alat_opt_curves(save=save)
     # plot_meff(save=save)
     plt.show()
 
