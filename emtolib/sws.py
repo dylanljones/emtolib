@@ -74,6 +74,22 @@ def read_data(root, key, quantity="sws", filename="sws.hdf5"):
 
 
 def read_opt_latt(root, filename="sws.hdf5"):
+    """Reads the optimized lattice constants from the hdf5 archive.
+
+    Parameters
+    ----------
+    root : str or pathlib.Path
+        Path to the root directory
+    filename : str
+        Name of the hdf5 file
+
+    Returns
+    -------
+    sws : dict
+        Dictionary with the optimized sws for each structure
+    alat : dict
+        Dictionary with the optimized alat for each structure
+    """
     root = Path(root)
     sws = dict()
     alat = dict()
