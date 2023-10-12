@@ -138,10 +138,10 @@ def plot_dos_conv(save=False):
     ax1.set_xticklabels([])
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
-    ax1.grid(axis="x")
-    ax2.grid(axis="x")
-    ax3.set_axisbelow(True)
-    ax3.grid(axis="x", zorder=-1)
+    # ax1.grid(axis="x")
+    # ax2.grid(axis="x")
+    # ax3.set_axisbelow(True)
+    # ax3.grid(axis="x", zorder=-1)
     ax3.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
 
     data_xps = np.loadtxt(Path("exp", "XPS_png.dat"))
@@ -196,15 +196,56 @@ def plot_dos_conv(save=False):
 
     # addtext(ax3, 0.95, 0.9, r"$a=2.9958 \AA$", ha="right", va="top")
     # addtext(ax4, 0.95, 0.9, r"$a=3.0233 \AA$", ha="right", va="top")
-
     ax3.legend(
         loc="upper left",
         frameon=True,
         fontsize="6",
     )
+    kwargs = dict(color="k", ls="--", lw=0.4, zorder=0)
+    x = -2.4
+    ax1.axvline(x, **kwargs)
+    ax3.axvline(x, **kwargs)
+    x = -0.7
+    ax1.axvline(x, **kwargs)
+    ax3.axvline(x, **kwargs)
+    x = +0.7
+    ax2.axvline(x, **kwargs)
+    ax3.axvline(x, **kwargs)
+    x = +2.3
+    ax2.axvline(x, **kwargs)
+    ax3.axvline(x, **kwargs)
 
     if save:
         fig.savefig(FIGS / "V_dos_conv.png", dpi=900)
+
+
+def plot_dos_at_ef(save=False):
+    print("---- DOS(z) Ef ----")
+    root = ROOT / "sws_opt" / "400K_2"
+    xlim = -0.6, +0.6
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    fig, ax = plt.subplots()
+    ax.set_xlim(*xlim)
+    ax.set_ylim(0, 30)
+    ax.set_xlabel("$E - E_F$ (eV)")
+    ax.set_ylabel("DOS (states/eV)")
+    ax.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
+    ax.grid(axis="x")
+
+    uu = [0, 2, 4, 6]
+    colors = ["C3", "C0", "C1", "C5"]
+    labels = ["LDA", "$U=2$eV", "$U=4$eV", "$U=6$eV"]
+    markers = ["o", "s", "D", "v"]
+    for u, c, lab, m in zip(uu, colors, labels, markers):
+        folder = EmtoDirectory(root, f"u{u}0")
+        dosfile = folder.dos
+        energy, dos = dosfile.get_total_dos()
+        energy *= ry2ev
+        ax.plot(energy, dos, ms=1, color=c, label=lab, lw=0.7, zorder=1)
+    ax.legend(frameon=True)
+    if save:
+        fig.savefig(FIGS / "V_dos_ef.png", dpi=900)
 
 
 def deriv_z(z, sig_z, i0, step=3):
@@ -536,18 +577,22 @@ def plot_meff(save=False):
     ax.set_xlabel(r"$U$ (eV)")
     ax.set_ylabel(r"$m^* / m$")
 
-    uu, meffs = extract_meffs(root / "200K")
+    temp = 200
+    uu, meffs = extract_meffs(root / f"{temp}K")
     meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
     # ax.plot(uu, meffs[:, 0], "o", color="C0", ms=2, label="t2g")
     # ax.plot(uu, meffs[:, 1], "o", color="C1", ms=2, label="eg")
-    ax.plot(uu, meff_total, "o--", color="C0", ms=2, label="200K")
+    ax.plot(uu, meff_total, "o--", color="C0", ms=2, label=f"$T={temp}$K")
 
-    uu, meffs = extract_meffs(root / "400K")
+    temp = 400
+    uu, meffs = extract_meffs(root / f"{temp}K")
     # ax.plot(uu, meffs[:, 0], "s", color="C0", ms=2, label="t2g")
     # ax.plot(uu, meffs[:, 1], "s", color="C1", ms=2, label="eg")
     meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    ax.plot(uu, meff_total, "s-.", color="C1", ms=2, label="400K")
-    ax.set_xlim(0.45, 4.05)
+    ax.plot(uu, meff_total, "s-.", color="C1", ms=2, label=f"$T={temp}$K")
+    # ax.set_xlim(0.45, 4.05)
+    ax.set_xmargin(0.02)
+    ax.set_ylim(1, 1.8)
     ax.legend(frameon=True)
     ax.grid(axis="y")
     if save:
@@ -557,7 +602,8 @@ def plot_meff(save=False):
 def main():
     save = True
     # plot_dos(save=save)
-    plot_dos_conv(save)
+    # plot_dos_conv(save)
+    plot_dos_at_ef(save=save)
     # plot_sigma_z(save=save)
     # plot_sigma_iw(save=save)
     # plot_sigma_iw_temp(save=save)

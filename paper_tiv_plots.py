@@ -106,11 +106,13 @@ def plot_tc_conc_tiv(save=False):
 
     fig, ax = plt.subplots()
     ckey = "Ti"
-    colors = ["C3", "C0", "C1"]
-    for u, c in zip([0, 2, 4], colors):
+    uu = [0, 2, 4, 6]
+    colors = ["C3", "C0", "C1", "C4"]
+    labels = ["LDA", "$U=2$eV", "$U=4$eV", "$U=6$eV"]
+    for u, c, lab in zip(uu, colors, labels):
         root = ROOT / "CPA" / f"u{u}_400K"  # / f"nl3_u{u}"
         cc, tc = _extract_tc_c_tiv(root, ckey)
-        ax.plot(cc, tc, "-o", lw=0.8, ms=2, color=c, label=f"U={u} eV")
+        ax.plot(cc, tc, "--o", lw=0.8, ms=2, color=c, label=lab)
 
     regions = [1 - 0.335, 1 - 0.145, 1]
 
@@ -257,7 +259,7 @@ def plot_sigma_iw2(save=False):
 
     fig = plt.figure()  # figsize=[3.375, 1.0 * 2.531])
     gs = gridspec.GridSpec(1, 2)
-    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.0, hspace=0.02)
+    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.02, hspace=0.02)
     ax1 = fig.add_subplot(gs[0, 0])
     ax2 = fig.add_subplot(gs[0, 1])
     ax2.set_yticklabels([])
@@ -333,22 +335,25 @@ def plot_meff(save=False):
     ax.set_ylabel(r"$m^* / m$")
 
     u = 2
-    cc, meffs = extract_meffs(root / f"u{u}_400K")
+    temp = 200
+    cc, meffs = extract_meffs(root / f"u{u}_{temp}K")
     meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    ax.plot(cc, meff_total, "o--", color="C0", ms=2, label=f"$U={u}$")
+    ax.plot(cc, meff_total, "o--", color="C0", ms=2, label=f"$T={temp}$K")
 
-    u = 4
-    cc, meffs = extract_meffs(root / f"u{u}_400K")
+    temp = 400
+    cc, meffs = extract_meffs(root / f"u{u}_{temp}K")
     meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    #ax.plot(cc, meff_total, "s-.", color="C1", ms=2, label=f"$U={u}$")
+    ax.plot(cc, meff_total, "s-.", color="C1", ms=2, label=f"$T={temp}$K")
 
     # uu, meffs = extract_meffs(root / "400K")
     # ax.plot(uu, meffs[:, 0], "s", color="C0", ms=2, label="t2g")
     # ax.plot(uu, meffs[:, 1], "s", color="C1", ms=2, label="eg")
     # meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
     # ax.plot(uu, meff_total, "s-.", color="C1", ms=2, label="400K")
-    # ax.set_xlim(0.45, 4.05)
+    ax.set_xmargin(0.02)
+    # ax.set_ylim(1, 1.8)
     #ax.set_ylim(1, 2)
+
     ax.legend(frameon=True)
     ax.grid(axis="y")
     if save:
@@ -361,7 +366,8 @@ def main():
     # plot_dos_cpa(save)
     # plot_sigma_iw(save)
     # plot_meff(save)
-    plot_sigma_iw2(save)
+    # plot_sigma_iw2(save)
+    plot_tc_conc_tiv(save)
     plt.show()
 
 

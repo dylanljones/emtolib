@@ -751,6 +751,9 @@ class KgrnFile(EmtoFile):
             atoms.append(at)
         return atoms
 
+    def get_max_iq(self) -> int:
+        return max(at.iq for at in self.atoms)
+
     def get_max_it(self) -> int:
         return max(at.it for at in self.atoms)
 
