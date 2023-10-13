@@ -35,7 +35,7 @@ def fit_etots(x, etot, deg=3):
     return poly, sol.x
 
 
-def save_alat_etots(root, deg=3, filename="sws.hdf5"):
+def save_alat_etots(root, deg=3, filename="sws.hdf5", callback=None):
     root = Path(root)
     with h5py.File(root / filename, "w") as h5:
         for folder in root.iterdir():
@@ -50,6 +50,8 @@ def save_alat_etots(root, deg=3, filename="sws.hdf5"):
                 ds.attrs["alat_opt"] = alat_opt
                 ds.attrs["poly_sws"] = poly_sws.coef
                 ds.attrs["poly_alat"] = poly_alat.coef
+                if callback is not None:
+                    callback(folder, ds)
     print(f"\rSaving SWS optimization data: done", flush=True)
 
 
