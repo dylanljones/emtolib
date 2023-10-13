@@ -523,7 +523,7 @@ def plot_alat_opt_curves(save=False):
 
     u = 2
     alat, etot, poly, popt = read_data(
-        ROOT / "sws", key=f"u{int(u*10):02d}", quantity="sws"
+        ROOT / "sws", key=f"u{int(u*10):02d}", quantity="alat"
     )
 
     # poly = Polynomial.fit(alat, etot, deg=3)
@@ -534,7 +534,7 @@ def plot_alat_opt_curves(save=False):
     ax.set_xlabel("$a$ ($Å$)")
     ax.set_ylabel("Total energy (Ry)")
     ax.axvline(popt, color="r", ls="--", lw=0.5, label="$a_{eq}$")
-    ax.axvline(2.813, color="k", ls="-.", lw=0.5, label="$a$ (exp)")
+    ax.axvline(3.024, color="k", ls="-.", lw=0.5, label="$a$ (exp)")
     ax.legend(loc="upper right", frameon=True)
     if save:
         fig.savefig(FIGS / "V_alat_etot.png", dpi=900)
@@ -603,12 +603,12 @@ def main():
     save = True
     # plot_dos(save=save)
     # plot_dos_conv(save)
-    plot_dos_at_ef(save=save)
+    # plot_dos_at_ef(save=save)
     # plot_sigma_z(save=save)
     # plot_sigma_iw(save=save)
     # plot_sigma_iw_temp(save=save)
     # plot_sws_lambda(save=save)
-    # plot_alat_opt_curves(save=save)
+    plot_alat_opt_curves(save=save)
     # plot_meff(save=save)
     plt.show()
 

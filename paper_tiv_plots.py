@@ -3,6 +3,7 @@
 # Date:   2023-08-21
 
 import numpy as np
+import h5py
 from numpy.polynomial import Polynomial
 from scipy import constants
 import matplotlib.pyplot as plt
@@ -11,6 +12,7 @@ from mplstyles import use_mplstyle, mplstyle_context
 from emtolib import Path, CONFIG, walk_emtodirs, EmtoDirectory, elements
 from emtolib.mcmillan import phonon_coupling, mcmillan
 from emtolib.meff import deriv_iw, effective_mass
+from emtolib.sws import save_alat_etots, read_data
 
 ry2ev = constants.value("Rydberg constant times hc in eV")  # 13.605693122994
 
@@ -150,7 +152,7 @@ def plot_tc_conc_tiv(save=False):
         fig.savefig(FIGS / "TiV_conc_tc.png", dpi=900)
 
 
-def plot_dos_cpa(save=False):
+def plot_dos_cpa2(save=False):
     xlim = -8, +8
     root = ROOT / "CPA" / "u2_400K"
     use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
@@ -169,6 +171,43 @@ def plot_dos_cpa(save=False):
         dosfile = folder.dos
         energy, dos = dosfile.get_total_dos()
         ax.plot(energy * ry2ev, dos, color=color, label=label, **kwargs)
+
+    ax.set_xlabel("$E - E_F$ (eV)")
+    ax.set_ylabel("DOS (states/eV)")
+    ax.set_xlim(*xlim)
+    ax.set_ylim(0, None)
+    ax.legend(frameon=True)
+    if save:
+        fig.savefig(FIGS / "TiV_DOS_CPA2.png", dpi=900)
+
+
+def plot_dos_cpa(save=False):
+    xlim = -8, +8
+    root = ROOT / "CPA" / "u2_400K"
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    fig, ax = plt.subplots(figsize=[3.375, 0.75 * 2.531])  # figsize=[3.375, 1.0 * 2.531])
+    ax.grid(axis="x", zorder=-1)
+    ax.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
+
+    folder = EmtoDirectory(root / "Ti35")
+    c = folder.dat.get_concentration("Ti")
+    dosfile = folder.dos
+    # energy, dos = dosfile.get_total_dos()
+    ee, dos = dosfile.get_partial_dos(atom="Ti")
+    ax.plot(ee * ry2ev, dos, lw=0.7, zorder=1, ls="-", label="$c_{Ti}$ Ti")
+    ee, dos = dosfile.get_partial_dos(atom="V")
+    ax.plot(ee * ry2ev, dos, lw=0.7, zorder=1, ls="-", label="$c_{V}$ V")
+    ee, dos = dosfile.get_total_dos()
+    ax.plot(ee * ry2ev, dos, lw=1.0, zorder=2, color="k", label="Total")
+
+    ax.text(0.05, 0.95, "Ti$_{0.35}$V$_{0.65}$", ha="left", va="top", transform=ax.transAxes)
+
+    root = CONFIG["app"] / "V" / "sws_opt" / "400K" / "u20"
+    folder = EmtoDirectory(root)
+    dosfile = folder.dos
+    ee, dos = dosfile.get_total_dos()
+    ax.plot(ee * ry2ev, dos, lw=0.7, zorder=1, ls="--", label="pure V")
 
     ax.set_xlabel("$E - E_F$ (eV)")
     ax.set_ylabel("DOS (states/eV)")
@@ -345,11 +384,6 @@ def plot_meff(save=False):
     meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
     ax.plot(cc, meff_total, "s-.", color="C1", ms=2, label=f"$T={temp}$K")
 
-    # uu, meffs = extract_meffs(root / "400K")
-    # ax.plot(uu, meffs[:, 0], "s", color="C0", ms=2, label="t2g")
-    # ax.plot(uu, meffs[:, 1], "s", color="C1", ms=2, label="eg")
-    # meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    # ax.plot(uu, meff_total, "s-.", color="C1", ms=2, label="400K")
     ax.set_xmargin(0.02)
     # ax.set_ylim(1, 1.8)
     #ax.set_ylim(1, 2)
@@ -360,14 +394,96 @@ def plot_meff(save=False):
         fig.savefig(FIGS / "TiV_c_meff.png", dpi=900)
 
 
+def plot_meff2(save=False):
+    print("---- m*(U) ----")
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    root = ROOT / "CPA"
+    fig = plt.figure(figsize=[3.375, 0.75 * 2.531])
+    gs = gridspec.GridSpec(1, 2)
+    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.02, hspace=0.02)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax2.set_yticklabels([])
+    ax1.text(0.3, 0.95, "t$_{2g}$", transform=ax1.transAxes, ha="center", va="center")
+    ax2.text(0.3, 0.95, "e$_{g}$", transform=ax2.transAxes, ha="center", va="center")
+    ax1.set_ylabel(r"$m^* / m$")
+    ax1.set_xlabel(r"$x$")
+    ax2.set_xlabel(r"$x$")
+    u = 2
+    temp = 200
+    cc, meffs = extract_meffs(root / f"u{u}_{temp}K")
+    ax1.plot(cc, meffs[:, 0], "o--", color="C0", ms=2)
+    ax2.plot(cc, meffs[:, 1], "o--", color="C0", ms=2, label=f"$T={temp}$K")
+
+    temp = 400
+    cc, meffs = extract_meffs(root / f"u{u}_{temp}K")
+    meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
+    ax1.plot(cc, meffs[:, 0], "s-.", color="C1", ms=2)
+    ax2.plot(cc, meffs[:, 1], "s-.", color="C1", ms=2, label=f"$T={temp}$K")
+
+    ylim = 1.12, 1.26
+    ax1.set_xmargin(0.02)
+    ax2.set_xmargin(0.02)
+    ax1.set_ylim(*ylim)
+    ax2.set_ylim(*ylim)
+    ax1.grid(axis="y")
+    ax2.grid(axis="y")
+    # ax1.legend(frameon=True)
+    ax2.legend(frameon=True)
+    if save:
+        fig.savefig(FIGS / "TiV_c_meff2.png", dpi=900)
+
+
+def callback(folder, ds):
+    ds.attrs["conc"] = int(folder.name.replace("Ti", "")) / 100
+
+
+def plot_conc_alat(save=False):
+
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+    fig, ax = plt.subplots(figsize=[3.375, 0.8 * 2.531])
+
+    ax.set_xlabel(r"$x$")
+    ax.set_ylabel(r"$a_{eq}$ ($\AA$)")
+    ax.set_xlim(-0.02, 1.02)
+    ax.grid(axis="x")
+
+    u = 2
+
+    root = ROOT / "CPA" / f"sws_u{u}_400K"
+    # save_alat_etots(root, callback=callback)
+    cc = list()
+    alat = list()
+    with h5py.File(root / "sws.hdf5", "r") as f:
+        for ds in f.values():
+            cc.append(ds.attrs["conc"])
+            alat.append(ds.attrs["alat_opt"][0])
+    idx = np.argsort(cc)
+    cc = np.array(cc)[idx]
+    alat = np.array(alat)[idx]
+    mask = cc < 0.8
+    linfit = Polynomial.fit(cc[mask], alat[mask], 1, domain=[0, 1])
+
+    ax.plot(cc[mask], alat[mask], "o", ms=3, label="data", zorder=2)
+    ax.plot(*linfit.linspace(100), "-", color="k", label="linear fit", zorder=1)
+    print(linfit(1))
+
+    ax.legend(frameon=True)
+
+    if save:
+        fig.savefig(FIGS / "TiV_c_alat.png", dpi=900)
+
+
 def main():
     save = True
 
     # plot_dos_cpa(save)
     # plot_sigma_iw(save)
-    # plot_meff(save)
+    plot_meff(save)
     # plot_sigma_iw2(save)
-    plot_tc_conc_tiv(save)
+    # plot_tc_conc_tiv(save)
+    # plot_conc_alat(True)
     plt.show()
 
 
