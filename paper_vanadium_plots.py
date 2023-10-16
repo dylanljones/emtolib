@@ -7,7 +7,7 @@ from numpy.polynomial import Polynomial
 from scipy import constants
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from mplstyles import use_mplstyle
+from mplstyles import use_mplstyle, mplstyle_context
 from emtolib import Path, CONFIG, walk_emtodirs, EmtoDirectory, elements
 from emtolib.mcmillan import phonon_coupling, mcmillan
 from emtolib.sws import read_data
@@ -138,10 +138,10 @@ def plot_dos_conv(save=False):
     ax1.set_xticklabels([])
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
-    # ax1.grid(axis="x")
-    # ax2.grid(axis="x")
-    # ax3.set_axisbelow(True)
-    # ax3.grid(axis="x", zorder=-1)
+    ax1.grid(axis="x")
+    ax2.grid(axis="x")
+    ax3.set_axisbelow(True)
+    ax3.grid(axis="x", zorder=-1)
     ax3.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
 
     data_xps = np.loadtxt(Path("exp", "XPS_png.dat"))
@@ -203,17 +203,17 @@ def plot_dos_conv(save=False):
     )
     kwargs = dict(color="k", ls="--", lw=0.4, zorder=0)
     x = -2.4
-    ax1.axvline(x, **kwargs)
-    ax3.axvline(x, **kwargs)
+    # ax1.axvline(x, **kwargs)
+    # ax3.axvline(x, **kwargs)
     x = -0.7
-    ax1.axvline(x, **kwargs)
-    ax3.axvline(x, **kwargs)
+    # ax1.axvline(x, **kwargs)
+    # ax3.axvline(x, **kwargs)
     x = +0.7
-    ax2.axvline(x, **kwargs)
-    ax3.axvline(x, **kwargs)
+    # ax2.axvline(x, **kwargs)
+    # ax3.axvline(x, **kwargs)
     x = +2.3
-    ax2.axvline(x, **kwargs)
-    ax3.axvline(x, **kwargs)
+    # ax2.axvline(x, **kwargs)
+    # ax3.axvline(x, **kwargs)
 
     if save:
         fig.savefig(FIGS / "V_dos_conv.png", dpi=900)
@@ -474,19 +474,19 @@ def plot_sws_lambda(save=False):
     ax3 = fig.add_subplot(gs[2])
 
     # ax1.axhline(3.024, color="k", ls="-.", lw=0.5, label="$a$ (exp)")
-    ax1.plot(uu, alat, "o-", ms=3, lw=0.8)
-    ax2.plot(uu, lambd, "o-", ms=3, lw=0.8)
+    ax1.plot(uu, alat, "o-", ms=3, lw=0.8, color="C3", )
+    ax2.plot(uu, lambd, "o-", ms=3, lw=0.8, color="C3", )
 
     def label(mu):
         return r"$\mu^* = " + f"{mu:.2f}" + "$"
 
     mustar = 0.13
     tc = mcmillan(theta, lambd, mu_star=mustar)
-    ax3.plot(uu, tc, "o-", ms=3, lw=0.8, label=label(mustar))
+    ax3.plot(uu, tc, "o-", ms=3, lw=0.8, color="C3", label=label(mustar))
 
     mustar = 0.14
     tc = mcmillan(theta, lambd, mu_star=mustar)
-    ax3.plot(uu, tc, "o-", ms=3, lw=0.8, label=label(mustar))
+    ax3.plot(uu, tc, "s--", ms=3, lw=0.8, color="C2", label=label(mustar))
 
     mustar = 0.15
     tc = mcmillan(theta, lambd, mu_star=mustar)
@@ -569,7 +569,7 @@ def extract_meffs(root):
 
 def plot_meff(save=False):
     print("---- m*(U) ----")
-    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+    use_mplstyle("figure", "aps", color_cycle="seaborn-colorblind")
 
     root = ROOT / "sws_opt"
 
@@ -582,14 +582,14 @@ def plot_meff(save=False):
     meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
     # ax.plot(uu, meffs[:, 0], "o", color="C0", ms=2, label="t2g")
     # ax.plot(uu, meffs[:, 1], "o", color="C1", ms=2, label="eg")
-    ax.plot(uu, meff_total, "o--", color="C0", ms=2, label=f"$T={temp}$K")
+    ax.plot(uu, meff_total, "o--", color="C0", ms=3, label=f"$T={temp}$K")
 
     temp = 400
     uu, meffs = extract_meffs(root / f"{temp}K")
     # ax.plot(uu, meffs[:, 0], "s", color="C0", ms=2, label="t2g")
     # ax.plot(uu, meffs[:, 1], "s", color="C1", ms=2, label="eg")
     meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    ax.plot(uu, meff_total, "s-.", color="C1", ms=2, label=f"$T={temp}$K")
+    ax.plot(uu, meff_total, "s-.", color="C1", ms=3, label=f"$T={temp}$K")
     # ax.set_xlim(0.45, 4.05)
     ax.set_xmargin(0.02)
     ax.set_ylim(1, 1.8)
@@ -599,17 +599,67 @@ def plot_meff(save=False):
         fig.savefig(FIGS / "V_u_meff.png", dpi=900)
 
 
+def plot_meff2(save=False):
+    print("---- m*(U) ----")
+    use_mplstyle("figure", "aps", color_cycle="tableau-colorblind")
+
+    root = ROOT / "sws_opt"
+    fig = plt.figure(figsize=[3.375, 0.75 * 2.531])
+    gs = gridspec.GridSpec(1, 2)
+    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.02, hspace=0.02)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax2.set_yticklabels([])
+    ax1.text(0.8, 0.93, "t$_{2g}$", transform=ax1.transAxes, ha="center", va="center")
+    ax2.text(0.2, 0.93, "e$_{g}$", transform=ax2.transAxes, ha="center", va="center")
+    ax1.set_ylabel(r"$m^* / m$")
+    ax1.set_xlabel(r"$U$ (eV)")
+    ax2.set_xlabel(r"$U$ (eV)")
+    ax1.grid(axis="y")
+    ax2.grid(axis="y")
+
+    temp = 200
+    uu, meffs = extract_meffs(root / f"{temp}K")
+    meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
+    # ax.plot(uu, meffs[:, 0], "o", color="C0", ms=2, label="t2g")
+    # ax.plot(uu, meffs[:, 1], "o", color="C1", ms=2, label="eg")
+    # ax1.plot(uu, meff_total, "o--", color="C0", ms=3, label=f"$T={temp}$K")
+    ax1.plot(uu, meffs[:, 0], "o--", color="C0", ms=2, label=f"$T={temp}$K")
+    ax2.plot(uu, meffs[:, 1], "o--", color="C1", ms=2, label=f"$T={temp}$K")
+
+    temp = 400
+    uu, meffs = extract_meffs(root / f"{temp}K")
+    meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
+    # ax.plot(uu, meffs[:, 0], "s", color="C0", ms=2, label="t2g")
+    # ax.plot(uu, meffs[:, 1], "s", color="C1", ms=2, label="eg")
+    # ax1.plot(uu, meff_total, "s-.", color="C1", ms=3, label=f"$T={temp}$K")
+    # ax.set_xlim(0.45, 4.05)
+    ax1.plot(uu, meffs[:, 0], "s-.", color="C0", ms=2, label=f"$T={temp}$K")
+    ax2.plot(uu, meffs[:, 1], "s-.", color="C1", ms=2, label=f"$T={temp}$K")
+
+    ax1.set_xmargin(0.02)
+    ax1.set_ylim(1, 1.8)
+    ax2.set_xmargin(0.02)
+    ax2.set_ylim(1, 1.8)
+    ax1.legend(frameon=True)
+    ax2.legend(frameon=True)
+
+    if save:
+        fig.savefig(FIGS / "V_u_meff2.png", dpi=900)
+
+
 def main():
     save = True
     # plot_dos(save=save)
-    # plot_dos_conv(save)
     # plot_dos_at_ef(save=save)
     # plot_sigma_z(save=save)
-    # plot_sigma_iw(save=save)
     # plot_sigma_iw_temp(save=save)
+
+    # plot_dos_conv(save)
+    # plot_sigma_iw(save=save)
     # plot_sws_lambda(save=save)
-    plot_alat_opt_curves(save=save)
-    # plot_meff(save=save)
+    # plot_alat_opt_curves(save=save)
+    plot_meff2(save=save)
     plt.show()
 
 

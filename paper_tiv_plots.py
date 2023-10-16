@@ -405,21 +405,21 @@ def plot_meff2(save=False):
     ax1 = fig.add_subplot(gs[0, 0])
     ax2 = fig.add_subplot(gs[0, 1])
     ax2.set_yticklabels([])
-    ax1.text(0.3, 0.95, "t$_{2g}$", transform=ax1.transAxes, ha="center", va="center")
-    ax2.text(0.3, 0.95, "e$_{g}$", transform=ax2.transAxes, ha="center", va="center")
+    ax1.text(0.3, 0.92, "t$_{2g}$", transform=ax1.transAxes, ha="center", va="center")
+    ax2.text(0.3, 0.92, "e$_{g}$", transform=ax2.transAxes, ha="center", va="center")
     ax1.set_ylabel(r"$m^* / m$")
     ax1.set_xlabel(r"$x$")
     ax2.set_xlabel(r"$x$")
     u = 2
     temp = 200
     cc, meffs = extract_meffs(root / f"u{u}_{temp}K")
-    ax1.plot(cc, meffs[:, 0], "o--", color="C0", ms=2)
-    ax2.plot(cc, meffs[:, 1], "o--", color="C0", ms=2, label=f"$T={temp}$K")
+    ax1.plot(cc, meffs[:, 0], "o--", color="C0", ms=2, label=f"$T={temp}$K")
+    ax2.plot(cc, meffs[:, 1], "o--", color="C1", ms=2, label=f"$T={temp}$K")
 
     temp = 400
     cc, meffs = extract_meffs(root / f"u{u}_{temp}K")
     meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    ax1.plot(cc, meffs[:, 0], "s-.", color="C1", ms=2)
+    ax1.plot(cc, meffs[:, 0], "s-.", color="C0", ms=2, label=f"$T={temp}$K")
     ax2.plot(cc, meffs[:, 1], "s-.", color="C1", ms=2, label=f"$T={temp}$K")
 
     ylim = 1.12, 1.26
@@ -430,6 +430,7 @@ def plot_meff2(save=False):
     ax1.grid(axis="y")
     ax2.grid(axis="y")
     # ax1.legend(frameon=True)
+    ax1.legend(frameon=True)
     ax2.legend(frameon=True)
     if save:
         fig.savefig(FIGS / "TiV_c_meff2.png", dpi=900)
@@ -480,7 +481,7 @@ def main():
 
     # plot_dos_cpa(save)
     # plot_sigma_iw(save)
-    plot_meff(save)
+    plot_meff2(save)
     # plot_sigma_iw2(save)
     # plot_tc_conc_tiv(save)
     # plot_conc_alat(True)
