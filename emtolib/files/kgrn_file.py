@@ -455,6 +455,12 @@ class Atom:
             item = ORBITALS.index(item)
         self.j[item] = j
 
+    def set_uj(self, item, u, j):
+        if isinstance(item, str):
+            item = ORBITALS.index(item)
+        self.u[item] = u
+        self.j[item] = j
+
     def update(self, *args, **kwargs):
         data = dict(*args, **kwargs)
         if "n" in data:
