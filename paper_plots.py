@@ -55,7 +55,6 @@ def extract_meffs_u(root, s=0, t2g=0, eg=2):
             sig_iw = sig_iw[0]
             deriv = deriv_iw(iw, sig_iw)
             meff = 1 - deriv
-            print(meff[s])
             # print(f"Z_t2g = {1 / meff[s, t2g]:.6f}  m* = {meff[s, t2g]:.3f}")
             # print(f"Z_eg  = {1 / meff[s, eg]:.6f}  m* = {meff[s, eg]:.3f}")
             if 0.5 <= u <= 4.0:
@@ -151,6 +150,15 @@ def read_fig_data(path):
     return dsets
 
 
+def load_data_p():
+    file = ROOT / "V" / "DATA_P.DOS"
+    dos_data = np.loadtxt(file)
+    c = dos_data.shape[0] // 2
+    dos_up, dos_dn = dos_data[:c], dos_data[c:]
+    energy, total_md, xy, yz, z2, zx, x2my2, t2g, eg = dos_up.T
+    return energy, t2g * RY2EV, eg * RY2EV
+
+
 # noinspection PyTypeChecker,PyUnresolvedReferences
 def plot_alat_opt_curves_v(save=False):
     print("---- V: E(a) ----")
@@ -243,6 +251,94 @@ def plot_dos_conv_v(save=False):
         fig.savefig(FIGS / "V_dos_conv.png", dpi=900)
 
 
+def plot_dos_conv_v2(save=False):
+    print("---- DOS(z) conv ----")
+    root = ROOT / "V" / "sws_opt" / "400K"
+    xlim = -8, +8
+
+    fig = plt.figure(figsize=[3.375, 1.2 * 2.531])
+    gs = gridspec.GridSpec(3, 2, height_ratios=[1, 1, 2])
+    gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.0, hspace=0.02)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax3 = fig.add_subplot(gs[1, :])
+    ax4 = fig.add_subplot(gs[2, :])
+    ax1.set_xticklabels([])
+    ax2.set_xticklabels([])
+    ax3.set_xticklabels([])
+    ax2.set_yticklabels([])
+    ax1.grid(axis="x")
+    ax2.grid(axis="x")
+    ax3.set_axisbelow(True)
+    ax3.grid(axis="x", zorder=-1)
+    ax4.set_axisbelow(True)
+    ax4.grid(axis="x", zorder=-1)
+    ax3.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
+    ax4.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
+
+    data_xps = np.loadtxt(Path("exp", "XPS_png.dat"))
+    x, y = data_xps.T
+    ax1.plot(x, y, "o", ms=1.0, color="k", label="BIS + XPS (a.u.)")
+    data_bis = np.loadtxt(Path("exp", "BIS_png.dat"))
+    x, y = data_bis.T
+    ax2.plot(x, y, "o", ms=1.0, color="k")
+    addtext(ax1, 0.05, 0.9, "XPS", ha="left", va="top")
+    addtext(ax2, 0.05, 0.9, "BIS", ha="left", va="top")
+
+    # Panel 2
+    u = 2
+    folder = EmtoDirectory(root, f"u{u}0")
+    dat = folder.dat
+    dosfile = folder.dos
+    energy, dos = dosfile.get_total_dos()
+    energy *= RY2EV
+    temp = dat.ttt
+    beta = 1 / (KB * temp)
+    # Apply Fermi-Dirac smearing
+    dos_val = fermi_fct(energy, beta=beta) * dos
+    dos_con = fermi_fct(-energy, beta=beta) * dos
+    # Convolve with a constant Lorentzian broadening of 0.1eV
+    dos_val = convolve_func(energy, dos_val, lorentzian, width=0.1, x0=0)
+    dos_con = convolve_func(energy, dos_con, lorentzian, width=0.1, x0=0)
+    # Convolve VB (CB) with a Gaussian broadening of 0.55eV (0.7eV)
+    dos_val = convolve_func(energy, dos_val, gaussian, width=0.55, x0=0)
+    dos_con = convolve_func(energy, dos_con, gaussian, width=0.7, x0=0)
+    ax3.plot(energy, dos_val, "-", label="VB", color="C2", zorder=2)
+    ax3.plot(energy, dos_con, "-", label="CB", color="C3", zorder=2)
+    # Plot original DOS
+    ax4.plot(energy, dos, "-", color="grey", label="DFT+DMFT", lw=0.5, zorder=1)
+    ax4.fill_between(energy, dos, color="grey", alpha=0.15, zorder=1)
+
+    # Read LMTO DOS
+    energy, dos_t2g, dos_eg = load_data_p()
+
+    ax4.plot(energy, dos_t2g, "-", label="DFT d-t$_{2g}$", color="C0", zorder=2)
+    ax4.plot(energy, dos_eg, "-", label="DFT d-e$_g$", color="C1", zorder=2)
+
+    # Styling
+    ax1.set_xlim(xlim[0], 0)
+    ax2.set_xlim(0, xlim[1])
+    ax3.set_xlim(*xlim)
+    ax4.set_xlim(*xlim)
+    ax1.set_ylim(0, 100)
+    ax2.set_ylim(0, 100)
+    ax3.set_ylim(0, 23)
+    ax4.set_ylim(0, 33)
+
+    ax1.set_ylabel("Exp. (a.u.)")
+    ax3.set_xlabel("$E - E_F$ (eV)")
+    ax4.set_ylabel("DOS (states/eV)")
+    ax3.legend(loc="upper left", fontsize="5",)
+    ax4.legend(loc="upper left", fontsize="5",)
+
+    addtext(ax2, 0.95, 0.9, r"(a)", ha="right", va="top")
+    addtext(ax3, 0.975, 0.9, r"(b)", ha="right", va="top")
+    addtext(ax4, 0.975, 0.95, r"(c)", ha="right", va="top")
+
+    if save:
+        fig.savefig(FIGS / "V_dos_conv2.png", dpi=900)
+
+
 def plot_sigma_iw_v(save=False):
     print("---- Sigma(iω) ----")
     root = ROOT / "V" / "sws_opt" / "400K"
@@ -270,27 +366,35 @@ def plot_sigma_iw_v(save=False):
     ax.plot(iw, sig_iw.imag[0, 2], marker=m2, color="C1", label=r"$e_{g}$", zorder=2)
     ax.plot(*poly_t2g.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C0", zorder=1)
     ax.plot(*poly_eg.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C1", zorder=1)
-
     ax.set_xlim(*xlim)
     ax.set_ylim(-0.38, 0.01)
-    ax.legend()
 
     # These are in unitless percentages of the figure size. (0,0 is bottom left)
-    left, bottom, width, height = [0.38, 0.63, 0.4, 0.3]
+    left, bottom, width, height = [0.38, 0.6, 0.5, 0.3]
     ax2 = fig.add_axes([left, bottom, width, height])
-    ax2.plot(iw, sig_iw.imag[0, 0], marker=m1, color="C0", label=r"$t_{2g}$", zorder=2)
-    ax2.plot(iw, sig_iw.imag[0, 2], marker=m2, color="C1", label=r"$e_{g}$", zorder=2)
-    ax2.plot(*poly_t2g.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C0", zorder=1)
-    ax2.plot(*poly_eg.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C1", zorder=1)
-    ax2.set_xlim(0, 0.6)
-    ax2.set_ylim(-0.1, 0)
-
+    ax2.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
+    ax2.axhline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
+    z, sig_z = folder.get_sigma_z(unit="ev")
+    ax2.plot(z, sig_z.imag[0, 0], color="C0", label=r"$t_{2g}$", zorder=2)
+    ax2.plot(z, sig_z.imag[0, 2], color="C1", label=r"$e_{g}$", zorder=2)
+    ax2.tick_params(labelsize=5)
+    ax2.set_xlabel(r"$E - E_F$ (eV)", fontsize=5)
+    ax2.set_xlim(-3, +3)
+    ax2.set_ylim(-0.35, 0.03)
+    # mask = np.abs(z) < 0.2
+    # fit_t2g = Polynomial.fit(z[mask], sig_z.imag[0, 0, mask], 3)
+    # fit_eg = Polynomial.fit(z[mask], sig_z.imag[0, 2, mask], 3)
+    # ax2.plot(*fit_t2g.linspace(domain=[-0.7, 0.7]), color="C0", ls="--", lw=0.5, zorder=1)
+    # ax2.plot(*fit_eg.linspace(domain=[-1.1, 1.1]), color="C1", ls="--", lw=0.5, zorder=1)
+    ax.legend(loc="lower left")
     if save:
         fig.savefig(FIGS / "V_selfiw.png", dpi=900)
 
 
 def plot_meff2_v(save=False):
     print("---- m*(U) ----")
+    xlim = 0.4, 4.1
+    ylim = 1, 1.9
 
     root = ROOT / "V" / "sws_opt"
     fig = plt.figure(figsize=[3.375, 0.75 * 2.531])
@@ -306,32 +410,22 @@ def plot_meff2_v(save=False):
     ax2.set_xlabel(r"$U$ (eV)")
     ax1.grid(axis="y")
     ax2.grid(axis="y")
-    m1, m2 = MARKERS[:2]
-    temp = 200
-    uu, meffs = extract_meffs_u(root / f"{temp}K")
-    meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    # ax.plot(uu, meffs[:, 0], "o", color="C0", label="t2g")
-    # ax.plot(uu, meffs[:, 1], "o", color="C1", label="eg")
-    # ax1.plot(uu, meff_total, "o--", color="C0", ms=3, label=f"$T={temp}$K")
-    ax1.plot(uu, meffs[:, 0], marker=m1, color="C0", label=f"$T={temp}$K")
-    ax2.plot(uu, meffs[:, 1], marker=m1, color="C1", label=f"$T={temp}$K")
 
-    temp = 400
-    uu, meffs = extract_meffs_u(root / f"{temp}K")
-    meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    # ax.plot(uu, meffs[:, 0], "s", color="C0", label="t2g")
-    # ax.plot(uu, meffs[:, 1], "s", color="C1", label="eg")
-    # ax1.plot(uu, meff_total, "s-.", color="C1", ms=3, label=f"$T={temp}$K")
-    # ax.set_xlim(0.45, 4.05)
-    ax1.plot(uu, meffs[:, 0], ls="--", marker=m2, color="C0", label=f"$T={temp}$K")
-    ax2.plot(uu, meffs[:, 1], ls="--", marker=m2, color="C1", label=f"$T={temp}$K")
+    temps = [200, 400, 600]
+    lines = ["-", "--", ":", "-."]
+    for temp, marker, ls in zip(temps, MARKERS, lines):
+        label = f"$T={temp}$K"
+        uu, meffs = extract_meffs_u(root / f"{temp}K")
+        # meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
+        ax1.plot(uu, meffs[:, 0], ls=ls, marker=marker, ms=1.5, color="C0", label=label)
+        ax2.plot(uu, meffs[:, 1], ls=ls, marker=marker, ms=1.5, color="C1", label=label)
 
-    ax1.set_xmargin(0.02)
-    ax1.set_ylim(1, 1.8)
-    ax2.set_xmargin(0.02)
-    ax2.set_ylim(1, 1.8)
-    ax1.legend()
-    ax2.legend()
+    ax1.set_xlim(*xlim)
+    ax2.set_xlim(*xlim)
+    ax1.set_ylim(*ylim)
+    ax2.set_ylim(*ylim)
+    ax1.legend(fontsize=5)
+    ax2.legend(fontsize=5)
 
     if save:
         fig.savefig(FIGS / "V_u_meff2.png", dpi=900)
@@ -390,11 +484,11 @@ def plot_sws_lambda_tc_v(save=False):
 
     mustar = 0.13
     tc = mcmillan(theta, lambd, mu_star=mustar)
-    ax3.plot(uu, tc, marker=m1, ms=2, lw=0.8, color="C0", label=label(mustar))
+    ax3.plot(uu, tc, marker=m1, ms=2, lw=0.8, color="C2", label=label(mustar))
 
     mustar = 0.14
     tc = mcmillan(theta, lambd, mu_star=mustar)
-    ax3.plot(uu, tc, ls="--", marker=m2, ms=2, lw=0.8, color="C1", label=label(mustar))
+    ax3.plot(uu, tc, ls="--", marker=m2, ms=2, lw=0.8, color="C3", label=label(mustar))
 
     mustar = 0.15
     tc = mcmillan(theta, lambd, mu_star=mustar)
@@ -417,6 +511,10 @@ def plot_sws_lambda_tc_v(save=False):
     ax3.axhline(5.38, color="C7", ls="--", lw=0.5, zorder=0, label="exp")
     ax3.set_ylim(4.5, 6.3)
     ax3.legend()
+
+    addtext(ax1, 0.975, 0.9, r"(a)", ha="right", va="top")
+    addtext(ax2, 0.975, 0.9, r"(b)", ha="right", va="top")
+    addtext(ax3, 0.975, 0.95, r"(c)", ha="right", va="top")
 
     if save:
         fig.savefig(FIGS / "V_alat_lambda_tc.png", dpi=900)
@@ -704,15 +802,16 @@ def main():
     # Vanadium
     # plot_alat_opt_curves_v(save)
     # plot_dos_conv_v(save)
-    # plot_sigma_iw_v(save)
+    # plot_dos_conv_v2(save)
+    plot_sigma_iw_v(save)
     # plot_meff2_v(save)
-    plot_sws_lambda_tc_v(save)
+    # plot_sws_lambda_tc_v(save)
     # TiV
     # plot_conc_alat_tiv(save)
     # plot_dos_cpa_tiv(save)
     # plot_sigma_iw2_tiv(save)
     # plot_meff2_tiv(save)
-    plot_tc_conc_tiv(save)
+    # plot_tc_conc_tiv(save)
     plt.show()
 
 
