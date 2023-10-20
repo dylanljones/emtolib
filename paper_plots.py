@@ -323,7 +323,7 @@ def plot_dos_conv_v2(save=False):
     ax4.set_ylim(0, 33)
 
     ax1.set_ylabel("Exp. (a.u.)")
-    ax3.set_xlabel("$E - E_F$ (eV)")
+    ax4.set_xlabel("$E - E_F$ (eV)")
     ax4.set_ylabel("DOS (states/eV)")
     ax3.legend(loc="upper left", fontsize="5",)
     ax4.legend(loc="upper left", fontsize="5",)
@@ -683,7 +683,8 @@ def plot_sigma_iw2_tiv(save=False):
 def plot_meff2_tiv(save=False):
     print("---- m*(U) ----")
     xlim = -0.03, 0.68
-    ylim = 1.05, 1.38
+    ylim1 = 1.05, 1.21
+    ylim2 = 1.1, 1.38
 
     root = ROOT / "Ti-V" / "CPA"
     fig = plt.figure(figsize=[3.375, 1 * 2.531])
@@ -732,17 +733,17 @@ def plot_meff2_tiv(save=False):
     ax2.set_xlim(*xlim)
     ax3.set_xlim(*xlim)
     ax4.set_xlim(*xlim)
-    ax1.set_ylim(*ylim)
-    ax2.set_ylim(*ylim)
-    ax3.set_ylim(*ylim)
-    ax4.set_ylim(*ylim)
+    ax1.set_ylim(*ylim1)
+    ax2.set_ylim(*ylim1)
+    ax3.set_ylim(*ylim2)
+    ax4.set_ylim(*ylim2)
     ax1.grid(axis="y")
     ax2.grid(axis="y")
     ax3.grid(axis="y")
     ax4.grid(axis="y")
     # ax1.legend()
-    ax1.legend(fontsize=5)
-    ax2.legend(fontsize=5)
+    ax1.legend(loc="lower left", fontsize=6)
+    ax2.legend(loc="upper right", fontsize=6)
     if save:
         fig.savefig(FIGS / "TiV_c_meff2.png", dpi=900)
 
