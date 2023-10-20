@@ -741,8 +741,8 @@ def plot_meff2_tiv(save=False):
     ax3.grid(axis="y")
     ax4.grid(axis="y")
     # ax1.legend()
-    ax1.legend()
-    ax2.legend()
+    ax1.legend(fontsize=5)
+    ax2.legend(fontsize=5)
     if save:
         fig.savefig(FIGS / "TiV_c_meff2.png", dpi=900)
 
