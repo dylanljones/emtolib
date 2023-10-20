@@ -57,9 +57,8 @@ def extract_meffs_u(root, s=0, t2g=0, eg=2):
             meff = 1 - deriv
             # print(f"Z_t2g = {1 / meff[s, t2g]:.6f}  m* = {meff[s, t2g]:.3f}")
             # print(f"Z_eg  = {1 / meff[s, eg]:.6f}  m* = {meff[s, eg]:.3f}")
-            if 0.5 <= u <= 4.0:
-                uu.append(u)
-                meffs.append([meff[s, t2g], meff[s, eg]])
+            uu.append(u)
+            meffs.append([meff[s, t2g], meff[s, eg]])
         except FileNotFoundError:
             continue
 
@@ -73,29 +72,27 @@ def extract_meffs_c(root, s=0, t2g=0, eg=2):
     cc = []
     meffs = []
     for folder in walk_emtodirs(root):
-        print(folder)
+
         dat = folder.dat
         c = dat.get_concentration("Ti")
         try:
             if c > 0.7:
                 continue
             iw, sig_iw = folder.get_sigma_iw(unit="ev")
-            if c == 0:
-                sig_iw = sig_iw[0]
-            else:
-                sig_iw = np.average(sig_iw, weights=[c, 1 - c], axis=0)
             deriv = deriv_iw(iw, sig_iw)
             meff = 1 - deriv
-            print(meff[s])
-
             cc.append(c)
-            meffs.append([meff[s, t2g], meff[s, eg]])
+            if c == 0:
+                ti = np.full_like(meff[0], fill_value=np.nan)
+                meff = np.array([ti, meff[0]])
+            meffs.append([meff[:, s, t2g], meff[:, s, eg]])
         except FileNotFoundError:
             continue
 
     idx = np.argsort(cc)
     cc = np.array(cc)[idx]
     meffs = np.array(meffs)[idx]
+    print(meffs.shape)
     return cc, meffs
 
 
@@ -393,8 +390,8 @@ def plot_sigma_iw_v(save=False):
 
 def plot_meff2_v(save=False):
     print("---- m*(U) ----")
-    xlim = 0.4, 4.1
-    ylim = 1, 1.9
+    xlim = 1.4, 4.6
+    ylim = 1, 2.12
 
     root = ROOT / "V" / "sws_opt"
     fig = plt.figure(figsize=[3.375, 0.75 * 2.531])
@@ -416,6 +413,9 @@ def plot_meff2_v(save=False):
     for temp, marker, ls in zip(temps, MARKERS, lines):
         label = f"$T={temp}$K"
         uu, meffs = extract_meffs_u(root / f"{temp}K")
+        mask = np.logical_and(1.5 <= uu, uu <= 4.5)
+        uu = uu[mask]
+        meffs = meffs[mask]
         # meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
         ax1.plot(uu, meffs[:, 0], ls=ls, marker=marker, ms=1.5, color="C0", label=label)
         ax2.plot(uu, meffs[:, 1], ls=ls, marker=marker, ms=1.5, color="C1", label=label)
@@ -436,10 +436,7 @@ def plot_sws_lambda_tc_v(save=False):
     root = ROOT / "V" / "sws_opt" / "400K"
     xlim = -0.1, 5.1
 
-    uu = list()
-    sws = list()
-    alat = list()
-    etas = list()
+    uu, alat, etas = list(), list(), list()
     for folder in walk_emtodirs(root):
         dat = folder.dat
         prn = folder.prn
@@ -449,19 +446,20 @@ def plot_sws_lambda_tc_v(save=False):
         u = v.get_u(2)
         if u > 5.0:
             continue
-        _sws, _, _alat = prn.get_lattice_constants()
+        _, _, _alat = prn.get_lattice_constants()
         hopfield = prn.get_sublat_hopfields(dat).sum(axis=1)[0]
-
         uu.append(u)
-        sws.append(_sws)
         alat.append(_alat)
         etas.append(hopfield)
 
     idx = np.argsort(uu)
     uu = np.array(uu)[idx]
-    # sws = np.array(sws)[idx]
     alat = np.array(alat)[idx]
     etas = np.array(etas)[idx]
+    mask = np.logical_or(1.5 <= uu, uu == 0)
+    uu = uu[mask]
+    alat = alat[mask]
+    etas = etas[mask]
 
     mass = Vanadium.mass
     theta = Vanadium.debye_0K
@@ -621,16 +619,26 @@ def plot_sigma_iw2_tiv(save=False):
 
     folder = EmtoDirectory(root, f"u{u}_400K", f"Ti{int(c*100)}")
     iw, sig_iw = folder.get_sigma_iw(unit="ev")
-    sig_iw_tot = np.average(sig_iw, weights=[c, 1 - c], axis=0)
+    sig_iw = sig_iw[:, 0]
+    sig_ti, sig_v = sig_iw[0], sig_iw[1]
 
-    deriv = deriv_iw(iw, sig_iw_tot)
-    meff = effective_mass(deriv)
-    print(f"Z_t2g = {1 / meff[0, 0]:.6f}  m* = {meff[0, 0]:.3f}")
-    print(f"Z_eg  = {1 / meff[0, 2]:.6f}  m* = {meff[0, 2]:.3f}")
+    deriv = deriv_iw(iw, sig_iw)
+    y0 = sig_iw[..., 0].imag - deriv * iw[0]
 
-    y0 = sig_iw_tot.imag[:, :, 0] - deriv * iw[0]
-    poly_t2g = Polynomial([y0[0, 0], deriv[0, 0]])
-    poly_eg = Polynomial([y0[0, 2], deriv[0, 2]])
+    poly_ti_t2g = Polynomial([y0[0, 0], deriv[0, 0]])
+    poly_ti_eg = Polynomial([y0[0, 2], deriv[0, 2]])
+    poly_v_t2g = Polynomial([y0[1, 0], deriv[1, 0]])
+    poly_v_eg = Polynomial([y0[1, 2], deriv[1, 2]])
+    domain = [0, 5]
+
+    # sig_iw_tot = np.average(sig_iw, weights=[c, 1 - c], axis=0)
+    # deriv = deriv_iw(iw, sig_iw_tot)
+    # meff = effective_mass(deriv)
+    # print(f"Z_t2g = {1 / meff[0, 0]:.6f}  m* = {meff[0, 0]:.3f}")
+    # print(f"Z_eg  = {1 / meff[0, 2]:.6f}  m* = {meff[0, 2]:.3f}")
+    # y0 = sig_iw_tot.imag[:, :, 0] - deriv * iw[0]
+    # poly_t2g = Polynomial([y0[0, 0], deriv[0, 0]])
+    # poly_eg = Polynomial([y0[0, 2], deriv[0, 2]])
 
     fig = plt.figure()  # figsize=[3.375, 1.0 * 2.531])
     gs = gridspec.GridSpec(1, 2)
@@ -645,16 +653,20 @@ def plot_sigma_iw2_tiv(save=False):
     ax2.set_xlabel(r"$i \omega_n$ (eV)")
     ax1.set_ylabel(r"Im $\Sigma$ (eV)")
     m1, m2, m3 = MARKERS[:3]
-    ax1.plot(iw, sig_iw_tot.imag[0, 0], marker=m1, color="C0", label=r"Total", zorder=2)
-    ax2.plot(iw, sig_iw_tot.imag[0, 2], marker=m1, color="C1", label=r"Total", zorder=2)
-    ax1.plot(*poly_t2g.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C0", zorder=1)
-    ax2.plot(*poly_eg.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C1", zorder=1)
+    # ax1.plot(iw, sig_iw_tot.imag[0, 0], marker=m1, color="C0", label=r"Total", zorder=2)
+    # ax2.plot(iw, sig_iw_tot.imag[0, 2], marker=m1, color="C1", label=r"Total", zorder=2)
+    # ax1.plot(*poly_t2g.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C0", zorder=1)
+    # ax2.plot(*poly_eg.linspace(domain=[0, 5]), ls="--", lw=0.7, color="C1", zorder=1)
 
-    ax1.plot(iw, sig_iw.imag[0, 0, 0], marker=m2, lw=0, color="C7", label=r"Ti", zorder=2)
-    ax2.plot(iw, sig_iw.imag[0, 0, 2], marker=m2, lw=0, color="C7", label=r"Ti", zorder=2)
+    ax1.plot(iw, sig_ti.imag[0], marker=m1, ls="--", color="C0", label=r"Ti", zorder=2)
+    ax2.plot(iw, sig_ti.imag[2], marker=m1, ls="--", color="C1", label=r"Ti", zorder=2)
+    ax1.plot(*poly_ti_t2g.linspace(domain=domain), ls=":", color="C7", zorder=1)
+    ax2.plot(*poly_ti_eg.linspace(domain=domain), ls=":", color="C7", zorder=1)
 
-    ax1.plot(iw, sig_iw.imag[1, 0, 0], marker=m3, lw=0, color="C7", label=r"V", zorder=2)
-    ax2.plot(iw, sig_iw.imag[1, 0, 2], marker=m3, lw=0, color="C7", label=r"V", zorder=2)
+    ax1.plot(iw, sig_v.imag[0], marker=m2, ls="--", color="C0", label=r"V", zorder=2)
+    ax2.plot(iw, sig_v.imag[2], marker=m2, ls="--", color="C1", label=r"V", zorder=2)
+    ax1.plot(*poly_v_t2g.linspace(domain=domain), ls=":", color="C7", zorder=1)
+    ax2.plot(*poly_v_eg.linspace(domain=domain), ls=":", color="C7", zorder=1)
 
     ax1.set_xlim(*xlim)
     ax2.set_xlim(*xlim)
@@ -670,39 +682,64 @@ def plot_sigma_iw2_tiv(save=False):
 
 def plot_meff2_tiv(save=False):
     print("---- m*(U) ----")
+    xlim = -0.03, 0.68
+    ylim = 1.05, 1.38
 
     root = ROOT / "Ti-V" / "CPA"
-    fig = plt.figure(figsize=[3.375, 0.75 * 2.531])
-    gs = gridspec.GridSpec(1, 2)
+    fig = plt.figure(figsize=[3.375, 1 * 2.531])
+    gs = gridspec.GridSpec(2, 2)
     gs.update(left=0.15, bottom=0.13, top=0.97, right=0.97, wspace=0.02, hspace=0.02)
     ax1 = fig.add_subplot(gs[0, 0])
     ax2 = fig.add_subplot(gs[0, 1])
+    ax3 = fig.add_subplot(gs[1, 0])
+    ax4 = fig.add_subplot(gs[1, 1])
     ax2.set_yticklabels([])
-    ax1.text(0.3, 0.92, "t$_{2g}$", transform=ax1.transAxes, ha="center", va="center")
-    ax2.text(0.3, 0.92, "e$_{g}$", transform=ax2.transAxes, ha="center", va="center")
-    ax1.set_ylabel(r"$m^* / m$")
-    ax1.set_xlabel(r"$x$")
-    ax2.set_xlabel(r"$x$")
+    ax4.set_yticklabels([])
+    ax1.set_xticklabels([])
+    ax2.set_xticklabels([])
+    addtext(ax1, 0.1, 0.92, "t$_{2g}$", "left", "top")
+    addtext(ax2, 0.1, 0.92, "e$_{g}$", "left", "top")
+
+    # ax1.text(0.1, 0.92, "t$_{2g}$", transform=ax1.transAxes, ha="center", va="center")
+    # ax2.text(0.1, 0.92, "e$_{g}$", transform=ax2.transAxes, ha="center", va="center")
+    ax1.set_ylabel(r"Ti $m^* / m$")
+    ax3.set_ylabel(r"V $m^* / m$")
+    ax3.set_xlabel(r"$x$")
+    ax4.set_xlabel(r"$x$")
     u = 2
     temp = 200
     m1, m2 = MARKERS[:2]
     cc, meffs = extract_meffs_c(root / f"u{u}_{temp}K")
-    ax1.plot(cc, meffs[:, 0], marker=m1, color="C0", label=f"$T={temp}$K")
-    ax2.plot(cc, meffs[:, 1], marker=m1, color="C1", label=f"$T={temp}$K")
+    print(meffs.shape)
+    ax1.plot(cc, meffs[:, 0, 0], marker=m1, color="C0", label=f"$T={temp}$K")
+    ax2.plot(cc, meffs[:, 1, 0], marker=m1, color="C1", label=f"$T={temp}$K")
+    ax3.plot(cc, meffs[:, 0, 1], marker=m1, color="C0", label=f"$T={temp}$K")
+    ax4.plot(cc, meffs[:, 1, 1], marker=m1, color="C1", label=f"$T={temp}$K")
+    # ax2.plot(cc, meffs[:, 1], marker=m1, color="C1", label=f"$T={temp}$K")
 
     temp = 400
     cc, meffs = extract_meffs_c(root / f"u{u}_{temp}K")
-    meff_total = (3 * meffs[:, 0] + 2 * meffs[:, 1]) / 5
-    ax1.plot(cc, meffs[:, 0], marker=m2, ls="--", color="C0", label=f"$T={temp}$K")
-    ax2.plot(cc, meffs[:, 1], marker=m2, ls="--", color="C1", label=f"$T={temp}$K")
+    ax1.plot(cc, meffs[:, 0, 0], marker=m2, color="C0", label=f"$T={temp}$K")
+    ax2.plot(cc, meffs[:, 1, 0], marker=m2, color="C1", label=f"$T={temp}$K")
+    ax3.plot(cc, meffs[:, 0, 1], marker=m2, color="C0", label=f"$T={temp}$K")
+    ax4.plot(cc, meffs[:, 1, 1], marker=m2, color="C1", label=f"$T={temp}$K")
+    # ax1.plot(cc, meffs[:, 0, 0], marker=m1, color="C0", label=f"$T={temp}$K")
+    # ax2.plot(cc, meffs[:, 0, 1], marker=m1, color="C0", label=f"$T={temp}$K")
+    # ax1.plot(cc, meffs[:, 0], marker=m2, ls="--", color="C0", label=f"$T={temp}$K")
+    # ax2.plot(cc, meffs[:, 1], marker=m2, ls="--", color="C1", label=f"$T={temp}$K")
 
-    ylim = 1.12, 1.26
-    ax1.set_xmargin(0.02)
-    ax2.set_xmargin(0.02)
+    ax1.set_xlim(*xlim)
+    ax2.set_xlim(*xlim)
+    ax3.set_xlim(*xlim)
+    ax4.set_xlim(*xlim)
     ax1.set_ylim(*ylim)
     ax2.set_ylim(*ylim)
+    ax3.set_ylim(*ylim)
+    ax4.set_ylim(*ylim)
     ax1.grid(axis="y")
     ax2.grid(axis="y")
+    ax3.grid(axis="y")
+    ax4.grid(axis="y")
     # ax1.legend()
     ax1.legend()
     ax2.legend()
@@ -803,14 +840,14 @@ def main():
     # plot_alat_opt_curves_v(save)
     # plot_dos_conv_v(save)
     # plot_dos_conv_v2(save)
-    plot_sigma_iw_v(save)
+    # plot_sigma_iw_v(save)
     # plot_meff2_v(save)
     # plot_sws_lambda_tc_v(save)
     # TiV
     # plot_conc_alat_tiv(save)
     # plot_dos_cpa_tiv(save)
     # plot_sigma_iw2_tiv(save)
-    # plot_meff2_tiv(save)
+    plot_meff2_tiv(save)
     # plot_tc_conc_tiv(save)
     plt.show()
 
