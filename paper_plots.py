@@ -302,15 +302,19 @@ def plot_dos_conv_v2(save=False):
     dos_con = convolve_func(energy, dos_con, gaussian, width=0.7, x0=0)
     ax3.plot(energy, dos_val, "-", label="VB", color="C2", zorder=2)
     ax3.plot(energy, dos_con, "-", label="CB", color="C3", zorder=2)
+
     # Plot original DOS
     ax4.plot(energy, dos, "-", color="grey", label="DFT+DMFT", lw=0.5, zorder=1)
     ax4.fill_between(energy, dos, color="grey", alpha=0.15, zorder=1)
 
+    energy, dos_d = dosfile.get_partial_dos(orbital="d")
+    ax4.plot(RY2EV * energy, dos_d, "-", label="EMTO d-Total", color="C2", zorder=3)
+
     # Read LMTO DOS
     energy, dos_t2g, dos_eg = load_data_p()
+    ax4.plot(energy, 2 * dos_t2g, "-", label="DFT d-t$_{2g}$", color="C0", zorder=2)
+    ax4.plot(energy, 2 * dos_eg, "-", label="DFT d-e$_g$", color="C1", zorder=2)
 
-    ax4.plot(energy, dos_t2g, "-", label="DFT d-t$_{2g}$", color="C0", zorder=2)
-    ax4.plot(energy, dos_eg, "-", label="DFT d-e$_g$", color="C1", zorder=2)
 
     # Styling
     ax1.set_xlim(xlim[0], 0)
@@ -840,7 +844,7 @@ def main():
     # Vanadium
     # plot_alat_opt_curves_v(save)
     # plot_dos_conv_v(save)
-    # plot_dos_conv_v2(save)
+    plot_dos_conv_v2(save)
     # plot_sigma_iw_v(save)
     # plot_meff2_v(save)
     # plot_sws_lambda_tc_v(save)
@@ -848,7 +852,7 @@ def main():
     # plot_conc_alat_tiv(save)
     # plot_dos_cpa_tiv(save)
     # plot_sigma_iw2_tiv(save)
-    plot_meff2_tiv(save)
+    # plot_meff2_tiv(save)
     # plot_tc_conc_tiv(save)
     plt.show()
 
