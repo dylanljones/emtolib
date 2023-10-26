@@ -16,8 +16,6 @@ dependencies = [
     "matplotlib",
     "pandas",
     "scipy",
-    "xarray",
-    "zarr",
     "pytest",
     "click",
     "h5py",
