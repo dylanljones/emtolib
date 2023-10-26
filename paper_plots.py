@@ -844,39 +844,32 @@ def plot_tc_conc_tiv(save=False):
         fig.savefig(FIGS / "TiV_conc_tc.png", dpi=900)
 
 
-def plot_lamb_conc_tiv(save=False):
-    fig, ax = plt.subplots()
-    ckey = "Ti"
-    regions = [1 - 0.335, 1 - 0.145, 1]
+def plot_lamb_conc_u_tiv(save=False):
+    cmap = sns.color_palette("Spectral_r", as_cmap=True)
+
     temp = 400
-    uu = [0, 2, 5]
-    colors = ["C0", "C1", "C2", "C3", "C4", "C5"]
+    uu = np.array([0, 1, 2, 3, 4, 5])
+    cc = np.arange(0, 0.66, 0.05)
+    lambdas = np.zeros((len(uu), len(cc)))
+    for i, u in enumerate(uu):
+        root = ROOT / "Ti-V" / "CPA" / f"{temp}K" / f"u{u:.1f}"
+        c, _, lamb = extract_tc_c_tiv(root, "Ti")
+        bcc = c < 0.7
+        lambdas[i] = lamb[bcc]
+    xx, yy = np.meshgrid(cc, uu)
 
-    for u, c, m in zip(uu, colors, MARKERS):
-        lab = f"$U={u}$eV" if u > 0 else "LDA"
-        root = ROOT / "Ti-V" / "CPA" / tiv_path(temp, u)  # / f"nl3_u{u}"
-        cc, _, lamb = extract_tc_c_tiv(root, ckey)
-        bcc = cc < regions[0]
-        hcp = np.logical_and(regions[1] < cc, cc < 1)
-        ax.plot(cc[bcc], lamb[bcc], f"--{m}", lw=0.5, ms=1.5, color=c, label=lab)
-        ax.plot(cc[hcp], lamb[hcp], f"--{m}", lw=0.5, ms=1.5, color=c)
+    fig, ax = plt.subplots()
+    im = ax.contourf(xx, yy, lambdas, cmap=cmap, vmin=0.6, levels=40)
+    fig.colorbar(im, ax=ax, label=r"$\lambda$ (a.u.)")
+    ax.set_xlabel("$x$")
+    ax.set_ylabel("$U$ (eV)")
 
-    addtext(ax, 0.1, 0.9, r"Ti$_{x}$V$_{1-x}$")
-    ax.set_xlim(-0.01, 1.01)
-    ax.set_ylim(0, 9)
-    ax.set_xlabel(r"x")
-    ax.set_ylabel("$\lambda$ (a.u.)")
-    ax.fill_between([regions[-2] - 0.02, 1.2], 0, 9, color="k", alpha=0.1, lw=0)
-    ax.fill_between([regions[-3], regions[-2] + 0.02], 0, 9, color="red", alpha=0.1, lw=0)
-    x1 = regions[-1] + 0.5 * (regions[-2] - regions[-1])
-    x2 = regions[-2] + 0.5 * (regions[-3] - regions[-2])
-
-    ax.set_ylim(0.4, 0.7)
-    ax.legend(loc="upper right")
+    if save:
+        fig.savefig(FIGS / "TiV_conc_u_lamb.png", dpi=900)
 
 
 def main():
-    save = False
+    save = True
     # Vanadium
     # plot_alat_opt_curves_v(save)
     # plot_dos_conv_v(save)
@@ -885,12 +878,12 @@ def main():
     # plot_meff2_v(save)
     # plot_sws_lambda_tc_v(save)
     # TiV
-    plot_conc_alat_tiv(save)
-    plot_dos_cpa_tiv(save)
-    plot_sigma_iw2_tiv(save)
-    plot_meff2_tiv(save)
-    plot_tc_conc_tiv(save)
-    plot_lamb_conc_tiv()
+    # plot_conc_alat_tiv(save)
+    # plot_dos_cpa_tiv(save)
+    # plot_sigma_iw2_tiv(save)
+    # plot_meff2_tiv(save)
+    # plot_tc_conc_tiv(save)
+    plot_lamb_conc_u_tiv(save)
     plt.show()
 
 

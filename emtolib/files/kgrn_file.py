@@ -678,6 +678,7 @@ class KgrnFile(EmtoFile):
         iq: int = None,
         it: int = None,
         ita: int = None,
+        raise_if_empty: bool = True,
     ) -> List[Atom]:
         # Integer key
         if isinstance(key, int):
@@ -701,7 +702,7 @@ class KgrnFile(EmtoFile):
             if ita is not None and at.ita != ita:
                 continue
             atoms.append(at)
-        if not atoms:
+        if not atoms and raise_if_empty:
             keystr = _frmt_atom_keys(key, iq, it, ita)
             raise KeyError(f"No atoms found with {keystr}")
         return atoms
