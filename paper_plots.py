@@ -34,10 +34,15 @@ MASS_TI = Titan.mass
 MASS_V = Vanadium.mass
 
 MARKERS = ["o", "s", "D", "v", "^", "<", ">", "p", "P", "*", "h", "H", "X", "d", "D"]
+LINESTYLES = ["-", "--", ":", "-."]
 PALETTE = "colorblind"  # "deep"
 
 use_mplstyle("figure", "paper")
 mpl.rcParams["axes.prop_cycle"] = plt.cycler(color=sns.color_palette(PALETTE))
+
+
+def tiv_path(temp, u):
+    return Path(f"{temp}K", f"u{u:.1f}")
 
 
 def addtext(ax, x, y, text, ha="center", va="center"):
@@ -72,9 +77,10 @@ def extract_meffs_c(root, s=0, t2g=0, eg=2):
     cc = []
     meffs = []
     for folder in walk_emtodirs(root):
-
         dat = folder.dat
         c = dat.get_concentration("Ti")
+        if not folder.converged():
+            continue
         try:
             if c > 0.7:
                 continue
@@ -88,11 +94,9 @@ def extract_meffs_c(root, s=0, t2g=0, eg=2):
             meffs.append([meff[:, s, t2g], meff[:, s, eg]])
         except FileNotFoundError:
             continue
-
     idx = np.argsort(cc)
     cc = np.array(cc)[idx]
     meffs = np.array(meffs)[idx]
-    print(meffs.shape)
     return cc, meffs
 
 
@@ -107,7 +111,11 @@ def extract_tc_c_tiv(root, ckey):
             continue
         try:
             c = dat.get_concentration(ckey)
-            eta = prn.get_sublat_hopfields(dat).sum(axis=1)[0]
+            f = 2 if 0.8 <= c <= 1.0 else 1
+            data = prn.extract_hopfields()
+            concs = [dat.get_concentration(item[0]) for item in data]
+            etas = f * np.sum([item[1] for item in data], axis=1)
+            eta = np.average(etas, weights=concs)
             cc.append(c)
             hopfields.append(eta)
         except Exception as e:
@@ -118,12 +126,11 @@ def extract_tc_c_tiv(root, ckey):
     idx = np.argsort(cc)
     cc = np.array(cc)[idx]
     hopfields = np.array(hopfields)[idx]
-
     mass = cc * MASS_V + (1 - cc) * MASS_TI
     debye = cc * DEBYE_V + (1 - cc) * DEBYE_TI
     lamb = phonon_coupling(2 * hopfields, mass, debye)
     t_c = mcmillan(debye, lamb, mu_star=0.13)
-    return cc, t_c
+    return cc, t_c, lamb
 
 
 def read_fig_data(path):
@@ -300,21 +307,24 @@ def plot_dos_conv_v2(save=False):
     # Convolve VB (CB) with a Gaussian broadening of 0.55eV (0.7eV)
     dos_val = convolve_func(energy, dos_val, gaussian, width=0.55, x0=0)
     dos_con = convolve_func(energy, dos_con, gaussian, width=0.7, x0=0)
+
+    # Plot original DOS
+    ax3.plot(energy, dos, "-", color="grey", label="DFT+DMFT", lw=0.5, zorder=1)
+    ax3.fill_between(energy, dos, color="grey", alpha=0.15, zorder=1)
+    # Plot convoluted
     ax3.plot(energy, dos_val, "-", label="VB", color="C2", zorder=2)
     ax3.plot(energy, dos_con, "-", label="CB", color="C3", zorder=2)
 
-    # Plot original DOS
-    ax4.plot(energy, dos, "-", color="grey", label="DFT+DMFT", lw=0.5, zorder=1)
-    ax4.fill_between(energy, dos, color="grey", alpha=0.15, zorder=1)
-
+    # Plot total d
     energy, dos_d = dosfile.get_partial_dos(orbital="d")
-    ax4.plot(RY2EV * energy, dos_d, "-", label="EMTO d-Total", color="C2", zorder=3)
+    energy *= RY2EV
+    ax4.plot(energy, dos_d, "-", color="grey", label="DFT+DMFT d", zorder=1)
+    ax4.fill_between(energy, dos_d, color="grey", alpha=0.15, zorder=1)
 
     # Read LMTO DOS
     energy, dos_t2g, dos_eg = load_data_p()
     ax4.plot(energy, 2 * dos_t2g, "-", label="DFT d-t$_{2g}$", color="C0", zorder=2)
     ax4.plot(energy, 2 * dos_eg, "-", label="DFT d-e$_g$", color="C1", zorder=2)
-
 
     # Styling
     ax1.set_xlim(xlim[0], 0)
@@ -323,12 +333,13 @@ def plot_dos_conv_v2(save=False):
     ax4.set_xlim(*xlim)
     ax1.set_ylim(0, 100)
     ax2.set_ylim(0, 100)
-    ax3.set_ylim(0, 23)
+    ax3.set_ylim(0, 31)
     ax4.set_ylim(0, 33)
 
     ax1.set_ylabel("Exp. (a.u.)")
     ax4.set_xlabel("$E - E_F$ (eV)")
     ax4.set_ylabel("DOS (states/eV)")
+    ax4.yaxis.set_label_coords(-0.1, 0.8)
     ax3.legend(loc="upper left", fontsize="5",)
     ax4.legend(loc="upper left", fontsize="5",)
 
@@ -565,7 +576,8 @@ def plot_conc_alat_tiv(save=False):
 
 def plot_dos_cpa_tiv(save=False):
     xlim = -8, +8
-    root = ROOT / "Ti-V" / "CPA" / "u2_400K"
+    temp, u = 400, 2
+    root = ROOT / "Ti-V" / "CPA" / tiv_path(temp, u)
 
     fig, ax = plt.subplots(figsize=[3.375, 1 * 2.531])  # figsize=[3.375, 0.75 * 2.531])
     ax.grid(axis="x", zorder=-1)
@@ -585,7 +597,7 @@ def plot_dos_cpa_tiv(save=False):
 
     ax.text(0.53, 0.95, "Ti$_{0.35}$V$_{0.65}$", ha="left", va="top", transform=ax.transAxes)
 
-    root = CONFIG["app"] / "V" / "sws_opt" / "400K_2" / "u20"
+    root = CONFIG["app"] / "V" / "sws_opt" / "400K" / "u20"
     folder = EmtoDirectory(root)
     dosfile = folder.dos
     eev, dosv = dosfile.get_total_dos()
@@ -607,7 +619,7 @@ def plot_dos_cpa_tiv(save=False):
     ax2.set_xlim(-1.3, 1.3)
     ax2.set_ylim(0, 30)
     ax2.axvline(0, color="dimgrey", ls="-", lw=0.5, zorder=1)
-
+    ax2.set_xlabel("$E - E_F$ (eV)", fontsize=5)
     if save:
         fig.savefig(FIGS / "TiV_DOS_CPA.png", dpi=900)
 
@@ -615,13 +627,13 @@ def plot_dos_cpa_tiv(save=False):
 def plot_sigma_iw2_tiv(save=False):
     print("---- Sigma(iω) ----")
     inset = False
-    u = 2
+    temp, u = 400, 2
     c = 0.35
     root = ROOT / "Ti-V" / "CPA"
     xlim = 0, +4.5
     ylim = -0.42, 0.01
 
-    folder = EmtoDirectory(root, f"u{u}_400K", f"Ti{int(c*100)}")
+    folder = EmtoDirectory(root, tiv_path(temp, u), f"Ti{int(c*100)}")
     iw, sig_iw = folder.get_sigma_iw(unit="ev")
     sig_iw = sig_iw[:, 0]
     sig_ti, sig_v = sig_iw[0], sig_iw[1]
@@ -711,27 +723,16 @@ def plot_meff2_tiv(save=False):
     ax3.set_ylabel(r"V $m^* / m$")
     ax3.set_xlabel(r"$x$")
     ax4.set_xlabel(r"$x$")
-    u = 2
-    temp = 200
-    m1, m2 = MARKERS[:2]
-    cc, meffs = extract_meffs_c(root / f"u{u}_{temp}K")
-    print(meffs.shape)
-    ax1.plot(cc, meffs[:, 0, 0], marker=m1, color="C0", label=f"$T={temp}$K")
-    ax2.plot(cc, meffs[:, 1, 0], marker=m1, color="C1", label=f"$T={temp}$K")
-    ax3.plot(cc, meffs[:, 0, 1], marker=m1, color="C0", label=f"$T={temp}$K")
-    ax4.plot(cc, meffs[:, 1, 1], marker=m1, color="C1", label=f"$T={temp}$K")
-    # ax2.plot(cc, meffs[:, 1], marker=m1, color="C1", label=f"$T={temp}$K")
 
-    temp = 400
-    cc, meffs = extract_meffs_c(root / f"u{u}_{temp}K")
-    ax1.plot(cc, meffs[:, 0, 0], marker=m2, color="C0", label=f"$T={temp}$K")
-    ax2.plot(cc, meffs[:, 1, 0], marker=m2, color="C1", label=f"$T={temp}$K")
-    ax3.plot(cc, meffs[:, 0, 1], marker=m2, color="C0", label=f"$T={temp}$K")
-    ax4.plot(cc, meffs[:, 1, 1], marker=m2, color="C1", label=f"$T={temp}$K")
-    # ax1.plot(cc, meffs[:, 0, 0], marker=m1, color="C0", label=f"$T={temp}$K")
-    # ax2.plot(cc, meffs[:, 0, 1], marker=m1, color="C0", label=f"$T={temp}$K")
-    # ax1.plot(cc, meffs[:, 0], marker=m2, ls="--", color="C0", label=f"$T={temp}$K")
-    # ax2.plot(cc, meffs[:, 1], marker=m2, ls="--", color="C1", label=f"$T={temp}$K")
+    u = 2
+    temps = [200, 400, 600]
+
+    for temp, ls, m in zip(temps, LINESTYLES, MARKERS):
+        cc, meffs = extract_meffs_c(root / tiv_path(temp, u))
+        ax1.plot(cc, meffs[:, 0, 0], marker=m, ls=ls, color="C0", label=f"$T={temp}$K")
+        ax2.plot(cc, meffs[:, 1, 0], marker=m, ls=ls, color="C1", label=f"$T={temp}$K")
+        ax3.plot(cc, meffs[:, 0, 1], marker=m, ls=ls, color="C0", label=f"$T={temp}$K")
+        ax4.plot(cc, meffs[:, 1, 1], marker=m, ls=ls, color="C1", label=f"$T={temp}$K")
 
     ax1.set_xlim(*xlim)
     ax2.set_xlim(*xlim)
@@ -746,7 +747,7 @@ def plot_meff2_tiv(save=False):
     ax3.grid(axis="y")
     ax4.grid(axis="y")
     # ax1.legend()
-    ax1.legend(loc="lower left", fontsize=6)
+    ax1.legend(loc="lower right", fontsize=6)
     ax2.legend(loc="upper right", fontsize=6)
     if save:
         fig.savefig(FIGS / "TiV_c_meff2.png", dpi=900)
@@ -755,20 +756,18 @@ def plot_meff2_tiv(save=False):
 def read_tc_data():
     temp = 400
     ckey = "Ti"
-    root = ROOT / "Ti-V" / "CPA"
+    root = ROOT / "Ti-V" / "CPA" / f"{temp}K"
     uu = list()
     data = list()
     for path in root.iterdir():
         name = path.name
         if name.startswith("sws"):
             continue
-        if not name.endswith(f"{temp}K"):
-            continue
         u = float(name.split("_")[0][1:])
         if u >= 6:
             continue
         uu.append(u)
-        cc, tc = extract_tc_c_tiv(path, ckey)
+        cc, tc, _ = extract_tc_c_tiv(path, ckey)
         data.append((cc, tc))
     i = np.argsort(uu)
     uu = np.array(uu)[i]
@@ -779,15 +778,20 @@ def read_tc_data():
 def plot_tc_conc_tiv(save=False):
     fig, ax = plt.subplots()
     ckey = "Ti"
+    regions = [1 - 0.335, 1 - 0.145, 1]
+    temp = 400
     uu = [0, 2, 5]
     colors = ["C0", "C1", "C2", "C3", "C4", "C5"]
+
     for u, c, m in zip(uu, colors, MARKERS):
         lab = f"$U={u}$eV" if u > 0 else "LDA"
-        root = ROOT / "Ti-V" / "CPA" / f"u{u}_400K"  # / f"nl3_u{u}"
-        cc, tc = extract_tc_c_tiv(root, ckey)
-        ax.plot(cc, tc, f"--{m}", lw=0.5, ms=1.5, color=c, label=lab)
+        root = ROOT / "Ti-V" / "CPA" / tiv_path(temp, u)  # / f"nl3_u{u}"
+        cc, tc, _ = extract_tc_c_tiv(root, ckey)
+        bcc = cc < regions[0]
+        hcp = np.logical_and(regions[1] < cc, cc < 1)
+        ax.plot(cc[bcc], tc[bcc], f"--{m}", lw=0.5, ms=1.5, color=c, label=lab)
+        ax.plot(cc[hcp], tc[hcp], f"--{m}", lw=0.5, ms=1.5, color=c)
 
-    regions = [1 - 0.335, 1 - 0.145, 1]
     addtext(ax, 0.1, 0.9, r"Ti$_{x}$V$_{1-x}$")
     ax.set_xlim(-0.01, 1.01)
     ax.set_ylim(0, 9)
@@ -830,30 +834,63 @@ def plot_tc_conc_tiv(save=False):
             cc, ttc = data[i]
             idx = np.where(cc == c)[0][0]
             tc[i] = ttc[idx]
-        ax2.plot(uu, tc, marker=m, ms=1, lw=0.5, label=f"$x={c:.1f}$")
+        mask = uu != 1
+        ax2.plot(uu[mask], tc[mask], marker=m, ms=1, lw=0.5, label=f"$x={c:.1f}$")
     ax2.tick_params(labelsize=5)
     ax2.set_xlabel(r"$U$", fontsize=5)
-    ax2.legend(loc="center left", frameon=False, fontsize=5)
+    ax2.legend(loc=(0.02, 0.4), frameon=False, fontsize=5)
     ax2.set_ylim(6.1, None)
     if save:
         fig.savefig(FIGS / "TiV_conc_tc.png", dpi=900)
 
 
+def plot_lamb_conc_tiv(save=False):
+    fig, ax = plt.subplots()
+    ckey = "Ti"
+    regions = [1 - 0.335, 1 - 0.145, 1]
+    temp = 400
+    uu = [0, 2, 5]
+    colors = ["C0", "C1", "C2", "C3", "C4", "C5"]
+
+    for u, c, m in zip(uu, colors, MARKERS):
+        lab = f"$U={u}$eV" if u > 0 else "LDA"
+        root = ROOT / "Ti-V" / "CPA" / tiv_path(temp, u)  # / f"nl3_u{u}"
+        cc, _, lamb = extract_tc_c_tiv(root, ckey)
+        bcc = cc < regions[0]
+        hcp = np.logical_and(regions[1] < cc, cc < 1)
+        ax.plot(cc[bcc], lamb[bcc], f"--{m}", lw=0.5, ms=1.5, color=c, label=lab)
+        ax.plot(cc[hcp], lamb[hcp], f"--{m}", lw=0.5, ms=1.5, color=c)
+
+    addtext(ax, 0.1, 0.9, r"Ti$_{x}$V$_{1-x}$")
+    ax.set_xlim(-0.01, 1.01)
+    ax.set_ylim(0, 9)
+    ax.set_xlabel(r"x")
+    ax.set_ylabel("$\lambda$ (a.u.)")
+    ax.fill_between([regions[-2] - 0.02, 1.2], 0, 9, color="k", alpha=0.1, lw=0)
+    ax.fill_between([regions[-3], regions[-2] + 0.02], 0, 9, color="red", alpha=0.1, lw=0)
+    x1 = regions[-1] + 0.5 * (regions[-2] - regions[-1])
+    x2 = regions[-2] + 0.5 * (regions[-3] - regions[-2])
+
+    ax.set_ylim(0.4, 0.7)
+    ax.legend(loc="upper right")
+
+
 def main():
-    save = True
+    save = False
     # Vanadium
     # plot_alat_opt_curves_v(save)
     # plot_dos_conv_v(save)
-    plot_dos_conv_v2(save)
+    # plot_dos_conv_v2(save)
     # plot_sigma_iw_v(save)
     # plot_meff2_v(save)
     # plot_sws_lambda_tc_v(save)
     # TiV
-    # plot_conc_alat_tiv(save)
-    # plot_dos_cpa_tiv(save)
-    # plot_sigma_iw2_tiv(save)
-    # plot_meff2_tiv(save)
-    # plot_tc_conc_tiv(save)
+    plot_conc_alat_tiv(save)
+    plot_dos_cpa_tiv(save)
+    plot_sigma_iw2_tiv(save)
+    plot_meff2_tiv(save)
+    plot_tc_conc_tiv(save)
+    plot_lamb_conc_tiv()
     plt.show()
 
 

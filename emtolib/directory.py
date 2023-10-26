@@ -68,7 +68,7 @@ class EmtoDirectory:
                 return self.get_prn()
             except FileNotFoundError:
                 return None
-        return self._dat
+        return self._prn
 
     @property
     def dos(self):
@@ -106,6 +106,11 @@ class EmtoDirectory:
         except KGRNReadError as e:
             logger.exception(e)
         return False
+
+    def converged(self):
+        if self.prn is None:
+            return False
+        return self.prn.converged
 
     def get_dat_path(self):
         return find_kgrn_file(self.path)
