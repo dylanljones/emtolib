@@ -54,7 +54,7 @@ include-package-data = true
 find = {}
 
 [tool.setuptools_scm]
-write_to = "pyrekordbox/_version.py"
+write_to = "emtolib/_version.py"
 git_describe_command = "git describe --dirty --tags --long --match * --first-parent"
 
 
