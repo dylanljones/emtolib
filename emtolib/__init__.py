@@ -29,7 +29,6 @@ from .errors import (
     DOSError,
     DOSReadError,
 )
-from .xarr import update_datasets, load_dataset, load_datasets
 
 try:
     from ._version import version as __version__
