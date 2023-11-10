@@ -5,7 +5,6 @@
 import logging
 import shutil
 import numpy as np
-import xarray as xr
 from scipy import constants as cc
 from pathlib import Path
 from typing import Union
