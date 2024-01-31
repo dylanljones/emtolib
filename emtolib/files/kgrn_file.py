@@ -9,11 +9,11 @@ from pathlib import Path
 from datetime import datetime
 
 import numpy as np
+from ftmplt import Template
 
 from ..common import EmtoFile, elements, dict_diff, parse_params
 from ..config import update_emto_paths
 from ..errors import KGRNError, KGRNReadError, KGRNWriteError
-from ..ftmplt import Template
 
 logger = logging.getLogger(__name__)
 

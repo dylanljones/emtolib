@@ -7,5 +7,5 @@ from .prn_file import PrnFile
 from .bmdl_file import BmdlFile
 from .dmft_file import DmftFile
 from .kgrn_file import Atom, KgrnFile
-from .make_file import Makefile, generate_makefile
 from .slurm_file import SlurmScript
+from .make_file import Makefile, generate_makefile

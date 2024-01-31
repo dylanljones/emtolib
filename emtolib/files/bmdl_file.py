@@ -5,9 +5,9 @@
 from datetime import datetime
 
 import numpy as np
+from ftmplt import Template
 
 from ..common import EmtoFile, parse_params
-from ..ftmplt import Template
 
 TEMPLATE = """\
 BMDL      HP......={hp} {header:>39}

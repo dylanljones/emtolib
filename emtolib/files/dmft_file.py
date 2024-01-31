@@ -2,9 +2,10 @@
 # Author: Dylan Jones
 # Date:   2023-07-17
 
+from ftmplt import Template
+
 from ..common import EmtoFile, fort2py_float, py2fort_float
 from ..errors import DMFTReadError, DMFTWriteError
-from ..ftmplt import Template
 
 TEMPLATE = """\
 #LMTO structure constants, number Matsubaras, Temp (Kelvin), Solver, DC, Mixing Sigma, Nomis
