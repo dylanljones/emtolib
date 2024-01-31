@@ -3,7 +3,9 @@
 # Date:   2023-07-07
 
 import re
+
 import numpy as np
+
 from ..common import EmtoFile, parse_params
 
 RE_ATOM = re.compile("^Atom:(?P<atom>.*)")
@@ -153,7 +155,6 @@ def parse_atom_panel(lines, istart):
 
 
 class PrnFile(EmtoFile):
-
     extension = ".prn"
     autoload = True
     missing_ok = False

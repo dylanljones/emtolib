@@ -3,12 +3,12 @@
 # Date:   2023-07-04
 import string
 from collections import OrderedDict
+
 from ..common import EmtoFile
 from ..directory import walk_emtodirs
 
 
 class Makefile(EmtoFile):
-
     def __init__(self, path):
         super().__init__(path)
         self.header = ""

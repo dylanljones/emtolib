@@ -28,7 +28,7 @@ def fermi_fct(eps, beta):
     --------
     fermi_fct_inv : The inverse of the Fermi function for real arguments.
     """
-    z = eps*beta
+    z = eps * beta
     try:
         return expit(-z)  # = 0.5 * (1. + tanh(-0.5 * beta * eps))
     except TypeError:
@@ -36,24 +36,23 @@ def fermi_fct(eps, beta):
     z = np.asanyarray(z)
     pos = z.real > 0
     res = np.empty_like(z)
-    res[~pos] = 1./(np.exp(z[~pos]) + 1)
+    res[~pos] = 1.0 / (np.exp(z[~pos]) + 1)
     exp_m = np.exp(-z[pos])
-    res[pos] = exp_m/(1 + exp_m)
+    res[pos] = exp_m / (1 + exp_m)
     return res
 
 
 def lorentzian(x, x0, width):
-    return width / (np.pi * (width**2 + (x - x0)**2))
+    return width / (np.pi * (width**2 + (x - x0) ** 2))
 
 
 def gaussian(x, x0, width):
-    return np.exp(-(x - x0)**2 / (2 * width**2)) / (width * np.sqrt(2 * np.pi))
+    return np.exp(-((x - x0) ** 2) / (2 * width**2)) / (width * np.sqrt(2 * np.pi))
 
 
 def convolve_func(x, y, func, normalize=True, **kwargs):
     kernel = func(x, **kwargs)
-    yconv = np.convolve(y, kernel, mode='same')
+    yconv = np.convolve(y, kernel, mode="same")
     if normalize:
         yconv /= np.sum(kernel)
     return yconv
-

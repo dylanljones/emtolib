@@ -7,9 +7,10 @@ import re
 import json
 import shutil
 import logging
-from pathlib import Path
 from typing import Union
+from pathlib import Path
 from collections import abc
+
 import numpy as np
 
 logger = logging.getLogger(__package__)

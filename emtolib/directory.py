@@ -2,13 +2,15 @@
 # Author: Dylan Jones
 # Date:   2023-06-21
 
-import logging
 import shutil
+import logging
+from typing import Union
+from pathlib import Path
+
 import numpy as np
 from scipy import constants as cc
-from pathlib import Path
-from typing import Union
-from .files import KgrnFile, BmdlFile, PrnFile, DosFile, SlurmScript, DmftFile
+
+from .files import DosFile, PrnFile, BmdlFile, DmftFile, KgrnFile, SlurmScript
 from .errors import KGRNReadError
 
 logger = logging.getLogger(__name__)

@@ -4,14 +4,16 @@
 
 import re
 import logging
-from datetime import datetime
-from typing import Union, List, Set, Dict
+from typing import Dict, List, Union
 from pathlib import Path
+from datetime import datetime
+
 import numpy as np
-from ..common import EmtoFile, parse_params, elements, dict_diff
+
+from ..common import EmtoFile, elements, dict_diff, parse_params
+from ..config import update_emto_paths
 from ..errors import KGRNError, KGRNReadError, KGRNWriteError
 from ..ftmplt import Template
-from ..config import update_emto_paths
 
 logger = logging.getLogger(__name__)
 

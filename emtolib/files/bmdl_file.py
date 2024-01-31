@@ -3,7 +3,9 @@
 # Date:   2023-07-07
 
 from datetime import datetime
+
 import numpy as np
+
 from ..common import EmtoFile, parse_params
 from ..ftmplt import Template
 
@@ -43,7 +45,7 @@ IBZ2LAT = dict((v, k) for k, v in LAT2IBZ.items())
 
 
 def lat_to_ibz(lat):
-    """Returns the Bravais lattice IBZ code based on the input string code"""
+    """Returns the Bravais lattice IBZ code based on the input string code."""
     if lat not in LAT2IBZ.keys():
         valid = list(LAT2IBZ.keys())
         raise ValueError(f"Unknown lattice {lat}! Valid lattices: {valid}")
@@ -51,7 +53,7 @@ def lat_to_ibz(lat):
 
 
 def ibz_to_lat(ibz):
-    """Returns the Bravais lattice name based on the input IBZ code"""
+    """Returns the Bravais lattice name based on the input IBZ code."""
     if ibz not in IBZ2LAT.keys():
         valid = list(IBZ2LAT.keys())
         raise ValueError(f"Unknown IBZ code {ibz}! IBZ codes: {valid}")
@@ -107,7 +109,6 @@ def parse_cell(cell, raise_errors=True):
 
 
 class BmdlFile(EmtoFile):
-
     extension = ".dat"
     template = Template(TEMPLATE, ignore_case=True)
 
@@ -149,7 +150,7 @@ class BmdlFile(EmtoFile):
             self.update(kwargs)
 
     def get_lattice_vectors(self, scaled=True):
-        """Returns the lattice vectors in units of A
+        """Returns the lattice vectors in units of A.
 
         If the BMDL file contains lattice vectors, those are returned.
         Otherwise, the lattice vectors are computed from the angles:
@@ -192,7 +193,7 @@ class BmdlFile(EmtoFile):
         return vectors
 
     def transform(self, positions):
-        r"""Transforms positions from fractional to cartesian coordinates
+        r"""Transforms positions from fractional to cartesian coordinates.
 
         The given positions .math:`x_i` are transformed to cartesian coordinates
         using the lattice vectors .math:`A = \sum_{ij} a_{ij}` as
@@ -216,7 +217,7 @@ class BmdlFile(EmtoFile):
         return trans
 
     def itransform(self, positions):
-        """Transforms positions from cartesian to fractional coordinates
+        """Transforms positions from cartesian to fractional coordinates.
 
         Parameters
         ----------

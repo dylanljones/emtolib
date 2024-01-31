@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # Author: Dylan Jones
 # Date:   2023-09-20
-import time
 from pathlib import Path
-import numpy as np
-from numpy.polynomial import Polynomial
-from scipy import optimize
+
 import h5py
+import numpy as np
+from scipy import optimize
+from numpy.polynomial import Polynomial
+
 from .directory import walk_emtodirs
 
 
@@ -52,7 +53,7 @@ def save_alat_etots(root, deg=3, filename="sws.hdf5", callback=None):
                 ds.attrs["poly_alat"] = poly_alat.coef
                 if callback is not None:
                     callback(folder, ds)
-    print(f"\rSaving SWS optimization data: done", flush=True)
+    print("\rSaving SWS optimization data: done", flush=True)
 
 
 def read_data(root, key, quantity="sws", filename="sws.hdf5"):

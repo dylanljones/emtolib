@@ -16,6 +16,7 @@ dependencies = [
     "matplotlib",
     "pandas",
     "scipy",
+    "ftmplt",
     "pytest",
     "click",
     "h5py",
@@ -56,36 +57,61 @@ write_to = "emtolib/_version.py"
 git_describe_command = "git describe --dirty --tags --long --match * --first-parent"
 
 
-# -- Black -----------------------------------------------------------------------------
+# -- Ruff ------------------------------------------------------------------------------
 
-[tool.black]
-line-length = 88
-include = '\.pyi?$'
-exclude = "__init__.py|__main__.py|_version.py|scripts"
-
-
-# -- Linting ---------------------------------------------------------------------------
-
-[tool.flake8]
-max-line-length = 88
-ignore = ["D203"]
-extend-ignore = ["E203", "W503"]
-per-file-ignores = ["__init__.py:F401"]
+[tool.ruff]
 exclude = [
     ".git",
     ".idea",
     "__pycache__",
     "build",
     "dist",
+    ".ruff_cache",
     "*/_version.py",
-    "docs/*",
-    "scripts/*"
 ]
+line-length = 88
+indent-width = 4
 
-[tool.pydocstyle]
-add_ignore = [
-    "D105",  # ignore undocumented dunder methods like ``__str__`
+[tool.ruff.lint]
+select = [
+    "F", # flake8
+    "E", # pycodestyle Errors
+    "W", # pycodestyle Warnings
+    "I", # isort
+    "NPY", # Numpy
+    "N", # pep8-naming
+    "D", # pydocstyle
 ]
+ignore = [
+    "E203",  # Whitespace before ':'
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
+    "D106", # Missing docstring in public nested class
+    "D107", # Missing docstring in __init__
+    "D401", # First line should be in imperative mood
+]
+fixable = ["ALL"]  # Allow fix for all enabled rules (when `--fix`) is provided.
+unfixable = []
+
+[tool.ruff.lint.per-file-ignores]
+"*__init__.py" = ["F401"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+length-sort = true
 
 
 # -- Coverage --------------------------------------------------------------------------

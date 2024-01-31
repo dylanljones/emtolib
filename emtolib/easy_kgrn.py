@@ -7,6 +7,7 @@
 import os
 import subprocess
 from configparser import ConfigParser
+
 from emtolib import KgrnFile, EmtoDirectory
 
 
@@ -86,8 +87,11 @@ def convert_kgrn_input(params, atoms, kgrn_path):
 
 
 def shell_source(script):
-    """Sometimes you want to emulate the action of "source" in bash,
-    settings some environment variables. Here is a way to do it."""
+    """Emulates source in bash.
+
+    Sometimes you want to emulate the action of "source" in bash,
+    settings some environment variables. Here is a way to do it.
+    """
     pipe = subprocess.Popen(". %s; env" % script, stdout=subprocess.PIPE, shell=True)
     output = pipe.communicate()[0].decode("utf-8")
     env = dict()
