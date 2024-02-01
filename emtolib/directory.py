@@ -18,6 +18,7 @@ from .files import (
     KgrnFile,
     SlurmScript,
     read_sigma_z,
+    read_sigma_iw,
     read_fermi_surface_file,
 )
 from .errors import KGRNReadError
@@ -358,7 +359,7 @@ class EmtoDirectory:
         if not name:
             name = f"fort.{num}"
         path = self.path / name
-        return read_sigma_z(path, unit)
+        return read_sigma_iw(path, unit)
 
     def get_fermi_surface(self, name=""):
         if not name:
