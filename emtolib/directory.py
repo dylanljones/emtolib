@@ -10,7 +10,16 @@ from pathlib import Path
 import numpy as np
 from scipy import constants as cc
 
-from .files import DosFile, PrnFile, BmdlFile, DmftFile, KgrnFile, SlurmScript
+from .files import (
+    DosFile,
+    PrnFile,
+    BmdlFile,
+    DmftFile,
+    KgrnFile,
+    SlurmScript,
+    read_sigma_z,
+    read_fermi_surface_file,
+)
 from .errors import KGRNReadError
 
 logger = logging.getLogger(__name__)
@@ -330,71 +339,32 @@ class EmtoDirectory:
         dat.force_dmft(True)
         dat.dump()
 
-    def get_fort(self, num, **kwargs):
+    def get_aimag(self):
+        num = 300
         path = self.path / f"fort.{num}"
         if not path.exists():
             raise FileNotFoundError(f"File {path.name} does not exist!")
-        return np.loadtxt(path, **kwargs)
+        return np.loadtxt(path)
 
-    def get_aimag(self):
-        return self.get_fort(300)
+    def get_sigma_z(self, name="", unit="ry"):
+        num = 99
+        if not name:
+            name = f"fort.{num}"
+        path = self.path / name
+        return read_sigma_z(path, unit)
 
-    def get_sigma_z(self, unit="ry"):
-        unit = unit.lower()
-        if unit not in ("ry", "ev"):
-            raise ValueError(f"Invalid unit {unit}!")
-        data = self.get_fort(99)
-        z = data[:, 0]
-        sig_real = data[:, 1::2]
-        sig_imag = data[:, 2::2]
-        sig = sig_real + 1j * sig_imag
-        nskip = 0
-        for i, _z in enumerate(z):
-            if _z != 0:
-                nskip = i
-                break
-        # Remove first rows
-        z, sig = z[nskip:], sig[nskip:]
-        # Unpack spin channels
-        _, idx = np.unique(z, return_index=True)
-        n = len(z) // len(idx)
-        z = np.split(z, n)[0]
-        sig = np.array(np.split(sig, n))
-        # Reshape to (n_channels, n_orbitals, n_energy)
-        sig = np.swapaxes(sig, 1, 2)
-        if unit == "ev":
-            z = z * ry2ev
-            sig = sig * ry2ev
-        return z, sig
+    def get_sigma_iw(self, name="", unit="ry"):
+        num = 400
+        if not name:
+            name = f"fort.{num}"
+        path = self.path / name
+        return read_sigma_z(path, unit)
 
-    def get_sigma_iw(self, unit="ry"):
-        unit = unit.lower()
-        if unit not in ("ry", "ev"):
-            raise ValueError(f"Invalid unit {unit}!")
-        data = self.get_fort(400)
-        iw = data[:, 0]
-        sig_real = data[:, 1::2]
-        sig_imag = data[:, 2::2]
-        sig = sig_real + 1j * sig_imag
-        # Unpack spin channels
-        _, idx = np.unique(iw, return_index=True)
-        n = len(iw) // len(idx)
-        iw = np.split(iw, n)[0]
-        sig = np.array(np.split(sig, n))
-        # Reshape to (n_channels, n_orbitals, n_energy)
-        sig = np.swapaxes(sig, 1, 2)
-        # Channels are (at1_up, at1_dn, at2_up, at2_dn, ...)
-        # Reshape to (natom, nspin, n_orbitals, n_energy)
-        shape = sig.shape
-        nchannels = shape[0]
-        natom = nchannels // 2
-        nspin = 2
-        sig = sig.reshape((natom, nspin, *shape[1:]))
-
-        if unit == "ev":
-            sig = sig * ry2ev
-            iw = iw * ry2ev
-        return iw, sig
+    def get_fermi_surface(self, name=""):
+        if not name:
+            name = self.dat.jobnam + ".fes"
+        path = self.path / name
+        return read_fermi_surface_file(path)
 
 
 def is_emtodir(path):
