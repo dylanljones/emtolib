@@ -390,6 +390,21 @@ def clear_cmd(aux, recursive, paths):
         folder.clear(aux=aux)
 
 
+@cli.command(name="clear-slurm")
+@multi_path_opts
+def clear_slurm(recursive, paths):
+    """Clears the SLURM scripts in the given directories.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        p = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        click.echo(f"{p} Clearing SLURM scripts")
+        folder.clear_slurm()
+
+
 @cli.command()
 @click.option("--keep", "-k", is_flag=True, default=False, help="Create keep files.")
 @multi_path_opts
