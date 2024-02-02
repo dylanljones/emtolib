@@ -4,9 +4,11 @@
 
 import io
 import re
+from typing import TextIO
+
 import numpy as np
 import pandas as pd
-from typing import TextIO
+
 from ..common import EmtoFile
 from ..errors import DOSReadError
 
@@ -225,7 +227,6 @@ def translate_spin(spin):
 
 
 class DosFile(EmtoFile):
-
     extension = ".dos"
 
     def __init__(self, *path):

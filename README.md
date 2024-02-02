@@ -12,7 +12,7 @@ for a more general purpose tool.
 
 Run the following command to install `emtolib`:
 ```bash
-python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git
+python3 -m pip install git+https://github.com/dylanljones/emtolib.git
 ```
 
 

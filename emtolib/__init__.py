@@ -14,12 +14,10 @@ from .files import (
     read_dos,
     load_dos,
     SlurmScript,
-    Makefile,
-    generate_makefile,
 )
 from .directory import EmtoDirectory, is_emtodir, walk_emtodirs
 from .errors import (
-    EmtoException,
+    EmtoError,
     KGRNError,
     KGRNReadError,
     KGRNWriteError,

@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*
 # Author: Dylan Jones
 # Date:   2023-07-25
-"""This module defines the command line interface for emtolib."""
 
-import click
+"""Command line interface for emtolib."""
+
 import functools
 import subprocess
 from pathlib import Path
+
+import click
 import numpy as np
-from emtolib.directory import walk_emtodirs, diff_emtodirs, EmtoDirectory
-from emtolib.errors import DOSReadError
-from emtolib.common import elements, WorkingDir
-from emtolib.config import CONFIG, update_emto_paths
+
 from emtolib import __version__
-from emtolib.easy_kgrn import run_emto_slurm, run_emto_local
+from emtolib.common import WorkingDir, elements
+from emtolib.config import CONFIG, update_emto_paths
+from emtolib.errors import DOSReadError
+from emtolib.directory import EmtoDirectory, diff_emtodirs, walk_emtodirs
+from emtolib.easy_kgrn import run_emto_local, run_emto_slurm
 
 ITER_TMPLT = "Iteration: {iter:>3} Etot: {etot:11.6f} erren: {erren:10.8f}"
 
@@ -437,7 +440,7 @@ def atom_group():
 @click.argument("kwargs", type=str, nargs=-1, required=False)
 @single_path_opts
 def add_atom(clear, symbol, kwargs, path):
-    """Add a new atom to the input file in the given directory
+    """Add a new atom to the input file in the given directory.
 
     SYMBOL: The symbol of the atom to add
     KWARGS: The keyword arguments to pass to the atom constructor. Must be given as
@@ -621,7 +624,7 @@ def cancel(dry, recursive, paths):
 @cli.command()
 @click.option("--all", "-a", is_flag=True, default=False, help="Show squeue output.")
 def running(all):  # noqa
-    """Check how many slurm jobs are still running"""
+    """Check how many slurm jobs are still running."""
     cmd = r'squeue -u $(whoami) -o "%.8i %.10P %.14j %.8T %.10M %.8N"'
     stdout = subprocess.check_output(cmd, shell=True)
     stdout = stdout.decode("utf-8")

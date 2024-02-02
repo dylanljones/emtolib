@@ -73,14 +73,14 @@ def _load_config(file):
 
 
 def read_config(filename="emto.ini"):
-    """Find and read the default config file"""
+    """Find and read the default config file."""
     file = _find_config_file(filename)
     conf = _load_config(file)
     return conf
 
 
 def update_config(filename="emto.ini"):
-    """Update the default config with the values from the config file"""
+    """Update the default config with the values from the config file."""
     logger.debug("Updating emtolib config")
 
     file = _find_config_file(filename)

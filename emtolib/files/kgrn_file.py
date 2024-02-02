@@ -4,14 +4,16 @@
 
 import re
 import logging
-from datetime import datetime
-from typing import Union, List, Set, Dict
+from typing import Dict, List, Union
 from pathlib import Path
+from datetime import datetime
+
 import numpy as np
-from ..common import EmtoFile, parse_params, elements, dict_diff
-from ..errors import KGRNError, KGRNReadError, KGRNWriteError
-from ..ftmplt import Template
+from ftmplt import Template
+
+from ..common import EmtoFile, elements, dict_diff, parse_params
 from ..config import update_emto_paths
+from ..errors import KGRNError, KGRNReadError, KGRNWriteError
 
 logger = logging.getLogger(__name__)
 
@@ -306,27 +308,44 @@ def parse_atoms(atomstr, atomconfstr):
         parse_atom_block(lines[i * 6 : (i + 1) * 6]) for i in range(n_blocks)
     ]
 
-    counts = dict()
-    atoms = list()
-    for at, params in atom_params:
-        if at not in counts:
-            counts[at] = 0
-        else:
-            counts[at] += 1
-        i = counts[at]
+    # Join the two together
+    # There are two cases: One block for each atom line or
+    # one block for each unique atom type
+    try:
+        atoms = list()
+        counts = dict()
+        for at, params in atom_params:
+            if at not in counts:
+                counts[at] = 0
+            else:
+                counts[at] += 1
+            i = counts[at]
 
-        # Get the corresponding atom block
-        blocks = list()
-        for _at, _params in atom_blocks:
-            _at = "".join([i for i in _at if not i.isdigit()])
-            if _at == at:
-                blocks.append(_params)
+            # Get the corresponding atom block
+            blocks = list()
+            for _at, _params in atom_blocks:
+                _at = "".join([i for i in _at if not i.isdigit()])
+                if _at == at:
+                    blocks.append(_params)
 
-        idx = 0 if len(blocks) == 1 else i
-        at_params = blocks[idx].copy()
-        at_params.update(params)
-        at_params["symbol"] = at
-        atoms.append(at_params)
+            idx = 0 if len(blocks) == 1 else i
+            at_params = blocks[idx].copy()
+            at_params.update(params)
+            at_params["symbol"] = at
+            atoms.append(at_params)
+    except IndexError:
+        # Fall back to using atom type
+        blocks = dict()
+        for at, block in atom_blocks:
+            if at not in blocks:
+                blocks[at] = block
+
+        atoms = list()
+        for at, params in atom_params:
+            at_params = blocks[at].copy()
+            at_params.update(params)
+            at_params["symbol"] = at
+            atoms.append(at_params)
 
     return atoms
 
