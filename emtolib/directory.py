@@ -288,6 +288,10 @@ class EmtoDirectory:
                     for file in path.iterdir():
                         file.unlink(missing_ok=True)
 
+    def clear_slurm(self):
+        for path in self.get_slurm_out_paths():
+            path.unlink(missing_ok=True)
+
     def __truediv__(self, other):
         new_path = self.path / other
         if new_path.is_dir():

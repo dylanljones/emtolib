@@ -3,8 +3,10 @@
 # Date:   2023-07-03
 
 from pathlib import Path
+
 from pytest import mark
 from numpy.testing import assert_array_equal
+
 from emtolib.files import KgrnFile
 
 TEST_ROOT = Path(__file__).parent.parent / ".testdata"
