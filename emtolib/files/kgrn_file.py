@@ -55,6 +55,42 @@ TESTE....=  {teste:8.2E} TESTY...=  {testy:8.2E} TESTV...=  {testv:8.2E}
 {atomconf}
 """  # noqa
 
+TEMPLATE_KGRN_v2 = """\
+KGRN {header:>55}
+JOBNAM={jobnam}
+STRT..=  {strt} MSGL.={msgl:3d} EXPAN.= {expan} FCD..=  {fcd} FUNC..= {func}
+FOR001={for001}
+FOR001={for001_2}
+DIR002={dir002}
+DIR003={dir003}
+FOR004={for004}
+DIR006={dir006}
+DIR009={dir009}
+DIR010={dir010}
+DIR011={dir011}
+{comment}
+Band: 10 lines
+NITER.={niter:3d} NLIN.={nlin:3d} NPRN.={nprn:3d} NCPA.={ncpa:3d} NT...={nt:3d} MNTA.={mnta:3d}
+MODE..= {mode:2} FRC..=  {frc} DOS..=  {dos} OPS..=  {ops} AFM..=  {afm} CRT..=  {crt}
+Lmaxh.={lmaxh:3d} Lmaxt={lmaxt:3d} NFI..={nfi:3d} FIXG.={fixg:3d} SHF..={shf:3d} SOFC.=  {sofc}
+KMSH...= {kmsh} IBZ..={ibz:3d} NKX..={nkx:3d} NKY..={nky:3d} NKZ..={nkz:3d} FBZ..=  {fbz}
+KMSH2..= {kmsh2} IBZ2.={ibz2:3d} NKX2.={nkx2:3d} NKY2.={nky2:3d} NKZ2.={nkz2:3d} AVG..=  {avg}
+ZMSH...= {zmsh} NZ1..={nz1:3d} NZ2..={nz2:3d} NZ3..={nz3:3d} NRES.={nres:3d} NZD.={nzd:4d}
+DEPTH..={depth:7.3f} IMAGZ.={imagz:7.5f} EPS...={eps:7.3f} ELIM..={elim:7.3f}
+AMIX...={amix:7.5f} EFMIX.={efmix:7.5f} VMTZ..={vmtz:7.3f} MMOM..={mmom:7.3f}
+TOLE...= {tole:7.1e} TOLEF.= {tolef:7.1e} TOLCPA= {tolcpa:7.1e} TFERMI={tfermi:7.3f} (K)
+SWS......={sws:10.6f} NSWS.={nsws:3d} DSWS..={dsws:7.2f} ALPCPA={alpcpa:7.4f}
+Setup: 2 + NQ*NS lines
+EFGS...={efgs:7.3f} HX....={hx:7.3f} NX...={nx:3d} NZ0..={nz0:3d} STMP..= {stmp}
+{atoms}
+Atom:  4 lines + NT*NTA*6 lines
+IEX...={iex:3d} NP..= {np:3d} NES..={nes:3d} NITER={dirac_niter:3d} IWAT.={iwat:3d} NPRNA={nprna:3d}
+VMIX.....={vmix:10.6f} RWAT....={rwat:10.6f} RMAX....={rmax:10.6f}
+DX.......={dx:10.6f} DR1.....={dr1:10.6f} TEST....=  {test:8.2E}
+TESTE....=  {teste:8.2E} TESTY...=  {testy:8.2E} TESTV...=  {testv:8.2E}
+{atomconf}
+"""  # noqa
+
 TEMPLATE_DMFT = """\
 DMFT {header:>55}
 JOBNAM={jobnam}
@@ -187,6 +223,7 @@ DEFAULT_PARAMS = {
     "nkx2": 4,
     "nky2": 0,
     "nkz2": 51,
+    "avg": "A",
     "zmsh": "C",
     "nz1": 32,
     "nz2": 8,
@@ -968,9 +1005,12 @@ class KgrnFile(EmtoFile):
         else:
             raise KGRNReadError(f"Unknown file format: Invalid key '{fkey}'")
 
-        if self._dmft and "AVG..=" in text:
+        if "AVG..=" in text:
             self._ga = True
-            tmplt_str = TEMPLATE_DMFT_v2
+            if self._dmft:
+                tmplt_str = TEMPLATE_DMFT_v2
+            else:
+                tmplt_str = TEMPLATE_KGRN_v2
 
         template = Template(tmplt_str, ignore_case=True)
 
@@ -1003,7 +1043,10 @@ class KgrnFile(EmtoFile):
             else:
                 tmplt_str = TEMPLATE_DMFT
         else:
-            tmplt_str = TEMPLATE_KGRN
+            if self._ga:
+                tmplt_str = TEMPLATE_KGRN_v2
+            else:
+                tmplt_str = TEMPLATE_KGRN
 
         template = Template(tmplt_str, ignore_case=True)
 
