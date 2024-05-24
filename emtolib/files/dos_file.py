@@ -8,12 +8,17 @@ from typing import TextIO
 
 import numpy as np
 import pandas as pd
+from scipy import constants
 
 from ..common import EmtoFile
 from ..errors import DOSReadError
 
+RY2EV = constants.value("Rydberg constant times hc in eV")  # 13.605693122994
+
 RE_DOS_TOTAL = re.compile(r"Total DOS and NOS and partial \(IT\) (?P<spin>.*)$")
 RE_DOS_SUBLAT = re.compile("Sublattice (?P<idx>.*) Atom (?P<atom>.*) spin (?P<spin>.*)")
+
+UNITS = "ry", "ev"
 
 
 def _search_sections_tnos(fp):
@@ -248,24 +253,44 @@ class DosFile(EmtoFile):
         spin = translate_spin(spin)
         return _index_dataframe(self.tnos, [sublatt, atom, spin], drop)
 
-    def get_total_dos(self, spin=None):
+    def get_total_dos(self, spin=None, unit="ry"):
+        unit = unit.lower()
+        if unit not in UNITS:
+            raise ValueError(f"Invalid unit: {unit}")
+
         df = self.get_tdos(spin, drop=True)
         series = df.groupby("E")["Total"].sum()
         energy = np.array(series.index)
+        if unit == "ev":
+            energy *= RY2EV
         dos = np.array(series)
         return energy, dos
 
-    def get_total_nos(self, spin=None):
+    def get_total_nos(self, spin=None, unit="ry"):
+        unit = unit.lower()
+        if unit not in UNITS:
+            raise ValueError(f"Invalid unit: {unit}")
+
         df = self.get_tnos(spin, drop=True)
         series = df.groupby("E")["Total"].sum()
         energy = np.array(series.index)
+        if unit == "ev":
+            energy *= RY2EV
         dos = np.array(series)
         return energy, dos
 
-    def get_partial_dos(self, sublatt=None, atom=None, spin=None, orbital="Total"):
+    def get_partial_dos(
+        self, sublatt=None, atom=None, spin=None, orbital="Total", unit="ry"
+    ):
+        unit = unit.lower()
+        if unit not in UNITS:
+            raise ValueError(f"Invalid unit: {unit}")
+
         df = self.get_pdos(sublatt, atom, spin, drop=True)
         series = df.groupby("E")[orbital].sum()
         energy = np.array(series.index)
+        if unit == "ev":
+            energy *= RY2EV
         dos = np.array(series)
         return energy, dos
 
@@ -277,8 +302,12 @@ class DosFile(EmtoFile):
         data = dos.loc[idx_ita[ita], idx_it[it], idx_is[s]]
         return data["Total"].array
 
-    def dos_array(self):
+    def dos_array(self, unit="ry"):
         """Return a 5D array of the total DOS with shape (ns, nit, nita, lmax, nzd)."""
+        unit = unit.lower()
+        if unit not in UNITS:
+            raise ValueError(f"Invalid unit: {unit}")
+
         dos = self.get_pdos()
         idx_it = dos.index.unique("Sublatt")
         idx_ita = dos.index.unique("Atom")
@@ -299,10 +328,18 @@ class DosFile(EmtoFile):
                     for c, col in enumerate(columns):
                         tdos[k, j, i, c] = data[col].array
 
+        if unit == "ev":
+            energy *= RY2EV
         return energy, tdos
 
-    def total_dos_array(self):
+    def total_dos_array(self, unit="ry"):
+        unit = unit.lower()
+        if unit not in UNITS:
+            raise ValueError(f"Invalid unit: {unit}")
+
         dos = self.get_tdos()
-        energy = dos["E"].array
-        dos = dos["Total"].array
-        return np.array(energy), np.array(dos)
+        energy = np.array(dos["E"].array)
+        if unit == "ev":
+            energy *= RY2EV
+        dos = np.array(dos["Total"].array)
+        return energy, dos
