@@ -1,0 +1,10 @@
+numpy
+matplotlib
+pandas
+scipy
+ftmplt
+pytest
+click
+h5py
+seaborn
+git+https://github.com/dylanljones/mplstyles.git

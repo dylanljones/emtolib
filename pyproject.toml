@@ -9,28 +9,26 @@ authors = [
     {name = "Dylan Jones", email = "dylanljones94@gmail.com"},
 ]
 license = {file = "LICENSE"}
-dynamic = ["version"]
+dynamic = ["version", "dependencies"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+keywords = ["emto", "dft", "cpa", "dmft"]
 requires-python = ">=3.8"
-dependencies = [
-    "numpy",
-    "matplotlib",
-    "pandas",
-    "scipy",
-    "ftmplt",
-    "pytest",
-    "click",
-    "h5py",
-]
 
-[project.optional-dependencies]
-test = [
-    "hypothesis>=6.0.0",
-    "pytest>=6.2.0",
-    "pytest-cov",
-]
+[project.urls]
+Source = "https://github.com/dylanljones/emtolib"
 
 [project.scripts]
 emtolib = "emtolib.__main__:cli"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
 
 
 # -- Build -----------------------------------------------------------------------------
@@ -69,7 +67,7 @@ exclude = [
     ".ruff_cache",
     "*/_version.py",
 ]
-line-length = 88
+line-length = 100
 indent-width = 4
 
 [tool.ruff.lint]
