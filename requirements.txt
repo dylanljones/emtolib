@@ -7,4 +7,4 @@ pytest
 click
 h5py
 seaborn
-git+https://github.com/dylanljones/mplstyles.git
+mplstyles @ git+https://github.com/dylanljones/mplstyles.git
