@@ -231,6 +231,11 @@ def translate_spin(spin):
     return spin
 
 
+def dos_ry2ev(energy, dos):
+    return energy * RY2EV, dos / RY2EV
+
+
+
 class DosFile(EmtoFile):
     extension = ".dos"
 
@@ -261,9 +266,9 @@ class DosFile(EmtoFile):
         df = self.get_tdos(spin, drop=True)
         series = df.groupby("E")["Total"].sum()
         energy = np.array(series.index)
-        if unit == "ev":
-            energy *= RY2EV
         dos = np.array(series)
+        if unit == "ev":
+            energy, dos = dos_ry2ev(energy, series)
         return energy, dos
 
     def get_total_nos(self, spin=None, unit="ry"):
@@ -274,9 +279,9 @@ class DosFile(EmtoFile):
         df = self.get_tnos(spin, drop=True)
         series = df.groupby("E")["Total"].sum()
         energy = np.array(series.index)
-        if unit == "ev":
-            energy *= RY2EV
         dos = np.array(series)
+        if unit == "ev":
+            energy, dos = dos_ry2ev(energy, dos)
         return energy, dos
 
     def get_partial_dos(
@@ -289,9 +294,9 @@ class DosFile(EmtoFile):
         df = self.get_pdos(sublatt, atom, spin, drop=True)
         series = df.groupby("E")[orbital].sum()
         energy = np.array(series.index)
-        if unit == "ev":
-            energy *= RY2EV
         dos = np.array(series)
+        if unit == "ev":
+            energy, dos = dos_ry2ev(energy, dos)
         return energy, dos
 
     def get_total_slice(self, ita, it, s):
@@ -329,7 +334,7 @@ class DosFile(EmtoFile):
                         tdos[k, j, i, c] = data[col].array
 
         if unit == "ev":
-            energy *= RY2EV
+            energy, dos = dos_ry2ev(energy, dos)
         return energy, tdos
 
     def total_dos_array(self, unit="ry"):
@@ -339,7 +344,7 @@ class DosFile(EmtoFile):
 
         dos = self.get_tdos()
         energy = np.array(dos["E"].array)
-        if unit == "ev":
-            energy *= RY2EV
         dos = np.array(dos["Total"].array)
+        if unit == "ev":
+            energy, dos = dos_ry2ev(energy, dos)
         return energy, dos
