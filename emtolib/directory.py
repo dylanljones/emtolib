@@ -94,12 +94,12 @@ class EmtoDirectory:
 
     @property
     def dos_lms(self):
-        if self._dos is None:
+        if self._dos_lms is None:
             try:
                 return self.get_dos_lms()
             except FileNotFoundError:
                 return None
-        return self._dos
+        return self._dos_lms
 
     @property
     def slurm(self):
