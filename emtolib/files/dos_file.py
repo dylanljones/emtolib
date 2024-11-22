@@ -348,3 +348,141 @@ class DosFile(EmtoFile):
         if unit == "ev":
             energy, dos = dos_ry2ev(energy, dos)
         return energy, dos
+
+
+def _get_lmax(n_total: int) -> int:
+    """Returns the maximum angular momentum index for a given number of orbitals.
+
+    Parameters
+    ----------
+    n_total : int
+        The total number of orbitals.
+
+    Returns
+    -------
+    int
+        The maximum angular momentum index.
+    """
+    n = 0
+    lmax = 0
+    while n < n_total:
+        lmax += 1
+        n += 2 * lmax + 1
+    return lmax - 1
+
+
+def _orbital_indices(lmax: int):
+    """Generate all possible orbital indices for a given maximum angular momentum index."""
+    for li in range(lmax + 1):
+        for mi in range(-li, li + 1):
+            yield li, mi
+
+
+def _parse_data_lms(lines):
+    data = list()
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        values = list()
+        for value in line.split():
+            try:
+                values.append(float(value))
+            except ValueError:
+                values.append(np.nan)
+        data.append(values)
+    return data
+
+
+def read_dos_lms(fp: TextIO):
+    """Reads the contents of a EMTO DOS file.
+
+    Parameters
+    ----------
+    fp : TextIO
+        The opened file pointer.
+    """
+    sections = _search_sections(fp)
+    dos_data = list()
+    for key, section in sections.items():
+        start, end = section
+        # Read data of section
+        fp.seek(start)
+        lines = [line.strip(" \t#") for line in fp.read(end - start).splitlines()]
+
+        assert key.startswith("Tot")
+        # Extract spin
+        match = RE_DOS_TOTAL.search(key)
+        spin = match.group("spin")
+        if spin.startswith("DOS"):
+            spin = spin[3:]
+
+        _parse_columns(lines)
+        data = _parse_data_lms(lines)
+        n = len(data[0]) - 3
+        lmax = _get_lmax(n)
+        indices = [f"{l}-{m}" for l, m in _orbital_indices(lmax)]
+        columns = ["E", "Total", "TNOS"] + indices
+        for values in data:
+            row = {k: v for k, v in zip(columns, values)}
+            row.update({"Spin": spin})
+            dos_data.append(row)
+
+    dos = pd.DataFrame(dos_data)
+    dos.set_index(["Spin"], inplace=True)
+    return dos
+
+
+def load_dos_lms(file_path: str):
+    """Open and read the contents of a EMTO DOS file.
+
+    Parameters
+    ----------
+    file_path : str
+        The path of the EMTO DOS file.
+    """
+    with open(file_path, "r") as fp:
+        return read_dos_lms(fp)
+
+
+class DosLmsFile(EmtoFile):
+    extension = ".lms"
+
+    def __init__(self, *path):
+        super().__init__(*path)
+        try:
+            self.tdos = load_dos_lms(self.path)
+        except Exception as e:
+            raise DOSReadError(f"Could not read DOS file: {self.path}") from e
+
+    def get_tdos(self, spin=None, drop=True):
+        spin = translate_spin(spin)
+        return _index_dataframe(self.tdos, [spin], drop)
+
+    def get_total_dos(self, spin=None, unit="ry"):
+        unit = unit.lower()
+        if unit not in UNITS:
+            raise ValueError(f"Invalid unit: {unit}")
+
+        dos = self.get_tdos(spin, drop=True)
+        if spin is not None:
+            data = dos.to_numpy()
+            energy = data[:, 0]
+            tdos = data[:, 3:].T  # Skip Energy and Total columns
+        else:
+            idx_ns = dos.index.unique("Spin")
+            ns = len(idx_ns)
+            n = len(dos) // ns
+            columns = dos.columns[3:]  # Skip Energy and Total columns
+            lmax = len(columns)
+            shape = (ns, lmax, n)
+            tdos = np.zeros(shape)
+            energy = np.zeros(n)
+            for i, s in enumerate(idx_ns):
+                data = dos.loc[s]
+                energy[:] = data["E"].array
+                for c, col in enumerate(columns):
+                    tdos[i, c] = data[col].array
+        if unit == "ev":
+            energy, dos = dos_ry2ev(energy, dos)
+        return energy, tdos

@@ -22,6 +22,7 @@ from .files import (
     read_fermi_surface_file,
 )
 from .errors import KGRNReadError
+from .files.dos_file import DosLmsFile
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class EmtoDirectory:
         self._dat: Union[KgrnFile, None] = None
         self._prn: Union[PrnFile, None] = None
         self._dos: Union[DosFile, None] = None
+        self._dos_lms: Union[DosLmsFile, None] = None
         self._slurm: Union[SlurmScript, None] = None
         self._dmft: Union[DmftFile, None] = None
 
@@ -86,6 +88,15 @@ class EmtoDirectory:
         if self._dos is None:
             try:
                 return self.get_dos()
+            except FileNotFoundError:
+                return None
+        return self._dos
+
+    @property
+    def dos_lms(self):
+        if self._dos is None:
+            try:
+                return self.get_dos_lms()
             except FileNotFoundError:
                 return None
         return self._dos
@@ -130,6 +141,11 @@ class EmtoDirectory:
         if not name:
             name = self.dat.jobnam
         return self.path / f"{name}.dos"
+
+    def get_dos_lms_path(self, name=""):
+        if not name:
+            name = self.dat.jobnam
+        return self.path / f"{name}.lms"
 
     def get_prn_path(self, name=""):
         if not name:
@@ -178,6 +194,14 @@ class EmtoDirectory:
         path = self.get_dos_path(name)
         dos = DosFile(path)
         self._dos = dos
+        return dos
+
+    def get_dos_lms(self, name="", reload=False):
+        if not reload and self._dos_lms is not None:
+            return self._dos_lms
+        path = self.get_dos_lms_path(name)
+        dos = DosLmsFile(path)
+        self._dos_lms = dos
         return dos
 
     def get_prn(self, name="", reload=False):
