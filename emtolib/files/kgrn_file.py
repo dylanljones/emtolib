@@ -341,9 +341,7 @@ def parse_atoms(atomstr, atomconfstr):
 
     lines = atomconfstr.splitlines()
     n_blocks = len(lines) // 6
-    atom_blocks = [
-        parse_atom_block(lines[i * 6 : (i + 1) * 6]) for i in range(n_blocks)
-    ]
+    atom_blocks = [parse_atom_block(lines[i * 6 : (i + 1) * 6]) for i in range(n_blocks)]
 
     # Join the two together
     # There are two cases: One block for each atom line or
@@ -739,9 +737,7 @@ class KgrnFile(EmtoFile):
         # Integer key
         if isinstance(key, int):
             if any([iq, it, ita]):
-                raise ValueError(
-                    "Integer key and iq, it or ita cannot be used together"
-                )
+                raise ValueError("Integer key and iq, it or ita cannot be used together")
             try:
                 return [self.atoms[key]]
             except IndexError:
@@ -915,9 +911,7 @@ class KgrnFile(EmtoFile):
         pot = str(pot)
         chd = str(chd)
         tmp = str(tmp)
-        update_emto_paths(
-            self, kstr, bmdl, kstr2=kstr2, pot=pot, chd=chd, tmp=tmp, conf=conf
-        )
+        update_emto_paths(self, kstr, bmdl, kstr2=kstr2, pot=pot, chd=chd, tmp=tmp, conf=conf)
 
     def param_diff(self, other, exclude=None):
         if isinstance(other, KgrnFile):

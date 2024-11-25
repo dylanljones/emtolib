@@ -235,7 +235,6 @@ def dos_ry2ev(energy, dos):
     return energy * RY2EV, dos / RY2EV
 
 
-
 class DosFile(EmtoFile):
     extension = ".dos"
 
@@ -284,9 +283,7 @@ class DosFile(EmtoFile):
             energy, dos = dos_ry2ev(energy, dos)
         return energy, dos
 
-    def get_partial_dos(
-        self, sublatt=None, atom=None, spin=None, orbital="Total", unit="ry"
-    ):
+    def get_partial_dos(self, sublatt=None, atom=None, spin=None, orbital="Total", unit="ry"):
         unit = unit.lower()
         if unit not in UNITS:
             raise ValueError(f"Invalid unit: {unit}")
@@ -516,9 +513,7 @@ class DosLmsFile(EmtoFile):
             energy, dos = dos_ry2ev(energy, dos)
         return energy, tdos
 
-    def get_partial_dos(
-        self, sublatt=None, atom=None, spin=None, unit="ry"
-    ):
+    def get_partial_dos(self, sublatt=None, atom=None, spin=None, unit="ry"):
         unit = unit.lower()
         if unit not in UNITS:
             raise ValueError(f"Invalid unit: {unit}")

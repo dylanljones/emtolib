@@ -213,9 +213,7 @@ def conv(recursive, paths):
 
 
 @cli.command()
-@click.option(
-    "--mean", "-m", is_flag=True, default=False, help="Show sublattice Hopfields (mean)"
-)
+@click.option("--mean", "-m", is_flag=True, default=False, help="Show sublattice Hopfields (mean)")
 @click.option("--sum", "-s", is_flag=True, default=False, help="Sum over spins")
 @multi_path_opts
 def hopfield(mean, sum, recursive, paths):  # noqa
@@ -328,9 +326,7 @@ def set_paths(kstr, bmdl, kstr2, recursive, paths):
 
 
 @cli.command()
-@click.option(
-    "--only_keys", "-k", is_flag=True, default=False, help="Only show key as output."
-)
+@click.option("--only_keys", "-k", is_flag=True, default=False, help="Only show key as output.")
 @multi_path_opts
 def diff(only_keys, recursive, paths):
     """Get the difference between the *.dat files in the given directories.
@@ -358,9 +354,7 @@ def diff(only_keys, recursive, paths):
 
 @cli.command("set-header")
 @click.option("--header", "-h", type=str, default="", help="The header to set.")
-@click.option(
-    "--frmt", "-f", type=str, default="%d %b %y", help="The date format of the header."
-)
+@click.option("--frmt", "-f", type=str, default="%d %b %y", help="The date format of the header.")
 @multi_path_opts
 def set_header(header, frmt, recursive, paths):
     """Sets the header of the *.dat files in the given directories.
@@ -433,9 +427,7 @@ def atom_group():
 
 
 @atom_group.command(name="add")
-@click.option(
-    "--clear", "-c", is_flag=True, default=False, help="Clear existing atoms first."
-)
+@click.option("--clear", "-c", is_flag=True, default=False, help="Clear existing atoms first.")
 @click.argument("symbol", type=str, nargs=1, required=True)
 @click.argument("kwargs", type=str, nargs=-1, required=False)
 @single_path_opts

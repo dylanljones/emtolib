@@ -47,8 +47,9 @@ def _find_config_file(filename):
     logger.info("Config file '%s' not found!", filename)
     # Raise an error if none of the above worked
     raise FileNotFoundError(
-        f"Could not find the config files {filename} in any of the directories: "
-        ", ".join(str(loc) for loc in LOCATIONS)
+        f"Could not find the config files {filename} in any of the directories: " ", ".join(
+            str(loc) for loc in LOCATIONS
+        )
     )
 
 
@@ -101,9 +102,7 @@ except (FileNotFoundError, KeyError):
     pass
 
 
-def update_emto_paths(
-    dat, kstr, bmdl, kstr2="", pot=None, chd=None, tmp=None, conf=None
-):
+def update_emto_paths(dat, kstr, bmdl, kstr2="", pot=None, chd=None, tmp=None, conf=None):
     if pot is None:
         pot = "pot/"
     if chd is None:
