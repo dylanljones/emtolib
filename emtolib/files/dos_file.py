@@ -403,34 +403,59 @@ def read_dos_lms(fp: TextIO):
         The opened file pointer.
     """
     sections = _search_sections(fp)
-    dos_data = list()
+    tdos_data = list()
+    pdos_data = list()
+    # tnos_data = list()
     for key, section in sections.items():
         start, end = section
         # Read data of section
         fp.seek(start)
         lines = [line.strip(" \t#") for line in fp.read(end - start).splitlines()]
+        if key.startswith("Tot"):
+            # Total DOS section
+            match = RE_DOS_TOTAL.search(key)
+            spin = match.group("spin")
+            if spin.startswith("DOS"):
+                spin = spin[3:]
 
-        assert key.startswith("Tot")
-        # Extract spin
-        match = RE_DOS_TOTAL.search(key)
-        spin = match.group("spin")
-        if spin.startswith("DOS"):
-            spin = spin[3:]
+            _parse_columns(lines)
+            data = _parse_data_lms(lines)
+            n = len(data[0]) - 3
+            lmax = _get_lmax(n)
+            indices = [f"{l}-{m}" for l, m in _orbital_indices(lmax)]
+            columns = ["E", "Total", "TNOS"] + indices
+            for values in data:
+                row = {k: v for k, v in zip(columns, values)}
+                row.update({"Spin": spin})
+                tdos_data.append(row)
 
-        _parse_columns(lines)
-        data = _parse_data_lms(lines)
-        n = len(data[0]) - 3
-        lmax = _get_lmax(n)
-        indices = [f"{l}-{m}" for l, m in _orbital_indices(lmax)]
-        columns = ["E", "Total", "TNOS"] + indices
-        for values in data:
-            row = {k: v for k, v in zip(columns, values)}
-            row.update({"Spin": spin})
-            dos_data.append(row)
+        elif key.startswith("Sub"):
+            # Sublattice DOS section
+            match = RE_DOS_SUBLAT.search(key)
+            sublatt = int(match.group("idx"))
+            atom = match.group("atom").strip()
+            spin = match.group("spin").strip()
+            index = {"Sublatt": sublatt, "Atom": atom, "Spin": spin}
 
-    dos = pd.DataFrame(dos_data)
-    dos.set_index(["Spin"], inplace=True)
-    return dos
+            _parse_columns(lines)
+            data = _parse_data_lms(lines)
+            n = len(data[0]) - 1
+            lmax = _get_lmax(n)
+            indices = [f"{l}-{m}" for l, m in _orbital_indices(lmax)]
+            columns = ["E"] + indices
+            for values in data:
+                row = {k: v for k, v in zip(columns, values)}
+                row.update(index)
+                pdos_data.append(row)
+
+    tdos = pd.DataFrame(tdos_data)
+    tdos.set_index(["Spin"], inplace=True)
+    if pdos_data:
+        pdos = pd.DataFrame(pdos_data)
+        pdos.set_index(["Sublatt", "Atom", "Spin"], inplace=True)
+    else:
+        pdos = None
+    return tdos, pdos
 
 
 def load_dos_lms(file_path: str):
@@ -451,13 +476,17 @@ class DosLmsFile(EmtoFile):
     def __init__(self, *path):
         super().__init__(*path)
         try:
-            self.tdos = load_dos_lms(self.path)
+            self.tdos, self.pdos = load_dos_lms(self.path)
         except Exception as e:
             raise DOSReadError(f"Could not read DOS file: {self.path}") from e
 
     def get_tdos(self, spin=None, drop=True):
         spin = translate_spin(spin)
         return _index_dataframe(self.tdos, [spin], drop)
+
+    def get_pdos(self, sublatt=None, atom=None, spin=None, drop=True):
+        spin = translate_spin(spin)
+        return _index_dataframe(self.pdos, [sublatt, atom, spin], drop)
 
     def get_total_dos(self, spin=None, unit="ry"):
         unit = unit.lower()
@@ -486,3 +515,33 @@ class DosLmsFile(EmtoFile):
         if unit == "ev":
             energy, dos = dos_ry2ev(energy, dos)
         return energy, tdos
+
+    def get_partial_dos(
+        self, sublatt=None, atom=None, spin=None, unit="ry"
+    ):
+        unit = unit.lower()
+        if unit not in UNITS:
+            raise ValueError(f"Invalid unit: {unit}")
+
+        dos = self.get_pdos(sublatt, atom, spin, drop=True)
+        idx_it = dos.index.unique("Sublatt")
+        idx_ita = dos.index.unique("Atom")
+        idx_ns = dos.index.unique("Spin")
+        columns = dos.columns[1:]  # Skip Energy
+        lmax = len(columns)
+        nita, nit, ns = len(idx_ita), len(idx_it), len(idx_ns)
+        n = len(dos) // (nita * nit * ns)
+        shape = (ns, nit, nita, lmax, n)
+
+        energy = np.zeros(n)
+        pdos = np.zeros(shape)
+        for i, ita in enumerate(idx_ita):
+            for j, it in enumerate(idx_it):
+                for k, s in enumerate(idx_ns):
+                    data = dos.loc[it, ita, s]
+                    energy[:] = data["E"].array
+                    for c, col in enumerate(columns):
+                        pdos[k, j, i, c] = data[col].array
+        if unit == "ev":
+            energy, pdos = dos_ry2ev(energy, pdos)
+        return energy, pdos
