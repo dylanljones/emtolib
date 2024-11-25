@@ -147,6 +147,11 @@ class EmtoDirectory:
             name = self.dat.jobnam
         return self.path / f"{name}.lms"
 
+    def get_fes_path(self, name=""):
+        if not name:
+            name = self.dat.jobnam
+        return self.path / f"{name}.fes"
+
     def get_prn_path(self, name=""):
         if not name:
             name = self.dat.jobnam
@@ -287,10 +292,15 @@ class EmtoDirectory:
         if out:
             jobname = dat.jobnam
             # prn file
-            file = self.path / f"{jobname}.prn"
+            file = self.get_prn_path()
             file.unlink(missing_ok=True)
-            # dos file
-            file = self.path / f"{jobname}.dos"
+            # dos files
+            file = self.get_dos_path()
+            file.unlink(missing_ok=True)
+            file = self.get_dos_lms_path()
+            file.unlink(missing_ok=True)
+            # fermi surface
+            file = self.get_fes_path()
             file.unlink(missing_ok=True)
             # other out files
             file = self.path / f"{jobname}.phi"
@@ -390,9 +400,7 @@ class EmtoDirectory:
         return read_sigma_iw(path, unit)
 
     def get_fermi_surface(self, name=""):
-        if not name:
-            name = self.dat.jobnam + ".fes"
-        path = self.path / name
+        path = self.get_fes_path(name)
         return read_fermi_surface_file(path)
 
 
