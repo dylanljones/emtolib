@@ -33,7 +33,10 @@ def read_fermi_surface_file(path):
     for i, x in enumerate(kx):
         for j, y in enumerate(ky):
             k = (x, y)
-            fs[0, i, j] = fs_up[k]
-            fs[1, i, j] = fs_dn[k]
+            try:
+                fs[0, i, j] = fs_up[k]
+                fs[1, i, j] = fs_dn[k]
+            except KeyError:
+                pass
 
     return kx, ky, fs
