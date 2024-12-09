@@ -504,6 +504,60 @@ def checkdos(recursive, paths):
 # ======================================================================================
 
 
+@cli.group(name="slurm", help="SLURM setup")
+def slurm_group():
+    pass
+
+
+@slurm_group.command(name="get")
+@click.argument("key", type=str, nargs=1)
+@multi_path_opts
+def get_slurm_cmd(recursive, key, paths):
+    """Gets the given value from the *.slurm files in the given directories.
+
+    KEY: The key of the value to get.
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    key = key.lower()
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        slurm = folder.slurm
+        click.echo(f"{path} {key}={slurm[key]}")
+
+
+@slurm_group.command(name="set")
+@click.argument("value", type=str, nargs=1)
+@multi_path_opts
+def set_slurm_cmd(dmft, recursive, value, paths):
+    """Sets the given value in the *.dat files in the given directories.
+
+    VALUE: The key of the value to set. Must be in the form KEY=VALUE.
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    key, val = value.split("=")
+    key, val = key.strip().lower(), val.strip()
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        dat = folder.dmft if dmft else folder.dat
+        slurm = folder.slurm
+        params = dat.to_dict()
+        if key == "jobname":
+            _val = val.format(**params)
+        else:
+            _val = val
+        click.echo(f"{path} Setting {key} to {_val}")
+        slurm[key] = _val
+        slurm.dump()
+
+# ======================================================================================
+#                                   Other
+# ======================================================================================
+
+
 @cli.command()
 @click.argument("symbol", type=str, nargs=1, required=True)
 @click.argument("keys", type=str, nargs=-1, required=False)

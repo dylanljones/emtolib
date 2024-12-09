@@ -31,6 +31,18 @@ echo - Calculation finished: `date`
 
 
 class SlurmScript(EmtoFile):
+
+    OPTIONS = [
+        "jobname",
+        "partition",
+        "ntasks",
+        "nodes",
+        "mail_type",
+        "mail_user",
+        "time",
+        "mem",
+    ]
+
     def __init__(
         self,
         path="",
@@ -60,6 +72,26 @@ class SlurmScript(EmtoFile):
             if isinstance(commands, str):
                 commands = commands.splitlines(keepends=False)
             self.commands = list(commands)
+
+    @property
+    def options(self):
+        return {k: getattr(self, k) for k in self.OPTIONS}
+
+    def __len__(self):
+        return len(self.OPTIONS)
+
+    def __iter__(self):
+        return iter(self.OPTIONS)
+
+    def __getitem__(self, key):
+        if key not in self.OPTIONS:
+            raise KeyError(f"Invalid key '{key}'")
+        return getattr(self, key)
+
+    def __setitem__(self, key, value):
+        if key not in self.OPTIONS:
+            raise KeyError(f"Invalid key '{key}'")
+        setattr(self, key, value)
 
     def iter_commands(self):
         return enumerate(list(self.commands))
