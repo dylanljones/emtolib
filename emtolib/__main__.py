@@ -91,8 +91,11 @@ def cli():
 @cli.command(name="update")
 def update():
     import os
+    import sys
 
-    cmd = r"python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git"
+    repo = "emtolib"
+    user = "dylanljones"
+    cmd = fr"{sys.executable} -m pip install git+ssh://git@github.com/{user}/{repo}.git"
 
     click.echo(f"Updating emtolib: Running command '{cmd}'")
     click.echo()
