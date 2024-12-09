@@ -533,7 +533,7 @@ def get_slurm_cmd(recursive, key, paths):
 @slurm_group.command(name="set")
 @click.argument("value", type=str, nargs=1)
 @multi_path_opts
-def set_slurm_cmd(dmft, recursive, value, paths):
+def set_slurm_cmd(recursive, value, paths):
     """Sets the given value in the *.dat files in the given directories.
 
     VALUE: The key of the value to set. Must be in the form KEY=VALUE.
@@ -545,7 +545,7 @@ def set_slurm_cmd(dmft, recursive, value, paths):
     key, val = key.strip().lower(), val.strip()
     for folder in folders:
         path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
-        dat = folder.dmft if dmft else folder.dat
+        dat = folder.dat
         slurm = folder.slurm
         params = dat.to_dict()
         if key == "jobname":
