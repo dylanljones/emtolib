@@ -95,7 +95,7 @@ def update():
 
     repo = "emtolib"
     user = "dylanljones"
-    cmd = fr"{sys.executable} -m pip install git+ssh://git@github.com/{user}/{repo}.git"
+    cmd = rf"{sys.executable} -m pip install git+ssh://git@github.com/{user}/{repo}.git"
 
     click.echo(f"Updating emtolib: Running command '{cmd}'")
     click.echo()
@@ -555,6 +555,7 @@ def set_slurm_cmd(recursive, value, paths):
         click.echo(f"{path} Setting {key} to {_val}")
         slurm[key] = _val
         slurm.dump()
+
 
 # ======================================================================================
 #                                   Other
