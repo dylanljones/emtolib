@@ -201,9 +201,7 @@ class EmtoFile(metaclass=PostInitCaller):
         if self.extension:
             ext = file.suffix
             if ext != self.extension:
-                raise ValueError(
-                    f"File extension of '{file}' does not match '{self.extension}'"
-                )
+                raise ValueError(f"File extension of '{file}' does not match '{self.extension}'")
 
     def load(self, file: Union[str, Path] = "", missing_ok: bool = False):
         """Load text from file."""

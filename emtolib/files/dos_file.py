@@ -122,10 +122,13 @@ def _parse_data(lines: list) -> tuple:
                     values.append(np.nan)
             dos_data.append(values)
     if contains_tnos:
-        for line in lines[i + 1 :]:
-            if line:
-                values = [float(x) for x in line.split()]
-                tnos_data.append(values)
+        try:
+            for line in lines[i + 1 :]:
+                if line:
+                    values = [float(x) for x in line.split()]
+                    tnos_data.append(values)
+        except ValueError:
+            tnos_data = list()
     return dos_data, tnos_data
 
 
@@ -186,9 +189,11 @@ def read_dos(fp: TextIO):
     tdos.set_index(["Spin"], inplace=True)
     pdos = pd.DataFrame(pdos_data)
     pdos.set_index(["Sublatt", "Atom", "Spin"], inplace=True)
-    tnos = pd.DataFrame(tnos_data)
-    tnos.set_index(["Sublatt", "Atom", "Spin"], inplace=True)
-
+    if tnos_data:
+        tnos = pd.DataFrame(tnos_data)
+        tnos.set_index(["Sublatt", "Atom", "Spin"], inplace=True)
+    else:
+        tnos = None
     return tdos, pdos, tnos
 
 
@@ -233,7 +238,6 @@ def translate_spin(spin):
 
 def dos_ry2ev(energy, dos):
     return energy * RY2EV, dos / RY2EV
-
 
 
 class DosFile(EmtoFile):
@@ -284,9 +288,7 @@ class DosFile(EmtoFile):
             energy, dos = dos_ry2ev(energy, dos)
         return energy, dos
 
-    def get_partial_dos(
-        self, sublatt=None, atom=None, spin=None, orbital="Total", unit="ry"
-    ):
+    def get_partial_dos(self, sublatt=None, atom=None, spin=None, orbital="Total", unit="ry"):
         unit = unit.lower()
         if unit not in UNITS:
             raise ValueError(f"Invalid unit: {unit}")
@@ -422,7 +424,7 @@ def read_dos_lms(fp: TextIO):
             data = _parse_data_lms(lines)
             n = len(data[0]) - 3
             lmax = _get_lmax(n)
-            indices = [f"{l}-{m}" for l, m in _orbital_indices(lmax)]
+            indices = [f"{li}-{m}" for li, m in _orbital_indices(lmax)]
             columns = ["E", "Total", "TNOS"] + indices
             for values in data:
                 row = {k: v for k, v in zip(columns, values)}
@@ -441,7 +443,7 @@ def read_dos_lms(fp: TextIO):
             data = _parse_data_lms(lines)
             n = len(data[0]) - 1
             lmax = _get_lmax(n)
-            indices = [f"{l}-{m}" for l, m in _orbital_indices(lmax)]
+            indices = [f"{li}-{m}" for li, m in _orbital_indices(lmax)]
             columns = ["E"] + indices
             for values in data:
                 row = {k: v for k, v in zip(columns, values)}
@@ -516,9 +518,7 @@ class DosLmsFile(EmtoFile):
             energy, dos = dos_ry2ev(energy, dos)
         return energy, tdos
 
-    def get_partial_dos(
-        self, sublatt=None, atom=None, spin=None, unit="ry"
-    ):
+    def get_partial_dos(self, sublatt=None, atom=None, spin=None, unit="ry"):
         unit = unit.lower()
         if unit not in UNITS:
             raise ValueError(f"Invalid unit: {unit}")

@@ -91,8 +91,11 @@ def cli():
 @cli.command(name="update")
 def update():
     import os
+    import sys
 
-    cmd = r"python3 -m pip install git+ssh://git@github.com/dylanljones/emtolib.git"
+    repo = "emtolib"
+    user = "dylanljones"
+    cmd = fr"{sys.executable} -m pip install git+ssh://git@github.com/{user}/{repo}.git"
 
     click.echo(f"Updating emtolib: Running command '{cmd}'")
     click.echo()
@@ -213,9 +216,7 @@ def conv(recursive, paths):
 
 
 @cli.command()
-@click.option(
-    "--mean", "-m", is_flag=True, default=False, help="Show sublattice Hopfields (mean)"
-)
+@click.option("--mean", "-m", is_flag=True, default=False, help="Show sublattice Hopfields (mean)")
 @click.option("--sum", "-s", is_flag=True, default=False, help="Sum over spins")
 @multi_path_opts
 def hopfield(mean, sum, recursive, paths):  # noqa
@@ -328,9 +329,7 @@ def set_paths(kstr, bmdl, kstr2, recursive, paths):
 
 
 @cli.command()
-@click.option(
-    "--only_keys", "-k", is_flag=True, default=False, help="Only show key as output."
-)
+@click.option("--only_keys", "-k", is_flag=True, default=False, help="Only show key as output.")
 @multi_path_opts
 def diff(only_keys, recursive, paths):
     """Get the difference between the *.dat files in the given directories.
@@ -358,9 +357,7 @@ def diff(only_keys, recursive, paths):
 
 @cli.command("set-header")
 @click.option("--header", "-h", type=str, default="", help="The header to set.")
-@click.option(
-    "--frmt", "-f", type=str, default="%d %b %y", help="The date format of the header."
-)
+@click.option("--frmt", "-f", type=str, default="%d %b %y", help="The date format of the header.")
 @multi_path_opts
 def set_header(header, frmt, recursive, paths):
     """Sets the header of the *.dat files in the given directories.
@@ -433,9 +430,7 @@ def atom_group():
 
 
 @atom_group.command(name="add")
-@click.option(
-    "--clear", "-c", is_flag=True, default=False, help="Clear existing atoms first."
-)
+@click.option("--clear", "-c", is_flag=True, default=False, help="Clear existing atoms first.")
 @click.argument("symbol", type=str, nargs=1, required=True)
 @click.argument("kwargs", type=str, nargs=-1, required=False)
 @single_path_opts
@@ -506,6 +501,60 @@ def checkdos(recursive, paths):
             click.echo(f"{path} " + error("Could not not read DOS file"))
             continue
 
+
+# ======================================================================================
+#                                   Other
+# ======================================================================================
+
+
+@cli.group(name="slurm", help="SLURM setup")
+def slurm_group():
+    pass
+
+
+@slurm_group.command(name="get")
+@click.argument("key", type=str, nargs=1)
+@multi_path_opts
+def get_slurm_cmd(recursive, key, paths):
+    """Gets the given value from the *.slurm files in the given directories.
+
+    KEY: The key of the value to get.
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    key = key.lower()
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        slurm = folder.slurm
+        click.echo(f"{path} {key}={slurm[key]}")
+
+
+@slurm_group.command(name="set")
+@click.argument("value", type=str, nargs=1)
+@multi_path_opts
+def set_slurm_cmd(recursive, value, paths):
+    """Sets the given value in the *.dat files in the given directories.
+
+    VALUE: The key of the value to set. Must be in the form KEY=VALUE.
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    key, val = value.split("=")
+    key, val = key.strip().lower(), val.strip()
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        dat = folder.dat
+        slurm = folder.slurm
+        params = dat.to_dict()
+        if key == "jobname":
+            _val = val.format(**params)
+        else:
+            _val = val
+        click.echo(f"{path} Setting {key} to {_val}")
+        slurm[key] = _val
+        slurm.dump()
 
 # ======================================================================================
 #                                   Other

@@ -135,26 +135,35 @@ class EmtoDirectory:
         return self.prn.converged
 
     def get_dat_path(self):
+        if not self.path.exists():
+            raise FileNotFoundError(f"Directory {self.path} does not exist!")
         return find_kgrn_file(self.path)
+
+    def get_jobnam(self):
+        if not self.path.exists():
+            raise FileNotFoundError(f"Directory {self.path} does not exist!")
+        if self.dat is None:
+            raise FileNotFoundError(f"No input file found in {self.path}!")
+        return self.dat.jobnam
 
     def get_dos_path(self, name=""):
         if not name:
-            name = self.dat.jobnam
+            name = self.get_jobnam()
         return self.path / f"{name}.dos"
 
     def get_dos_lms_path(self, name=""):
         if not name:
-            name = self.dat.jobnam
+            name = self.get_jobnam()
         return self.path / f"{name}.lms"
 
     def get_fes_path(self, name=""):
         if not name:
-            name = self.dat.jobnam
+            name = self.get_jobnam()
         return self.path / f"{name}.fes"
 
     def get_prn_path(self, name=""):
         if not name:
-            name = self.dat.jobnam
+            name = self.get_jobnam()
         return self.path / f"{name}.prn"
 
     def get_mdl_path(self, base=""):
