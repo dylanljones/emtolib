@@ -334,9 +334,10 @@ def parse_atom_block(lines):
 def parse_atoms(atomstr, atomconfstr):
     atom_lines = atomstr.splitlines()
     header = atom_lines.pop(0).lower()
-    columns = header.replace("(", "").replace(")", "").split()[1:]
+    columns = header.replace("(", "").replace(")", "").split()[1:11]
     if tuple(columns) != ATOM_COLUMNS[: len(columns)]:
         raise KGRNReadError(f"Invalid atom header: {header}")
+    columns = ATOM_COLUMNS
     atom_params = [parse_atom_line(line, columns) for line in atom_lines]
 
     lines = atomconfstr.splitlines()
