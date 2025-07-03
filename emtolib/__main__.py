@@ -93,9 +93,7 @@ def update():
     import os
     import sys
 
-    repo = "emtolib"
-    user = "dylanljones"
-    cmd = fr"{sys.executable} -m pip install git+ssh://git@github.com/{user}/{repo}.git"
+    cmd = fr"{sys.executable} -m pip install git+https://github.com/dylanljones/emtolib.git"
 
     click.echo(f"Updating emtolib: Running command '{cmd}'")
     click.echo()
@@ -510,6 +508,8 @@ def split_dosfile(folder: EmtoDirectory, with_sublattice: bool = False) -> None:
         file = f"tdos_{spin.lower()}.dos"
         df.to_csv(folder.path / file, index=False)
 
+    kwargs = dict(index=False, sep=" ", header=False, float_format="%.4f")
+
     pdos_indices_raw = set(dosfile.pdos.index)
     if not with_sublattice:
         pdos_indices_raw = set((atom, spin) for _, atom, spin in pdos_indices_raw)
@@ -517,13 +517,13 @@ def split_dosfile(folder: EmtoDirectory, with_sublattice: bool = False) -> None:
         for atom, spin in pdos_indices:
             df = dosfile.get_pdos(atom=atom, spin=spin)
             file = f"pdos_{atom}_{spin.lower()}.dos"
-            df.to_csv(folder.path / file, index=False)
+            df.to_csv(folder.path / file, **kwargs)
     else:
         pdos_indices = list(pdos_indices_raw)
         for sublatt, atom, spin in pdos_indices:
             df = dosfile.get_pdos(sublatt=sublatt, atom=atom, spin=spin)
             file = f"pdos_{sublatt}_{atom}_{spin.lower()}.dos"
-            df.to_csv(folder.path / file, index=False)
+            df.to_csv(folder.path / file, **kwargs)
 
 
 @cli.command()
