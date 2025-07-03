@@ -502,13 +502,13 @@ def checkdos(recursive, paths):
 
 def split_dosfile(folder: EmtoDirectory, with_sublattice: bool = False) -> None:
     dosfile = folder.dos
+    kwargs = dict(index=False, sep=" ", header=False, float_format="%.4f")
+
     tdos_indices = list(set(dosfile.tdos.index))
     for spin in tdos_indices:
         df = dosfile.get_tdos(spin)
         file = f"tdos_{spin.lower()}.dos"
-        df.to_csv(folder.path / file, index=False)
-
-    kwargs = dict(index=False, sep=" ", header=False, float_format="%.4f")
+        df.to_csv(folder.path / file, **kwargs)
 
     pdos_indices_raw = set(dosfile.pdos.index)
     if not with_sublattice:
