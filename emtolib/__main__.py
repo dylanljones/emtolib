@@ -502,6 +502,55 @@ def checkdos(recursive, paths):
             continue
 
 
+def split_dosfile(folder: EmtoDirectory, with_sublattice: bool = False) -> None:
+    dosfile = folder.dos
+    tdos_indices = list(set(dosfile.tdos.index))
+    for spin in tdos_indices:
+        df = dosfile.get_tdos(spin)
+        file = f"tdos_{spin.lower()}.dos"
+        df.to_csv(folder.path / file, index=False)
+
+    pdos_indices_raw = set(dosfile.pdos.index)
+    if not with_sublattice:
+        pdos_indices_raw = set((atom, spin) for _, atom, spin in pdos_indices_raw)
+        pdos_indices = list(pdos_indices_raw)
+        for atom, spin in pdos_indices:
+            df = dosfile.get_pdos(atom=atom, spin=spin)
+            file = f"pdos_{atom}_{spin.lower()}.dos"
+            df.to_csv(folder.path / file, index=False)
+    else:
+        pdos_indices = list(pdos_indices_raw)
+        for sublatt, atom, spin in pdos_indices:
+            df = dosfile.get_pdos(sublatt=sublatt, atom=atom, spin=spin)
+            file = f"pdos_{sublatt}_{atom}_{spin.lower()}.dos"
+            df.to_csv(folder.path / file, index=False)
+
+
+@cli.command()
+@multi_path_opts
+@click.option("--sublattice", "-s", is_flag=True, default=False, help="Also split into sublattices.")
+def split_dos(recursive, paths, sublattice: bool = False):
+    """Split the DOS file into separate files for each spin, atom and optionally sublattice.
+
+    PATHS: One or multiple paths to search for EMTO directories.
+    """
+    folders = get_emtodirs(*paths, recursive=recursive)
+    maxw = max(len(str(folder.path)) for folder in folders) + 1
+    for folder in folders:
+        path = frmt_file(f"{str(folder.path) + ':':<{maxw}}")
+        try:
+            dosfile = folder.dos
+        except DOSReadError:
+            click.echo(f"{path} " + error("Could not not read DOS file"))
+            continue
+        try:
+            click.echo(f"{path} Splitting DOS file")
+            split_dosfile(folder, with_sublattice=sublattice)
+        except AttributeError:
+            click.echo(f"{path} " + error("Could not not read DOS file"))
+            continue
+
+
 # ======================================================================================
 #                                   Other
 # ======================================================================================
