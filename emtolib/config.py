@@ -47,7 +47,7 @@ def _find_config_file(filename):
     logger.info("Config file '%s' not found!", filename)
     # Raise an error if none of the above worked
     raise FileNotFoundError(
-        f"Could not find the config files {filename} in any of the directories: " ", ".join(
+        f"Could not find the config files {filename} in any of the directories: , ".join(
             str(loc) for loc in LOCATIONS
         )
     )
