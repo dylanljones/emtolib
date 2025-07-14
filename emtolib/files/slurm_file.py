@@ -31,7 +31,6 @@ echo - Calculation finished: `date`
 
 
 class SlurmScript(EmtoFile):
-
     OPTIONS = [
         "jobname",
         "partition",

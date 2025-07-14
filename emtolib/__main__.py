@@ -93,7 +93,7 @@ def update():
     import os
     import sys
 
-    cmd = fr"{sys.executable} -m pip install git+https://github.com/dylanljones/emtolib.git"
+    cmd = rf"{sys.executable} -m pip install git+https://github.com/dylanljones/emtolib.git"
 
     click.echo(f"Updating emtolib: Running command '{cmd}'")
     click.echo()
@@ -528,7 +528,9 @@ def split_dosfile(folder: EmtoDirectory, with_sublattice: bool = False) -> None:
 
 @cli.command()
 @multi_path_opts
-@click.option("--sublattice", "-s", is_flag=True, default=False, help="Also split into sublattices.")
+@click.option(
+    "--sublattice", "-s", is_flag=True, default=False, help="Also split into sublattices."
+)
 def split_dos(recursive, paths, sublattice: bool = False):
     """Split the DOS file into separate files for each spin, atom and optionally sublattice.
 
@@ -604,6 +606,7 @@ def set_slurm_cmd(recursive, value, paths):
         click.echo(f"{path} Setting {key} to {_val}")
         slurm[key] = _val
         slurm.dump()
+
 
 # ======================================================================================
 #                                   Other
